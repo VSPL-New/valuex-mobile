@@ -43,4 +43,43 @@ class AppTextStyles {
     bodyLarge: body,
     bodyMedium: bodySecondary,
   );
+
+  // Onboarding / splash (Figma uses Poppins/General Sans/Parkinsans — mapped to
+  // the bundled Inter family since those fonts are not part of this project).
+  static const TextStyle onboardingTitle = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 28,
+    height: 1.35,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textPrimary,
+  );
+
+  static const TextStyle onboardingSubtitle = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 16,
+    height: 1.4,
+    fontWeight: FontWeight.w400,
+    color: AppColors.onboardingSubtitle,
+  );
+
+  static const TextStyle skipLabel = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+    color: AppColors.onboardingSkipText,
+  );
+
+  static const TextStyle splashTagline = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: Colors.white,
+  );
+
+  static const TextStyle splashProgressLabel = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textPrimary,
+  );
 }
