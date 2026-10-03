@@ -14,7 +14,6 @@ class OnboardingSlide extends StatelessWidget {
 
   final OnboardingContent content;
   final int dotIndex;
-  final bool highlightAllDots;
   final bool showBackButton;
   final VoidCallback onSkip;
   final VoidCallback onBack;
@@ -28,7 +27,6 @@ class OnboardingSlide extends StatelessWidget {
     required this.onSkip,
     required this.onBack,
     required this.onNext,
-    this.highlightAllDots = false,
   });
 
   @override
@@ -128,8 +126,8 @@ class OnboardingSlide extends StatelessWidget {
                         Expanded(
                           child: Center(
                             child: OnboardingDots(
+                              count: onboardingPages.length,
                               activeDot: dotIndex,
-                              highlightAll: highlightAllDots,
                             ),
                           ),
                         ),

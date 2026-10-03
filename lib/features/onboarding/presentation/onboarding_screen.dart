@@ -50,11 +50,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         itemCount: onboardingPages.length,
         onPageChanged: (index) => setState(() => _currentPage = index),
         itemBuilder: (context, index) {
-          final isLastPage = index == onboardingPages.length - 1;
           return OnboardingSlide(
             content: onboardingPages[index],
-            dotIndex: index < 2 ? index : 2,
-            highlightAllDots: isLastPage,
+            dotIndex: index,
             showBackButton: index > 0,
             onSkip: _finish,
             onBack: _back,

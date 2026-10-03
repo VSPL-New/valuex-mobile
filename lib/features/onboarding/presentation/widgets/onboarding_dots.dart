@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/colors.dart';
 
-/// 3-dot page indicator. The active dot is elongated; on the final page
-/// (per Figma) all dots switch to the active color to signal the flow end.
+/// Page indicator with one dot per onboarding page; the active dot is elongated.
 class OnboardingDots extends StatelessWidget {
+  final int count;
   final int activeDot;
-  final bool highlightAll;
 
   const OnboardingDots({
     super.key,
+    required this.count,
     required this.activeDot,
-    this.highlightAll = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: List.generate(3, (index) {
+      children: List.generate(count, (index) {
         final isActive = index == activeDot;
-        final color = (isActive || highlightAll)
+        final color = isActive
             ? AppColors.onboardingDotActive
             : AppColors.onboardingDotInactive;
         return AnimatedContainer(
