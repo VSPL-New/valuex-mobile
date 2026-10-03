@@ -43,4 +43,42 @@ class AppTextStyles {
     bodyLarge: body,
     bodyMedium: bodySecondary,
   );
+
+  // Onboarding / splash: Figma Make brand fonts (Outfit headings, DM Sans body).
+  static const TextStyle onboardingTitle = TextStyle(
+    fontFamily: 'Outfit',
+    fontSize: 28,
+    height: 38 / 28,
+    fontWeight: FontWeight.w700,
+    color: AppColors.brandForeground,
+  );
+
+  static const TextStyle onboardingSubtitle = TextStyle(
+    fontFamily: 'DMSans',
+    fontSize: 16,
+    height: 23 / 16,
+    fontWeight: FontWeight.w400,
+    color: AppColors.onboardingSubtitle,
+  );
+
+  static const TextStyle skipLabel = TextStyle(
+    fontFamily: 'DMSans',
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+    color: AppColors.onboardingSkipText,
+  );
+
+  static const TextStyle splashTagline = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: Colors.white,
+  );
+
+  static const TextStyle splashProgressLabel = TextStyle(
+    fontFamily: 'DMSans',
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: AppColors.brandForeground,
+  );
 }
