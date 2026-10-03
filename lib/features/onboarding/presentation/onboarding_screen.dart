@@ -56,7 +56,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             dotIndex: index < 2 ? index : 2,
             highlightAllDots: isLastPage,
             showBackButton: index > 0,
-            isLastPage: isLastPage,
             onSkip: _finish,
             onBack: _back,
             onNext: _next,

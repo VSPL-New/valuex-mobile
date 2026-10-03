@@ -1,0 +1,114 @@
+{
+  "version": "1",
+  "mappingFilePath": ".figma/mapping.json",
+  "entries": [
+    {
+      "figma": {
+        "fileKey": "D1BtJ1lsMVRBLtUPBv1UIr",
+        "nodeId": "3:126",
+        "nodeName": "splash"
+      },
+      "local": {
+        "components": [
+          {
+            "path": "lib/features/splash/presentation/splash_screen.dart",
+            "tier": "page"
+          }
+        ],
+        "tokens": [
+          "lib/core/theme/colors.dart",
+          "lib/core/theme/text_styles.dart",
+          "pubspec.yaml"
+        ],
+        "stories": []
+      },
+      "sync": {
+        "contentHash": "sha256:dad739eca900f9f60ed1586cbfe83f82e261b779bd76b328c6d4bac707c313d5",
+        "lastSyncedAt": "2026-10-03T12:54:44Z",
+        "status": "in-sync"
+      }
+    },
+    {
+      "figma": {
+        "fileKey": "D1BtJ1lsMVRBLtUPBv1UIr",
+        "nodeId": "3:142",
+        "nodeName": "onboading screen 1"
+      },
+      "local": {
+        "components": [
+          { "path": "lib/features/onboarding/presentation/onboarding_screen.dart", "tier": "page" },
+          { "path": "lib/features/onboarding/presentation/widgets/onboarding_slide.dart", "tier": "template" },
+          { "path": "lib/features/onboarding/presentation/widgets/onboarding_nav_button.dart", "tier": "atom" },
+          { "path": "lib/features/onboarding/presentation/widgets/onboarding_dots.dart", "tier": "molecule" }
+        ],
+        "tokens": ["lib/core/theme/colors.dart", "lib/core/theme/text_styles.dart"],
+        "stories": []
+      },
+      "sync": {
+        "contentHash": "sha256:4a668d4118aa0a6d2c11f9f194c7a94e8d31c06ebab7cc8fd9918a82578eb5b5",
+        "lastSyncedAt": "2026-10-03T17:10:30Z",
+        "status": "in-sync"
+      }
+    },
+    {
+      "figma": {
+        "fileKey": "D1BtJ1lsMVRBLtUPBv1UIr",
+        "nodeId": "3:165",
+        "nodeName": "onboading screen 2"
+      },
+      "local": {
+        "components": [
+          { "path": "lib/features/onboarding/presentation/onboarding_screen.dart", "tier": "page" },
+          { "path": "lib/features/onboarding/presentation/widgets/onboarding_slide.dart", "tier": "template" }
+        ],
+        "tokens": ["lib/core/theme/colors.dart", "lib/core/theme/text_styles.dart"],
+        "stories": []
+      },
+      "sync": {
+        "contentHash": "sha256:c0458ccd7bb799228534f091df971c4286e0c53a07342a1ea610f9deeb7a6d03",
+        "lastSyncedAt": "2026-10-03T17:10:30Z",
+        "status": "in-sync"
+      }
+    },
+    {
+      "figma": {
+        "fileKey": "D1BtJ1lsMVRBLtUPBv1UIr",
+        "nodeId": "3:193",
+        "nodeName": "onboading screen 3"
+      },
+      "local": {
+        "components": [
+          { "path": "lib/features/onboarding/presentation/onboarding_screen.dart", "tier": "page" },
+          { "path": "lib/features/onboarding/presentation/widgets/onboarding_slide.dart", "tier": "template" }
+        ],
+        "tokens": ["lib/core/theme/colors.dart", "lib/core/theme/text_styles.dart"],
+        "stories": []
+      },
+      "sync": {
+        "contentHash": "sha256:8ac6b8229a0e63626417c39ce8030855fe4057e07b1bb9fa096e36811801dd71",
+        "lastSyncedAt": "2026-10-03T17:10:30Z",
+        "status": "in-sync"
+      }
+    },
+    {
+      "figma": {
+        "fileKey": "D1BtJ1lsMVRBLtUPBv1UIr",
+        "nodeId": "3:220",
+        "nodeName": "onboading screen 4"
+      },
+      "local": {
+        "components": [
+          { "path": "lib/features/onboarding/presentation/onboarding_screen.dart", "tier": "page" },
+          { "path": "lib/features/onboarding/presentation/widgets/onboarding_slide.dart", "tier": "template" }
+        ],
+        "tokens": ["lib/core/theme/colors.dart", "lib/core/theme/text_styles.dart"],
+        "stories": []
+      },
+      "sync": {
+        "contentHash": "sha256:f196c8692c53e9241523d5f5a449d7f6391efcb8793b52e654cb47dc60f36d9c",
+        "lastSyncedAt": "2026-10-03T17:10:30Z",
+        "status": "in-sync"
+      }
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/text_styles.dart';
@@ -5,14 +7,15 @@ import '../onboarding_content.dart';
 import 'onboarding_dots.dart';
 import 'onboarding_nav_button.dart';
 
-/// Single onboarding slide: full-bleed illustration with the skip action,
-/// copy, page dots, and back/next controls laid over it.
+/// Single onboarding slide: illustration with a white fade, then skip, copy,
+/// page dots and back/next controls anchored to the bottom (Figma 428x926).
 class OnboardingSlide extends StatelessWidget {
+  static const _designWidth = 428.0;
+
   final OnboardingContent content;
   final int dotIndex;
   final bool highlightAllDots;
   final bool showBackButton;
-  final bool isLastPage;
   final VoidCallback onSkip;
   final VoidCallback onBack;
   final VoidCallback onNext;
@@ -22,7 +25,6 @@ class OnboardingSlide extends StatelessWidget {
     required this.content,
     required this.dotIndex,
     required this.showBackButton,
-    required this.isLastPage,
     required this.onSkip,
     required this.onBack,
     required this.onNext,
@@ -31,70 +33,119 @@ class OnboardingSlide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Image.asset(content.backgroundAsset, fit: BoxFit.cover),
-        SafeArea(
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 20, top: 8),
-                  child: _SkipButton(onTap: onSkip),
+    final media = MediaQuery.of(context);
+    final scale = media.size.width / _designWidth;
+    // Design leaves 62px below the controls (includes the home indicator).
+    final bottomPadding = math.max(62.0, media.padding.bottom + 24);
+
+    return ColoredBox(
+      color: Colors.white,
+      child: Stack(
+        children: [
+          Positioned(
+            top: content.imageTop * scale,
+            left: 0,
+            right: 0,
+            height: content.imageHeight * scale,
+            child: Image.asset(
+              content.backgroundAsset,
+              fit: BoxFit.cover,
+              alignment: Alignment.topCenter,
+            ),
+          ),
+          Positioned(
+            top: content.fadeTop * scale,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: const DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0x00FFFFFF),
+                    Color(0x45FEFEFF),
+                    Color(0xFFFDFEFF),
+                    Color(0xFFFAFBFF),
+                  ],
+                  stops: [0, 0.120192, 0.269231, 1],
                 ),
               ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  children: [
-                    Text(
-                      content.title,
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.onboardingTitle,
+            ),
+          ),
+          Positioned.fill(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: bottomPadding),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 15),
+                      child: _SkipButton(onTap: onSkip),
                     ),
-                    const SizedBox(height: 12),
-                    Text(
-                      content.subtitle,
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.onboardingSubtitle,
+                  ),
+                  const SizedBox(height: 26),
+                  SizedBox(
+                    width: 342,
+                    height: 76,
+                    child: Center(
+                      child: Text(
+                        content.title,
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.onboardingTitle,
+                      ),
                     ),
-                    const SizedBox(height: 24),
-                    OnboardingDots(
-                      activeDot: dotIndex,
-                      highlightAll: highlightAllDots,
+                  ),
+                  const SizedBox(height: 5),
+                  SizedBox(
+                    width: 322,
+                    height: 69,
+                    child: Center(
+                      child: Text(
+                        content.subtitle,
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.onboardingSubtitle,
+                      ),
                     ),
-                    const SizedBox(height: 20),
-                    Row(
+                  ),
+                  const SizedBox(height: 17),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Row(
                       children: [
                         if (showBackButton)
                           OnboardingNavButton(
-                            icon: Icons.arrow_back,
+                            pointsBack: true,
+                            radius: 12,
                             backgroundColor: AppColors.onboardingBackButton,
                             onPressed: onBack,
                           )
                         else
                           const SizedBox(width: 45),
-                        const Spacer(),
+                        Expanded(
+                          child: Center(
+                            child: OnboardingDots(
+                              activeDot: dotIndex,
+                              highlightAll: highlightAllDots,
+                            ),
+                          ),
+                        ),
                         OnboardingNavButton(
-                          icon: isLastPage
-                              ? Icons.check
-                              : Icons.arrow_forward,
                           backgroundColor: AppColors.onboardingNextButton,
                           onPressed: onNext,
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 24),
-            ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -112,9 +163,10 @@ class _SkipButton extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(6),
         onTap: onTap,
-        child: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Text('Skip', style: AppTextStyles.skipLabel),
+        child: const SizedBox(
+          width: 64,
+          height: 31,
+          child: Center(child: Text('Skip', style: AppTextStyles.skipLabel)),
         ),
       ),
     );

@@ -44,28 +44,27 @@ class AppTextStyles {
     bodyMedium: bodySecondary,
   );
 
-  // Onboarding / splash (Figma uses Poppins/General Sans/Parkinsans — mapped to
-  // the bundled Inter family since those fonts are not part of this project).
+  // Onboarding / splash: Figma Make brand fonts (Outfit headings, DM Sans body).
   static const TextStyle onboardingTitle = TextStyle(
-    fontFamily: 'Inter',
+    fontFamily: 'Outfit',
     fontSize: 28,
-    height: 1.35,
+    height: 38 / 28,
     fontWeight: FontWeight.w700,
-    color: AppColors.textPrimary,
+    color: AppColors.brandForeground,
   );
 
   static const TextStyle onboardingSubtitle = TextStyle(
-    fontFamily: 'Inter',
+    fontFamily: 'DMSans',
     fontSize: 16,
-    height: 1.4,
+    height: 23 / 16,
     fontWeight: FontWeight.w400,
     color: AppColors.onboardingSubtitle,
   );
 
   static const TextStyle skipLabel = TextStyle(
-    fontFamily: 'Inter',
+    fontFamily: 'DMSans',
     fontSize: 13,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w400,
     color: AppColors.onboardingSkipText,
   );
 
@@ -77,9 +76,9 @@ class AppTextStyles {
   );
 
   static const TextStyle splashProgressLabel = TextStyle(
-    fontFamily: 'Inter',
+    fontFamily: 'DMSans',
     fontSize: 12,
     fontWeight: FontWeight.w400,
-    color: AppColors.textPrimary,
+    color: AppColors.brandForeground,
   );
 }
