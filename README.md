@@ -113,6 +113,7 @@ Conventions for new work:
 - Keep tokens in `SecureStorageService`; non-sensitive flags in `PreferencesService`. Keys live in `storage_keys.dart`.
 - Make HTTP calls through `ApiClient` so timeouts (30 s) and error mapping stay consistent.
 - Follow [../Documents/CODING_STANDARDS.md](../Documents/CODING_STANDARDS.md).
+- Follow the UI rules in [docs/Flutter-Design-System.md](docs/Flutter-Design-System.md) for every screen: tokens, fonts, buttons, and the approval step for any Figma value that conflicts with them.
 
 ## Code generation (Riverpod)
 
