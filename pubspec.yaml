@@ -59,24 +59,15 @@ flutter:
     - assets/icons/
 
   fonts:
-    - family: Inter
+    # Brand fonts: Poppins (headings), DM Sans (body)
+    - family: Poppins
       fonts:
-        - asset: assets/fonts/Inter-Regular.ttf
-        - asset: assets/fonts/Inter-Medium.ttf
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Medium.ttf
           weight: 500
-        - asset: assets/fonts/Inter-SemiBold.ttf
+        - asset: assets/fonts/Poppins-SemiBold.ttf
           weight: 600
-        - asset: assets/fonts/Inter-Bold.ttf
-          weight: 700
-    # Figma Make brand fonts: Outfit (headings), DM Sans (body)
-    - family: Outfit
-      fonts:
-        - asset: assets/fonts/Outfit-Regular.ttf
-        - asset: assets/fonts/Outfit-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Outfit-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/Outfit-Bold.ttf
+        - asset: assets/fonts/Poppins-Bold.ttf
           weight: 700
     - family: DMSans
       fonts:

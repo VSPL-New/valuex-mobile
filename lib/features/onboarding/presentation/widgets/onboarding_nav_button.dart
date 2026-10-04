@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../../../core/constants/app_assets.dart';
 
 /// Square back/next control used on the onboarding slides.
 class OnboardingNavButton extends StatelessWidget {
@@ -31,7 +32,7 @@ class OnboardingNavButton extends StatelessWidget {
             child: RotatedBox(
               quarterTurns: pointsBack ? 2 : 0,
               child: SvgPicture.asset(
-                'assets/icons/arrow_right.svg',
+                AppAssets.arrowRightIcon,
                 width: 18,
                 height: 12.41,
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/colors.dart';
+import '../../core/theme/spacing.dart';
 
 class AppButton extends StatelessWidget {
   final String label;
@@ -44,11 +45,11 @@ class AppButton extends StatelessWidget {
       return OutlinedButton(
         onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primary,
-          side: const BorderSide(color: AppColors.primary),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          foregroundColor: AppColors.brandPrimary,
+          side: const BorderSide(color: AppColors.brandPrimary),
+          minimumSize: const Size.fromHeight(AppSizes.buttonMedium),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppRadius.xl),
           ),
         ),
         child: child,
@@ -57,6 +58,12 @@ class AppButton extends StatelessWidget {
 
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.brandPrimary,
+        foregroundColor: AppColors.brandOnPrimary,
+        disabledBackgroundColor: AppColors.brandPrimary.withValues(alpha: 0.4),
+        disabledForegroundColor: AppColors.brandOnPrimary,
+      ),
       child: child,
     );
   }

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/colors.dart';
+import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../onboarding_content.dart';
 import 'onboarding_dots.dart';
@@ -93,7 +94,7 @@ class OnboardingSlide extends StatelessWidget {
                       child: Text(
                         content.title,
                         textAlign: TextAlign.center,
-                        style: AppTextStyles.onboardingTitle,
+                        style: AppTextStyles.heading1,
                       ),
                     ),
                   ),
@@ -117,7 +118,7 @@ class OnboardingSlide extends StatelessWidget {
                         if (showBackButton)
                           OnboardingNavButton(
                             pointsBack: true,
-                            radius: 12,
+                            radius: AppRadius.lg,
                             backgroundColor: AppColors.onboardingBackButton,
                             onPressed: onBack,
                           )
@@ -157,9 +158,9 @@ class _SkipButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.onboardingSkipBackground,
-      borderRadius: BorderRadius.circular(6),
+      borderRadius: BorderRadius.circular(AppRadius.sm),
       child: InkWell(
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(AppRadius.sm),
         onTap: onTap,
         child: const SizedBox(
           width: 64,

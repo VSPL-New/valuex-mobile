@@ -109,6 +109,51 @@
         "lastSyncedAt": "2026-10-03T17:10:30Z",
         "status": "in-sync"
       }
+    },
+    {
+      "figma": {
+        "fileKey": "D1BtJ1lsMVRBLtUPBv1UIr",
+        "nodeId": "3:433",
+        "nodeName": "Create account"
+      },
+      "local": {
+        "components": [
+          { "path": "lib/features/auth/presentation/create_account_screen.dart", "tier": "page" },
+          { "path": "lib/features/auth/presentation/widgets/labeled_divider.dart", "tier": "molecule" },
+          { "path": "lib/shared/widgets/gradient_button.dart", "tier": "atom" },
+          { "path": "lib/shared/widgets/tonal_button.dart", "tier": "atom" },
+          { "path": "lib/shared/widgets/outlined_icon_button.dart", "tier": "atom" },
+          { "path": "lib/shared/widgets/square_back_button.dart", "tier": "atom" }
+        ],
+        "tokens": ["lib/core/theme/colors.dart", "lib/core/theme/text_styles.dart", "pubspec.yaml"],
+        "stories": []
+      },
+      "sync": {
+        "contentHash": "sha256:ce3781c784dc42d2531c2253f3b1dbdaddbdfee4c42cf8757760971ed8c6c083",
+        "lastSyncedAt": "2026-10-03T19:02:28Z",
+        "status": "in-sync"
+      }
+    },
+    {
+      "figma": {
+        "fileKey": "tzrpUwfrR0SYeyKkv1p0co",
+        "nodeId": "0:1",
+        "nodeName": "Figma Make: OnboardingScreen > signup-phone (Create Account)"
+      },
+      "local": {
+        "components": [
+          { "path": "lib/features/auth/presentation/signup_mobile_screen.dart", "tier": "page" },
+          { "path": "lib/features/auth/presentation/widgets/mobile_number_field.dart", "tier": "molecule" },
+          { "path": "lib/shared/widgets/brand_gradient_button.dart", "tier": "atom" }
+        ],
+        "tokens": ["lib/core/theme/colors.dart"],
+        "stories": []
+      },
+      "sync": {
+        "contentHash": "sha256:36586ee1aa95a5deb936b1594ceeed42a9fb3c41bfbe48a85dccef03e3165749",
+        "lastSyncedAt": "2026-10-04T10:38:28Z",
+        "status": "in-sync"
+      }
     }
   ]
 }

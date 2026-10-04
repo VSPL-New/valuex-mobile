@@ -22,7 +22,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     super.dispose();
   }
 
-  void _finish() => context.go(RouteNames.home);
+  void _finish() => context.go(RouteNames.createAccount);
 
   void _next() {
     if (_currentPage == onboardingPages.length - 1) {

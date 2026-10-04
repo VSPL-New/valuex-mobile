@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/routing/route_names.dart';
 import '../../../core/theme/colors.dart';
+import '../../../core/theme/gradients.dart';
 import '../../../core/theme/text_styles.dart';
+import '../../../shared/widgets/brand_logo.dart';
 
 /// App launch screen (Figma: Just Qlic) — logo, animated progress bar, and
 /// an auto-advance to onboarding once the progress animation completes.
@@ -52,13 +54,8 @@ class _SplashScreenState extends State<SplashScreen>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Logo PNG has an opaque white backdrop; multiply blends it into the page colour.
-                Image.asset(
-                  'assets/images/splash_logo.png',
-                  width: 229,
-                  color: AppColors.brandBackground,
-                  colorBlendMode: BlendMode.multiply,
-                ),
+                // Logo size follows the Figma splash frame.
+                const BrandLogo(width: 229, height: 92, fit: BoxFit.cover),
                 const SizedBox(height: 23),
                 _ProgressBar(animation: _progressController),
                 const SizedBox(height: 10),
@@ -93,20 +90,13 @@ class _ProgressBar extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               const DecoratedBox(
-                decoration: BoxDecoration(color: AppColors.progressTrack),
+                decoration: BoxDecoration(color: AppColors.brandMuted),
               ),
               FractionallySizedBox(
                 alignment: Alignment.centerLeft,
                 widthFactor: animation.value,
                 child: const DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        AppColors.progressGradientStart,
-                        AppColors.progressGradientEnd,
-                      ],
-                    ),
-                  ),
+                  decoration: BoxDecoration(gradient: AppGradients.brand),
                 ),
               ),
             ],

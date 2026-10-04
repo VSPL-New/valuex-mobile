@@ -1,40 +1,84 @@
 import 'package:flutter/material.dart';
 import 'colors.dart';
 
+/// Font families bundled in pubspec.yaml.
+class AppFonts {
+  AppFonts._();
+
+  static const String heading = 'Poppins';
+  static const String body = 'DMSans';
+}
+
 class AppTextStyles {
+  AppTextStyles._();
+
   static const TextStyle heading1 = TextStyle(
-    fontFamily: 'Inter',
+    fontFamily: AppFonts.heading,
     fontSize: 28,
+    height: 38 / 28,
     fontWeight: FontWeight.w700,
-    color: AppColors.textPrimary,
+    color: AppColors.brandForeground,
   );
 
   static const TextStyle heading2 = TextStyle(
-    fontFamily: 'Inter',
-    fontSize: 22,
-    fontWeight: FontWeight.w600,
-    color: AppColors.textPrimary,
+    fontFamily: AppFonts.heading,
+    fontSize: 24,
+    height: 1.5,
+    fontWeight: FontWeight.w700,
+    color: AppColors.brandForeground,
   );
 
   static const TextStyle body = TextStyle(
-    fontFamily: 'Inter',
+    fontFamily: AppFonts.body,
     fontSize: 16,
+    height: 1.5,
     fontWeight: FontWeight.w400,
-    color: AppColors.textPrimary,
+    color: AppColors.brandForeground,
+  );
+
+  static const TextStyle input = TextStyle(
+    fontFamily: AppFonts.body,
+    fontSize: 14,
+    height: 20 / 14,
+    color: AppColors.brandForeground,
   );
 
   static const TextStyle bodySecondary = TextStyle(
-    fontFamily: 'Inter',
+    fontFamily: AppFonts.body,
     fontSize: 14,
-    fontWeight: FontWeight.w400,
-    color: AppColors.textSecondary,
+    height: 20 / 14,
+    color: AppColors.brandMutedText,
+  );
+
+  static const TextStyle label = TextStyle(
+    fontFamily: AppFonts.body,
+    fontSize: 12,
+    height: 16 / 12,
+    letterSpacing: 0.6,
+    color: AppColors.brandMutedText,
+  );
+
+  static const TextStyle hint = TextStyle(
+    fontFamily: AppFonts.body,
+    fontSize: 12,
+    height: 16 / 12,
+    color: AppColors.brandPlaceholder,
   );
 
   static const TextStyle button = TextStyle(
-    fontFamily: 'Inter',
+    fontFamily: AppFonts.body,
     fontSize: 16,
-    fontWeight: FontWeight.w600,
-    color: Colors.white,
+    fontWeight: FontWeight.w700,
+    color: AppColors.brandOnPrimary,
+  );
+
+  static const TextStyle dividerLabel = TextStyle(
+    fontFamily: AppFonts.body,
+    fontSize: 14,
+    height: 1.4,
+    letterSpacing: -0.28,
+    fontWeight: FontWeight.w500,
+    color: AppColors.brandForeground,
   );
 
   static const TextTheme textTheme = TextTheme(
@@ -42,19 +86,12 @@ class AppTextStyles {
     displayMedium: heading2,
     bodyLarge: body,
     bodyMedium: bodySecondary,
+    labelLarge: button,
   );
 
-  // Onboarding / splash: Figma Make brand fonts (Outfit headings, DM Sans body).
-  static const TextStyle onboardingTitle = TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 28,
-    height: 38 / 28,
-    fontWeight: FontWeight.w700,
-    color: AppColors.brandForeground,
-  );
-
+  // Screen-specific
   static const TextStyle onboardingSubtitle = TextStyle(
-    fontFamily: 'DMSans',
+    fontFamily: AppFonts.body,
     fontSize: 16,
     height: 23 / 16,
     fontWeight: FontWeight.w400,
@@ -62,21 +99,14 @@ class AppTextStyles {
   );
 
   static const TextStyle skipLabel = TextStyle(
-    fontFamily: 'DMSans',
+    fontFamily: AppFonts.body,
     fontSize: 13,
     fontWeight: FontWeight.w400,
     color: AppColors.onboardingSkipText,
   );
 
-  static const TextStyle splashTagline = TextStyle(
-    fontFamily: 'Inter',
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
-    color: Colors.white,
-  );
-
   static const TextStyle splashProgressLabel = TextStyle(
-    fontFamily: 'DMSans',
+    fontFamily: AppFonts.body,
     fontSize: 12,
     fontWeight: FontWeight.w400,
     color: AppColors.brandForeground,
