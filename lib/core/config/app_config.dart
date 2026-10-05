@@ -64,15 +64,13 @@ class AppConfig {
       throw const AppConfigException('API_BASE_URL must use https outside dev');
     }
     if (parsedEnv == AppEnv.prod && parsedFlow == AadhaarFlow.sandbox) {
-      throw const AppConfigException(
-          'The Aadhaar sandbox flow is not allowed in prod');
+      throw const AppConfigException('The Aadhaar sandbox flow is not allowed in prod');
     }
 
     return AppConfig._(
       env: parsedEnv,
-      apiBaseUrl: apiBaseUrl.endsWith('/')
-          ? apiBaseUrl.substring(0, apiBaseUrl.length - 1)
-          : apiBaseUrl,
+      apiBaseUrl:
+          apiBaseUrl.endsWith('/') ? apiBaseUrl.substring(0, apiBaseUrl.length - 1) : apiBaseUrl,
       aadhaarFlow: parsedFlow,
     );
   }
@@ -83,6 +81,5 @@ class AppConfig {
 }
 
 final appConfigProvider = Provider<AppConfig>(
-  (ref) => throw UnimplementedError(
-      'appConfigProvider must be overridden in main()'),
+  (ref) => throw UnimplementedError('appConfigProvider must be overridden in main()'),
 );

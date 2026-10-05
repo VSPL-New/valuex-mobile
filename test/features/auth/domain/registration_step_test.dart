@@ -15,8 +15,7 @@ void main() {
         AccountStatus.fromApi('IDENTITY_VERIFICATION_PENDING'),
         AccountStatus.identityVerificationPending,
       );
-      expect(
-          AccountStatus.fromApi('SIGNUP_PENDING'), AccountStatus.signupPending);
+      expect(AccountStatus.fromApi('SIGNUP_PENDING'), AccountStatus.signupPending);
       expect(AccountStatus.fromApi('ACTIVE'), AccountStatus.active);
       expect(AccountStatus.fromApi('UNDER_REVIEW'), AccountStatus.underReview);
       expect(AccountStatus.fromApi('RESTRICTED'), AccountStatus.restricted);

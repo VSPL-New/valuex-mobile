@@ -7,10 +7,8 @@ import 'package:flutter/foundation.dart';
 /// (OTPs, Aadhaar numbers and tokens travel in them).
 class ApiLogInterceptor extends Interceptor {
   @override
-  void onResponse(
-      Response<dynamic> response, ResponseInterceptorHandler handler) {
-    _log(
-        '${response.requestOptions.method} ${response.requestOptions.uri.path} '
+  void onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) {
+    _log('${response.requestOptions.method} ${response.requestOptions.uri.path} '
         '-> ${response.statusCode}');
     handler.next(response);
   }

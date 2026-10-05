@@ -5,9 +5,7 @@ enum RegistrationStep { mobile, email, aadhaar, signup, home, blocked }
 
 RegistrationStep registrationStepFor(AccountStatus status) {
   return switch (status) {
-    AccountStatus.newAccount ||
-    AccountStatus.otpPending =>
-      RegistrationStep.mobile,
+    AccountStatus.newAccount || AccountStatus.otpPending => RegistrationStep.mobile,
     AccountStatus.emailVerificationPending => RegistrationStep.email,
     AccountStatus.identityVerificationPending => RegistrationStep.aadhaar,
     AccountStatus.signupPending => RegistrationStep.signup,

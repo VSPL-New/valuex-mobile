@@ -29,8 +29,7 @@ Future<ApiError> _expectError(Future<Object?> call) async {
 void main() {
   group('envelope and errors', () {
     test('unwraps the data field and parses it', () async {
-      final adapter = FakeHttpAdapter(
-          (_) async => FakeHttpAdapter.ok({'status': 'ACTIVE'}));
+      final adapter = FakeHttpAdapter((_) async => FakeHttpAdapter.ok({'status': 'ACTIVE'}));
       final client = _client(FakeSecureStorage(), adapter);
 
       final status = await client.get<String>(
@@ -43,13 +42,11 @@ void main() {
 
     test('maps a business error to its code and message', () async {
       final adapter = FakeHttpAdapter(
-        (_) async => FakeHttpAdapter.error(
-            400, 'ERROR_INVALID_OTP', 'Invalid or expired OTP'),
+        (_) async => FakeHttpAdapter.error(400, 'ERROR_INVALID_OTP', 'Invalid or expired OTP'),
       );
       final client = _client(FakeSecureStorage(), adapter);
 
-      final error =
-          await _expectError(client.post<Object?>('/x', authenticated: false));
+      final error = await _expectError(client.post<Object?>('/x', authenticated: false));
 
       expect(error.type, ApiErrorType.business);
       expect(error.code, 'ERROR_INVALID_OTP');
@@ -67,8 +64,7 @@ void main() {
       );
       final client = _client(FakeSecureStorage(), adapter);
 
-      final error =
-          await _expectError(client.post<Object?>('/x', authenticated: false));
+      final error = await _expectError(client.post<Object?>('/x', authenticated: false));
 
       expect(error.type, ApiErrorType.validation);
       expect(error.details['mobile'], 'Invalid mobile');
@@ -80,8 +76,7 @@ void main() {
       );
       final client = _client(FakeSecureStorage(), adapter);
 
-      final error =
-          await _expectError(client.get<Object?>('/x', authenticated: false));
+      final error = await _expectError(client.get<Object?>('/x', authenticated: false));
 
       expect(error.type, ApiErrorType.server);
       expect(error.isRetryable, isTrue);
@@ -89,48 +84,40 @@ void main() {
 
     test('maps connection failures to a network error', () async {
       final adapter = FakeHttpAdapter((options) async {
-        throw DioException(
-            requestOptions: options, type: DioExceptionType.connectionError);
+        throw DioException(requestOptions: options, type: DioExceptionType.connectionError);
       });
       final client = _client(FakeSecureStorage(), adapter);
 
-      final error =
-          await _expectError(client.get<Object?>('/x', authenticated: false));
+      final error = await _expectError(client.get<Object?>('/x', authenticated: false));
 
       expect(error.type, ApiErrorType.network);
     });
 
     test('maps timeouts to a timeout error', () async {
       final adapter = FakeHttpAdapter((options) async {
-        throw DioException(
-            requestOptions: options, type: DioExceptionType.receiveTimeout);
+        throw DioException(requestOptions: options, type: DioExceptionType.receiveTimeout);
       });
       final client = _client(FakeSecureStorage(), adapter);
 
-      final error =
-          await _expectError(client.get<Object?>('/x', authenticated: false));
+      final error = await _expectError(client.get<Object?>('/x', authenticated: false));
 
       expect(error.type, ApiErrorType.timeout);
     });
 
     test('a non-envelope success body is an error', () async {
-      final adapter =
-          FakeHttpAdapter((_) async => FakeHttpAdapter.json(200, {'foo': 1}));
+      final adapter = FakeHttpAdapter((_) async => FakeHttpAdapter.json(200, {'foo': 1}));
       final client = _client(FakeSecureStorage(), adapter);
 
-      final error =
-          await _expectError(client.get<Object?>('/x', authenticated: false));
+      final error = await _expectError(client.get<Object?>('/x', authenticated: false));
 
       expect(error.type, ApiErrorType.server);
     });
   });
 
   group('headers', () {
-    test('adds the bearer token and a correlation id to authenticated calls',
-        () async {
+    test('adds the bearer token and a correlation id to authenticated calls', () async {
       final adapter = FakeHttpAdapter((_) async => FakeHttpAdapter.ok(null));
-      final client =
-          _client(FakeSecureStorage(accessToken: 'access-1'), adapter);
+      final client = _client(FakeSecureStorage(accessToken: 'access-1'), adapter);
 
       await client.get<Object?>('/users/me');
 
@@ -141,26 +128,21 @@ void main() {
 
     test('sends no bearer token to public endpoints', () async {
       final adapter = FakeHttpAdapter((_) async => FakeHttpAdapter.ok(null));
-      final client =
-          _client(FakeSecureStorage(accessToken: 'access-1'), adapter);
+      final client = _client(FakeSecureStorage(accessToken: 'access-1'), adapter);
 
-      await client.post<Object?>('/auth/register/initiate',
-          authenticated: false);
+      await client.post<Object?>('/auth/register/initiate', authenticated: false);
 
-      expect(adapter.requests.single.headers.containsKey('Authorization'),
-          isFalse);
+      expect(adapter.requests.single.headers.containsKey('Authorization'), isFalse);
     });
   });
 
   group('refresh once on 401', () {
     ResponseBody tokens(String access, String refresh) {
-      return FakeHttpAdapter.ok(
-          {'accessToken': access, 'refreshToken': refresh});
+      return FakeHttpAdapter.ok({'accessToken': access, 'refreshToken': refresh});
     }
 
     test('refreshes the tokens and retries the request once', () async {
-      final storage =
-          FakeSecureStorage(accessToken: 'old', refreshToken: 'refresh-1');
+      final storage = FakeSecureStorage(accessToken: 'old', refreshToken: 'refresh-1');
       final adapter = FakeHttpAdapter((options) async {
         if (options.path == '/auth/refresh') return tokens('new', 'refresh-2');
         return options.headers['Authorization'] == 'Bearer new'
@@ -179,8 +161,7 @@ void main() {
     });
 
     test('concurrent 401s share one refresh request', () async {
-      final storage =
-          FakeSecureStorage(accessToken: 'old', refreshToken: 'refresh-1');
+      final storage = FakeSecureStorage(accessToken: 'old', refreshToken: 'refresh-1');
       final adapter = FakeHttpAdapter((options) async {
         if (options.path == '/auth/refresh') return tokens('new', 'refresh-2');
         return options.headers['Authorization'] == 'Bearer new'
@@ -195,12 +176,10 @@ void main() {
     });
 
     test('an expired refresh token clears the session', () async {
-      final storage =
-          FakeSecureStorage(accessToken: 'old', refreshToken: 'refresh-1');
+      final storage = FakeSecureStorage(accessToken: 'old', refreshToken: 'refresh-1');
       final adapter = FakeHttpAdapter((options) async {
         if (options.path == '/auth/refresh') {
-          return FakeHttpAdapter.error(
-              400, 'ERROR_REFRESH_TOKEN_EXPIRED', 'expired');
+          return FakeHttpAdapter.error(400, 'ERROR_REFRESH_TOKEN_EXPIRED', 'expired');
         }
         return FakeHttpAdapter.error(401, 'UNAUTHORIZED', 'expired');
       });
@@ -217,8 +196,7 @@ void main() {
       expect(expiredEvents, 1);
     });
 
-    test('a missing refresh token ends the session without calling refresh',
-        () async {
+    test('a missing refresh token ends the session without calling refresh', () async {
       final storage = FakeSecureStorage(accessToken: 'old');
       final adapter = FakeHttpAdapter(
         (_) async => FakeHttpAdapter.error(401, 'UNAUTHORIZED', 'expired'),
@@ -232,12 +210,10 @@ void main() {
     });
 
     test('a network failure during refresh keeps the tokens', () async {
-      final storage =
-          FakeSecureStorage(accessToken: 'old', refreshToken: 'refresh-1');
+      final storage = FakeSecureStorage(accessToken: 'old', refreshToken: 'refresh-1');
       final adapter = FakeHttpAdapter((options) async {
         if (options.path == '/auth/refresh') {
-          throw DioException(
-              requestOptions: options, type: DioExceptionType.connectionError);
+          throw DioException(requestOptions: options, type: DioExceptionType.connectionError);
         }
         return FakeHttpAdapter.error(401, 'UNAUTHORIZED', 'expired');
       });
@@ -250,8 +226,7 @@ void main() {
     });
 
     test('a second 401 after the retry is not refreshed again', () async {
-      final storage =
-          FakeSecureStorage(accessToken: 'old', refreshToken: 'refresh-1');
+      final storage = FakeSecureStorage(accessToken: 'old', refreshToken: 'refresh-1');
       final adapter = FakeHttpAdapter((options) async {
         if (options.path == '/auth/refresh') return tokens('new', 'refresh-2');
         return FakeHttpAdapter.error(401, 'UNAUTHORIZED', 'still rejected');
@@ -266,15 +241,13 @@ void main() {
     });
 
     test('public endpoints never trigger a refresh', () async {
-      final storage =
-          FakeSecureStorage(accessToken: 'old', refreshToken: 'refresh-1');
+      final storage = FakeSecureStorage(accessToken: 'old', refreshToken: 'refresh-1');
       final adapter = FakeHttpAdapter(
         (_) async => FakeHttpAdapter.error(401, 'UNAUTHORIZED', 'nope'),
       );
       final client = _client(storage, adapter);
 
-      final error = await _expectError(
-          client.post<Object?>('/auth/login', authenticated: false));
+      final error = await _expectError(client.post<Object?>('/auth/login', authenticated: false));
 
       expect(error.type, ApiErrorType.unauthorized);
       expect(adapter.count('/auth/refresh'), 0);

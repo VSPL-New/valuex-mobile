@@ -34,8 +34,7 @@ void main() {
     repository = MockAuthRepository();
     apiClient = MockApiClient();
     sessionExpired = StreamController<void>.broadcast();
-    when(() => apiClient.onSessionExpired)
-        .thenAnswer((_) => sessionExpired.stream);
+    when(() => apiClient.onSessionExpired).thenAnswer((_) => sessionExpired.stream);
     when(() => repository.clearSession()).thenAnswer((_) async {});
     addTearDown(sessionExpired.close);
   });
@@ -65,8 +64,7 @@ void main() {
   void signedInAs(AccountStatus status) {
     when(() => repository.hasSession()).thenAnswer((_) async => true);
     when(() => repository.fetchProfile()).thenAnswer(
-      (_) async =>
-          UserProfile(userId: 'user-1', status: status, aadhaarVerified: false),
+      (_) async => UserProfile(userId: 'user-1', status: status, aadhaarVerified: false),
     );
   }
 
@@ -94,8 +92,7 @@ void main() {
     expect(find.byType(AccountBlockedScreen), findsOneWidget);
   });
 
-  testWidgets('a failed lookup stays on the splash and can be retried',
-      (tester) async {
+  testWidgets('a failed lookup stays on the splash and can be retried', (tester) async {
     when(() => repository.hasSession()).thenAnswer((_) async => true);
     when(() => repository.fetchProfile()).thenThrow(
       const ApiError(type: ApiErrorType.network, message: 'offline'),
@@ -113,8 +110,7 @@ void main() {
     expect(find.byType(HomeScreen), findsOneWidget);
   });
 
-  testWidgets('an ended session shows a notice and returns to sign-in',
-      (tester) async {
+  testWidgets('an ended session shows a notice and returns to sign-in', (tester) async {
     signedInAs(AccountStatus.active);
     await launch(tester);
     expect(find.byType(HomeScreen), findsOneWidget);

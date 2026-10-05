@@ -20,8 +20,7 @@ class ApiInterceptor extends Interceptor {
   ApiInterceptor(this._dio, this._storage, this._refresher);
 
   @override
-  Future<void> onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+  Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     if (options.extra[ApiRequestFlags.authenticated] != false) {
       final token = await _storage.getAccessToken();
       if (token != null) {
@@ -32,11 +31,9 @@ class ApiInterceptor extends Interceptor {
   }
 
   @override
-  Future<void> onError(
-      DioException err, ErrorInterceptorHandler handler) async {
+  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
     final options = err.requestOptions;
-    final isAuthenticated =
-        options.extra[ApiRequestFlags.authenticated] != false;
+    final isAuthenticated = options.extra[ApiRequestFlags.authenticated] != false;
     if (err.response?.statusCode != 401 || !isAuthenticated) {
       return handler.next(err);
     }

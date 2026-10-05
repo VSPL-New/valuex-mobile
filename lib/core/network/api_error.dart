@@ -34,11 +34,8 @@ class ApiError implements Exception {
 
   /// Network, timeout and 5xx failures: the request may succeed on retry.
   bool get isRetryable =>
-      type == ApiErrorType.network ||
-      type == ApiErrorType.timeout ||
-      type == ApiErrorType.server;
+      type == ApiErrorType.network || type == ApiErrorType.timeout || type == ApiErrorType.server;
 
   @override
-  String toString() =>
-      'ApiError(type: $type, code: $code, statusCode: $statusCode)';
+  String toString() => 'ApiError(type: $type, code: $code, statusCode: $statusCode)';
 }

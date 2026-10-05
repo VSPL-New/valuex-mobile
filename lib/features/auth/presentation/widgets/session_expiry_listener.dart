@@ -21,8 +21,7 @@ class SessionExpiryListener extends ConsumerWidget {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
-          SnackBar(
-              content: Text(AppLocalizations.of(context).errorSessionExpired)),
+          SnackBar(content: Text(AppLocalizations.of(context).errorSessionExpired)),
         );
       ref.read(appRouterProvider).go(RouteNames.createAccount);
     });

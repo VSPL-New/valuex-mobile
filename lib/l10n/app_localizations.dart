@@ -62,8 +62,7 @@ import 'app_localizations_hi.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -71,8 +70,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -93,10 +91,7 @@ abstract class AppLocalizations {
   ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('en'),
-    Locale('hi')
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('hi')];
 
   /// No description provided for @appName.
   ///
@@ -295,10 +290,657 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back to start'**
   String get accountBlockedAction;
+
+  /// No description provided for @authErrorMobileRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'This mobile number is already registered'**
+  String get authErrorMobileRegistered;
+
+  /// No description provided for @authErrorEmailRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'This email is already linked to another account'**
+  String get authErrorEmailRegistered;
+
+  /// No description provided for @authErrorInvalidOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid or expired OTP'**
+  String get authErrorInvalidOtp;
+
+  /// No description provided for @authErrorOtpExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'OTP has expired. Please request a new one'**
+  String get authErrorOtpExpired;
+
+  /// No description provided for @authErrorOtpRateLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many OTP requests. Please try again in 10 minutes'**
+  String get authErrorOtpRateLimit;
+
+  /// No description provided for @authErrorOtpMaxAttempts.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many failed attempts. Please request a new OTP'**
+  String get authErrorOtpMaxAttempts;
+
+  /// No description provided for @authErrorInvalidState.
+  ///
+  /// In en, this message translates to:
+  /// **'This step is not available right now'**
+  String get authErrorInvalidState;
+
+  /// No description provided for @authErrorUserNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'We could not find your account. Please start again'**
+  String get authErrorUserNotFound;
+
+  /// No description provided for @authErrorValidation.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check the details you entered'**
+  String get authErrorValidation;
+
+  /// No description provided for @emailEntryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Email'**
+  String get emailEntryTitle;
+
+  /// No description provided for @emailEntrySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your email to keep your account secure'**
+  String get emailEntrySubtitle;
+
+  /// No description provided for @emailEntryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'EMAIL ADDRESS'**
+  String get emailEntryLabel;
+
+  /// No description provided for @emailEntryFieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'name@example.com'**
+  String get emailEntryFieldHint;
+
+  /// No description provided for @emailEntryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll send an OTP to verify your email'**
+  String get emailEntryHint;
+
+  /// No description provided for @emailEntrySendOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Send OTP'**
+  String get emailEntrySendOtp;
+
+  /// No description provided for @otpMobileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your number'**
+  String get otpMobileTitle;
+
+  /// No description provided for @otpEmailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your email'**
+  String get otpEmailTitle;
+
+  /// No description provided for @otpSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code sent to {target}'**
+  String otpSubtitle(String target);
+
+  /// No description provided for @otpFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'6-digit one-time code'**
+  String get otpFieldLabel;
+
+  /// No description provided for @otpVerify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get otpVerify;
+
+  /// No description provided for @otpResend.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code'**
+  String get otpResend;
+
+  /// No description provided for @otpResendIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code in {seconds}s'**
+  String otpResendIn(int seconds);
+
+  /// No description provided for @otpExpiresIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Code expires in {time}'**
+  String otpExpiresIn(String time);
+
+  /// No description provided for @otpExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'The code has expired. Request a new one.'**
+  String get otpExpired;
+
+  /// No description provided for @otpResendLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend limit reached. Please try again later.'**
+  String get otpResendLimit;
+
+  /// No description provided for @otpResent.
+  ///
+  /// In en, this message translates to:
+  /// **'A new code has been sent'**
+  String get otpResent;
+
+  /// No description provided for @otpChangeNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Change number'**
+  String get otpChangeNumber;
+
+  /// No description provided for @otpChangeEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Change email'**
+  String get otpChangeEmail;
+
+  /// No description provided for @aadhaarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Aadhaar'**
+  String get aadhaarTitle;
+
+  /// No description provided for @aadhaarSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your identity with your Aadhaar number'**
+  String get aadhaarSubtitle;
+
+  /// No description provided for @aadhaarNote.
+  ///
+  /// In en, this message translates to:
+  /// **'You can ‘Skip for now’ but Aadhaar Verification is must before any transactions (Buy/Sell/Contact seller/buyer). So, before your first transaction, you must complete this one time Aadhaar Verification.'**
+  String get aadhaarNote;
+
+  /// No description provided for @aadhaarNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'AADHAAR NUMBER'**
+  String get aadhaarNumberLabel;
+
+  /// No description provided for @aadhaarNumberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'12-digit Aadhaar number'**
+  String get aadhaarNumberHint;
+
+  /// No description provided for @aadhaarShowNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Aadhaar number'**
+  String get aadhaarShowNumber;
+
+  /// No description provided for @aadhaarHideNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide Aadhaar number'**
+  String get aadhaarHideNumber;
+
+  /// No description provided for @aadhaarConsent.
+  ///
+  /// In en, this message translates to:
+  /// **'I consent to ValueX using my Aadhaar number to verify my identity'**
+  String get aadhaarConsent;
+
+  /// No description provided for @aadhaarVerifyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Aadhaar'**
+  String get aadhaarVerifyButton;
+
+  /// No description provided for @aadhaarSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get aadhaarSkip;
+
+  /// No description provided for @aadhaarNotNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get aadhaarNotNow;
+
+  /// No description provided for @aadhaarComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Aadhaar verification is coming soon. You can skip for now and complete it before your first transaction.'**
+  String get aadhaarComingSoon;
+
+  /// No description provided for @aadhaarDevBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'DEVELOPMENT ONLY — to be replaced with the third-party Aadhaar verification service provider'**
+  String get aadhaarDevBanner;
+
+  /// No description provided for @aadhaarOtpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Aadhaar OTP'**
+  String get aadhaarOtpTitle;
+
+  /// No description provided for @aadhaarOtpSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code sent to your Aadhaar-linked mobile number'**
+  String get aadhaarOtpSubtitle;
+
+  /// No description provided for @aadhaarChangeNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Aadhaar number'**
+  String get aadhaarChangeNumber;
+
+  /// No description provided for @authErrorAadhaarUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'This Aadhaar is already linked to an account'**
+  String get authErrorAadhaarUsed;
+
+  /// No description provided for @authErrorAadhaarRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'This Aadhaar is linked to a closed account. Please contact support'**
+  String get authErrorAadhaarRecovery;
+
+  /// No description provided for @authErrorAadhaarUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification service temporarily unavailable. Please try again'**
+  String get authErrorAadhaarUnavailable;
+
+  /// No description provided for @authErrorAadhaarSessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Aadhaar session expired. Please enter your Aadhaar number again'**
+  String get authErrorAadhaarSessionExpired;
+
+  /// No description provided for @authErrorAadhaarFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to verify Aadhaar. Please try again'**
+  String get authErrorAadhaarFailed;
+
+  /// No description provided for @commonClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get commonClose;
+
+  /// No description provided for @signupProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your profile'**
+  String get signupProfileTitle;
+
+  /// No description provided for @signupProfileSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Almost there! Tell me a bit about yourself'**
+  String get signupProfileSubtitle;
+
+  /// No description provided for @signupAvatarEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Change avatar'**
+  String get signupAvatarEdit;
+
+  /// No description provided for @signupAvatarSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your avatar'**
+  String get signupAvatarSheetTitle;
+
+  /// No description provided for @avatarGroupMale.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get avatarGroupMale;
+
+  /// No description provided for @avatarGroupFemale.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get avatarGroupFemale;
+
+  /// No description provided for @avatarGroupNeutral.
+  ///
+  /// In en, this message translates to:
+  /// **'Neutral'**
+  String get avatarGroupNeutral;
+
+  /// No description provided for @avatarLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Avatar {number}'**
+  String avatarLabel(int number);
+
+  /// No description provided for @signupNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'NAME'**
+  String get signupNameLabel;
+
+  /// No description provided for @signupNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your full name'**
+  String get signupNameHint;
+
+  /// No description provided for @signupGenderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'GENDER'**
+  String get signupGenderLabel;
+
+  /// No description provided for @genderMale.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get genderMale;
+
+  /// No description provided for @genderFemale.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get genderFemale;
+
+  /// No description provided for @genderOthers.
+  ///
+  /// In en, this message translates to:
+  /// **'Others'**
+  String get genderOthers;
+
+  /// No description provided for @signupDobLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'DATE OF BIRTH'**
+  String get signupDobLabel;
+
+  /// No description provided for @signupDobHint.
+  ///
+  /// In en, this message translates to:
+  /// **'DD/MM/YYYY'**
+  String get signupDobHint;
+
+  /// No description provided for @signupDobPick.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose date of birth'**
+  String get signupDobPick;
+
+  /// No description provided for @signupEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'EMAIL'**
+  String get signupEmailLabel;
+
+  /// No description provided for @signupPhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PHONE'**
+  String get signupPhoneLabel;
+
+  /// No description provided for @signupVerifiedReadOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get signupVerifiedReadOnly;
+
+  /// No description provided for @signupStateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'STATE'**
+  String get signupStateLabel;
+
+  /// No description provided for @signupStateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your state'**
+  String get signupStateHint;
+
+  /// No description provided for @signupStateSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your state'**
+  String get signupStateSheetTitle;
+
+  /// No description provided for @signupCityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'CITY'**
+  String get signupCityLabel;
+
+  /// No description provided for @signupCityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your city'**
+  String get signupCityHint;
+
+  /// No description provided for @signupAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'ADDRESS'**
+  String get signupAddressLabel;
+
+  /// No description provided for @signupAddressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'House number, street, area'**
+  String get signupAddressHint;
+
+  /// No description provided for @signupPincodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PINCODE'**
+  String get signupPincodeLabel;
+
+  /// No description provided for @signupPincodeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'6-digit pincode'**
+  String get signupPincodeHint;
+
+  /// No description provided for @signupTermsPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the '**
+  String get signupTermsPrefix;
+
+  /// No description provided for @signupTermsLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms and Conditions'**
+  String get signupTermsLink;
+
+  /// No description provided for @signupTermsSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **' and consent to the processing of my data'**
+  String get signupTermsSuffix;
+
+  /// No description provided for @signupTermsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the Terms and Conditions first to turn this on'**
+  String get signupTermsHint;
+
+  /// No description provided for @signupSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get signupSubmit;
+
+  /// No description provided for @signupHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get signupHaveAccount;
+
+  /// No description provided for @signupSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get signupSignIn;
+
+  /// No description provided for @signupErrorName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter 3 to 50 letters'**
+  String get signupErrorName;
+
+  /// No description provided for @signupErrorCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter 2 to 100 letters'**
+  String get signupErrorCity;
+
+  /// No description provided for @signupErrorAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter 10 to 255 characters'**
+  String get signupErrorAddress;
+
+  /// No description provided for @signupErrorPincode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid 6-digit pincode'**
+  String get signupErrorPincode;
+
+  /// No description provided for @signupErrorDobFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid date as DD/MM/YYYY'**
+  String get signupErrorDobFormat;
+
+  /// No description provided for @signupErrorDobFuture.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth cannot be in the future'**
+  String get signupErrorDobFuture;
+
+  /// No description provided for @authErrorInvalidAddressState.
+  ///
+  /// In en, this message translates to:
+  /// **'Please choose a valid state'**
+  String get authErrorInvalidAddressState;
+
+  /// No description provided for @authErrorInvalidDob.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid date of birth'**
+  String get authErrorInvalidDob;
+
+  /// No description provided for @authErrorTermsNotAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Please accept the terms and conditions to continue'**
+  String get authErrorTermsNotAccepted;
+
+  /// No description provided for @authErrorConsentRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Consent for data processing is required'**
+  String get authErrorConsentRequired;
+
+  /// No description provided for @authErrorInvalidAvatar.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected avatar is not available. Please choose another'**
+  String get authErrorInvalidAvatar;
+
+  /// No description provided for @termsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms and Conditions'**
+  String get termsTitle;
+
+  /// No description provided for @termsLastUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated: [date to be added]'**
+  String get termsLastUpdated;
+
+  /// No description provided for @termsPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'[Legal text to be added]'**
+  String get termsPlaceholder;
+
+  /// No description provided for @termsSection1.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Acceptance of terms'**
+  String get termsSection1;
+
+  /// No description provided for @termsSection2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Your account'**
+  String get termsSection2;
+
+  /// No description provided for @termsSection3.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Using ValueX'**
+  String get termsSection3;
+
+  /// No description provided for @termsSection4.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Listings and purchases'**
+  String get termsSection4;
+
+  /// No description provided for @termsSection5.
+  ///
+  /// In en, this message translates to:
+  /// **'5. Payments and fees'**
+  String get termsSection5;
+
+  /// No description provided for @termsSection6.
+  ///
+  /// In en, this message translates to:
+  /// **'6. Privacy and your data'**
+  String get termsSection6;
+
+  /// No description provided for @termsSection7.
+  ///
+  /// In en, this message translates to:
+  /// **'7. Changes to these terms'**
+  String get termsSection7;
+
+  /// No description provided for @termsSection8.
+  ///
+  /// In en, this message translates to:
+  /// **'8. Contact us'**
+  String get termsSection8;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -307,8 +949,7 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'hi'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'hi'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;

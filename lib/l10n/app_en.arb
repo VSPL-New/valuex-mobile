@@ -32,5 +32,141 @@
   "errorSessionExpired": "Session expired — Login again",
   "accountBlockedTitle": "Account unavailable",
   "accountBlockedMessage": "This account cannot be used right now. Please contact support for help.",
-  "accountBlockedAction": "Back to start"
+  "accountBlockedAction": "Back to start",
+  "authErrorMobileRegistered": "This mobile number is already registered",
+  "authErrorEmailRegistered": "This email is already linked to another account",
+  "authErrorInvalidOtp": "Invalid or expired OTP",
+  "authErrorOtpExpired": "OTP has expired. Please request a new one",
+  "authErrorOtpRateLimit": "Too many OTP requests. Please try again in 10 minutes",
+  "authErrorOtpMaxAttempts": "Too many failed attempts. Please request a new OTP",
+  "authErrorInvalidState": "This step is not available right now",
+  "authErrorUserNotFound": "We could not find your account. Please start again",
+  "authErrorValidation": "Please check the details you entered",
+  "emailEntryTitle": "Verify Email",
+  "emailEntrySubtitle": "Add your email to keep your account secure",
+  "emailEntryLabel": "EMAIL ADDRESS",
+  "emailEntryFieldHint": "name@example.com",
+  "emailEntryHint": "We'll send an OTP to verify your email",
+  "emailEntrySendOtp": "Send OTP",
+  "otpMobileTitle": "Verify your number",
+  "otpEmailTitle": "Verify your email",
+  "otpSubtitle": "Enter the 6-digit code sent to {target}",
+  "@otpSubtitle": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "otpFieldLabel": "6-digit one-time code",
+  "otpVerify": "Verify",
+  "otpResend": "Resend code",
+  "otpResendIn": "Resend code in {seconds}s",
+  "@otpResendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "otpExpiresIn": "Code expires in {time}",
+  "@otpExpiresIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "otpExpired": "The code has expired. Request a new one.",
+  "otpResendLimit": "Resend limit reached. Please try again later.",
+  "otpResent": "A new code has been sent",
+  "otpChangeNumber": "Change number",
+  "otpChangeEmail": "Change email",
+  "aadhaarTitle": "Verify Aadhaar",
+  "aadhaarSubtitle": "Verify your identity with your Aadhaar number",
+  "aadhaarNote": "You can ‘Skip for now’ but Aadhaar Verification is must before any transactions (Buy/Sell/Contact seller/buyer). So, before your first transaction, you must complete this one time Aadhaar Verification.",
+  "aadhaarNumberLabel": "AADHAAR NUMBER",
+  "aadhaarNumberHint": "12-digit Aadhaar number",
+  "aadhaarShowNumber": "Show Aadhaar number",
+  "aadhaarHideNumber": "Hide Aadhaar number",
+  "aadhaarConsent": "I consent to ValueX using my Aadhaar number to verify my identity",
+  "aadhaarVerifyButton": "Verify Aadhaar",
+  "aadhaarSkip": "Skip for now",
+  "aadhaarNotNow": "Not now",
+  "aadhaarComingSoon": "Aadhaar verification is coming soon. You can skip for now and complete it before your first transaction.",
+  "aadhaarDevBanner": "DEVELOPMENT ONLY — to be replaced with the third-party Aadhaar verification service provider",
+  "aadhaarOtpTitle": "Enter Aadhaar OTP",
+  "aadhaarOtpSubtitle": "Enter the 6-digit code sent to your Aadhaar-linked mobile number",
+  "aadhaarChangeNumber": "Change Aadhaar number",
+  "authErrorAadhaarUsed": "This Aadhaar is already linked to an account",
+  "authErrorAadhaarRecovery": "This Aadhaar is linked to a closed account. Please contact support",
+  "authErrorAadhaarUnavailable": "Verification service temporarily unavailable. Please try again",
+  "authErrorAadhaarSessionExpired": "Aadhaar session expired. Please enter your Aadhaar number again",
+  "authErrorAadhaarFailed": "Unable to verify Aadhaar. Please try again",
+  "commonClose": "Close",
+  "signupProfileTitle": "Create your profile",
+  "signupProfileSubtitle": "Almost there! Tell me a bit about yourself",
+  "signupAvatarEdit": "Change avatar",
+  "signupAvatarSheetTitle": "Choose your avatar",
+  "avatarGroupMale": "Male",
+  "avatarGroupFemale": "Female",
+  "avatarGroupNeutral": "Neutral",
+  "avatarLabel": "Avatar {number}",
+  "@avatarLabel": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "signupNameLabel": "NAME",
+  "signupNameHint": "Your full name",
+  "signupGenderLabel": "GENDER",
+  "genderMale": "Male",
+  "genderFemale": "Female",
+  "genderOthers": "Others",
+  "signupDobLabel": "DATE OF BIRTH",
+  "signupDobHint": "DD/MM/YYYY",
+  "signupDobPick": "Choose date of birth",
+  "signupEmailLabel": "EMAIL",
+  "signupPhoneLabel": "PHONE",
+  "signupVerifiedReadOnly": "Verified",
+  "signupStateLabel": "STATE",
+  "signupStateHint": "Select your state",
+  "signupStateSheetTitle": "Select your state",
+  "signupCityLabel": "CITY",
+  "signupCityHint": "Your city",
+  "signupAddressLabel": "ADDRESS",
+  "signupAddressHint": "House number, street, area",
+  "signupPincodeLabel": "PINCODE",
+  "signupPincodeHint": "6-digit pincode",
+  "signupTermsPrefix": "I agree to the ",
+  "signupTermsLink": "Terms and Conditions",
+  "signupTermsSuffix": " and consent to the processing of my data",
+  "signupTermsHint": "Open the Terms and Conditions first to turn this on",
+  "signupSubmit": "Submit",
+  "signupHaveAccount": "Already have an account?",
+  "signupSignIn": "Sign In",
+  "signupErrorName": "Enter 3 to 50 letters",
+  "signupErrorCity": "Enter 2 to 100 letters",
+  "signupErrorAddress": "Enter 10 to 255 characters",
+  "signupErrorPincode": "Enter a valid 6-digit pincode",
+  "signupErrorDobFormat": "Enter a valid date as DD/MM/YYYY",
+  "signupErrorDobFuture": "Date of birth cannot be in the future",
+  "authErrorInvalidAddressState": "Please choose a valid state",
+  "authErrorInvalidDob": "Please enter a valid date of birth",
+  "authErrorTermsNotAccepted": "Please accept the terms and conditions to continue",
+  "authErrorConsentRequired": "Consent for data processing is required",
+  "authErrorInvalidAvatar": "Selected avatar is not available. Please choose another",
+  "termsTitle": "Terms and Conditions",
+  "termsLastUpdated": "Last updated: [date to be added]",
+  "termsPlaceholder": "[Legal text to be added]",
+  "termsSection1": "1. Acceptance of terms",
+  "termsSection2": "2. Your account",
+  "termsSection3": "3. Using ValueX",
+  "termsSection4": "4. Listings and purchases",
+  "termsSection5": "5. Payments and fees",
+  "termsSection6": "6. Privacy and your data",
+  "termsSection7": "7. Changes to these terms",
+  "termsSection8": "8. Contact us"
 }

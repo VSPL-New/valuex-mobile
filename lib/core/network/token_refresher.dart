@@ -49,8 +49,7 @@ class TokenRefresher {
       final accessToken = data?['accessToken'] as String?;
       final newRefreshToken = data?['refreshToken'] as String?;
       if (accessToken == null || newRefreshToken == null) {
-        throw const ApiError(
-            type: ApiErrorType.server, message: 'Invalid refresh response');
+        throw const ApiError(type: ApiErrorType.server, message: 'Invalid refresh response');
       }
       await _storage.saveAccessToken(accessToken);
       await _storage.saveRefreshToken(newRefreshToken);

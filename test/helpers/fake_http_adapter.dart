@@ -22,18 +22,13 @@ class FakeHttpAdapter implements HttpClientAdapter {
     );
   }
 
-  static ResponseBody ok(Object? data) =>
-      json(200, {'success': true, 'data': data});
+  static ResponseBody ok(Object? data) => json(200, {'success': true, 'data': data});
 
   static ResponseBody error(int status, String code, String message,
       {Map<String, String>? details}) {
     return json(status, {
       'success': false,
-      'error': {
-        'code': code,
-        'message': message,
-        if (details != null) 'details': details
-      },
+      'error': {'code': code, 'message': message, if (details != null) 'details': details},
     });
   }
 

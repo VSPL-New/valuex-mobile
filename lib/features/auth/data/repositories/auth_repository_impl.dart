@@ -2,6 +2,7 @@ import '../../../../core/security/secure_storage_service.dart';
 import '../../domain/entities/aadhaar_transaction.dart';
 import '../../domain/entities/auth_session.dart';
 import '../../domain/entities/otp_sent.dart';
+import '../../domain/entities/signup_details.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_data_source.dart';
@@ -33,8 +34,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthResult> verifyMobileOtp(
-      {required String mobile, required String otp}) {
+  Future<AuthResult> verifyMobileOtp({required String mobile, required String otp}) {
     return _store(_remote.verifyMobileOtp(mobile: mobile, otp: otp));
   }
 
@@ -64,10 +64,13 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthResult> verifyAadhaar(
-      {required String transactionId, required String otp}) {
-    return _store(
-        _remote.verifyAadhaar(transactionId: transactionId, otp: otp));
+  Future<AuthResult> verifyAadhaar({required String transactionId, required String otp}) {
+    return _store(_remote.verifyAadhaar(transactionId: transactionId, otp: otp));
+  }
+
+  @override
+  Future<AuthResult> completeSignup(SignupDetails details) {
+    return _store(_remote.completeSignup(details));
   }
 
   Future<AuthResult> _store(Future<AuthResponseModel> call) async {

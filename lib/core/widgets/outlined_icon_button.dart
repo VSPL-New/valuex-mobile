@@ -37,10 +37,13 @@ class OutlinedIconButton extends StatelessWidget {
             children: [
               SvgPicture.asset(iconAsset, width: 29, height: 29),
               const SizedBox(width: 12),
-              Text(
-                label,
-                style: AppTextStyles.button.copyWith(
-                  color: AppColors.brandForeground,
+              Flexible(
+                child: Text(
+                  label,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.button.copyWith(
+                    color: AppColors.brandForeground,
+                  ),
                 ),
               ),
             ],

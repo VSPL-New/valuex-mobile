@@ -16,18 +16,15 @@ class ApiErrorMapper {
       case DioExceptionType.receiveTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.transformTimeout:
-        return const ApiError(
-            type: ApiErrorType.timeout, message: 'Request timed out');
+        return const ApiError(type: ApiErrorType.timeout, message: 'Request timed out');
       case DioExceptionType.connectionError:
       case DioExceptionType.badCertificate:
-        return const ApiError(
-            type: ApiErrorType.network, message: 'No connection');
+        return const ApiError(type: ApiErrorType.network, message: 'No connection');
       case DioExceptionType.badResponse:
         return _fromResponse(e.response);
       case DioExceptionType.cancel:
       case DioExceptionType.unknown:
-        return const ApiError(
-            type: ApiErrorType.unknown, message: 'Unexpected error');
+        return const ApiError(type: ApiErrorType.unknown, message: 'Unexpected error');
     }
   }
 

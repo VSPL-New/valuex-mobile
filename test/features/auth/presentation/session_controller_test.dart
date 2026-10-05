@@ -15,8 +15,7 @@ import 'package:valuex_mobile/features/auth/presentation/providers/session_state
 import '../../../helpers/mocks.dart';
 
 UserProfile _profile(AccountStatus status, {bool aadhaarVerified = false}) {
-  return UserProfile(
-      userId: 'user-1', status: status, aadhaarVerified: aadhaarVerified);
+  return UserProfile(userId: 'user-1', status: status, aadhaarVerified: aadhaarVerified);
 }
 
 void main() {
@@ -29,8 +28,7 @@ void main() {
     repository = MockAuthRepository();
     apiClient = MockApiClient();
     sessionExpired = StreamController<void>.broadcast();
-    when(() => apiClient.onSessionExpired)
-        .thenAnswer((_) => sessionExpired.stream);
+    when(() => apiClient.onSessionExpired).thenAnswer((_) => sessionExpired.stream);
     when(() => repository.clearSession()).thenAnswer((_) async {});
     container = ProviderContainer(
       overrides: [
@@ -42,8 +40,7 @@ void main() {
     addTearDown(sessionExpired.close);
   });
 
-  Future<SessionState> resolve() =>
-      container.read(sessionControllerProvider.future);
+  Future<SessionState> resolve() => container.read(sessionControllerProvider.future);
 
   test('signed out when no session is stored', () async {
     when(() => repository.hasSession()).thenAnswer((_) async => false);
@@ -65,8 +62,7 @@ void main() {
     expect(state.status, AccountStatus.identityVerificationPending);
   });
 
-  test('a network failure surfaces as an error without automatic retries',
-      () async {
+  test('a network failure surfaces as an error without automatic retries', () async {
     when(() => repository.hasSession()).thenAnswer((_) async => true);
     when(() => repository.fetchProfile()).thenThrow(
       const ApiError(type: ApiErrorType.network, message: 'offline'),
@@ -78,15 +74,13 @@ void main() {
 
   test('the session ending later signs the user out with a notice', () async {
     when(() => repository.hasSession()).thenAnswer((_) async => true);
-    when(() => repository.fetchProfile())
-        .thenAnswer((_) async => _profile(AccountStatus.active));
+    when(() => repository.fetchProfile()).thenAnswer((_) async => _profile(AccountStatus.active));
     await resolve();
 
     sessionExpired.add(null);
     await Future<void>.delayed(Duration.zero);
 
-    final state =
-        container.read(sessionControllerProvider).value as Unauthenticated;
+    final state = container.read(sessionControllerProvider).value as Unauthenticated;
     expect(state.sessionExpired, isTrue);
   });
 
@@ -96,43 +90,37 @@ void main() {
 
     container.read(sessionControllerProvider.notifier).signedIn(
           const AuthResult(
-            session: AuthSession(
-                accessToken: 'a', refreshToken: 'r', userId: 'user-1'),
+            session: AuthSession(accessToken: 'a', refreshToken: 'r', userId: 'user-1'),
             status: AccountStatus.emailVerificationPending,
             aadhaarVerified: false,
           ),
         );
 
-    final state =
-        container.read(sessionControllerProvider).value as Authenticated;
+    final state = container.read(sessionControllerProvider).value as Authenticated;
     expect(state.status, AccountStatus.emailVerificationPending);
   });
 
   test('refreshStatus re-reads the server status', () async {
     when(() => repository.hasSession()).thenAnswer((_) async => true);
     var status = AccountStatus.emailVerificationPending;
-    when(() => repository.fetchProfile())
-        .thenAnswer((_) async => _profile(status));
+    when(() => repository.fetchProfile()).thenAnswer((_) async => _profile(status));
     await resolve();
 
     status = AccountStatus.identityVerificationPending;
     await container.read(sessionControllerProvider.notifier).refreshStatus();
 
-    final state =
-        container.read(sessionControllerProvider).value as Authenticated;
+    final state = container.read(sessionControllerProvider).value as Authenticated;
     expect(state.status, AccountStatus.identityVerificationPending);
   });
 
   test('signOutLocally clears the stored session', () async {
     when(() => repository.hasSession()).thenAnswer((_) async => true);
-    when(() => repository.fetchProfile())
-        .thenAnswer((_) async => _profile(AccountStatus.banned));
+    when(() => repository.fetchProfile()).thenAnswer((_) async => _profile(AccountStatus.banned));
     await resolve();
 
     await container.read(sessionControllerProvider.notifier).signOutLocally();
 
     verify(() => repository.clearSession()).called(1);
-    expect(container.read(sessionControllerProvider).value,
-        isA<Unauthenticated>());
+    expect(container.read(sessionControllerProvider).value, isA<Unauthenticated>());
   });
 }

@@ -17,10 +17,7 @@ const Map<String, Set<RegistrationStep>> _gatedRoutes = {
   RouteNames.home: {RegistrationStep.home},
 };
 
-const Set<String> _aadhaarRoutes = {
-  RouteNames.signupAadhaar,
-  RouteNames.devAadhaarOtp
-};
+const Set<String> _aadhaarRoutes = {RouteNames.signupAadhaar, RouteNames.devAadhaarOtp};
 
 String routeForStep(RegistrationStep step) {
   return switch (step) {
@@ -42,12 +39,18 @@ String startRouteFor(SessionState state) {
 }
 
 /// GoRouter redirect: nobody sees a registration step the server status does not allow.
-String? redirectFor(
-    {required AsyncValue<SessionState> session, required String location}) {
+String? redirectFor({
+  required AsyncValue<SessionState> session,
+  required String location,
+  bool aadhaarSandbox = true,
+}) {
   final state = session.value;
   if (state == null) {
     return location == RouteNames.splash ? null : RouteNames.splash;
   }
+
+  // The OTP screen exists only for the sandbox provider; production uses the third-party flow.
+  if (location == RouteNames.devAadhaarOtp && !aadhaarSandbox) return RouteNames.signupAadhaar;
 
   final allowedSteps = _gatedRoutes[location];
   if (allowedSteps == null) return null;
@@ -61,9 +64,8 @@ String? redirectFor(
     case Authenticated(:final step, :final aadhaarVerified):
       if (allowedSteps.contains(step)) return null;
       // Active users who skipped Aadhaar may open it later.
-      final aadhaarLater = step == RegistrationStep.home &&
-          !aadhaarVerified &&
-          _aadhaarRoutes.contains(location);
+      final aadhaarLater =
+          step == RegistrationStep.home && !aadhaarVerified && _aadhaarRoutes.contains(location);
       return aadhaarLater ? null : routeForStep(step);
   }
 }

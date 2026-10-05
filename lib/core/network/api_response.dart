@@ -15,8 +15,7 @@ class ApiResponse<T> {
   });
 
   /// Returns null when [json] is not an envelope.
-  static ApiResponse<T>? tryParse<T>(Object? json,
-      {T Function(Object? data)? parse}) {
+  static ApiResponse<T>? tryParse<T>(Object? json, {T Function(Object? data)? parse}) {
     if (json is! Map<String, dynamic> || json['success'] is! bool) return null;
 
     final success = json['success'] as bool;
@@ -37,10 +36,8 @@ class ApiResponse<T> {
     }
     return ApiResponse<T>(
       success: false,
-      errorCode:
-          error is Map<String, dynamic> ? error['code'] as String? : null,
-      errorMessage:
-          error is Map<String, dynamic> ? error['message'] as String? : null,
+      errorCode: error is Map<String, dynamic> ? error['code'] as String? : null,
+      errorMessage: error is Map<String, dynamic> ? error['message'] as String? : null,
       errorDetails: details,
     );
   }

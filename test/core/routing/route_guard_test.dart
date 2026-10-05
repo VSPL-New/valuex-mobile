@@ -6,23 +6,18 @@ import 'package:valuex_mobile/core/routing/route_names.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/presentation/providers/session_state.dart';
 
-AsyncValue<SessionState> _signedOut() =>
-    const AsyncData<SessionState>(Unauthenticated());
+AsyncValue<SessionState> _signedOut() => const AsyncData<SessionState>(Unauthenticated());
 
-AsyncValue<SessionState> _signedIn(AccountStatus status,
-    {bool aadhaarVerified = false}) {
-  return AsyncData(
-      Authenticated(status: status, aadhaarVerified: aadhaarVerified));
+AsyncValue<SessionState> _signedIn(AccountStatus status, {bool aadhaarVerified = false}) {
+  return AsyncData(Authenticated(status: status, aadhaarVerified: aadhaarVerified));
 }
 
 void main() {
   group('while the session is unresolved', () {
     test('only the splash is reachable', () {
       const loading = AsyncLoading<SessionState>();
-      expect(
-          redirectFor(session: loading, location: RouteNames.splash), isNull);
-      expect(redirectFor(session: loading, location: RouteNames.home),
-          RouteNames.splash);
+      expect(redirectFor(session: loading, location: RouteNames.splash), isNull);
+      expect(redirectFor(session: loading, location: RouteNames.home), RouteNames.splash);
     });
 
     test('a failed lookup keeps the user on the splash', () {
@@ -30,8 +25,7 @@ void main() {
         ApiError(type: ApiErrorType.network, message: ''),
         StackTrace.empty,
       );
-      expect(redirectFor(session: failed, location: RouteNames.signupEmail),
-          RouteNames.splash);
+      expect(redirectFor(session: failed, location: RouteNames.signupEmail), RouteNames.splash);
     });
   });
 
@@ -44,8 +38,7 @@ void main() {
         RouteNames.signupMobileVerify,
         RouteNames.home,
       ]) {
-        expect(redirectFor(session: _signedOut(), location: route), isNull,
-            reason: route);
+        expect(redirectFor(session: _signedOut(), location: route), isNull, reason: route);
       }
     });
 
@@ -81,9 +74,7 @@ void main() {
     for (final entry in resumeRoutes.entries) {
       test('${entry.key.name} starts at ${entry.value}', () {
         expect(startRouteFor(_signedIn(entry.key).value!), entry.value);
-        expect(
-            redirectFor(session: _signedIn(entry.key), location: entry.value),
-            isNull);
+        expect(redirectFor(session: _signedIn(entry.key), location: entry.value), isNull);
       });
     }
 
@@ -93,8 +84,7 @@ void main() {
   });
 
   group('never shows a step the status does not allow', () {
-    test('an account waiting for email verification cannot see the mobile page',
-        () {
+    test('an account waiting for email verification cannot see the mobile page', () {
       final session = _signedIn(AccountStatus.emailVerificationPending);
       expect(
         redirectFor(session: session, location: RouteNames.signupMobile),
@@ -128,38 +118,30 @@ void main() {
 
     test('an active account cannot go back into registration', () {
       final session = _signedIn(AccountStatus.active, aadhaarVerified: true);
-      expect(redirectFor(session: session, location: RouteNames.signupMobile),
-          RouteNames.home);
-      expect(redirectFor(session: session, location: RouteNames.signupProfile),
-          RouteNames.home);
-      expect(redirectFor(session: session, location: RouteNames.signupAadhaar),
-          RouteNames.home);
+      expect(redirectFor(session: session, location: RouteNames.signupMobile), RouteNames.home);
+      expect(redirectFor(session: session, location: RouteNames.signupProfile), RouteNames.home);
+      expect(redirectFor(session: session, location: RouteNames.signupAadhaar), RouteNames.home);
     });
 
     test('a blocked account only sees the blocked page', () {
       final session = _signedIn(AccountStatus.banned);
-      expect(redirectFor(session: session, location: RouteNames.home),
-          RouteNames.accountBlocked);
+      expect(redirectFor(session: session, location: RouteNames.home), RouteNames.accountBlocked);
     });
   });
 
   group('Aadhaar after skipping', () {
     test('an active account without Aadhaar can open the Aadhaar screens', () {
       final session = _signedIn(AccountStatus.active);
-      expect(redirectFor(session: session, location: RouteNames.signupAadhaar),
-          isNull);
-      expect(redirectFor(session: session, location: RouteNames.devAadhaarOtp),
-          isNull);
+      expect(redirectFor(session: session, location: RouteNames.signupAadhaar), isNull);
+      expect(redirectFor(session: session, location: RouteNames.devAadhaarOtp), isNull);
     });
   });
 
   group('ungated routes', () {
     test('onboarding and create account are never redirected', () {
       final session = _signedIn(AccountStatus.signupPending);
-      expect(redirectFor(session: session, location: RouteNames.onboarding),
-          isNull);
-      expect(redirectFor(session: session, location: RouteNames.createAccount),
-          isNull);
+      expect(redirectFor(session: session, location: RouteNames.onboarding), isNull);
+      expect(redirectFor(session: session, location: RouteNames.createAccount), isNull);
     });
   });
 }

@@ -19,4 +19,7 @@ class Authenticated extends SessionState {
   const Authenticated({required this.status, required this.aadhaarVerified});
 
   RegistrationStep get step => registrationStepFor(status);
+
+  /// Registration is finished (the account is active, even if Aadhaar was skipped).
+  bool get isPastRegistration => step == RegistrationStep.home;
 }

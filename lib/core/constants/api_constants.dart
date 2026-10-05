@@ -3,6 +3,7 @@ class ApiConstants {
 
   static const String registerInitiate = '/auth/register/initiate';
   static const String registerVerifyMobile = '/auth/register/verify-mobile';
+  static const String registerComplete = '/auth/register/complete';
   static const String skipAadhaar = '/auth/register/skip-aadhaar';
   static const String emailSendOtp = '/auth/email/send-otp';
   static const String emailVerifyOtp = '/auth/email/verify-otp';

@@ -65,8 +65,7 @@ class CreateAccountScreen extends StatelessWidget {
                   const SizedBox(height: 11),
                   SingleToneButton(
                     label: l10n.createAccountSignIn,
-                    onPressed: () => _comingSoon(
-                        context, l10n.createAccountSignInComingSoon),
+                    onPressed: () => _comingSoon(context, l10n.createAccountSignInComingSoon),
                   ),
                   const SizedBox(height: 25),
                   LabeledDivider(label: l10n.createAccountOrLoginWith),
@@ -74,8 +73,7 @@ class CreateAccountScreen extends StatelessWidget {
                   OutlinedIconButton(
                     label: l10n.createAccountContinueGoogle,
                     iconAsset: AppAssets.googleIcon,
-                    onPressed: () => _comingSoon(
-                        context, l10n.createAccountGoogleComingSoon),
+                    onPressed: () => _comingSoon(context, l10n.createAccountGoogleComingSoon),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   OutlinedIconButton(

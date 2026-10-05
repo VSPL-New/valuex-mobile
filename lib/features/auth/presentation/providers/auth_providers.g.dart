@@ -12,10 +12,9 @@ part of 'auth_providers.dart';
 @ProviderFor(authRemoteDataSource)
 const authRemoteDataSourceProvider = AuthRemoteDataSourceProvider._();
 
-final class AuthRemoteDataSourceProvider extends $FunctionalProvider<
-    AuthRemoteDataSource,
-    AuthRemoteDataSource,
-    AuthRemoteDataSource> with $Provider<AuthRemoteDataSource> {
+final class AuthRemoteDataSourceProvider
+    extends $FunctionalProvider<AuthRemoteDataSource, AuthRemoteDataSource, AuthRemoteDataSource>
+    with $Provider<AuthRemoteDataSource> {
   const AuthRemoteDataSourceProvider._()
       : super(
           from: null,
@@ -32,8 +31,7 @@ final class AuthRemoteDataSourceProvider extends $FunctionalProvider<
 
   @$internal
   @override
-  $ProviderElement<AuthRemoteDataSource> $createElement(
-          $ProviderPointer pointer) =>
+  $ProviderElement<AuthRemoteDataSource> $createElement($ProviderPointer pointer) =>
       $ProviderElement(pointer);
 
   @override
@@ -50,8 +48,7 @@ final class AuthRemoteDataSourceProvider extends $FunctionalProvider<
   }
 }
 
-String _$authRemoteDataSourceHash() =>
-    r'bf0f2078e4f67bb78a1f7186e89245e870f5013c';
+String _$authRemoteDataSourceHash() => r'bf0f2078e4f67bb78a1f7186e89245e870f5013c';
 
 @ProviderFor(authRepository)
 const authRepositoryProvider = AuthRepositoryProvider._();

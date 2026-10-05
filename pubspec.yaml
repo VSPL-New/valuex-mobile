@@ -43,6 +43,7 @@ dependencies:
 
   # Permissions
   permission_handler: ^11.3.1
+  screen_protector: ^1.5.3
 
 dev_dependencies:
   flutter_test:

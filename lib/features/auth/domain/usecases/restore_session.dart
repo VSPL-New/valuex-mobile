@@ -18,8 +18,7 @@ class RestoreSession {
     try {
       return await _repository.fetchProfile();
     } on ApiError catch (error) {
-      if (error.type == ApiErrorType.sessionExpired ||
-          error.code == _userNotFoundCode) {
+      if (error.type == ApiErrorType.sessionExpired || error.code == _userNotFoundCode) {
         await _repository.clearSession();
         return null;
       }

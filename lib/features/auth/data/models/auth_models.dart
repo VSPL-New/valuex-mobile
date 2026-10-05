@@ -121,6 +121,5 @@ class AadhaarInitiateModel {
     return AadhaarInitiateModel(transactionId: map['transactionId'] as String);
   }
 
-  AadhaarTransaction toEntity() =>
-      AadhaarTransaction(transactionId: transactionId);
+  AadhaarTransaction toEntity() => AadhaarTransaction(transactionId: transactionId);
 }

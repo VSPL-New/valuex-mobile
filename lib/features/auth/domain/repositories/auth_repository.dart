@@ -1,6 +1,7 @@
 import '../entities/aadhaar_transaction.dart';
 import '../entities/auth_session.dart';
 import '../entities/otp_sent.dart';
+import '../entities/signup_details.dart';
 import '../entities/user_profile.dart';
 
 abstract interface class AuthRepository {
@@ -14,8 +15,7 @@ abstract interface class AuthRepository {
   Future<OtpSent> initiateRegistration(String mobile);
 
   /// Stores the issued tokens.
-  Future<AuthResult> verifyMobileOtp(
-      {required String mobile, required String otp});
+  Future<AuthResult> verifyMobileOtp({required String mobile, required String otp});
 
   Future<OtpSent> sendEmailOtp(String email);
 
@@ -30,6 +30,8 @@ abstract interface class AuthRepository {
   });
 
   /// Stores the issued tokens.
-  Future<AuthResult> verifyAadhaar(
-      {required String transactionId, required String otp});
+  Future<AuthResult> verifyAadhaar({required String transactionId, required String otp});
+
+  /// Finishes registration; stores the issued tokens.
+  Future<AuthResult> completeSignup(SignupDetails details);
 }

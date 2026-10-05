@@ -47,8 +47,7 @@ void main() {
 
     test('rejects a missing base URL', () {
       expect(
-        () =>
-            AppConfig.parse(env: 'dev', apiBaseUrl: '', aadhaarFlow: 'sandbox'),
+        () => AppConfig.parse(env: 'dev', apiBaseUrl: '', aadhaarFlow: 'sandbox'),
         throwsA(isA<AppConfigException>()),
       );
     });

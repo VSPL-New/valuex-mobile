@@ -24,8 +24,7 @@ class SplashScreen extends ConsumerStatefulWidget {
   ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends ConsumerState<SplashScreen>
-    with SingleTickerProviderStateMixin {
+class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerProviderStateMixin {
   static const _splashDuration = Duration(milliseconds: 2200);
 
   late final AnimationController _progressController;
@@ -45,8 +44,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       setState(() => _animationDone = true);
       _openNextScreen();
     });
-    ref.listenManual(
-        sessionControllerProvider, (previous, next) => _openNextScreen());
+    ref.listenManual(sessionControllerProvider, (previous, next) => _openNextScreen());
   }
 
   void _openNextScreen() {
@@ -85,8 +83,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                       AppLocalizations.of(context),
                       sessionError is ApiError
                           ? sessionError
-                          : const ApiError(
-                              type: ApiErrorType.unknown, message: ''),
+                          : const ApiError(type: ApiErrorType.unknown, message: ''),
                     ),
                     onRetry: () => ref.invalidate(sessionControllerProvider),
                   )

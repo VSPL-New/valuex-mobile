@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
+import '../theme/colors.dart';
 import '../theme/gradients.dart';
 import '../theme/spacing.dart';
 import '../theme/text_styles.dart';
 
 /// Full-width primary action with the brand gradient.
-/// Dimmed and non-interactive when [onPressed] is null.
+/// Dimmed and non-interactive when [onPressed] is null; shows a spinner and
+/// ignores taps while [isLoading].
 class BrandGradientButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
+  final bool isLoading;
 
   const BrandGradientButton({
     super.key,
     required this.label,
     required this.onPressed,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final enabled = onPressed != null;
+    final enabled = onPressed != null || isLoading;
     final radius = BorderRadius.circular(AppRadius.xl);
     return Opacity(
       opacity: enabled ? 1 : 0.4,
@@ -39,12 +43,21 @@ class BrandGradientButton extends StatelessWidget {
             ),
             child: InkWell(
               borderRadius: radius,
-              onTap: onPressed,
+              onTap: isLoading ? null : onPressed,
               child: SizedBox(
                 height: AppSizes.buttonMedium,
                 width: double.infinity,
                 child: Center(
-                  child: Text(label, style: AppTextStyles.button),
+                  child: isLoading
+                      ? const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.5,
+                            color: AppColors.brandOnPrimary,
+                          ),
+                        )
+                      : Text(label, style: AppTextStyles.button),
                 ),
               ),
             ),

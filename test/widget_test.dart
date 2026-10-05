@@ -13,8 +13,7 @@ void main() {
   testWidgets('ValueXApp builds and shows the splash screen', (tester) async {
     final repository = MockAuthRepository();
     final apiClient = MockApiClient();
-    when(() => apiClient.onSessionExpired)
-        .thenAnswer((_) => const Stream<void>.empty());
+    when(() => apiClient.onSessionExpired).thenAnswer((_) => const Stream<void>.empty());
     when(() => repository.hasSession()).thenAnswer((_) async => false);
 
     await tester.pumpWidget(

@@ -18,8 +18,7 @@ class ValueXApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       routerConfig: router,
-      builder: (context, child) =>
-          SessionExpiryListener(child: child ?? const SizedBox.shrink()),
+      builder: (context, child) => SessionExpiryListener(child: child ?? const SizedBox.shrink()),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

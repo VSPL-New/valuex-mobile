@@ -28,15 +28,12 @@ class AccountBlockedScreen extends ConsumerWidget {
               const SizedBox(height: AppSpacing.xl),
               Text(l10n.accountBlockedTitle, style: AppTextStyles.heading2),
               const SizedBox(height: AppSpacing.sm),
-              Text(l10n.accountBlockedMessage,
-                  style: AppTextStyles.bodySecondary),
+              Text(l10n.accountBlockedMessage, style: AppTextStyles.bodySecondary),
               const Spacer(),
               BrandGradientButton(
                 label: l10n.accountBlockedAction,
                 onPressed: () async {
-                  await ref
-                      .read(sessionControllerProvider.notifier)
-                      .signOutLocally();
+                  await ref.read(sessionControllerProvider.notifier).signOutLocally();
                   if (context.mounted) context.go(RouteNames.createAccount);
                 },
               ),

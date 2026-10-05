@@ -37,10 +37,7 @@ class ApiClient {
       baseUrl: config.apiBaseUrl,
       connectTimeout: ApiConstants.connectTimeout,
       receiveTimeout: ApiConstants.receiveTimeout,
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
+      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
     );
 
     // The refresh call must not pass through the interceptor that triggers it.
@@ -90,8 +87,7 @@ class ApiClient {
     T Function(Object? data)? parse,
   }) {
     return _send(
-      () =>
-          dio.post<dynamic>(path, data: data, options: _options(authenticated)),
+      () => dio.post<dynamic>(path, data: data, options: _options(authenticated)),
       parse,
     );
   }
@@ -103,8 +99,7 @@ class ApiClient {
     T Function(Object? data)? parse,
   }) {
     return _send(
-      () =>
-          dio.put<dynamic>(path, data: data, options: _options(authenticated)),
+      () => dio.put<dynamic>(path, data: data, options: _options(authenticated)),
       parse,
     );
   }
@@ -116,8 +111,7 @@ class ApiClient {
     T Function(Object? data)? parse,
   }) {
     return _send(
-      () => dio.delete<dynamic>(path,
-          data: data, options: _options(authenticated)),
+      () => dio.delete<dynamic>(path, data: data, options: _options(authenticated)),
       parse,
     );
   }

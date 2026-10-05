@@ -15,23 +15,20 @@ part 'session_controller.g.dart';
 class SessionController extends _$SessionController {
   @override
   Future<SessionState> build() async {
-    final subscription =
-        ref.watch(apiClientProvider).onSessionExpired.listen((_) {
+    final subscription = ref.watch(apiClientProvider).onSessionExpired.listen((_) {
       state = const AsyncData(Unauthenticated(sessionExpired: true));
     });
     ref.onDispose(subscription.cancel);
 
     final profile = await ref.watch(restoreSessionProvider).call();
     if (profile == null) return const Unauthenticated();
-    return Authenticated(
-        status: profile.status, aadhaarVerified: profile.aadhaarVerified);
+    return Authenticated(status: profile.status, aadhaarVerified: profile.aadhaarVerified);
   }
 
   /// Call after an endpoint issued tokens (verify mobile, skip or verify Aadhaar).
   void signedIn(AuthResult result) {
     state = AsyncData(
-      Authenticated(
-          status: result.status, aadhaarVerified: result.aadhaarVerified),
+      Authenticated(status: result.status, aadhaarVerified: result.aadhaarVerified),
     );
   }
 
@@ -39,8 +36,7 @@ class SessionController extends _$SessionController {
   Future<void> refreshStatus() async {
     final profile = await ref.read(authRepositoryProvider).fetchProfile();
     state = AsyncData(
-      Authenticated(
-          status: profile.status, aadhaarVerified: profile.aadhaarVerified),
+      Authenticated(status: profile.status, aadhaarVerified: profile.aadhaarVerified),
     );
   }
 

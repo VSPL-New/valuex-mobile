@@ -6,6 +6,8 @@ import 'package:valuex_mobile/features/auth/data/datasources/auth_remote_data_so
 import 'package:valuex_mobile/features/auth/data/models/auth_models.dart';
 import 'package:valuex_mobile/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
+import 'package:valuex_mobile/features/auth/domain/entities/gender.dart';
+import 'package:valuex_mobile/features/auth/domain/entities/signup_details.dart';
 
 import '../../../helpers/fake_http_adapter.dart';
 import '../../../helpers/fake_secure_storage.dart';
@@ -50,17 +52,12 @@ void main() {
 
     test('MessageResponseModel reads the OTP lifetime', () {
       expect(
-        MessageResponseModel.fromJson(
-                {'message': 'sent', 'otpExpiresInSeconds': 300})
+        MessageResponseModel.fromJson({'message': 'sent', 'otpExpiresInSeconds': 300})
             .toOtpSent()
             .expiresInSeconds,
         300,
       );
-      expect(
-          MessageResponseModel.fromJson({'message': 'ok'})
-              .toOtpSent()
-              .expiresInSeconds,
-          isNull);
+      expect(MessageResponseModel.fromJson({'message': 'ok'}).toOtpSent().expiresInSeconds, isNull);
     });
   });
 
@@ -77,10 +74,10 @@ void main() {
             }),
           '/auth/register/verify-mobile' ||
           '/auth/register/skip-aadhaar' ||
+          '/auth/register/complete' ||
           '/auth/aadhaar/verify' =>
             FakeHttpAdapter.ok(_authJson),
-          '/users/me' =>
-            FakeHttpAdapter.ok({'userId': 'user-1', 'status': 'ACTIVE'}),
+          '/users/me' => FakeHttpAdapter.ok({'userId': 'user-1', 'status': 'ACTIVE'}),
           _ => FakeHttpAdapter.ok({'message': 'ok', 'transactionId': 'txn-1'}),
         };
       });
@@ -138,6 +135,41 @@ void main() {
       expect(adapter.requests[1].path, '/auth/aadhaar/verify');
     });
 
+    test('complete sign up posts the profile with an ISO date of birth', () async {
+      await dataSource.completeSignup(
+        SignupDetails(
+          displayName: 'Asha Verma',
+          gender: Gender.female,
+          dateOfBirth: DateTime(1995, 5, 7),
+          state: 'Assam',
+          city: 'Guwahati',
+          address: '12 GS Road, Dispur',
+          pincode: '781005',
+          avatarId: 'avatar-05',
+          termsAccepted: true,
+          consentGiven: true,
+          termsVersion: 'template-0',
+        ),
+      );
+
+      final request = adapter.requests.single;
+      expect(request.path, '/auth/register/complete');
+      expect(request.headers['Authorization'], 'Bearer access-1');
+      expect(request.data, {
+        'displayName': 'Asha Verma',
+        'gender': 'FEMALE',
+        'dateOfBirth': '1995-05-07',
+        'state': 'Assam',
+        'city': 'Guwahati',
+        'address': '12 GS Road, Dispur',
+        'pincode': '781005',
+        'avatarId': 'avatar-05',
+        'termsAccepted': true,
+        'consentGiven': true,
+        'termsVersion': 'template-0',
+      });
+    });
+
     test('skip Aadhaar and profile use their endpoints', () async {
       await dataSource.skipAadhaar();
       final profile = await dataSource.fetchProfile();
@@ -164,8 +196,7 @@ void main() {
         () => remote.verifyMobileOtp(mobile: '9876543210', otp: '123456'),
       ).thenAnswer((_) async => AuthResponseModel.fromJson(_authJson));
 
-      final result =
-          await repository.verifyMobileOtp(mobile: '9876543210', otp: '123456');
+      final result = await repository.verifyMobileOtp(mobile: '9876543210', otp: '123456');
 
       expect(result.status, AccountStatus.emailVerificationPending);
       expect(storage.accessToken, 'access-1');
@@ -173,12 +204,36 @@ void main() {
       expect(storage.userId, 'user-1');
     });
 
+    test('completing sign up stores the activated session', () async {
+      final details = SignupDetails(
+        displayName: 'Asha Verma',
+        gender: Gender.female,
+        dateOfBirth: DateTime(1995, 5, 17),
+        state: 'Assam',
+        city: 'Guwahati',
+        address: '12 GS Road, Dispur',
+        pincode: '781005',
+        avatarId: 'avatar-05',
+        termsAccepted: true,
+        consentGiven: true,
+        termsVersion: 'template-0',
+      );
+      when(() => remote.completeSignup(details)).thenAnswer(
+        (_) async => AuthResponseModel.fromJson({..._authJson, 'status': 'ACTIVE'}),
+      );
+
+      final result = await repository.completeSignup(details);
+
+      expect(result.status, AccountStatus.active);
+      expect(storage.accessToken, 'access-1');
+      expect(storage.userId, 'user-1');
+    });
+
     test('skipping Aadhaar replaces the stored tokens', () async {
       storage.accessToken = 'old';
       storage.refreshToken = 'old-refresh';
       when(() => remote.skipAadhaar()).thenAnswer(
-        (_) async => AuthResponseModel.fromJson(
-            {..._authJson, 'status': 'SIGNUP_PENDING'}),
+        (_) async => AuthResponseModel.fromJson({..._authJson, 'status': 'SIGNUP_PENDING'}),
       );
 
       final result = await repository.skipAadhaar();
@@ -188,14 +243,11 @@ void main() {
     });
 
     test('verifying Aadhaar stores the session', () async {
-      when(() => remote.verifyAadhaar(transactionId: 'txn-1', otp: '123456'))
-          .thenAnswer(
-        (_) async =>
-            AuthResponseModel.fromJson({..._authJson, 'aadhaarVerified': true}),
+      when(() => remote.verifyAadhaar(transactionId: 'txn-1', otp: '123456')).thenAnswer(
+        (_) async => AuthResponseModel.fromJson({..._authJson, 'aadhaarVerified': true}),
       );
 
-      final result =
-          await repository.verifyAadhaar(transactionId: 'txn-1', otp: '123456');
+      final result = await repository.verifyAadhaar(transactionId: 'txn-1', otp: '123456');
 
       expect(result.aadhaarVerified, isTrue);
       expect(storage.refreshToken, 'refresh-1');

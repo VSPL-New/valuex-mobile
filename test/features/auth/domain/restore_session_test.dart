@@ -23,8 +23,7 @@ void main() {
     when(() => repository.clearSession()).thenAnswer((_) async {});
   });
 
-  test('returns null without calling the server when nobody is signed in',
-      () async {
+  test('returns null without calling the server when nobody is signed in', () async {
     when(() => repository.hasSession()).thenAnswer((_) async => false);
 
     expect(await restoreSession(), isNull);
@@ -40,8 +39,7 @@ void main() {
 
   test('an expired session is cleared and treated as signed out', () async {
     when(() => repository.hasSession()).thenAnswer((_) async => true);
-    when(() => repository.fetchProfile())
-        .thenThrow(const ApiError.sessionExpired());
+    when(() => repository.fetchProfile()).thenThrow(const ApiError.sessionExpired());
 
     expect(await restoreSession(), isNull);
     verify(() => repository.clearSession()).called(1);

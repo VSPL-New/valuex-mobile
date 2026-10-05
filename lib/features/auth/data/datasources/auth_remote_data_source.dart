@@ -1,5 +1,6 @@
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/api_client.dart';
+import '../../domain/entities/signup_details.dart';
 import '../models/auth_models.dart';
 
 class AuthRemoteDataSource {
@@ -17,8 +18,7 @@ class AuthRemoteDataSource {
     );
   }
 
-  Future<AuthResponseModel> verifyMobileOtp(
-      {required String mobile, required String otp}) {
+  Future<AuthResponseModel> verifyMobileOtp({required String mobile, required String otp}) {
     return _client.post(
       ApiConstants.registerVerifyMobile,
       data: {'mobile': mobile, 'otp': otp},
@@ -43,8 +43,7 @@ class AuthRemoteDataSource {
   }
 
   Future<AuthResponseModel> skipAadhaar() {
-    return _client.post(ApiConstants.skipAadhaar,
-        parse: AuthResponseModel.fromJson);
+    return _client.post(ApiConstants.skipAadhaar, parse: AuthResponseModel.fromJson);
   }
 
   Future<AadhaarInitiateModel> initiateAadhaar({
@@ -69,8 +68,32 @@ class AuthRemoteDataSource {
     );
   }
 
+  Future<AuthResponseModel> completeSignup(SignupDetails details) {
+    return _client.post(
+      ApiConstants.registerComplete,
+      data: {
+        'displayName': details.displayName,
+        'gender': details.gender.apiValue,
+        'dateOfBirth': _isoDate(details.dateOfBirth),
+        'state': details.state,
+        'city': details.city,
+        'address': details.address,
+        'pincode': details.pincode,
+        'avatarId': details.avatarId,
+        'termsAccepted': details.termsAccepted,
+        'consentGiven': details.consentGiven,
+        'termsVersion': details.termsVersion,
+      },
+      parse: AuthResponseModel.fromJson,
+    );
+  }
+
+  static String _isoDate(DateTime date) {
+    String two(int value) => value.toString().padLeft(2, '0');
+    return '${date.year.toString().padLeft(4, '0')}-${two(date.month)}-${two(date.day)}';
+  }
+
   Future<UserProfileModel> fetchProfile() {
-    return _client.get(ApiConstants.currentUser,
-        parse: UserProfileModel.fromJson);
+    return _client.get(ApiConstants.currentUser, parse: UserProfileModel.fromJson);
   }
 }
