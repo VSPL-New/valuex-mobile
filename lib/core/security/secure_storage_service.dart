@@ -44,6 +44,12 @@ class SecureStorageService {
     return await _storage.read(key: StorageKeys.userId);
   }
 
+  Future<void> clearSession() async {
+    await _storage.delete(key: StorageKeys.accessToken);
+    await _storage.delete(key: StorageKeys.refreshToken);
+    await _storage.delete(key: StorageKeys.userId);
+  }
+
   // Clear all
   Future<void> clearAll() async {
     await _storage.deleteAll();

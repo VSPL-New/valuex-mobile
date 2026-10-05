@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/gradients.dart';
-import '../../core/theme/spacing.dart';
-import '../../core/theme/text_styles.dart';
+import '../theme/gradients.dart';
+import '../theme/spacing.dart';
+import '../theme/text_styles.dart';
 
 /// Full-width primary action with the brand gradient.
 /// Dimmed and non-interactive when [onPressed] is null.

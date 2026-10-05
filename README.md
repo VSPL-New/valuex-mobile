@@ -46,32 +46,27 @@ Fonts (`assets/fonts/`) and images (`assets/images/`) are checked in. When addin
 
 ## Running the app
 
+The app reads its environment from a JSON file passed with `--dart-define-from-file`. Without it the app stops at startup with a configuration error.
+
 ```bash
-flutter devices                 # list emulators/simulators/devices
-flutter run                     # run on the default device
-flutter run -d <device-id>      # run on a specific device
-flutter run -d chrome           # web (UI checks only; secure storage/permissions are limited)
+flutter devices                                                    # list emulators/simulators/devices
+flutter run -d <device-id> --dart-define-from-file=config/dev_android.json   # Android emulator
+flutter run -d <device-id> --dart-define-from-file=config/dev_ios.json       # iOS simulator
 ```
+
+| File | Use | `API_BASE_URL` |
+|---|---|---|
+| `config/dev_android.json` | Android emulator | `http://10.0.2.2:8080/api/v1` |
+| `config/dev_ios.json` | iOS simulator | `http://localhost:8080/api/v1` |
+| `config/dev_local.json` | physical device (git-ignored, create it yourself) | `http://<your-LAN-IP>:8080/api/v1` |
+| `config/staging.json` | staging | placeholder host, replace before use |
+| `config/prod.json` | production | placeholder host, replace before use |
+
+Keys: `ENV` (`dev`, `staging`, `prod`), `API_BASE_URL` (https outside dev), `AADHAAR_FLOW` (`sandbox` or `thirdparty`; `sandbox` is rejected in prod). The files hold public values only, never secrets. The same flag works for `flutter build`. VS Code launch entries are in `.vscode/launch.json`.
 
 Hot reload: `r`, hot restart: `R`, quit: `q`.
 
 ## Backend
-
-The API base URL is hardcoded in [lib/core/constants/api_constants.dart](lib/core/constants/api_constants.dart):
-
-```dart
-static const String baseUrl = 'http://localhost:8080/api/v1';
-```
-
-`localhost` only reaches your machine from the iOS simulator and web. Change the host per target:
-
-| Target | Host |
-|---|---|
-| iOS simulator / web | `localhost` |
-| Android emulator | `10.0.2.2` |
-| Physical device | your machine's LAN IP (same network) |
-
-Revert local host changes before committing.
 
 Start the backend (Spring Boot, port `8080`, `dev` profile) from `valuex-backend/`. See [../valuex-backend/README.md](../valuex-backend/README.md) for details. PostgreSQL and Redis are provided by `valuex-backend/docker-compose.yml`:
 
@@ -82,33 +77,39 @@ docker compose up -d
 
 Swagger UI (dev profile): `http://localhost:8080/swagger-ui.html`.
 
-Android note: the main `AndroidManifest.xml` does not declare `android.permission.INTERNET`; only the debug/profile manifests do. Add it to `android/app/src/main/AndroidManifest.xml` before producing release builds that call the API. Cleartext HTTP is not configured either, so use HTTPS outside local development.
+Android note: cleartext HTTP is allowed in debug and profile builds only (needed for `10.0.2.2`). Release builds must use HTTPS. iOS allows local-network HTTP through `NSAllowsLocalNetworking`.
 
 ## Project structure
 
 ```
+config/                     # Per-environment JSON for --dart-define-from-file
 lib/
-  main.dart                 # Entry point, wraps app in ProviderScope
-  app.dart                  # ValueXApp: theme and router wiring
+  main.dart                 # Entry point, reads AppConfig, wraps app in ProviderScope
+  app.dart                  # ValueXApp: theme, router and localization wiring
+  l10n/                     # app_en.arb, app_hi.arb and generated AppLocalizations
   core/
+    config/                 # app_config (environment values)
     constants/              # api_constants, app_constants, storage_keys
-    network/                # Dio api_client, api_response, api_error
-    routing/                # go_router config (app_router), route_names
-    storage/                # preferences_service, secure_storage_service
+    network/                # api_client, api_interceptor (refresh once on 401), api_error, api_response
+    routing/                # go_router config (app_router), route_names, route_guard (redirect by account status)
+    security/               # secure_storage_service (tokens)
+    storage/                # preferences_service (non-sensitive flags)
     theme/                  # colors, text_styles, app_theme
     utils/                  # date_utils, formatters, validators
+    widgets/                # shared widgets (buttons, back button, logo, error view, ...)
   features/
     splash/presentation/
     onboarding/presentation/
+    auth/                   # data/, domain/, presentation/ (providers, screens, widgets)
     home/presentation/
-  shared/widgets/           # app_button, app_text_field, error_view, loading_indicator
-test/                       # Widget and unit tests
+test/                       # Unit and widget tests mirroring lib/
 ```
 
 Conventions for new work:
 
 - One folder per feature under `lib/features/<feature>/` with `presentation/` and, as needed, `data/` and `domain/`.
-- Reusable widgets go in `lib/shared/widgets/`; app-wide helpers in `lib/core/`.
+- Reusable widgets go in `lib/core/widgets/` or `lib/features/<feature>/presentation/widgets/`; app-wide helpers in `lib/core/`.
+- User-facing text goes in `lib/l10n/app_en.arb` and `app_hi.arb`, then run `flutter gen-l10n`; read it with `AppLocalizations.of(context)`. No hardcoded strings in widgets.
 - Register routes in `route_names.dart` and `app_router.dart`.
 - Keep tokens in `SecureStorageService`; non-sensitive flags in `PreferencesService`. Keys live in `storage_keys.dart`.
 - Make HTTP calls through `ApiClient` so timeouts (30 s) and error mapping stay consistent.
@@ -118,6 +119,8 @@ Conventions for new work:
 ## Code generation (Riverpod)
 
 When using `@riverpod` annotations:
+
+The project uses Riverpod 3 with `riverpod_generator` 3; older generators cannot analyze the current Dart SDK. Generated `.g.dart` files are committed.
 
 ```bash
 dart run build_runner build --delete-conflicting-outputs   # one-off

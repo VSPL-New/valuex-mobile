@@ -1,121 +1,164 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
+import '../config/app_config.dart';
 import '../constants/api_constants.dart';
-import '../storage/secure_storage_service.dart';
+import '../security/secure_storage_service.dart';
 import 'api_error.dart';
+import 'api_error_mapper.dart';
+import 'api_interceptor.dart';
+import 'api_log_interceptor.dart';
+import 'api_response.dart';
+import 'token_refresher.dart';
 
 final apiClientProvider = Provider<ApiClient>((ref) {
-  return ApiClient(ref.watch(secureStorageServiceProvider));
+  final client = ApiClient(
+    ref.watch(secureStorageServiceProvider),
+    ref.watch(appConfigProvider),
+  );
+  ref.onDispose(client.dispose);
+  return client;
 });
 
+/// All HTTP goes through this client: envelope unwrapping, typed errors,
+/// bearer token and refresh-once on 401.
 class ApiClient {
-  final SecureStorageService _secureStorage;
+  static const _uuid = Uuid();
+
   late final Dio dio;
+  late final TokenRefresher _refresher;
 
-  ApiClient(this._secureStorage) {
-    dio = Dio(
-      BaseOptions(
-        baseUrl: ApiConstants.baseUrl,
-        connectTimeout: ApiConstants.connectTimeout,
-        receiveTimeout: ApiConstants.receiveTimeout,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      ),
+  ApiClient(
+    SecureStorageService storage,
+    AppConfig config, {
+    HttpClientAdapter? adapter,
+  }) {
+    final options = BaseOptions(
+      baseUrl: config.apiBaseUrl,
+      connectTimeout: ApiConstants.connectTimeout,
+      receiveTimeout: ApiConstants.receiveTimeout,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
     );
 
-    dio.interceptors.add(
+    // The refresh call must not pass through the interceptor that triggers it.
+    final refreshDio = Dio(options);
+    dio = Dio(options);
+    if (adapter != null) {
+      refreshDio.httpClientAdapter = adapter;
+      dio.httpClientAdapter = adapter;
+    }
+
+    _refresher = TokenRefresher(storage, refreshDio);
+    dio.interceptors.addAll([
       InterceptorsWrapper(
-        onRequest: (options, handler) async {
-          final token = await _secureStorage.getAccessToken();
-          if (token != null) {
-            options.headers['Authorization'] = 'Bearer $token';
-          }
-          return handler.next(options);
-        },
-        onError: (error, handler) async {
-          if (error.response?.statusCode == 401) {
-            // Token refresh logic can be added here in a later sprint
-          }
-          return handler.next(error);
+        onRequest: (options, handler) {
+          options.headers['X-Correlation-Id'] = _uuid.v4();
+          handler.next(options);
         },
       ),
-    );
+      ApiInterceptor(dio, storage, _refresher),
+      ApiLogInterceptor(),
+    ]);
+  }
 
-    if (const bool.fromEnvironment('dart.vm.product') == false) {
-      dio.interceptors.add(
-        LogInterceptor(
-          requestBody: true,
-          responseBody: true,
-          error: true,
-        ),
+  /// Emits when the session cannot be renewed; the app must return to sign-in.
+  Stream<void> get onSessionExpired => _refresher.onSessionExpired;
+
+  Future<T> get<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    bool authenticated = true,
+    T Function(Object? data)? parse,
+  }) {
+    return _send(
+      () => dio.get<dynamic>(
+        path,
+        queryParameters: queryParameters,
+        options: _options(authenticated),
+      ),
+      parse,
+    );
+  }
+
+  Future<T> post<T>(
+    String path, {
+    Object? data,
+    bool authenticated = true,
+    T Function(Object? data)? parse,
+  }) {
+    return _send(
+      () =>
+          dio.post<dynamic>(path, data: data, options: _options(authenticated)),
+      parse,
+    );
+  }
+
+  Future<T> put<T>(
+    String path, {
+    Object? data,
+    bool authenticated = true,
+    T Function(Object? data)? parse,
+  }) {
+    return _send(
+      () =>
+          dio.put<dynamic>(path, data: data, options: _options(authenticated)),
+      parse,
+    );
+  }
+
+  Future<T> delete<T>(
+    String path, {
+    Object? data,
+    bool authenticated = true,
+    T Function(Object? data)? parse,
+  }) {
+    return _send(
+      () => dio.delete<dynamic>(path,
+          data: data, options: _options(authenticated)),
+      parse,
+    );
+  }
+
+  Options _options(bool authenticated) {
+    return Options(extra: {ApiRequestFlags.authenticated: authenticated});
+  }
+
+  Future<T> _send<T>(
+    Future<Response<dynamic>> Function() call,
+    T Function(Object? data)? parse,
+  ) async {
+    final Response<dynamic> response;
+    try {
+      response = await call();
+    } on DioException catch (e) {
+      throw ApiErrorMapper.fromDio(e);
+    }
+
+    try {
+      final envelope = ApiResponse.tryParse<T>(response.data, parse: parse);
+      if (envelope == null || !envelope.success) {
+        throw ApiError(
+          type: ApiErrorType.server,
+          message: envelope?.errorMessage ?? 'Unexpected response',
+          code: envelope?.errorCode,
+          statusCode: response.statusCode,
+        );
+      }
+      return envelope.data as T;
+    } on TypeError {
+      throw ApiError(
+        type: ApiErrorType.server,
+        message: 'Unexpected response',
+        statusCode: response.statusCode,
       );
     }
   }
 
-  Future<Response<T>> get<T>(
-    String path, {
-    Map<String, dynamic>? queryParameters,
-  }) async {
-    try {
-      return await dio.get<T>(path, queryParameters: queryParameters);
-    } on DioException catch (e) {
-      throw _mapError(e);
-    }
-  }
-
-  Future<Response<T>> post<T>(
-    String path, {
-    dynamic data,
-  }) async {
-    try {
-      return await dio.post<T>(path, data: data);
-    } on DioException catch (e) {
-      throw _mapError(e);
-    }
-  }
-
-  Future<Response<T>> put<T>(
-    String path, {
-    dynamic data,
-  }) async {
-    try {
-      return await dio.put<T>(path, data: data);
-    } on DioException catch (e) {
-      throw _mapError(e);
-    }
-  }
-
-  Future<Response<T>> delete<T>(
-    String path, {
-    dynamic data,
-  }) async {
-    try {
-      return await dio.delete<T>(path, data: data);
-    } on DioException catch (e) {
-      throw _mapError(e);
-    }
-  }
-
-  ApiError _mapError(DioException e) {
-    if (e.type == DioExceptionType.connectionTimeout ||
-        e.type == DioExceptionType.receiveTimeout ||
-        e.type == DioExceptionType.sendTimeout) {
-      return ApiError(message: 'Connection timed out. Please try again.');
-    }
-    if (e.type == DioExceptionType.connectionError) {
-      return ApiError(message: 'No internet connection.');
-    }
-    final data = e.response?.data;
-    String message = 'Something went wrong. Please try again.';
-    if (data is Map<String, dynamic>) {
-      message = data['message']?.toString() ?? message;
-    }
-    return ApiError(
-      message: message,
-      statusCode: e.response?.statusCode,
-      data: e.response?.data,
-    );
+  void dispose() {
+    _refresher.dispose();
+    dio.close();
   }
 }

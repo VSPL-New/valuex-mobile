@@ -2,36 +2,37 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/constants/app_assets.dart';
-import '../../../core/routing/route_names.dart';
-import '../../../core/theme/colors.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../shared/widgets/brand_gradient_button.dart';
-import '../../../shared/widgets/brand_logo.dart';
-import '../../../shared/widgets/outlined_icon_button.dart';
-import '../../../shared/widgets/single_tone_button.dart';
-import '../../../shared/widgets/square_back_button.dart';
-import 'widgets/labeled_divider.dart';
+import '../../../../core/constants/app_assets.dart';
+import '../../../../core/routing/route_names.dart';
+import '../../../../core/theme/colors.dart';
+import '../../../../core/theme/spacing.dart';
+import '../../../../core/widgets/brand_gradient_button.dart';
+import '../../../../core/widgets/brand_logo.dart';
+import '../../../../core/widgets/outlined_icon_button.dart';
+import '../../../../core/widgets/single_tone_button.dart';
+import '../../../../core/widgets/square_back_button.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../widgets/labeled_divider.dart';
 
 /// Landing page after onboarding: choose how to register or sign in
 /// (Figma: Create account).
 class CreateAccountScreen extends StatelessWidget {
   const CreateAccountScreen({super.key});
 
-  void _comingSoon(BuildContext context, String what) {
+  void _comingSoon(BuildContext context, String message) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('$what is coming soon')));
+      ..showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final bottomInset = MediaQuery.of(context).padding.bottom;
     // Design leaves 54px below the last button (includes the home indicator).
     final bottomPadding = math.max(54.0, bottomInset + 24);
 
     return Scaffold(
-      backgroundColor: AppColors.brandSurface,
       body: SafeArea(
         bottom: false,
         child: Column(
@@ -58,25 +59,27 @@ class CreateAccountScreen extends StatelessWidget {
               child: Column(
                 children: [
                   BrandGradientButton(
-                    label: 'Create an Account',
+                    label: l10n.createAccountCreate,
                     onPressed: () => context.go(RouteNames.signupMobile),
                   ),
                   const SizedBox(height: 11),
                   SingleToneButton(
-                    label: 'Sign In',
-                    onPressed: () => _comingSoon(context, 'Sign in'),
+                    label: l10n.createAccountSignIn,
+                    onPressed: () => _comingSoon(
+                        context, l10n.createAccountSignInComingSoon),
                   ),
                   const SizedBox(height: 25),
-                  const LabeledDivider(label: 'Or login with'),
+                  LabeledDivider(label: l10n.createAccountOrLoginWith),
                   const SizedBox(height: 30),
                   OutlinedIconButton(
-                    label: 'Continue with Google',
+                    label: l10n.createAccountContinueGoogle,
                     iconAsset: AppAssets.googleIcon,
-                    onPressed: () => _comingSoon(context, 'Google sign-in'),
+                    onPressed: () => _comingSoon(
+                        context, l10n.createAccountGoogleComingSoon),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   OutlinedIconButton(
-                    label: 'Continue as Guest',
+                    label: l10n.createAccountContinueGuest,
                     iconAsset: AppAssets.guestIcon,
                     onPressed: () => context.go(RouteNames.home),
                   ),
@@ -105,6 +108,9 @@ class _Hero extends StatelessWidget {
             child: Image.asset(
               AppAssets.createAccountIllustration,
               fit: BoxFit.cover,
+              // The PNG has an opaque white backdrop; multiply blends it into the page colour.
+              color: AppColors.brandBackground,
+              colorBlendMode: BlendMode.multiply,
             ),
           ),
           const Positioned(
@@ -112,8 +118,7 @@ class _Hero extends StatelessWidget {
             top: 204,
             width: 57,
             height: 22,
-            // The phone screen in the illustration is white.
-            child: BrandLogo(fit: BoxFit.cover, blendWith: null),
+            child: BrandLogo(fit: BoxFit.cover),
           ),
         ],
       ),

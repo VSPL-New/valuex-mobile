@@ -1,28 +1,37 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/routing/route_names.dart';
+import '../../../core/routing/route_guard.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/gradients.dart';
 import '../../../core/theme/text_styles.dart';
-import '../../../shared/widgets/brand_logo.dart';
+import '../../../core/network/api_error.dart';
+import '../../../core/network/api_error_messages.dart';
+import '../../../core/widgets/brand_logo.dart';
+import '../../../core/widgets/error_view.dart';
+import '../../auth/presentation/providers/session_controller.dart';
+import '../../../l10n/app_localizations.dart';
 
-/// App launch screen (Figma: Just Qlic) — logo, animated progress bar, and
-/// an auto-advance to onboarding once the progress animation completes.
-class SplashScreen extends StatefulWidget {
+/// App launch screen (Figma: Just Qlic) — logo and animated progress bar. Once the
+/// animation completes and the stored session is resolved, it opens the screen that
+/// matches the account state (onboarding when signed out).
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   static const _splashDuration = Duration(milliseconds: 2200);
 
   late final AnimationController _progressController;
   Timer? _navigationTimer;
+  bool _animationDone = false;
+  bool _navigated = false;
 
   @override
   void initState() {
@@ -32,8 +41,20 @@ class _SplashScreenState extends State<SplashScreen>
       duration: _splashDuration,
     )..forward();
     _navigationTimer = Timer(_splashDuration, () {
-      if (mounted) context.go(RouteNames.onboarding);
+      if (!mounted) return;
+      setState(() => _animationDone = true);
+      _openNextScreen();
     });
+    ref.listenManual(
+        sessionControllerProvider, (previous, next) => _openNextScreen());
+  }
+
+  void _openNextScreen() {
+    if (!mounted || _navigated || !_animationDone) return;
+    final session = ref.read(sessionControllerProvider).value;
+    if (session == null) return;
+    _navigated = true;
+    context.go(startRouteFor(session));
   }
 
   @override
@@ -45,8 +66,9 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    final sessionError = ref.watch(sessionControllerProvider).error;
+
     return Scaffold(
-      backgroundColor: AppColors.brandBackground,
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -57,12 +79,25 @@ class _SplashScreenState extends State<SplashScreen>
                 // Logo size follows the Figma splash frame.
                 const BrandLogo(width: 229, height: 92, fit: BoxFit.cover),
                 const SizedBox(height: 23),
-                _ProgressBar(animation: _progressController),
-                const SizedBox(height: 10),
-                const Text(
-                  'Initializing A1 Engine...',
-                  style: AppTextStyles.splashProgressLabel,
-                ),
+                if (sessionError != null && _animationDone)
+                  ErrorView(
+                    message: apiErrorMessage(
+                      AppLocalizations.of(context),
+                      sessionError is ApiError
+                          ? sessionError
+                          : const ApiError(
+                              type: ApiErrorType.unknown, message: ''),
+                    ),
+                    onRetry: () => ref.invalidate(sessionControllerProvider),
+                  )
+                else ...[
+                  _ProgressBar(animation: _progressController),
+                  const SizedBox(height: 10),
+                  Text(
+                    AppLocalizations.of(context).splashInitializing,
+                    style: AppTextStyles.splashProgressLabel,
+                  ),
+                ],
               ],
             ),
           ),
@@ -106,4 +141,3 @@ class _ProgressBar extends StatelessWidget {
     );
   }
 }
-

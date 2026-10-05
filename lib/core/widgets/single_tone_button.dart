@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/colors.dart';
-import '../../core/theme/spacing.dart';
-import '../../core/theme/text_styles.dart';
+import '../theme/colors.dart';
+import '../theme/spacing.dart';
+import '../theme/text_styles.dart';
 
 /// Full-width secondary action: same shape and type as [BrandGradientButton]
 /// on a light tint of the brand blue. Dimmed when [onPressed] is null.

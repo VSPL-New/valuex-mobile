@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "ValueX (dev, Android emulator)",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--dart-define-from-file=config/dev_android.json"]
+    },
+    {
+      "name": "ValueX (dev, iOS simulator)",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--dart-define-from-file=config/dev_ios.json"]
+    },
+    {
+      "name": "ValueX (dev, local device)",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--dart-define-from-file=config/dev_local.json"]
+    },
+    {
+      "name": "ValueX (staging)",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--dart-define-from-file=config/staging.json"]
+    }
+  ]
+}

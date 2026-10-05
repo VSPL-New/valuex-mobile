@@ -118,12 +118,12 @@
       },
       "local": {
         "components": [
-          { "path": "lib/features/auth/presentation/create_account_screen.dart", "tier": "page" },
+          { "path": "lib/features/auth/presentation/screens/create_account_screen.dart", "tier": "page" },
           { "path": "lib/features/auth/presentation/widgets/labeled_divider.dart", "tier": "molecule" },
-          { "path": "lib/shared/widgets/gradient_button.dart", "tier": "atom" },
-          { "path": "lib/shared/widgets/tonal_button.dart", "tier": "atom" },
-          { "path": "lib/shared/widgets/outlined_icon_button.dart", "tier": "atom" },
-          { "path": "lib/shared/widgets/square_back_button.dart", "tier": "atom" }
+          { "path": "lib/core/widgets/gradient_button.dart", "tier": "atom" },
+          { "path": "lib/core/widgets/tonal_button.dart", "tier": "atom" },
+          { "path": "lib/core/widgets/outlined_icon_button.dart", "tier": "atom" },
+          { "path": "lib/core/widgets/square_back_button.dart", "tier": "atom" }
         ],
         "tokens": ["lib/core/theme/colors.dart", "lib/core/theme/text_styles.dart", "pubspec.yaml"],
         "stories": []
@@ -142,9 +142,9 @@
       },
       "local": {
         "components": [
-          { "path": "lib/features/auth/presentation/signup_mobile_screen.dart", "tier": "page" },
+          { "path": "lib/features/auth/presentation/screens/signup_mobile_screen.dart", "tier": "page" },
           { "path": "lib/features/auth/presentation/widgets/mobile_number_field.dart", "tier": "molecule" },
-          { "path": "lib/shared/widgets/brand_gradient_button.dart", "tier": "atom" }
+          { "path": "lib/core/widgets/brand_gradient_button.dart", "tier": "atom" }
         ],
         "tokens": ["lib/core/theme/colors.dart"],
         "stories": []

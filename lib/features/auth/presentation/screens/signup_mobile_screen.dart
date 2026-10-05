@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/routing/route_names.dart';
-import '../../../core/theme/colors.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/text_styles.dart';
-import '../../../shared/widgets/brand_gradient_button.dart';
-import '../../../shared/widgets/brand_logo.dart';
-import '../../../shared/widgets/square_back_button.dart';
-import 'widgets/mobile_number_field.dart';
+import '../../../../core/routing/route_names.dart';
+import '../../../../core/theme/colors.dart';
+import '../../../../core/theme/spacing.dart';
+import '../../../../core/theme/text_styles.dart';
+import '../../../../core/widgets/brand_gradient_button.dart';
+import '../../../../core/widgets/brand_logo.dart';
+import '../../../../core/widgets/square_back_button.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../widgets/mobile_number_field.dart';
 
 /// Registration step 1: enter a mobile number to receive an OTP
 /// (Figma Make: signup-phone "Create Account").
@@ -29,14 +30,17 @@ class _SignupMobileScreenState extends State<SignupMobileScreen> {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
-        const SnackBar(content: Text('OTP verification is coming soon')),
+        SnackBar(
+          content: Text(AppLocalizations.of(context).signupMobileOtpComingSoon),
+        ),
       );
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
-      backgroundColor: AppColors.brandBackground,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(
@@ -59,29 +63,32 @@ class _SignupMobileScreenState extends State<SignupMobileScreen> {
                       const SizedBox(height: AppSpacing.lg),
                       const BrandLogo(height: 32),
                       const SizedBox(height: AppSpacing.xl),
-                      const Text('Create Account', style: AppTextStyles.heading2),
+                      Text(
+                        l10n.signupMobileTitle,
+                        style: AppTextStyles.heading2,
+                      ),
                       const SizedBox(height: AppSpacing.sm),
-                      const Text(
-                        'Join 10L+ users on JustQlic',
+                      Text(
+                        l10n.signupMobileSubtitle,
                         style: AppTextStyles.bodySecondary,
                       ),
                       const SizedBox(height: AppSpacing.xl),
-                      const Text('MOBILE NUMBER', style: AppTextStyles.label),
+                      Text(l10n.signupMobileLabel, style: AppTextStyles.label),
                       const SizedBox(height: AppSpacing.sm),
                       MobileNumberField(
                         onChanged: (value) => setState(() => _mobile = value),
                       ),
                       const SizedBox(height: AppSpacing.md),
-                      const Row(
+                      Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.lock_outline_rounded,
                             size: 12,
                             color: AppColors.brandPlaceholder,
                           ),
-                          SizedBox(width: 6),
+                          const SizedBox(width: 6),
                           Text(
-                            "We'll send an OTP to verify your number",
+                            l10n.signupMobileHint,
                             style: AppTextStyles.hint,
                           ),
                         ],
@@ -91,7 +98,7 @@ class _SignupMobileScreenState extends State<SignupMobileScreen> {
                 ),
               ),
               BrandGradientButton(
-                label: 'Send OTP',
+                label: l10n.signupMobileSendOtp,
                 onPressed: _isValid ? _sendOtp : null,
               ),
             ],

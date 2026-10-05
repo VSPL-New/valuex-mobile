@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../core/constants/app_assets.dart';
-import '../../core/theme/colors.dart';
+import '../../l10n/app_localizations.dart';
+import '../constants/app_assets.dart';
+import '../theme/colors.dart';
 
 /// The one widget every screen uses to show the logo; replace
 /// `assets/images/logo.png` to change it app-wide.
@@ -31,7 +32,7 @@ class BrandLogo extends StatelessWidget {
       fit: fit,
       color: blendWith,
       colorBlendMode: blendWith == null ? null : BlendMode.multiply,
-      semanticLabel: 'JustQlic',
+      semanticLabel: AppLocalizations.of(context).appName,
     );
   }
 }

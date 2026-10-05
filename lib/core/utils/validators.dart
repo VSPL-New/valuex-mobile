@@ -37,7 +37,8 @@ class Validators {
     return null;
   }
 
-  static String? validateNotEmpty(String? value, {String fieldName = 'This field'}) {
+  static String? validateNotEmpty(String? value,
+      {String fieldName = 'This field'}) {
     if (value == null || value.trim().isEmpty) {
       return '$fieldName is required';
     }

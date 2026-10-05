@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../core/theme/colors.dart';
-import '../../core/theme/spacing.dart';
-import '../../core/theme/text_styles.dart';
+import '../theme/colors.dart';
+import '../theme/spacing.dart';
+import '../theme/text_styles.dart';
 
 /// Full-width outlined button with a leading SVG icon (social / guest login).
 class OutlinedIconButton extends StatelessWidget {

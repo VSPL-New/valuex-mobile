@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/routing/route_names.dart';
+import '../../../l10n/app_localizations.dart';
 import 'onboarding_content.dart';
 import 'widgets/onboarding_slide.dart';
 
@@ -44,6 +45,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final titles = [
+      l10n.onboardingTitle1,
+      l10n.onboardingTitle2,
+      l10n.onboardingTitle3,
+      l10n.onboardingTitle4,
+    ];
+    final subtitles = [
+      l10n.onboardingSubtitle1,
+      l10n.onboardingSubtitle2,
+      l10n.onboardingSubtitle3,
+      l10n.onboardingSubtitle4,
+    ];
+
     return Scaffold(
       body: PageView.builder(
         controller: _pageController,
@@ -52,6 +67,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         itemBuilder: (context, index) {
           return OnboardingSlide(
             content: onboardingPages[index],
+            title: titles[index],
+            subtitle: subtitles[index],
             dotIndex: index,
             showBackButton: index > 0,
             onSkip: _finish,

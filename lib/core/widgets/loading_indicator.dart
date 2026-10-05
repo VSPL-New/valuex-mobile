@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/colors.dart';
+import '../theme/colors.dart';
 
 class LoadingIndicator extends StatelessWidget {
   final double size;

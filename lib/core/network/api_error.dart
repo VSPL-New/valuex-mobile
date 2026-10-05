@@ -1,14 +1,44 @@
-class ApiError implements Exception {
-  final String message;
-  final int? statusCode;
-  final dynamic data;
+enum ApiErrorType {
+  network,
+  timeout,
+  server,
+  unauthorized,
+  sessionExpired,
+  validation,
+  business,
+  unknown,
+}
 
-  ApiError({
+/// Mirrors the backend error body `{ code, message, details }`.
+class ApiError implements Exception {
+  final ApiErrorType type;
+  final String message;
+  final String? code;
+  final int? statusCode;
+  final Map<String, String> details;
+
+  const ApiError({
+    required this.type,
     required this.message,
+    this.code,
     this.statusCode,
-    this.data,
+    this.details = const {},
   });
 
+  const ApiError.sessionExpired()
+      : type = ApiErrorType.sessionExpired,
+        message = 'Session expired',
+        code = null,
+        statusCode = 401,
+        details = const {};
+
+  /// Network, timeout and 5xx failures: the request may succeed on retry.
+  bool get isRetryable =>
+      type == ApiErrorType.network ||
+      type == ApiErrorType.timeout ||
+      type == ApiErrorType.server;
+
   @override
-  String toString() => 'ApiError(statusCode: $statusCode, message: $message)';
+  String toString() =>
+      'ApiError(type: $type, code: $code, statusCode: $statusCode)';
 }

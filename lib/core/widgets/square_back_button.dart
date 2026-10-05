@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../core/constants/app_assets.dart';
-import '../../core/theme/spacing.dart';
+import '../constants/app_assets.dart';
+import '../theme/spacing.dart';
 
 /// Rounded-square back control (Figma: Back Button Container, 35x35).
 class SquareBackButton extends StatelessWidget {
@@ -13,7 +14,7 @@ class SquareBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: 'Back',
+      label: AppLocalizations.of(context).commonBack,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: onPressed,

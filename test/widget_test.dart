@@ -1,24 +1,43 @@
-// Basic Flutter widget test for the ValueX app.
-//
-// Verifies that the app boots and the splash screen is displayed.
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/app.dart';
+import 'package:valuex_mobile/core/config/app_config.dart';
+import 'package:valuex_mobile/core/network/api_client.dart';
+import 'package:valuex_mobile/features/auth/presentation/providers/auth_providers.dart';
+import 'package:valuex_mobile/features/splash/presentation/splash_screen.dart';
+
+import 'helpers/mocks.dart';
 
 void main() {
-  testWidgets('ValueXApp builds and shows splash screen', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      const ProviderScope(child: ValueXApp()),
-    );
+  testWidgets('ValueXApp builds and shows the splash screen', (tester) async {
+    final repository = MockAuthRepository();
+    final apiClient = MockApiClient();
+    when(() => apiClient.onSessionExpired)
+        .thenAnswer((_) => const Stream<void>.empty());
+    when(() => repository.hasSession()).thenAnswer((_) async => false);
 
-    // Allow initial frame to settle (splash screen renders immediately).
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          appConfigProvider.overrideWithValue(
+            AppConfig.parse(
+              env: 'dev',
+              apiBaseUrl: 'http://localhost:8080/api/v1',
+              aadhaarFlow: 'sandbox',
+            ),
+          ),
+          authRepositoryProvider.overrideWithValue(repository),
+          apiClientProvider.overrideWithValue(apiClient),
+        ],
+        child: const ValueXApp(),
+      ),
+    );
     await tester.pump();
 
-    // Verify the app renders without throwing.
-    expect(find.byType(ValueXApp), findsOneWidget);
+    expect(find.byType(SplashScreen), findsOneWidget);
+
+    // Let the splash timer finish so no timer is left pending.
+    await tester.pump(const Duration(seconds: 3));
   });
 }

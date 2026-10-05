@@ -7,6 +7,9 @@ class AppFonts {
 
   static const String heading = 'Poppins';
   static const String body = 'DMSans';
+
+  /// DM Sans has no Devanagari glyphs; Poppins does.
+  static const List<String> bodyFallback = [heading];
 }
 
 class AppTextStyles {
@@ -30,6 +33,7 @@ class AppTextStyles {
 
   static const TextStyle body = TextStyle(
     fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
     fontSize: 16,
     height: 1.5,
     fontWeight: FontWeight.w400,
@@ -38,6 +42,7 @@ class AppTextStyles {
 
   static const TextStyle input = TextStyle(
     fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
     fontSize: 14,
     height: 20 / 14,
     color: AppColors.brandForeground,
@@ -45,6 +50,7 @@ class AppTextStyles {
 
   static const TextStyle bodySecondary = TextStyle(
     fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
     fontSize: 14,
     height: 20 / 14,
     color: AppColors.brandMutedText,
@@ -52,6 +58,7 @@ class AppTextStyles {
 
   static const TextStyle label = TextStyle(
     fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
     fontSize: 12,
     height: 16 / 12,
     letterSpacing: 0.6,
@@ -60,6 +67,7 @@ class AppTextStyles {
 
   static const TextStyle hint = TextStyle(
     fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
     fontSize: 12,
     height: 16 / 12,
     color: AppColors.brandPlaceholder,
@@ -67,6 +75,7 @@ class AppTextStyles {
 
   static const TextStyle button = TextStyle(
     fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
     fontSize: 16,
     fontWeight: FontWeight.w700,
     color: AppColors.brandOnPrimary,
@@ -74,6 +83,7 @@ class AppTextStyles {
 
   static const TextStyle dividerLabel = TextStyle(
     fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
     fontSize: 14,
     height: 1.4,
     letterSpacing: -0.28,
@@ -92,6 +102,7 @@ class AppTextStyles {
   // Screen-specific
   static const TextStyle onboardingSubtitle = TextStyle(
     fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
     fontSize: 16,
     height: 23 / 16,
     fontWeight: FontWeight.w400,
@@ -100,6 +111,7 @@ class AppTextStyles {
 
   static const TextStyle skipLabel = TextStyle(
     fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
     fontSize: 13,
     fontWeight: FontWeight.w400,
     color: AppColors.onboardingSkipText,
@@ -107,6 +119,7 @@ class AppTextStyles {
 
   static const TextStyle splashProgressLabel = TextStyle(
     fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
     fontSize: 12,
     fontWeight: FontWeight.w400,
     color: AppColors.brandForeground,

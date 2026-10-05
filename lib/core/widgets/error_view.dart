@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/colors.dart';
-import '../../core/theme/spacing.dart';
-import '../../core/theme/text_styles.dart';
+import '../../l10n/app_localizations.dart';
+import '../theme/colors.dart';
+import '../theme/spacing.dart';
+import '../theme/text_styles.dart';
 import 'app_button.dart';
 
 class ErrorView extends StatelessWidget {
@@ -36,7 +37,7 @@ class ErrorView extends StatelessWidget {
             if (onRetry != null) ...[
               const SizedBox(height: AppSpacing.md),
               AppButton(
-                label: 'Retry',
+                label: AppLocalizations.of(context).commonRetry,
                 onPressed: onRetry,
                 isOutlined: true,
               ),
