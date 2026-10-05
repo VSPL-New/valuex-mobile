@@ -137,6 +137,14 @@ flutter test test/widget_test.dart        # single file
 flutter test --coverage                   # report at coverage/lcov.info
 ```
 
+Integration test (registration end to end with an in-memory server; needs an emulator or simulator, and replaces the installed app):
+
+```bash
+flutter test integration_test -d <device-id>
+```
+
+The same scenarios also run on the host: copy `integration_test/registration_flow_test.dart` into `test/`, change the `../test/helpers/` imports to `helpers/`, run it, then delete the copy.
+
 Optional HTML coverage report (`brew install lcov`):
 
 ```bash
@@ -147,7 +155,8 @@ Guidelines:
 
 - Mirror the `lib/` structure under `test/` (e.g. `test/core/utils/validators_test.dart`).
 - Wrap widgets under test in `ProviderScope` and override providers to mock API and storage.
-- Do not hit the real backend in unit or widget tests.
+- Do not hit the real backend in unit or widget tests. `test/helpers/app_harness.dart` runs the real app against a mocked repository; `test/helpers/fake_auth_repository.dart` is an in-memory server for whole flows.
+- Layout tests load the bundled fonts (`test/helpers/fonts.dart`); the default test font is much wider than DM Sans.
 
 Manual test guides per user story and sprint are in [../Documents](../Documents), e.g. `US-001-Testing-Guide.md`, `Sprint-1-Combined-Testing-Guide.md`, `Sprint-1-OTP-Regression-Checklist.md`.
 

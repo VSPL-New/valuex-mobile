@@ -115,6 +115,10 @@ Shared widgets live in `lib/core/widgets/`. Reuse them; extract a new shared ato
 | `OnboardingNavButton` | atom | Onboarding next (radius 7) and back (radius 12) controls |
 | `BrandLogo` | atom | The logo |
 | `AppTextField`, `ErrorView`, `LoadingIndicator` | atoms | Generic building blocks themed from `AppTheme` |
+| `OtpInput` | molecule | Six-digit code drawn as boxes over one real text field (paste, autofill, backspace). Boxes use the input tint and border; the current box and errors use `brandPrimary` and `brandError` borders. |
+| `ProtectedScreen` | utility | Wraps a screen that must block screenshots (Aadhaar now; payment, escrow and bank details later). Reference counted through `ScreenProtectionService`. |
+
+Auth feature widgets (`lib/features/auth/presentation/widgets/`): `AuthFormScaffold` (back, logo, title, scrolling content, fixed bottom actions; used by every registration step), `OtpVerificationView`, `AadhaarNoteCard` (tint card with `brandAccent` icon), `GenderSelector` (three equal choices, selected = `brandPrimary` 2 px border on `brandSurfaceTint`), `DateOfBirthField` (typed DD/MM/YYYY plus a calendar icon), `StatePickerField` (field-style row opening a list sheet), `AvatarImage` and the avatar picker sheet.
 
 ### 4.1 Button rules for new screens
 
@@ -195,7 +199,7 @@ Target: **WCAG 2.2 AA** for all screens in the first release.
 | Area | Rule |
 |---|---|
 | Text contrast | Body text at least 4.5:1; large text (24 px, or 18.7 px bold) at least 3:1; UI components and icons at least 3:1 |
-| Tap targets | At least 48×48 dp. Extend the hit area with padding when the visual is smaller (Back 35 px, Skip 64×31). |
+| Tap targets | At least 48×48 dp (CODING_STANDARDS 3.4 requires 44 as the minimum). Extend the hit area with padding when the visual is smaller (Back 35 px, Skip 64×31). |
 | Text scaling | Layouts must work at 200% system font size: no clipping, scrollable pages, no fixed-height text boxes |
 | Screen readers | Every interactive element has a semantic label; decorative images are excluded; logo uses the label "JustQlic" |
 | Focus and keyboard | Logical focus order; visible focus; inputs use correct `keyboardType` and autofill hints |
@@ -218,7 +222,9 @@ Contrast of the current colour pairs (calculated):
 
 These Figma colours need designer sign-off to darken `brandMutedText`, `brandPlaceholder`, `onboardingSubtitle` and `onboardingSkipText` to at least 4.5:1. Until then, treat them as known gaps, not as a pattern to copy.
 
-Known gaps to close before release: tap targets on Back and Skip, fixed-height text boxes on onboarding, missing semantic labels on icon buttons and illustrations, reduce-motion handling.
+New registration controls (gender choices, state picker, calendar icon, show/hide, resend and change links, avatar tiles, switch) are 44 dp or larger. The inline "Terms and Conditions" link inside a sentence is smaller; it is the only exception.
+
+Known gaps to close before release: tap targets on Back (35 px, from Figma) and Skip, fixed-height text boxes on onboarding, missing semantic labels on icon buttons and illustrations, reduce-motion handling.
 
 ---
 
@@ -268,7 +274,9 @@ Don't:
 | Transparent Create Account illustration (faint edge lines show on `brandBackground` today) | Designer |
 | Darker colours for the failing contrast pairs | Designer |
 | Clean export of the onboarding screen 4 illustration (baked-in status bar) | Designer |
-| Terms and consent checkbox on the mobile number page (required by US-001) | Product |
+| Native-speaker review of the Hindi strings in `lib/l10n/app_hi.arb` | Product |
+| Final avatar artwork (placeholders drawn from icons today; US-003) | Designer |
+| Figma frames for the Sign Up form, gender choices, date field, state picker, avatar picker and OTP boxes (built from tokens without a design) | Designer |
 | Role-based `ThemeExtension` and dark theme | Engineering |
 | Tap-target, text-scaling and semantics fixes | Engineering |
 
@@ -287,6 +295,11 @@ Decisions taken so far. Add a row for every approved conflict resolution (sectio
 | 2026-10-04 | Brand name and logo | Make shows a "ValueX" wordmark | JustQlic logo and name through `BrandLogo` |
 | 2026-10-04 | Button colours | Separate colour per screen | Only `brandPrimary` and `brandAccent` (the gradient's ends) |
 | 2026-10-04 | Page background | Splash, mobile entry and Make's app shell use `#F4F6FF`; Figma Create Account and onboarding frames are white | `brandBackground` `#F4F6FF` on **all** screens; onboarding fade ends in `brandBackground` |
+
+| 2026-10-06 | OTP boxes, gender choices, date of birth field, state picker, avatar picker, Aadhaar note card, development banner | No Figma design | Built from existing tokens only (no new colour, font or radius) and approved to build; **screenshots still to be reviewed by the product owner** |
+| 2026-10-06 | Avatars | Final artwork not available | Placeholder avatars drawn from Material icons on brand-tinted circles; male-looking `avatar-01..04`, female-looking `05..08`, neutral `09..12`; ids unchanged when artwork arrives |
+| 2026-10-06 | Hindi text | DM Sans has no Devanagari glyphs | `AppFonts.bodyFallback` uses Poppins, which has Devanagari; no new font |
+| 2026-10-06 | Back button size | Figma 35 px against the 44 dp standard | Left at 35 px; needs a decision (grow the hit area or accept the exception) |
 
 ### Approved exceptions
 

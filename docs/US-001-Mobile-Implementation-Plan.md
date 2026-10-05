@@ -1,6 +1,6 @@
 # US-001 Mobile Implementation Plan — User Registration (v3)
 
-**Status:** v3.1, your answers of 2026-10-05 incorporated (section 11). **Implementation progress:** phases 1 to 3 (foundation, data and domain layers, session and resume routing) done, not yet committed; phase 4 and later not started. One decision is still open (third-party Aadhaar provider) and does not block implementation.
+**Status:** v3.1, your answers of 2026-10-05 incorporated (section 11). **Implementation progress:** phases 1 to 8 implemented (foundation, auth data and domain, session and resume routing, mobile and email OTP, Aadhaar with screenshot protection, Sign Up, tests). Open: native review of Hindi strings, design review of the new components, real-device and iOS checks, final avatar artwork. One decision is still open (third-party Aadhaar provider) and does not block implementation.
 **Governing rule:** `Documents/CODING_STANDARDS.md` (§1 all repos, §3 Flutter). The two exceptions recorded in v2 (localization, screenshot protection) are **rejected**; this plan follows the standards.
 **Branch:** `feature/us-001-user-registration-mobile` (from `main`)
 **Related:** `Documents/user-stories.md` (US-001, US-108), `Documents/LLD/Sprint-1-Identity-User-Management-LLD.md`, `Documents/US-001-Testing-Guide.md`, `docs/Flutter-Design-System.md`.
