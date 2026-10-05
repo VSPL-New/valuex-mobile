@@ -29,8 +29,8 @@ Global tokens are prefixed `brand`. Screen-specific tokens use the screen name (
 
 | Token | Value | Use |
 |---|---|---|
-| `brandBackground` | `#F4F6FF` | Page background |
-| `brandSurface` | `#FFFFFF` | Cards, outlined buttons, Create Account page |
+| `brandBackground` | `#F4F6FF` | **Page background of every screen** (very light blue, from Make's `--background`) |
+| `brandSurface` | `#FFFFFF` | Cards and outlined buttons only. Never a full-page background. |
 | `brandSurfaceTint` | `#EEF0FF` | Input fill |
 | `brandMuted` | `#E2E8FF` | Light tint of brand blue: `SingleToneButton` fill, progress track |
 | `brandForeground` | `#0A0D1E` | Primary text |
@@ -95,7 +95,7 @@ Figma's 55 and 60 px buttons are normalised to 56. The onboarding Next button ke
 
 ### 3.1 Logo — one place to change
 
-- Every screen shows the logo through `BrandLogo` (`lib/shared/widgets/brand_logo.dart`), which reads `AppAssets.logo` = `assets/images/logo.png`.
+- Every screen shows the logo through `BrandLogo` (`lib/core/widgets/brand_logo.dart`), which reads `AppAssets.logo` = `assets/images/logo.png`.
 - **To swap the logo:** replace `assets/images/logo.png` (keep the path). When the designer's transparent logo arrives, also set `BrandLogo`'s default `blendWith` to `null`.
 - The current PNG has an opaque white backdrop, so `BrandLogo` multiplies it into the page colour (`blendWith`, default `brandBackground`). On a white surface pass `blendWith: null`.
 
@@ -103,7 +103,7 @@ Figma's 55 and 60 px buttons are normalised to 56. The onboarding Next button ke
 
 ## 4. Components
 
-Shared widgets live in `lib/shared/widgets/`. Reuse them; extract a new shared atom for any generic button, input or icon, even on its first use.
+Shared widgets live in `lib/core/widgets/`. Reuse them; extract a new shared atom for any generic button, input or icon, even on its first use.
 
 | Widget | Tier | Use |
 |---|---|---|
@@ -134,6 +134,8 @@ Inputs inherit `InputDecorationTheme` from `AppTheme` (tint fill, 12 px radius, 
 ## 5. Layout rules
 
 - Design basis is the 428×926 Figma frame. Scale horizontal artwork with screen width and keep text at fixed sizes.
+- **Every screen has the `brandBackground` (`#F4F6FF`) full-screen background.** It comes from `scaffoldBackgroundColor` in `AppTheme`, so do not set a page colour on a `Scaffold`, and do not use white or any other full-page colour (including Figma frames drawn on white). Fades and overlays over artwork must end in `brandBackground`.
+- Images with an opaque white backdrop (logo, illustrations) are multiplied into `brandBackground` until transparent assets are supplied.
 - Anchor bottom content (buttons, CTAs) to the bottom using Figma offsets, and always add the system safe-area inset.
 - Respect `SafeArea` at the top; do not draw under the status bar unless the design requires it.
 - Page side padding is 24 (`AppSpacing.lg`) on Make-based pages and 21.5 on the Figma Create Account page.
@@ -250,6 +252,7 @@ Do:
 Don't:
 - Hardcode colours, font names, radii, spacings or asset paths.
 - Add a second gradient.
+- Set a page background on a `Scaffold` or use a white or other full-page colour.
 - Use Inter, Outfit, Plus Jakarta Sans, General Sans or Parkinsans.
 - Create a back button, input or button style per screen.
 - Hand-draw icons or edit exported assets.
@@ -262,6 +265,7 @@ Don't:
 | Item | Owner |
 |---|---|
 | Transparent JustQlic logo | Designer |
+| Transparent Create Account illustration (faint edge lines show on `brandBackground` today) | Designer |
 | Darker colours for the failing contrast pairs | Designer |
 | Clean export of the onboarding screen 4 illustration (baked-in status bar) | Designer |
 | Terms and consent checkbox on the mobile number page (required by US-001) | Product |
@@ -282,6 +286,7 @@ Decisions taken so far. Add a row for every approved conflict resolution (sectio
 | 2026-10-04 | Fonts | Make: Outfit and Plus Jakarta Sans; Figma: Poppins and General Sans | **Poppins** (headings) and **DM Sans** (everything else) only |
 | 2026-10-04 | Brand name and logo | Make shows a "ValueX" wordmark | JustQlic logo and name through `BrandLogo` |
 | 2026-10-04 | Button colours | Separate colour per screen | Only `brandPrimary` and `brandAccent` (the gradient's ends) |
+| 2026-10-04 | Page background | Splash, mobile entry and Make's app shell use `#F4F6FF`; Figma Create Account and onboarding frames are white | `brandBackground` `#F4F6FF` on **all** screens; onboarding fade ends in `brandBackground` |
 
 ### Approved exceptions
 
