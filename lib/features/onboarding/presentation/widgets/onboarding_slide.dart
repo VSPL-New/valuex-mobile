@@ -2,7 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/colors.dart';
+import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../onboarding_content.dart';
 import 'onboarding_dots.dart';
 import 'onboarding_nav_button.dart';
@@ -13,6 +15,8 @@ class OnboardingSlide extends StatelessWidget {
   static const _designWidth = 428.0;
 
   final OnboardingContent content;
+  final String title;
+  final String subtitle;
   final int dotIndex;
   final bool showBackButton;
   final VoidCallback onSkip;
@@ -22,6 +26,8 @@ class OnboardingSlide extends StatelessWidget {
   const OnboardingSlide({
     super.key,
     required this.content,
+    required this.title,
+    required this.subtitle,
     required this.dotIndex,
     required this.showBackButton,
     required this.onSkip,
@@ -37,7 +43,7 @@ class OnboardingSlide extends StatelessWidget {
     final bottomPadding = math.max(62.0, media.padding.bottom + 24);
 
     return ColoredBox(
-      color: Colors.white,
+      color: AppColors.brandBackground,
       child: Stack(
         children: [
           Positioned(
@@ -56,18 +62,18 @@ class OnboardingSlide extends StatelessWidget {
             left: 0,
             right: 0,
             bottom: 0,
-            child: const DecoratedBox(
+            child: DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Color(0x00FFFFFF),
-                    Color(0x45FEFEFF),
-                    Color(0xFFFDFEFF),
-                    Color(0xFFFAFBFF),
+                    AppColors.brandBackground.withValues(alpha: 0),
+                    AppColors.brandBackground.withValues(alpha: 0.27),
+                    AppColors.brandBackground,
+                    AppColors.brandBackground,
                   ],
-                  stops: [0, 0.120192, 0.269231, 1],
+                  stops: const [0, 0.120192, 0.269231, 1],
                 ),
               ),
             ),
@@ -91,9 +97,9 @@ class OnboardingSlide extends StatelessWidget {
                     height: 76,
                     child: Center(
                       child: Text(
-                        content.title,
+                        title,
                         textAlign: TextAlign.center,
-                        style: AppTextStyles.onboardingTitle,
+                        style: AppTextStyles.heading1,
                       ),
                     ),
                   ),
@@ -103,7 +109,7 @@ class OnboardingSlide extends StatelessWidget {
                     height: 69,
                     child: Center(
                       child: Text(
-                        content.subtitle,
+                        subtitle,
                         textAlign: TextAlign.center,
                         style: AppTextStyles.onboardingSubtitle,
                       ),
@@ -117,7 +123,7 @@ class OnboardingSlide extends StatelessWidget {
                         if (showBackButton)
                           OnboardingNavButton(
                             pointsBack: true,
-                            radius: 12,
+                            radius: AppRadius.lg,
                             backgroundColor: AppColors.onboardingBackButton,
                             onPressed: onBack,
                           )
@@ -157,14 +163,19 @@ class _SkipButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.onboardingSkipBackground,
-      borderRadius: BorderRadius.circular(6),
+      borderRadius: BorderRadius.circular(AppRadius.sm),
       child: InkWell(
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(AppRadius.sm),
         onTap: onTap,
-        child: const SizedBox(
+        child: SizedBox(
           width: 64,
           height: 31,
-          child: Center(child: Text('Skip', style: AppTextStyles.skipLabel)),
+          child: Center(
+            child: Text(
+              AppLocalizations.of(context).commonSkip,
+              style: AppTextStyles.skipLabel,
+            ),
+          ),
         ),
       ),
     );

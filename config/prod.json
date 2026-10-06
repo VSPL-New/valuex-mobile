@@ -1,0 +1,5 @@
+{
+  "ENV": "prod",
+  "API_BASE_URL": "https://api.example.invalid/api/v1",
+  "AADHAAR_FLOW": "thirdparty"
+}

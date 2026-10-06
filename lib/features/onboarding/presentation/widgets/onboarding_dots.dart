@@ -18,9 +18,7 @@ class OnboardingDots extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: List.generate(count, (index) {
         final isActive = index == activeDot;
-        final color = isActive
-            ? AppColors.onboardingDotActive
-            : AppColors.onboardingDotInactive;
+        final color = isActive ? AppColors.onboardingDotActive : AppColors.onboardingDotInactive;
         return AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           margin: const EdgeInsets.symmetric(horizontal: 3),

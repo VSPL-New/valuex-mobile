@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Temporary landing placeholder until the Home feature is implemented.
 class HomeScreen extends StatelessWidget {
@@ -6,8 +7,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text('Home — coming soon')),
+    return Scaffold(
+      body: Center(child: Text(AppLocalizations.of(context).homeComingSoon)),
     );
   }
 }
