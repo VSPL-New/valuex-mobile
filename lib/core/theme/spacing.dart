@@ -26,4 +26,7 @@ class AppSizes {
 
   /// Square back control (Figma).
   static const double backButton = 35.1;
+
+  /// Smallest tap area for any control (CODING_STANDARDS 3.4).
+  static const double minTouchTarget = 44;
 }

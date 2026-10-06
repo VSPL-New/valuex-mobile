@@ -111,7 +111,7 @@ Shared widgets live in `lib/core/widgets/`. Reuse them; extract a new shared ato
 | `SingleToneButton` | atom | **Secondary action.** Same size, radius and type as the primary, on a light tint of brand blue (`brandMuted`) with `brandForeground` text. |
 | `OutlinedIconButton` | atom | **Alternative sign-in or action with a leading icon** (Google, Guest). White, `brandOutline` border, radius 10, DM Sans 16 bold in `brandForeground`. |
 | `AppButton` | atom | **Generic utility button** (Retry, dialogs, forms outside the main flow). Solid `brandPrimary` (the gradient's blue end), outlined variant, loading state. |
-| `SquareBackButton` | atom | **Canonical back button** (Figma rounded square). Use on every page that goes back. |
+| `SquareBackButton` | atom | **Canonical back button** (Figma rounded square, 44×44 tap area). Use on every page that goes back. |
 | `OnboardingNavButton` | atom | Onboarding next (radius 7) and back (radius 12) controls |
 | `BrandLogo` | atom | The logo |
 | `AppTextField`, `ErrorView`, `LoadingIndicator` | atoms | Generic building blocks themed from `AppTheme` |
@@ -224,7 +224,7 @@ These Figma colours need designer sign-off to darken `brandMutedText`, `brandPla
 
 New registration controls (gender choices, state picker, calendar icon, show/hide, resend and change links, avatar tiles, switch) are 44 dp or larger. The inline "Terms and Conditions" link inside a sentence is smaller; it is the only exception.
 
-Known gaps to close before release: tap targets on Back (35 px, from Figma) and Skip, fixed-height text boxes on onboarding, missing semantic labels on icon buttons and illustrations, reduce-motion handling.
+Known gaps to close before release: tap target on Skip (64×31), fixed-height text boxes on onboarding, missing semantic labels on icon buttons and illustrations, reduce-motion handling.
 
 ---
 
@@ -299,7 +299,7 @@ Decisions taken so far. Add a row for every approved conflict resolution (sectio
 | 2026-10-06 | OTP boxes, gender choices, date of birth field, state picker, avatar picker, Aadhaar note card, development banner | No Figma design | Built from existing tokens only (no new colour, font or radius) and approved to build; **screenshots still to be reviewed by the product owner** |
 | 2026-10-06 | Avatars | Final artwork not available | Placeholder avatars drawn from Material icons on brand-tinted circles; male-looking `avatar-01..04`, female-looking `05..08`, neutral `09..12`; ids unchanged when artwork arrives |
 | 2026-10-06 | Hindi text | DM Sans has no Devanagari glyphs | `AppFonts.bodyFallback` uses Poppins, which has Devanagari; no new font |
-| 2026-10-06 | Back button size | Figma 35 px against the 44 dp standard | Left at 35 px; needs a decision (grow the hit area or accept the exception) |
+| 2026-10-06 | Back button size | Figma 35 px against the 44 dp standard | **Approved: enlarge.** `SquareBackButton` has a 44×44 tap area around the unchanged 35 px visual (content below moves down about 9 px) |
 
 ### Approved exceptions
 
