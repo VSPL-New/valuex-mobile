@@ -56,6 +56,11 @@ class EmailEntryController extends _$EmailEntryController {
   @override
   FutureOr<void> build() {}
 
+  /// Removes the last send error once the user edits the address.
+  void clearError() {
+    if (state.hasError) state = const AsyncData(null);
+  }
+
   Future<bool> sendOtp() async {
     final email = ref.read(emailInputProvider).trim();
     if (!Validators.isValidEmail(email) || state.isLoading) return false;

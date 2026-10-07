@@ -51,6 +51,7 @@
   "emailEntryFieldHint": "name@example.com",
   "emailEntryHint": "हम आपका ईमेल सत्यापित करने के लिए OTP भेजेंगे",
   "emailEntrySendOtp": "OTP भेजें",
+  "emailEntryInvalid": "मान्य ईमेल पता दर्ज करें",
   "otpMobileTitle": "अपना नंबर सत्यापित करें",
   "otpEmailTitle": "अपना ईमेल सत्यापित करें",
   "otpSubtitle": "{target} पर भेजा गया 6 अंकों का कोड दर्ज करें",

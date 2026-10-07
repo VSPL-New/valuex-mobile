@@ -57,6 +57,7 @@
   "emailEntryFieldHint": "name@example.com",
   "emailEntryHint": "We'll send an OTP to verify your email",
   "emailEntrySendOtp": "Send OTP",
+  "emailEntryInvalid": "Enter a valid email address",
   "otpMobileTitle": "Verify your number",
   "otpEmailTitle": "Verify your email",
   "otpSubtitle": "Enter the 6-digit code sent to {target}",

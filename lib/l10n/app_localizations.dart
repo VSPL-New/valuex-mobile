@@ -399,6 +399,12 @@ abstract class AppLocalizations {
   /// **'Send OTP'**
   String get emailEntrySendOtp;
 
+  /// No description provided for @emailEntryInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address'**
+  String get emailEntryInvalid;
+
   /// No description provided for @otpMobileTitle.
   ///
   /// In en, this message translates to:

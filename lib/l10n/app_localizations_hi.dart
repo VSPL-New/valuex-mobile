@@ -169,6 +169,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get emailEntrySendOtp => 'OTP भेजें';
 
   @override
+  String get emailEntryInvalid => 'मान्य ईमेल पता दर्ज करें';
+
+  @override
   String get otpMobileTitle => 'अपना नंबर सत्यापित करें';
 
   @override
