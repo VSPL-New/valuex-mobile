@@ -7,9 +7,9 @@ class AppTheme {
   AppTheme._();
 
   static ThemeData get lightTheme {
-    OutlineInputBorder border(Color color) => OutlineInputBorder(
+    OutlineInputBorder border(Color color, {double width = 1}) => OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadius.lg),
-          borderSide: BorderSide(color: color),
+          borderSide: BorderSide(color: color, width: width),
         );
 
     return ThemeData(
@@ -43,9 +43,12 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.brandSurfaceTint,
-        border: border(AppColors.brandBorder),
-        enabledBorder: border(AppColors.brandBorder),
-        focusedBorder: border(AppColors.brandBorderFocused),
+        border: border(AppColors.brandControlBorder),
+        enabledBorder: border(AppColors.brandControlBorder),
+        focusedBorder: border(AppColors.brandPrimary, width: 2),
+        errorBorder: border(AppColors.brandError, width: 2),
+        focusedErrorBorder: border(AppColors.brandError, width: 2),
+        errorStyle: AppTextStyles.error,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.md,
           vertical: 14,

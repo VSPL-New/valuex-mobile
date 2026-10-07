@@ -43,8 +43,8 @@ class AppTextStyles {
   static const TextStyle input = TextStyle(
     fontFamily: AppFonts.body,
     fontFamilyFallback: AppFonts.bodyFallback,
-    fontSize: 14,
-    height: 20 / 14,
+    fontSize: 16,
+    height: 24 / 16,
     color: AppColors.brandForeground,
   );
 
@@ -59,18 +59,30 @@ class AppTextStyles {
   static const TextStyle label = TextStyle(
     fontFamily: AppFonts.body,
     fontFamilyFallback: AppFonts.bodyFallback,
-    fontSize: 12,
-    height: 16 / 12,
-    letterSpacing: 0.6,
+    fontSize: 14,
+    height: 20 / 14,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.4,
     color: AppColors.brandMutedText,
   );
 
+  /// Helper text, timers and messages under a field (14 px; 12 px is for captions only).
   static const TextStyle hint = TextStyle(
     fontFamily: AppFonts.body,
     fontFamilyFallback: AppFonts.bodyFallback,
-    fontSize: 12,
-    height: 16 / 12,
-    color: AppColors.brandPlaceholder,
+    fontSize: 14,
+    height: 20 / 14,
+    color: AppColors.brandMutedText,
+  );
+
+  /// Error message under a field; always shown with an icon, never colour alone.
+  static const TextStyle error = TextStyle(
+    fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
+    fontSize: 14,
+    height: 20 / 14,
+    fontWeight: FontWeight.w500,
+    color: AppColors.brandError,
   );
 
   static const TextStyle button = TextStyle(

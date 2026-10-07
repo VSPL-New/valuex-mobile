@@ -99,6 +99,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get signupMobileSendOtp => 'OTP भेजें';
 
   @override
+  String get signupMobileInvalid => '10 अंकों का मान्य मोबाइल नंबर दर्ज करें';
+
+  @override
   String get signupMobileOtpComingSoon => 'OTP सत्यापन जल्द उपलब्ध होगा';
 
   @override

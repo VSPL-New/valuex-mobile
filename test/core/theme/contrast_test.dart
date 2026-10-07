@@ -17,6 +17,14 @@ void main() {
       AppColors.onboardingSkipBackground,
     ),
     'body text on the page': (AppColors.brandForeground, AppColors.brandBackground),
+    'secondary text on the page': (AppColors.brandMutedText, AppColors.brandBackground),
+    'secondary text on white': (AppColors.brandMutedText, AppColors.brandSurface),
+    'secondary text on the input fill': (AppColors.brandMutedText, AppColors.brandSurfaceTint),
+    'placeholder on the input fill': (AppColors.brandPlaceholder, AppColors.brandSurfaceTint),
+    'placeholder on the page': (AppColors.brandPlaceholder, AppColors.brandBackground),
+    'error text on the page': (AppColors.brandError, AppColors.brandBackground),
+    'error text on white': (AppColors.brandError, AppColors.brandSurface),
+    'error text on the input fill': (AppColors.brandError, AppColors.brandSurfaceTint),
   };
 
   textPairs.forEach((name, pair) {

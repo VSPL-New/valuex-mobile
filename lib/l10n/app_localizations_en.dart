@@ -99,6 +99,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signupMobileSendOtp => 'Send OTP';
 
   @override
+  String get signupMobileInvalid => 'Enter a valid 10-digit mobile number';
+
+  @override
   String get signupMobileOtpComingSoon => 'OTP verification is coming soon';
 
   @override

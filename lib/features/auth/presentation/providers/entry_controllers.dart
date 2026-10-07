@@ -29,6 +29,11 @@ class MobileEntryController extends _$MobileEntryController {
   @override
   FutureOr<void> build() {}
 
+  /// Removes the last send error once the user edits the number.
+  void clearError() {
+    if (state.hasError) state = const AsyncData(null);
+  }
+
   /// Returns true when the OTP was sent.
   Future<bool> sendOtp() async {
     final mobile = ref.read(mobileInputProvider);

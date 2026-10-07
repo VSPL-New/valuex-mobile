@@ -13,8 +13,8 @@ class AppColors {
 
   // Text
   static const Color brandForeground = Color(0xFF0A0D1E);
-  static const Color brandMutedText = Color(0xFF64748B);
-  static const Color brandPlaceholder = Color(0xFF94A3B8);
+  static const Color brandMutedText = Color(0xFF5B6B82);
+  static const Color brandPlaceholder = Color(0xFF5F6D83);
   static const Color brandOnPrimary = Color(0xFFFFFFFF);
 
   // Brand
@@ -29,7 +29,7 @@ class AppColors {
   /// Edge of a control that must be seen to be found (3:1 on white, page and input fill).
   static const Color brandControlBorder = Color(0xFF76839B);
   static const Color brandDivider = Color(0xFFDCE4E8);
-  static const Color brandError = Color(0xFFEF4444);
+  static const Color brandError = Color(0xFFC81E1E);
 
   // Onboarding only (Figma: Just Qlic)
   static const Color onboardingSkipBackground = Color(0xFFE9E9FF);

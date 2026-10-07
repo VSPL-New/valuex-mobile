@@ -34,6 +34,7 @@
   "signupMobileLabel": "MOBILE NUMBER",
   "signupMobileHint": "We'll send an OTP to verify your number",
   "signupMobileSendOtp": "Send OTP",
+  "signupMobileInvalid": "Enter a valid 10-digit mobile number",
   "signupMobileOtpComingSoon": "OTP verification is coming soon",
   "errorUnableToConnect": "Unable to connect — Retry",
   "errorSomethingWentWrong": "Something went wrong — Try Again",

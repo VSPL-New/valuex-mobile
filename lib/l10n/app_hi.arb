@@ -26,6 +26,7 @@
   "signupMobileTitle": "खाता बनाएँ",
   "signupMobileSubtitle": "JustQlic पर 10 लाख+ उपयोगकर्ताओं से जुड़ें",
   "signupMobileLabel": "मोबाइल नंबर",
+  "signupMobileInvalid": "10 अंकों का मान्य मोबाइल नंबर दर्ज करें",
   "signupMobileHint": "हम आपका नंबर सत्यापित करने के लिए OTP भेजेंगे",
   "signupMobileSendOtp": "OTP भेजें",
   "signupMobileOtpComingSoon": "OTP सत्यापन जल्द उपलब्ध होगा",

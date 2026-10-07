@@ -261,6 +261,12 @@ abstract class AppLocalizations {
   /// **'Send OTP'**
   String get signupMobileSendOtp;
 
+  /// No description provided for @signupMobileInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid 10-digit mobile number'**
+  String get signupMobileInvalid;
+
   /// No description provided for @signupMobileOtpComingSoon.
   ///
   /// In en, this message translates to:
