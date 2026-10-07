@@ -409,6 +409,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signupSignIn => 'Sign In';
 
   @override
+  String get signupErrorGender => 'Choose one option';
+
+  @override
+  String get signupErrorState => 'Choose your state';
+
+  @override
+  String get signupErrorTerms => 'Accept the Terms and Conditions to continue';
+
+  @override
   String get signupErrorName => 'Enter 3 to 50 letters';
 
   @override

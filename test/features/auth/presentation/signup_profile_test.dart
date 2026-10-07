@@ -107,10 +107,30 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('Submit is disabled until everything is filled in', (tester) async {
+    testWidgets('Submit with nothing filled in shows every message and sends nothing', (
+      tester,
+    ) async {
       await openSignup(tester);
+      expect(_submit(tester).onPressed, isNotNull);
 
-      expect(_submit(tester).onPressed, isNull);
+      await _tapVisible(tester, find.widgetWithText(BrandGradientButton, 'Submit'));
+      await harness.settle();
+
+      for (final message in [
+        'Enter 3 to 50 letters',
+        'Choose one option',
+        'Enter a valid date as DD/MM/YYYY',
+        'Choose your state',
+        'Enter 2 to 100 letters',
+        'Enter 10 to 255 characters',
+        'Enter a valid 6-digit pincode',
+        'Open the Terms and Conditions first to turn this on',
+      ]) {
+        await tester.ensureVisible(find.text(message, skipOffstage: false));
+        expect(find.text(message), findsOneWidget, reason: message);
+      }
+      expect(find.byType(SnackBar), findsNothing);
+      verifyNever(() => harness.repository.completeSignup(any()));
       await harness.dispose();
     });
 
@@ -354,14 +374,18 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('turning the terms switch off disables Submit again', (tester) async {
+    testWidgets('turning the terms switch off makes Submit ask for the terms again', (
+      tester,
+    ) async {
       await openSignup(tester);
       await fillEverything(tester);
-      expect(_submit(tester).onPressed, isNotNull);
 
       await _tapVisible(tester, find.byType(Switch));
+      await _tapVisible(tester, find.widgetWithText(BrandGradientButton, 'Submit'));
+      await harness.settle();
 
-      expect(_submit(tester).onPressed, isNull);
+      expect(find.text('Accept the Terms and Conditions to continue'), findsOneWidget);
+      verifyNever(() => harness.repository.completeSignup(any()));
       await harness.dispose();
     });
 
@@ -376,6 +400,7 @@ void main() {
       await harness.settle();
 
       expect(find.text('Please choose a valid state'), findsOneWidget);
+      expect(find.byType(SnackBar), findsNothing);
       expect(find.byType(SignupProfileScreen), findsOneWidget);
       await harness.dispose();
     });

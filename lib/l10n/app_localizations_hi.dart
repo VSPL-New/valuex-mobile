@@ -409,6 +409,15 @@ class AppLocalizationsHi extends AppLocalizations {
   String get signupSignIn => 'साइन इन';
 
   @override
+  String get signupErrorGender => 'एक विकल्प चुनें';
+
+  @override
+  String get signupErrorState => 'अपना राज्य चुनें';
+
+  @override
+  String get signupErrorTerms => 'आगे बढ़ने के लिए नियम और शर्तें स्वीकार करें';
+
+  @override
   String get signupErrorName => '3 से 50 अक्षर दर्ज करें';
 
   @override

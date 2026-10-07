@@ -14,7 +14,7 @@ import 'session_controller.dart';
 
 part 'signup_form_controller.g.dart';
 
-enum SignupFieldError { name, city, address, pincode, dobFormat, dobFuture }
+enum SignupFieldError { name, gender, dobFormat, dobFuture, state, city, address, pincode, terms }
 
 class SignupFormState {
   final String? chosenAvatarId;
@@ -30,6 +30,9 @@ class SignupFormState {
   final bool isSubmitting;
   final ApiError? error;
 
+  /// The user tapped Submit with something missing; show what is wrong.
+  final bool showValidation;
+
   const SignupFormState({
     this.chosenAvatarId,
     this.displayName = '',
@@ -43,30 +46,61 @@ class SignupFormState {
     this.termsAccepted = false,
     this.isSubmitting = false,
     this.error,
+    this.showValidation = false,
   });
 
   String get avatarId => chosenAvatarId ?? AvatarCatalog.defaultFor(gender);
 
   DateTime? get dateOfBirth => Validators.parseDateOfBirth(dobText);
 
-  /// Errors are shown only once the user has typed something invalid.
+  /// A field shows its error once the user typed something invalid, or after Submit was tapped.
   SignupFieldError? get nameError =>
-      displayName.isNotEmpty && !Validators.isValidName(displayName) ? SignupFieldError.name : null;
+      (displayName.isNotEmpty || showValidation) && !Validators.isValidName(displayName)
+          ? SignupFieldError.name
+          : null;
+
+  SignupFieldError? get genderError =>
+      showValidation && gender == null ? SignupFieldError.gender : null;
+
+  SignupFieldError? get stateError =>
+      showValidation && state == null ? SignupFieldError.state : null;
 
   SignupFieldError? get cityError =>
-      city.isNotEmpty && !Validators.isValidCity(city) ? SignupFieldError.city : null;
+      (city.isNotEmpty || showValidation) && !Validators.isValidCity(city)
+          ? SignupFieldError.city
+          : null;
 
   SignupFieldError? get addressError =>
-      address.isNotEmpty && !Validators.isValidAddress(address) ? SignupFieldError.address : null;
+      (address.isNotEmpty || showValidation) && !Validators.isValidAddress(address)
+          ? SignupFieldError.address
+          : null;
 
   SignupFieldError? get pincodeError =>
-      pincode.isNotEmpty && !Validators.isValidPincode(pincode) ? SignupFieldError.pincode : null;
+      (pincode.isNotEmpty || showValidation) && !Validators.isValidPincode(pincode)
+          ? SignupFieldError.pincode
+          : null;
 
   SignupFieldError? get dobError {
-    if (dobText.length < 10) return null;
-    if (Validators.isFutureDate(dobText)) return SignupFieldError.dobFuture;
-    return dateOfBirth == null ? SignupFieldError.dobFormat : null;
+    if (dobText.length >= 10) {
+      if (Validators.isFutureDate(dobText)) return SignupFieldError.dobFuture;
+      return dateOfBirth == null ? SignupFieldError.dobFormat : null;
+    }
+    return showValidation ? SignupFieldError.dobFormat : null;
   }
+
+  SignupFieldError? get termsError =>
+      showValidation && !termsAccepted ? SignupFieldError.terms : null;
+
+  /// The first field with an error, in screen order.
+  SignupFieldError? get firstError =>
+      nameError ??
+      genderError ??
+      dobError ??
+      stateError ??
+      cityError ??
+      addressError ??
+      pincodeError ??
+      termsError;
 
   bool get isValid =>
       Validators.isValidName(displayName) &&
@@ -93,6 +127,7 @@ class SignupFormState {
     bool? termsAccepted,
     bool? isSubmitting,
     ApiError? error,
+    bool? showValidation,
     bool clearError = false,
   }) {
     return SignupFormState(
@@ -108,6 +143,7 @@ class SignupFormState {
       termsAccepted: termsAccepted ?? this.termsAccepted,
       isSubmitting: isSubmitting ?? this.isSubmitting,
       error: clearError ? null : (error ?? this.error),
+      showValidation: showValidation ?? this.showValidation,
     );
   }
 }
@@ -117,6 +153,9 @@ class SignupFormState {
 class SignupForm extends _$SignupForm {
   @override
   SignupFormState build() => const SignupFormState();
+
+  /// Called when Submit is tapped while the form is incomplete.
+  void showValidation() => state = state.copyWith(showValidation: true);
 
   void setDisplayName(String value) => state = state.copyWith(displayName: value);
 

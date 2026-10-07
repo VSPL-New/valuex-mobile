@@ -849,6 +849,24 @@ abstract class AppLocalizations {
   /// **'Sign In'**
   String get signupSignIn;
 
+  /// No description provided for @signupErrorGender.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose one option'**
+  String get signupErrorGender;
+
+  /// No description provided for @signupErrorState.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your state'**
+  String get signupErrorState;
+
+  /// No description provided for @signupErrorTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept the Terms and Conditions to continue'**
+  String get signupErrorTerms;
+
   /// No description provided for @signupErrorName.
   ///
   /// In en, this message translates to:
