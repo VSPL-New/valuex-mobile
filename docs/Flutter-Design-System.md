@@ -34,17 +34,17 @@ Global tokens are prefixed `brand`. Screen-specific tokens use the screen name (
 | `brandSurfaceTint` | `#EEF0FF` | Input fill |
 | `brandMuted` | `#E2E8FF` | Light tint of brand blue: `SingleToneButton` fill, progress track |
 | `brandForeground` | `#0A0D1E` | Primary text |
-| `brandMutedText` | `#64748B` | Secondary text, labels |
-| `brandPlaceholder` | `#94A3B8` | Placeholders, hints |
+| `brandMutedText` | `#5B6B82` | Secondary text, field labels, helper text, icons beside helper text |
+| `brandPlaceholder` | `#5F6D83` | Placeholder text inside inputs (not for helper text or icons; use `brandMutedText`) |
 | `brandOnPrimary` | `#FFFFFF` | Text on brand fills |
 | `brandPrimary` | `#2D6BFF` | Brand blue, cursor, focus |
 | `brandAccent` | `#C026D3` | Brand magenta |
 | `brandBorder` | `#2D6BFF` at 12% | Input and card borders |
-| `brandBorderFocused` | `#2D6BFF` at 30% | Focused input border |
+| `brandBorderFocused` | `#2D6BFF` at 30% | Decorative only; inputs now focus with a 2 px `brandPrimary` border |
 | `brandOutline` | `#DEDEDE` | Decorative outlines only (no longer used for controls) |
 | `brandControlBorder` | `#76839B` | **Edge of every control that must be seen to be found** (outlined buttons now; inputs, choices and pickers as their screens are reviewed). 3.4–3.8:1 on white, page and input fill |
 | `brandDivider` | `#DCE4E8` | Divider lines |
-| `brandError` | `#EF4444` | Errors |
+| `brandError` | `#C81E1E` | Error text, icons and borders (5.1 to 5.7:1) |
 
 Onboarding-only: `onboardingSkipBackground` `#E9E9FF`, `onboardingSkipText` `#4A4AE0`, `onboardingSubtitle` `#6F6B6B`, `onboardingDotActive` `#D708B7`, `onboardingDotInactive` `#0149FD`, `onboardingBackButton` `#E703B2`, `onboardingNextButton` `#0149FD`. The Skip text and subtitle colours are darker than Figma's `#5B5BF7` and `#8F8B8B` to reach 4.5:1 (approved 2026-10-07).
 
@@ -66,10 +66,11 @@ Two families only. Do not add a third.
 | `heading1` | Poppins 28 / 38, w700 (onboarding titles) |
 | `heading2` | Poppins 24 / 1.5, w700 (page titles) |
 | `body` | DM Sans 16 / 1.5 |
-| `input` | DM Sans 14 / 20, foreground |
+| `input` | DM Sans 16 / 24, foreground (typed text and placeholder) |
 | `bodySecondary` | DM Sans 14 / 20, muted |
-| `label` | DM Sans 12, letter spacing 0.6, muted (use uppercase text) |
-| `hint` | DM Sans 12, placeholder colour |
+| `label` | DM Sans 14 / 20 medium, letter spacing 0.4, muted (field labels) |
+| `hint` | DM Sans 14 / 20, muted (helper text, timers; 12 px is for non-essential captions only) |
+| `error` | DM Sans 14 / 20 medium, `brandError` (message under a field, always with an icon) |
 | `button` | DM Sans 16, w700, white; on `OutlinedIconButton` the colour is `brandForeground` |
 | `dividerLabel` | DM Sans 14, w500, spacing -0.28 |
 
@@ -133,7 +134,9 @@ Auth feature widgets (`lib/features/auth/presentation/widgets/`): `AuthFormScaff
 
 Feature widgets: `OnboardingSlide`, `OnboardingDots` (one dot per page), `OnboardingNavButton`, `LabeledDivider`, `MobileNumberField` (+91 prefix, 10 digits).
 
-Inputs inherit `InputDecorationTheme` from `AppTheme` (tint fill, 12 px radius, `brandBorder`, focused `brandBorderFocused`). Do not restyle them per screen.
+Inputs inherit `InputDecorationTheme` from `AppTheme`: tint fill, 12 px radius, 1 px `brandControlBorder`, 2 px `brandPrimary` when focused, 2 px `brandError` on error. Do not restyle them per screen.
+
+**Form error rule:** show an error under the field (14 px `error` style, an icon, `Semantics(liveRegion: true)`), not in a snackbar, and keep it until the user edits the field. Scroll it into view at large text. Snackbars are for passing messages only. A submit button stays enabled; tapping it with invalid input shows the error (see `SignupMobileScreen`). Each field also announces its label to screen readers.
 
 ---
 
@@ -215,14 +218,14 @@ Contrast of the current colour pairs (calculated):
 | `brandForeground` on `brandBackground` | 17.9 | Pass |
 | White on `brandPrimary` | 4.51 | Pass |
 | White on `brandAccent` | 4.71 | Pass |
-| `brandMutedText` on `brandBackground` | 4.41 | Marginal (just under 4.5) |
-| `brandMutedText` on `brandSurfaceTint` | 4.20 | Fail for body text |
+| `brandMutedText` `#5B6B82` on `brandBackground` | 5.03 | Pass (was 4.41) |
+| `brandMutedText` on `brandSurfaceTint` | 4.79 | Pass (was 4.20) |
+| `brandError` `#C81E1E` on `brandBackground` / white / input fill | 5.32 / 5.74 / 5.07 | Pass (was 3.49) |
 | Skip text `#4A4AE0` on `onboardingSkipBackground` | 5.25 | Pass (was 4.10) |
 | `onboardingSubtitle` `#6F6B6B` on `brandBackground` | 4.88 | Pass (was 3.12) |
-| `brandPlaceholder` on `brandSurfaceTint` | 2.26 | Fail |
-| `brandPlaceholder` hint on `brandBackground` | 2.38 | Fail |
+| `brandPlaceholder` `#5F6D83` on `brandSurfaceTint` / `brandBackground` | 4.63 / 4.87 | Pass (was 2.26) |
 
-The onboarding colours are fixed. `brandMutedText` and `brandPlaceholder` are still to be darkened to at least 4.5:1 (US-110). Until then, treat them as known gaps, not as a pattern to copy. `test/core/theme/contrast_test.dart` holds the contrast checks; add a row there for every new colour pair.
+All text colours now reach 4.5:1 except the blue link text (`brandPrimary` on the page is 4.18), which is fixed with its screens (US-110). `test/core/theme/contrast_test.dart` holds the contrast checks; add a row there for every new colour pair.
 
 New registration controls (gender choices, state picker, calendar icon, show/hide, resend and change links, avatar tiles, switch) are 44 dp or larger. The inline "Terms and Conditions" link inside a sentence is smaller; it is the only exception.
 
@@ -263,6 +266,7 @@ Don't:
 - Set a page background on a `Scaffold` or use a white or other full-page colour.
 - Use Inter, Outfit, Plus Jakarta Sans, General Sans or Parkinsans.
 - Create a back button, input or button style per screen.
+- Show a form error only in a snackbar, or disable a submit button without saying why.
 - Hand-draw icons or edit exported assets.
 - Silently copy a Figma value that conflicts with a token, or silently change a token.
 
@@ -310,6 +314,10 @@ Decisions taken so far. Add a row for every approved conflict resolution (sectio
 
 | 2026-10-08 | Create Account outlined buttons | Border `#DEDEDE` was 1.25:1 against white and the page | **Approved:** new `brandControlBorder` `#76839B` (3.4 to 3.8:1) |
 | 2026-10-08 | Shared buttons at large text | Fixed 56 px height cut the Google and Guest labels at 200% | **Approved:** buttons keep a 56 dp minimum and grow; labels wrap instead of being truncated |
+
+| 2026-10-08 | Secondary, placeholder and error colours | `#64748B` (4.2:1), `#94A3B8` (2.3:1) and `#EF4444` (3.5:1) fail contrast | **Approved:** `brandMutedText` `#5B6B82`, `brandPlaceholder` `#5F6D83`, `brandError` `#C81E1E` |
+| 2026-10-08 | Input look and text sizes | Input edge 1.2:1; 12 px helper and label text; 14 px typed text | **Approved:** inputs use `brandControlBorder` with a 2 px focus and error border; `label` and `hint` 14 px; `input` 16 px |
+| 2026-10-08 | Mobile entry behaviour | Send OTP was disabled with no reason; errors went to a snackbar | **Approved:** Send OTP stays enabled and shows an inline error under the field; server errors also show inline |
 
 ### Approved exceptions
 

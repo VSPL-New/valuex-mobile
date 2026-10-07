@@ -31,12 +31,12 @@ Status values: Open, Fixed, Accepted (with reason).
 
 | # | Gap | Measured | Where | Proposed fix | Status |
 |---|---|---|---|---|---|
-| G1 | Secondary text too light | 4.41:1 on page background, 4.20:1 on input fill | Subtitles, field labels, note card, "coming soon" | Darken `brandMutedText` to `#5B6B82` (4.8 to 5.0:1) | Open |
-| G2 | Placeholder and hint text far too light | 2.26 to 2.38:1 | Input hints, state hint, OTP timer, Terms "last updated" | Darken `brandPlaceholder` until it passes 4.5:1. It will end up close to the muted text colour. | Open |
-| G3 | Error text too light, set at 12 px | 3.49 to 3.76:1 | Inline errors, OTP errors | Change `brandError` to `#C81E1E` (5.1 to 5.7:1) | Open |
+| G1 | Secondary text too light | 4.41:1 on page background, 4.20:1 on input fill | Subtitles, field labels, note card, "coming soon" | Darken `brandMutedText` to `#5B6B82` (4.8 to 5.0:1) | Fixed 2026-10-08 (token) |
+| G2 | Placeholder and hint text far too light | 2.26 to 2.38:1 | Input hints, state hint, OTP timer, Terms "last updated" | Darken `brandPlaceholder` until it passes 4.5:1. It will end up close to the muted text colour. | Fixed 2026-10-08 (token) |
+| G3 | Error text too light, set at 12 px | 3.49 to 3.76:1 | Inline errors, OTP errors | Change `brandError` to `#C81E1E` (5.1 to 5.7:1) | Fixed 2026-10-08 (token) |
 | G4 | Blue link text too light | 3.98 to 4.18:1 | Change number, Resend, Sign in, Retry | Add a darker link text colour `#1F5AE6` (5.1 to 5.3:1). Button fills stay as they are. | Open |
 | G5 | Onboarding colours from Figma fail | Subtitle `#8F8B8B` 3.12:1, Skip text `#5B5BF7` 4.10:1 | Onboarding screens | Subtitle `#6F6B6B`, Skip `#4A4AE0`. Changes Figma colours, needs design sign-off. | Onboarding fixed 2026-10-07 |
-| G6 | Field and control edges nearly invisible | Border 1.16:1, field fill against page 1.05:1 (needs 3:1) | Text fields, gender chips, state picker, OTP boxes, cards | Solid 1 px border in `brandControlBorder` `#76839B` (3.4 to 3.8:1), 2 px primary when focused. Visible look change. | In progress: outlined buttons done 2026-10-08; inputs, choices, pickers and OTP boxes follow with their screens |
+| G6 | Field and control edges nearly invisible | Border 1.16:1, field fill against page 1.05:1 (needs 3:1) | Text fields, gender chips, state picker, OTP boxes, cards | Solid 1 px border in `brandControlBorder` `#76839B` (3.4 to 3.8:1), 2 px primary when focused. Visible look change. | In progress: outlined buttons and inputs done; choices, pickers and OTP boxes follow with their screens |
 | G7 | White on the primary button has no margin | 4.51:1 | Primary buttons | Optional: darken the blue to `#2559E8` (5.7:1) | Open |
 | G8 | Disabled buttons are only 40% opacity, with no hint why | Low contrast | Sign Up, Verify | Dedicated disabled style (see G19) | Open |
 
@@ -44,7 +44,7 @@ Status values: Open, Fixed, Accepted (with reason).
 
 | # | Gap | Proposed fix | Status |
 |---|---|---|---|
-| G9 | 12 px is used for important text: errors, OTP countdown, resend status, Terms date. Skip is 13 px. | Use 14 px for errors and helper text. Keep 12 px only for non-essential captions. | In progress: Skip done |
+| G9 | 12 px is used for important text: errors, OTP countdown, resend status, Terms date. Skip is 13 px. | Use 14 px for errors and helper text. Keep 12 px only for non-essential captions. | In progress: Skip, labels, helper and error text done; remaining screens follow |
 | G10 | Onboarding title and subtitle sit in fixed-height boxes (76 and 69 px). Onboarding, splash and Home were not tested at large text sizes. | Remove fixed heights, test at 1.5x and 2x, cap the maximum text scale. | In progress: onboarding done |
 | G11 | Type scale has gaps. Link style is copied inline in 5+ places. Only 5 of 15 Material text slots are mapped, so the date picker and snackbars use default fonts. | Add `link`, `caption` and `error` styles, and set the theme font family. | Open |
 | G12 | Hindi heading at 28 px uses a 1.36 line height. Devanagari marks may clip. | Check visually, raise heading line height to about 1.5. | Open |
@@ -62,14 +62,14 @@ Status values: Open, Fixed, Accepted (with reason).
 | # | Gap | Proposed fix | Status |
 |---|---|---|---|
 | G16 | Onboarding next and back buttons have no label, so VoiceOver and TalkBack users cannot get past onboarding. The page dots have no "page 2 of 4" description. | Add labels and a dots description | Fixed 2026-10-07 |
-| G17 | Screen titles are not marked as headings. The loading spinner is not announced. | Mark titles as headers, add a loading label | In progress: onboarding done |
+| G17 | Screen titles are not marked as headings. The loading spinner is not announced. | Mark titles as headers, add a loading label | In progress: onboarding and the shared registration frame done |
 
 ### User friendliness
 
 | # | Gap | Proposed fix | Status |
 |---|---|---|---|
-| G18 | Blocking errors (invalid mobile or email, Aadhaar failure, Sign Up failure) appear in a snackbar that disappears after about 4 seconds and is not tied to a field. | Show errors inline under the field. Keep snackbars for transient network messages. | Open |
-| G19 | The Sign Up button stays dimmed with no explanation of what is missing. | Keep it enabled and show errors on tap, or add a hint line | Open |
+| G18 | Blocking errors (invalid mobile or email, Aadhaar failure, Sign Up failure) appear in a snackbar that disappears after about 4 seconds and is not tied to a field. | Show errors inline under the field. Keep snackbars for transient network messages. | In progress: Mobile entry done |
+| G19 | The Sign Up button stays dimmed with no explanation of what is missing. | Keep it enabled and show errors on tap, or add a hint line | In progress: Mobile entry done |
 | G20 | Animations ignore the system "reduce motion" setting. | Skip the animated dots and progress bar when it is on | Open |
 
 ## Progress by screen
@@ -80,7 +80,8 @@ Each screen is shown as a before and after design, approved, then implemented wi
 |---|---|
 | Onboarding | Approved and implemented 2026-10-07 |
 | Create Account | Approved and implemented 2026-10-08 |
-| Mobile, Mobile OTP, Email, Email OTP, Aadhaar, Aadhaar OTP, Sign Up, Terms, Blocked, Home, Splash | Pending |
+| Mobile | Approved and implemented 2026-10-08 |
+| Mobile OTP, Email, Email OTP, Aadhaar, Aadhaar OTP, Sign Up, Terms, Blocked, Home, Splash | Pending |
 
 ## Proposed fix order
 
