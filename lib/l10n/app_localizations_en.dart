@@ -21,6 +21,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonSkip => 'Skip';
 
   @override
+  String get commonNext => 'Next';
+
+  @override
+  String onboardingPageOf(int current, int total) {
+    return 'Page $current of $total';
+  }
+
+  @override
   String get splashInitializing => 'Initializing A1 Engine...';
 
   @override

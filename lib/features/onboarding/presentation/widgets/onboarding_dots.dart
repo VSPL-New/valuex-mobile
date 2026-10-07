@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/colors.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// Page indicator with one dot per onboarding page; the active dot is elongated.
 class OnboardingDots extends StatelessWidget {
@@ -14,7 +15,7 @@ class OnboardingDots extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    final dots = Row(
       mainAxisSize: MainAxisSize.min,
       children: List.generate(count, (index) {
         final isActive = index == activeDot;
@@ -30,6 +31,11 @@ class OnboardingDots extends StatelessWidget {
           ),
         );
       }),
+    );
+    return Semantics(
+      label: AppLocalizations.of(context).onboardingPageOf(activeDot + 1, count),
+      excludeSemantics: true,
+      child: dots,
     );
   }
 }

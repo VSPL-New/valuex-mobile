@@ -112,8 +112,8 @@ class AppTextStyles {
   static const TextStyle skipLabel = TextStyle(
     fontFamily: AppFonts.body,
     fontFamilyFallback: AppFonts.bodyFallback,
-    fontSize: 13,
-    fontWeight: FontWeight.w400,
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
     color: AppColors.onboardingSkipText,
   );
 

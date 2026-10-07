@@ -4,6 +4,8 @@
   "commonBack": "वापस",
   "commonRetry": "पुनः प्रयास करें",
   "commonSkip": "छोड़ें",
+  "commonNext": "आगे",
+  "onboardingPageOf": "{total} में से पृष्ठ {current}",
   "splashInitializing": "A1 इंजन शुरू हो रहा है...",
   "homeComingSoon": "होम — जल्द आ रहा है",
   "onboardingTitle1": "JustQlic से बेचना हुआ आसान",

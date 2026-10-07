@@ -117,6 +117,18 @@ abstract class AppLocalizations {
   /// **'Skip'**
   String get commonSkip;
 
+  /// No description provided for @commonNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get commonNext;
+
+  /// No description provided for @onboardingPageOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {current} of {total}'**
+  String onboardingPageOf(int current, int total);
+
   /// No description provided for @splashInitializing.
   ///
   /// In en, this message translates to:

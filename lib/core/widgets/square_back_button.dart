@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../constants/app_assets.dart';
 import '../theme/spacing.dart';
 
-/// Rounded-square back control (Figma: Back Button Container, 35x35) inside a 44x44 tap area.
+/// Rounded-square back control (Figma: Back Button Container, 35x35) inside a 48x48 tap area.
 class SquareBackButton extends StatelessWidget {
   final VoidCallback onPressed;
 

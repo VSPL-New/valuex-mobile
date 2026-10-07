@@ -21,6 +21,14 @@ class AppLocalizationsHi extends AppLocalizations {
   String get commonSkip => 'छोड़ें';
 
   @override
+  String get commonNext => 'आगे';
+
+  @override
+  String onboardingPageOf(int current, int total) {
+    return '$total में से पृष्ठ $current';
+  }
+
+  @override
   String get splashInitializing => 'A1 इंजन शुरू हो रहा है...';
 
   @override

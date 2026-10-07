@@ -30,8 +30,8 @@ class AppColors {
 
   // Onboarding only (Figma: Just Qlic)
   static const Color onboardingSkipBackground = Color(0xFFE9E9FF);
-  static const Color onboardingSkipText = Color(0xFF5B5BF7);
-  static const Color onboardingSubtitle = Color(0xFF8F8B8B);
+  static const Color onboardingSkipText = Color(0xFF4A4AE0);
+  static const Color onboardingSubtitle = Color(0xFF6F6B6B);
   static const Color onboardingDotActive = Color(0xFFD708B7);
   static const Color onboardingDotInactive = Color(0xFF0149FD);
   static const Color onboardingBackButton = Color(0xFFE703B2);

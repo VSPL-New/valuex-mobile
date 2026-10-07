@@ -4,6 +4,14 @@
   "commonBack": "Back",
   "commonRetry": "Retry",
   "commonSkip": "Skip",
+  "commonNext": "Next",
+  "onboardingPageOf": "Page {current} of {total}",
+  "@onboardingPageOf": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
   "splashInitializing": "Initializing A1 Engine...",
   "homeComingSoon": "Home — coming soon",
   "onboardingTitle1": "JustQlic Makes Selling Simple",
