@@ -41,7 +41,8 @@ Global tokens are prefixed `brand`. Screen-specific tokens use the screen name (
 | `brandAccent` | `#C026D3` | Brand magenta |
 | `brandBorder` | `#2D6BFF` at 12% | Input and card borders |
 | `brandBorderFocused` | `#2D6BFF` at 30% | Focused input border |
-| `brandOutline` | `#DEDEDE` | Outlined button border |
+| `brandOutline` | `#DEDEDE` | Decorative outlines only (no longer used for controls) |
+| `brandControlBorder` | `#76839B` | **Edge of every control that must be seen to be found** (outlined buttons now; inputs, choices and pickers as their screens are reviewed). 3.4–3.8:1 on white, page and input fill |
 | `brandDivider` | `#DCE4E8` | Divider lines |
 | `brandError` | `#EF4444` | Errors |
 
@@ -110,7 +111,7 @@ Shared widgets live in `lib/core/widgets/`. Reuse them; extract a new shared ato
 |---|---|---|
 | `BrandGradientButton` | atom | **Primary action.** Brand gradient, 56 high, radius 16, DM Sans 16 bold, glow. |
 | `SingleToneButton` | atom | **Secondary action.** Same size, radius and type as the primary, on a light tint of brand blue (`brandMuted`) with `brandForeground` text. |
-| `OutlinedIconButton` | atom | **Alternative sign-in or action with a leading icon** (Google, Guest). White, `brandOutline` border, radius 10, DM Sans 16 bold in `brandForeground`. |
+| `OutlinedIconButton` | atom | **Alternative sign-in or action with a leading icon** (Google, Guest). White, `brandControlBorder` border, radius 10, DM Sans 16 bold in `brandForeground`. The label wraps to a second line at large text. |
 | `AppButton` | atom | **Generic utility button** (Retry, dialogs, forms outside the main flow). Solid `brandPrimary` (the gradient's blue end), outlined variant, loading state. |
 | `SquareBackButton` | atom | **Canonical back button** (Figma rounded square, 48×48 tap area). Use on every page that goes back. |
 | `OnboardingNavButton` | atom | Onboarding next (radius 7) and back (radius 12) controls. 45 px drawing inside a 48 dp tap area; requires a `label` for screen readers. |
@@ -125,7 +126,7 @@ Auth feature widgets (`lib/features/auth/presentation/widgets/`): `AuthFormScaff
 
 - Use only the widgets above. **Do not create a new button style or a per-screen variant.**
 - One primary (`BrandGradientButton`) per screen. A second action next to it uses `SingleToneButton`. Alternative methods use `OutlinedIconButton`. Use `AppButton` only for generic utility actions.
-- All buttons are 56 high. Disabled means `onPressed: null` (shown at 40% opacity); do not hide or restyle disabled buttons.
+- All buttons are at least 56 high and grow when the label wraps at large text (never truncate a label). Disabled means `onPressed: null` (shown at 40% opacity); do not hide or restyle disabled buttons.
 - Button labels use sentence case ("Create an Account", "Sign In"), not UPPERCASE.
 - Only `brandPrimary` and `brandAccent` (the two ends of the brand gradient) may be used as button colours.
 - Placement: bottom-anchored actions respect the safe-area inset; stacked buttons are separated by `AppSpacing.sm` to `AppSpacing.md`.
@@ -306,6 +307,9 @@ Decisions taken so far. Add a row for every approved conflict resolution (sectio
 | 2026-10-07 | Touch targets | 44 dp minimum is below Material's 48 dp | **Approved: 48 dp** (`AppSizes.minTouchTarget`); CODING_STANDARDS 3.4 updated; back button tap area grows from 44 to 48 |
 | 2026-10-07 | Onboarding Skip, Next and Back | Drawings of 31 and 45 px are below 48 dp | **Approved:** drawing unchanged, tap area 48 dp; Skip text 14 px medium |
 | 2026-10-07 | Onboarding at 200% text | Fixed-height text boxes clipped the copy | **Approved:** boxes grow with the text and the copy gets a solid backing over the illustration when text is enlarged |
+
+| 2026-10-08 | Create Account outlined buttons | Border `#DEDEDE` was 1.25:1 against white and the page | **Approved:** new `brandControlBorder` `#76839B` (3.4 to 3.8:1) |
+| 2026-10-08 | Shared buttons at large text | Fixed 56 px height cut the Google and Guest labels at 200% | **Approved:** buttons keep a 56 dp minimum and grow; labels wrap instead of being truncated |
 
 ### Approved exceptions
 

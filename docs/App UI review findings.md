@@ -36,7 +36,7 @@ Status values: Open, Fixed, Accepted (with reason).
 | G3 | Error text too light, set at 12 px | 3.49 to 3.76:1 | Inline errors, OTP errors | Change `brandError` to `#C81E1E` (5.1 to 5.7:1) | Open |
 | G4 | Blue link text too light | 3.98 to 4.18:1 | Change number, Resend, Sign in, Retry | Add a darker link text colour `#1F5AE6` (5.1 to 5.3:1). Button fills stay as they are. | Open |
 | G5 | Onboarding colours from Figma fail | Subtitle `#8F8B8B` 3.12:1, Skip text `#5B5BF7` 4.10:1 | Onboarding screens | Subtitle `#6F6B6B`, Skip `#4A4AE0`. Changes Figma colours, needs design sign-off. | Onboarding fixed 2026-10-07 |
-| G6 | Field and control edges nearly invisible | Border 1.16:1, field fill against page 1.05:1 (needs 3:1) | Text fields, gender chips, state picker, OTP boxes, cards | Solid 1 px border around `#5F7BB5` (3.7:1), 2 px primary when focused. Visible look change, needs sign-off. | Open |
+| G6 | Field and control edges nearly invisible | Border 1.16:1, field fill against page 1.05:1 (needs 3:1) | Text fields, gender chips, state picker, OTP boxes, cards | Solid 1 px border in `brandControlBorder` `#76839B` (3.4 to 3.8:1), 2 px primary when focused. Visible look change. | In progress: outlined buttons done 2026-10-08; inputs, choices, pickers and OTP boxes follow with their screens |
 | G7 | White on the primary button has no margin | 4.51:1 | Primary buttons | Optional: darken the blue to `#2559E8` (5.7:1) | Open |
 | G8 | Disabled buttons are only 40% opacity, with no hint why | Low contrast | Sign Up, Verify | Dedicated disabled style (see G19) | Open |
 
@@ -79,7 +79,8 @@ Each screen is shown as a before and after design, approved, then implemented wi
 | Screen | Status |
 |---|---|
 | Onboarding | Approved and implemented 2026-10-07 |
-| Create Account, Mobile, Mobile OTP, Email, Email OTP, Aadhaar, Aadhaar OTP, Sign Up, Terms, Blocked, Home, Splash | Pending |
+| Create Account | Approved and implemented 2026-10-08 |
+| Mobile, Mobile OTP, Email, Email OTP, Aadhaar, Aadhaar OTP, Sign Up, Terms, Blocked, Home, Splash | Pending |
 
 ## Proposed fix order
 
@@ -97,7 +98,7 @@ Each step ends with `flutter analyze` and the tests. The design system doc ([Flu
 
 | Decision | Options | Answer |
 |---|---|---|
-| Change the look for G5 (Figma colours) and G6 (more visible field borders)? | Yes / No / Middle option: 1 px border at exactly 3:1 | G5 approved 2026-10-07; G6 pending |
+| Change the look for G5 (Figma colours) and G6 (more visible field borders)? | Yes / No / Middle option: 1 px border at exactly 3:1 | G5 approved 2026-10-07; G6 approved with the colour `#76839B` on 2026-10-08 |
 | Touch target minimum | 48 (recommended) / keep 44 | 48 approved 2026-10-07 |
 | Move blocking errors inline (G18)? | Yes (recommended) / keep snackbars | Pending |
 
