@@ -83,7 +83,8 @@ Each screen is shown as a before and after design, approved, then implemented wi
 | Mobile | Approved and implemented 2026-10-08 |
 | Mobile OTP and the shared OTP view (Email OTP) | Approved and implemented 2026-10-08 |
 | Email entry | Approved and implemented 2026-10-08 |
-| Aadhaar, Aadhaar OTP, Sign Up, Terms, Blocked, Home, Splash | Pending |
+| Aadhaar and Aadhaar OTP | Approved and implemented 2026-10-08 |
+| Sign Up, Terms, Blocked, Home, Splash | Pending |
 
 ## Proposed fix order
 

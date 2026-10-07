@@ -139,7 +139,7 @@ Feature widgets: `OnboardingSlide`, `OnboardingDots` (one dot per page), `Onboar
 
 Inputs inherit `InputDecorationTheme` from `AppTheme`: tint fill, 12 px radius, 1 px `brandControlBorder`, 2 px `brandPrimary` when focused, 2 px `brandError` on error. Do not restyle them per screen.
 
-**Form error rule:** show an error under the field with `FieldError` (14 px `error` style, an icon, live region), not in a snackbar, and keep it until the user edits the field. Scroll it into view at large text. For a plain `TextField` pass `InputDecoration(error: FieldError(text: ...))`; the theme then draws the red 2 px border (see `SignupEmailScreen`). Snackbars are for passing messages only. A submit button stays enabled; tapping it with invalid input shows the error (see `SignupMobileScreen`). Each field also announces its label to screen readers.
+**Form error rule:** show an error under the field with `FieldError` (14 px `error` style, an icon, live region), not in a snackbar, and keep it until the user edits the field. Scroll it into view at large text. For a plain `TextField` pass `InputDecoration(error: FieldError(text: ...))`; the theme then draws the red 2 px border (see `SignupEmailScreen`). Snackbars are for passing messages only. A submit button stays enabled; tapping it with invalid input shows the error (see `SignupMobileScreen`). Each field also announces its label to screen readers. When a form can fail below the fold, scroll its first message into view with `Scrollable.ensureVisible` (see `AadhaarScreen`).
 
 ---
 
@@ -325,6 +325,8 @@ Decisions taken so far. Add a row for every approved conflict resolution (sectio
 | 2026-10-08 | Mobile and email OTP | Box edge 1.2:1; verify dimmed without a reason; links 4.2:1 and 44 dp; digits clipped at 200%; typed digits not announced; old digits left after Resend | **Approved:** `brandControlBorder` edges, Verify stays enabled and asks for six digits, `brandLink` text and 48 dp links, boxes grow with text, digits announced, boxes empty after Resend |
 
 | 2026-10-08 | Email entry | Same gaps as mobile entry | **Approved:** same pattern: inline `FieldError`, Send OTP stays enabled, field label announced |
+
+| 2026-10-08 | Aadhaar and development Aadhaar OTP | Snackbar errors, dimmed Verify, 44 dp controls, unlabeled field | **Approved:** same form pattern as mobile entry; consent shows its own message with a red checkbox; the form scrolls to its messages; the consent copy keeps "ValueX" until legal confirms the brand name |
 
 ### Approved exceptions
 
