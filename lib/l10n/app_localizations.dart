@@ -429,6 +429,12 @@ abstract class AppLocalizations {
   /// **'Verify'**
   String get otpVerify;
 
+  /// No description provided for @otpIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code'**
+  String get otpIncomplete;
+
   /// No description provided for @otpResend.
   ///
   /// In en, this message translates to:

@@ -75,6 +75,16 @@ class AppTextStyles {
     color: AppColors.brandMutedText,
   );
 
+  /// Tappable text such as Resend code or Change number.
+  static const TextStyle link = TextStyle(
+    fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
+    fontSize: 16,
+    height: 24 / 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.brandLink,
+  );
+
   /// Error message under a field; always shown with an icon, never colour alone.
   static const TextStyle error = TextStyle(
     fontFamily: AppFonts.body,

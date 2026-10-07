@@ -54,6 +54,7 @@
   "otpMobileTitle": "अपना नंबर सत्यापित करें",
   "otpEmailTitle": "अपना ईमेल सत्यापित करें",
   "otpSubtitle": "{target} पर भेजा गया 6 अंकों का कोड दर्ज करें",
+  "otpIncomplete": "6 अंकों का कोड दर्ज करें",
   "otpFieldLabel": "6 अंकों का वन-टाइम कोड",
   "otpVerify": "सत्यापित करें",
   "otpResend": "कोड फिर से भेजें",

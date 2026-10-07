@@ -63,17 +63,28 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('Verify stays disabled until six digits are entered', (tester) async {
+    testWidgets('Verify with an incomplete code shows an inline message and verifies nothing', (
+      tester,
+    ) async {
       await openVerifyScreen(tester);
-      expect(_verifyEnabled(tester), isFalse);
+      expect(_verifyEnabled(tester), isTrue);
 
       await tester.enterText(find.byType(TextField), '12345');
       await tester.pump();
-      expect(_verifyEnabled(tester), isFalse);
+      await tester.tap(_verifyButton);
+      await harness.settle();
+
+      expect(find.text('Enter the 6-digit code'), findsOneWidget);
+      expect(find.byType(SnackBar), findsNothing);
+      verifyNever(
+        () => harness.repository
+            .verifyMobileOtp(mobile: any(named: 'mobile'), otp: any(named: 'otp')),
+      );
 
       await tester.enterText(find.byType(TextField), '123456');
       await tester.pump();
-      expect(_verifyEnabled(tester), isTrue);
+
+      expect(find.text('Enter the 6-digit code'), findsNothing);
       await harness.dispose();
     });
 

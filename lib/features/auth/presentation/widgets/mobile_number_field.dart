@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
+import '../../../../core/widgets/field_error.dart';
 
 /// Indian mobile number entry: fixed +91 prefix plus a 10-digit field. [errorText] is shown
 /// under the field with an icon and turns both edges red.
@@ -100,22 +101,9 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
             ],
           ),
         ),
-        if (hasError) ...[
+        if (errorText != null) ...[
           const SizedBox(height: AppSpacing.sm),
-          Semantics(
-            liveRegion: true,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 2),
-                  child: Icon(Icons.error_outline_rounded, size: 18, color: AppColors.brandError),
-                ),
-                const SizedBox(width: 6),
-                Expanded(child: Text(errorText, style: AppTextStyles.error)),
-              ],
-            ),
-          ),
+          FieldError(text: errorText),
         ],
       ],
     );

@@ -186,6 +186,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get otpVerify => 'सत्यापित करें';
 
   @override
+  String get otpIncomplete => '6 अंकों का कोड दर्ज करें';
+
+  @override
   String get otpResend => 'कोड फिर से भेजें';
 
   @override

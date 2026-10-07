@@ -69,6 +69,7 @@
   },
   "otpFieldLabel": "6-digit one-time code",
   "otpVerify": "Verify",
+  "otpIncomplete": "Enter the 6-digit code",
   "otpResend": "Resend code",
   "otpResendIn": "Resend code in {seconds}s",
   "@otpResendIn": {

@@ -186,6 +186,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get otpVerify => 'Verify';
 
   @override
+  String get otpIncomplete => 'Enter the 6-digit code';
+
+  @override
   String get otpResend => 'Resend code';
 
   @override

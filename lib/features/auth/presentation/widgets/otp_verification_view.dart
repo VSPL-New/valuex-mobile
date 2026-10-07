@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../../../core/widgets/brand_gradient_button.dart';
+import '../../../../core/widgets/field_error.dart';
 import '../../../../core/widgets/otp_input.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../auth_error_messages.dart';
@@ -56,27 +56,22 @@ class OtpVerificationView extends ConsumerWidget {
       subtitle: l10n.otpSubtitle(target),
       content: [
         OtpInput(
+          // A new key empties the boxes when a new code is requested.
+          key: ValueKey(state.sendCount),
           semanticLabel: l10n.otpFieldLabel,
           enabled: !state.isVerifying && !state.isLocked,
-          hasError: error != null,
+          hasError: error != null || state.codeIncomplete,
           onChanged: controller.setCode,
         ),
         const SizedBox(height: AppSpacing.md),
         if (error != null)
-          Semantics(
-            liveRegion: true,
-            child: Text(
-              authErrorMessage(l10n, error),
-              style: AppTextStyles.hint.copyWith(color: AppColors.brandError),
-            ),
-          )
+          FieldError(text: authErrorMessage(l10n, error))
+        else if (state.codeIncomplete)
+          FieldError(text: l10n.otpIncomplete)
+        else if (state.isExpired)
+          FieldError(text: l10n.otpExpired)
         else
-          Text(
-            state.isExpired
-                ? l10n.otpExpired
-                : l10n.otpExpiresIn(_formatTime(state.secondsUntilExpiry)),
-            style: AppTextStyles.hint,
-          ),
+          Text(l10n.otpExpiresIn(_formatTime(state.secondsUntilExpiry)), style: AppTextStyles.hint),
         const SizedBox(height: AppSpacing.md),
         _ResendRow(state: state, onResend: controller.resend),
       ],
@@ -85,15 +80,16 @@ class OtpVerificationView extends ConsumerWidget {
           BrandGradientButton(
             label: l10n.otpVerify,
             isLoading: state.isVerifying,
-            onPressed: state.canVerify ? controller.verify : null,
+            onPressed: state.canSubmit ? controller.verify : null,
           ),
           const SizedBox(height: AppSpacing.sm),
           TextButton(
             onPressed: onChange,
-            style: TextButton.styleFrom(minimumSize: const Size(44, 44)),
+            style: TextButton.styleFrom(
+                minimumSize: const Size(AppSizes.minTouchTarget, AppSizes.minTouchTarget)),
             child: Text(
               changeLabel,
-              style: AppTextStyles.input.copyWith(color: AppColors.brandPrimary),
+              style: AppTextStyles.link,
             ),
           ),
         ],
@@ -124,13 +120,13 @@ class _ResendRow extends StatelessWidget {
     return TextButton(
       onPressed: onResend,
       style: TextButton.styleFrom(
-        minimumSize: const Size(44, 44),
+        minimumSize: const Size(AppSizes.minTouchTarget, AppSizes.minTouchTarget),
         padding: EdgeInsets.zero,
         alignment: Alignment.centerLeft,
       ),
       child: Text(
         l10n.otpResend,
-        style: AppTextStyles.input.copyWith(color: AppColors.brandPrimary),
+        style: AppTextStyles.link,
       ),
     );
   }
