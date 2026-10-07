@@ -4,7 +4,7 @@ Review of the registration flow UI (onboarding, create account, Sign Up steps, T
 
 - **Date:** 2026-10-07
 - **Scope:** `valuex-mobile` at branch `feature/us-001-user-registration-mobile`
-- **Status:** Findings only. No app code has been changed yet.
+- **Status:** In progress under US-110. Onboarding is fixed; the other screens follow one at a time.
 
 ## How the review was done
 
@@ -35,7 +35,7 @@ Status values: Open, Fixed, Accepted (with reason).
 | G2 | Placeholder and hint text far too light | 2.26 to 2.38:1 | Input hints, state hint, OTP timer, Terms "last updated" | Darken `brandPlaceholder` until it passes 4.5:1. It will end up close to the muted text colour. | Open |
 | G3 | Error text too light, set at 12 px | 3.49 to 3.76:1 | Inline errors, OTP errors | Change `brandError` to `#C81E1E` (5.1 to 5.7:1) | Open |
 | G4 | Blue link text too light | 3.98 to 4.18:1 | Change number, Resend, Sign in, Retry | Add a darker link text colour `#1F5AE6` (5.1 to 5.3:1). Button fills stay as they are. | Open |
-| G5 | Onboarding colours from Figma fail | Subtitle `#8F8B8B` 3.12:1, Skip text `#5B5BF7` 4.10:1 | Onboarding screens | Subtitle `#6F6B6B`, Skip `#4A4AE0`. Changes Figma colours, needs design sign-off. | Open |
+| G5 | Onboarding colours from Figma fail | Subtitle `#8F8B8B` 3.12:1, Skip text `#5B5BF7` 4.10:1 | Onboarding screens | Subtitle `#6F6B6B`, Skip `#4A4AE0`. Changes Figma colours, needs design sign-off. | Onboarding fixed 2026-10-07 |
 | G6 | Field and control edges nearly invisible | Border 1.16:1, field fill against page 1.05:1 (needs 3:1) | Text fields, gender chips, state picker, OTP boxes, cards | Solid 1 px border around `#5F7BB5` (3.7:1), 2 px primary when focused. Visible look change, needs sign-off. | Open |
 | G7 | White on the primary button has no margin | 4.51:1 | Primary buttons | Optional: darken the blue to `#2559E8` (5.7:1) | Open |
 | G8 | Disabled buttons are only 40% opacity, with no hint why | Low contrast | Sign Up, Verify | Dedicated disabled style (see G19) | Open |
@@ -44,8 +44,8 @@ Status values: Open, Fixed, Accepted (with reason).
 
 | # | Gap | Proposed fix | Status |
 |---|---|---|---|
-| G9 | 12 px is used for important text: errors, OTP countdown, resend status, Terms date. Skip is 13 px. | Use 14 px for errors and helper text. Keep 12 px only for non-essential captions. | Open |
-| G10 | Onboarding title and subtitle sit in fixed-height boxes (76 and 69 px). Onboarding, splash and Home were not tested at large text sizes. | Remove fixed heights, test at 1.5x and 2x, cap the maximum text scale. | Open |
+| G9 | 12 px is used for important text: errors, OTP countdown, resend status, Terms date. Skip is 13 px. | Use 14 px for errors and helper text. Keep 12 px only for non-essential captions. | In progress: Skip done |
+| G10 | Onboarding title and subtitle sit in fixed-height boxes (76 and 69 px). Onboarding, splash and Home were not tested at large text sizes. | Remove fixed heights, test at 1.5x and 2x, cap the maximum text scale. | In progress: onboarding done |
 | G11 | Type scale has gaps. Link style is copied inline in 5+ places. Only 5 of 15 Material text slots are mapped, so the date picker and snackbars use default fonts. | Add `link`, `caption` and `error` styles, and set the theme font family. | Open |
 | G12 | Hindi heading at 28 px uses a 1.36 line height. Devanagari marks may clip. | Check visually, raise heading line height to about 1.5. | Open |
 
@@ -53,16 +53,16 @@ Status values: Open, Fixed, Accepted (with reason).
 
 | # | Gap | Measured | Proposed fix | Status |
 |---|---|---|---|---|
-| G13 | Onboarding Skip is too small | 64 x 31 | Tap area at least 48 px high. Look stays the same. | Open |
-| G14 | Onboarding back and next pass iOS 44 but fail Android 48 | 45 x 45 | Raise to 48 | Open |
-| G15 | Our minimum is 44, below Material's 48 dp. The back button and all 44 px TextButtons fail Flutter's Android check. | 44 | Raise `minTouchTarget` to 48 and update CODING_STANDARDS 3.4 | Open |
+| G13 | Onboarding Skip is too small | 64 x 31 | Tap area at least 48 px high. Look stays the same. | Fixed 2026-10-07 |
+| G14 | Onboarding back and next pass iOS 44 but fail Android 48 | 45 x 45 | Raise to 48 | Fixed 2026-10-07 |
+| G15 | Our minimum is 44, below Material's 48 dp. The back button and all 44 px TextButtons fail Flutter's Android check. | 44 | Raise `minTouchTarget` to 48 and update CODING_STANDARDS 3.4 | In progress: token is 48, remaining 44 px controls follow with their screens |
 
 ### Screen reader and keyboard
 
 | # | Gap | Proposed fix | Status |
 |---|---|---|---|
-| G16 | Onboarding next and back buttons have no label, so VoiceOver and TalkBack users cannot get past onboarding. The page dots have no "page 2 of 4" description. | Add labels and a dots description | Open |
-| G17 | Screen titles are not marked as headings. The loading spinner is not announced. | Mark titles as headers, add a loading label | Open |
+| G16 | Onboarding next and back buttons have no label, so VoiceOver and TalkBack users cannot get past onboarding. The page dots have no "page 2 of 4" description. | Add labels and a dots description | Fixed 2026-10-07 |
+| G17 | Screen titles are not marked as headings. The loading spinner is not announced. | Mark titles as headers, add a loading label | In progress: onboarding done |
 
 ### User friendliness
 
@@ -71,6 +71,15 @@ Status values: Open, Fixed, Accepted (with reason).
 | G18 | Blocking errors (invalid mobile or email, Aadhaar failure, Sign Up failure) appear in a snackbar that disappears after about 4 seconds and is not tied to a field. | Show errors inline under the field. Keep snackbars for transient network messages. | Open |
 | G19 | The Sign Up button stays dimmed with no explanation of what is missing. | Keep it enabled and show errors on tap, or add a hint line | Open |
 | G20 | Animations ignore the system "reduce motion" setting. | Skip the animated dots and progress bar when it is on | Open |
+
+## Progress by screen
+
+Each screen is shown as a before and after design, approved, then implemented with tests.
+
+| Screen | Status |
+|---|---|
+| Onboarding | Approved and implemented 2026-10-07 |
+| Create Account, Mobile, Mobile OTP, Email, Email OTP, Aadhaar, Aadhaar OTP, Sign Up, Terms, Blocked, Home, Splash | Pending |
 
 ## Proposed fix order
 
@@ -88,8 +97,8 @@ Each step ends with `flutter analyze` and the tests. The design system doc ([Flu
 
 | Decision | Options | Answer |
 |---|---|---|
-| Change the look for G5 (Figma colours) and G6 (more visible field borders)? | Yes / No / Middle option: 1 px border at exactly 3:1 | Pending |
-| Touch target minimum | 48 (recommended) / keep 44 | Pending |
+| Change the look for G5 (Figma colours) and G6 (more visible field borders)? | Yes / No / Middle option: 1 px border at exactly 3:1 | G5 approved 2026-10-07; G6 pending |
+| Touch target minimum | 48 (recommended) / keep 44 | 48 approved 2026-10-07 |
 | Move blocking errors inline (G18)? | Yes (recommended) / keep snackbars | Pending |
 
 ## Evidence

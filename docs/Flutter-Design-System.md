@@ -45,7 +45,7 @@ Global tokens are prefixed `brand`. Screen-specific tokens use the screen name (
 | `brandDivider` | `#DCE4E8` | Divider lines |
 | `brandError` | `#EF4444` | Errors |
 
-Onboarding-only: `onboardingSkipBackground` `#E9E9FF`, `onboardingSkipText` `#5B5BF7`, `onboardingSubtitle` `#8F8B8B`, `onboardingDotActive` `#D708B7`, `onboardingDotInactive` `#0149FD`, `onboardingBackButton` `#E703B2`, `onboardingNextButton` `#0149FD`.
+Onboarding-only: `onboardingSkipBackground` `#E9E9FF`, `onboardingSkipText` `#4A4AE0`, `onboardingSubtitle` `#6F6B6B`, `onboardingDotActive` `#D708B7`, `onboardingDotInactive` `#0149FD`, `onboardingBackButton` `#E703B2`, `onboardingNextButton` `#0149FD`. The Skip text and subtitle colours are darker than Figma's `#5B5BF7` and `#8F8B8B` to reach 4.5:1 (approved 2026-10-07).
 
 ### 2.2 Gradient — `AppGradients.brand` (`gradients.dart`)
 
@@ -82,6 +82,7 @@ Inter, Outfit, Plus Jakarta Sans, General Sans and Parkinsans are not used.
 | `AppRadius` sm / md / lg / xl | 6 / 10 / 12 / 16 |
 | `AppSizes.buttonMedium` | 56 (every button and text input) |
 | `AppSizes.backButton` | 35.1 (Figma back button) |
+| `AppSizes.minTouchTarget` | 48 (smallest tap area of any control; Material's 48 dp, which also covers iOS's 44 pt) |
 
 Figma's 55 and 60 px buttons are normalised to 56. The onboarding Next button keeps its Figma radius of 7.
 
@@ -111,8 +112,8 @@ Shared widgets live in `lib/core/widgets/`. Reuse them; extract a new shared ato
 | `SingleToneButton` | atom | **Secondary action.** Same size, radius and type as the primary, on a light tint of brand blue (`brandMuted`) with `brandForeground` text. |
 | `OutlinedIconButton` | atom | **Alternative sign-in or action with a leading icon** (Google, Guest). White, `brandOutline` border, radius 10, DM Sans 16 bold in `brandForeground`. |
 | `AppButton` | atom | **Generic utility button** (Retry, dialogs, forms outside the main flow). Solid `brandPrimary` (the gradient's blue end), outlined variant, loading state. |
-| `SquareBackButton` | atom | **Canonical back button** (Figma rounded square, 44×44 tap area). Use on every page that goes back. |
-| `OnboardingNavButton` | atom | Onboarding next (radius 7) and back (radius 12) controls |
+| `SquareBackButton` | atom | **Canonical back button** (Figma rounded square, 48×48 tap area). Use on every page that goes back. |
+| `OnboardingNavButton` | atom | Onboarding next (radius 7) and back (radius 12) controls. 45 px drawing inside a 48 dp tap area; requires a `label` for screen readers. |
 | `BrandLogo` | atom | The logo |
 | `AppTextField`, `ErrorView`, `LoadingIndicator` | atoms | Generic building blocks themed from `AppTheme` |
 | `OtpInput` | molecule | Six-digit code drawn as boxes over one real text field (paste, autofill, backspace). Boxes use the input tint and border; the current box and errors use `brandPrimary` and `brandError` borders. |
@@ -199,9 +200,9 @@ Target: **WCAG 2.2 AA** for all screens in the first release.
 | Area | Rule |
 |---|---|
 | Text contrast | Body text at least 4.5:1; large text (24 px, or 18.7 px bold) at least 3:1; UI components and icons at least 3:1 |
-| Tap targets | At least 48×48 dp (CODING_STANDARDS 3.4 requires 44 as the minimum). Extend the hit area with padding when the visual is smaller (Back 35 px, Skip 64×31). |
-| Text scaling | Layouts must work at 200% system font size: no clipping, scrollable pages, no fixed-height text boxes |
-| Screen readers | Every interactive element has a semantic label; decorative images are excluded; logo uses the label "JustQlic" |
+| Tap targets | At least `AppSizes.minTouchTarget` (48×48 dp, CODING_STANDARDS 3.4). When the visual is smaller (Back 35 px, Skip pill 31 px high, onboarding arrows 45 px) keep the drawing and extend the tap area: a `SizedBox` of the minimum size with an opaque `GestureDetector`, plus `Semantics(button: true, label: ..., onTap: ...)`. |
+| Text scaling | Layouts must work at 200% system font size: no clipping, scrollable pages, no fixed-height text boxes (use a minimum height and let text grow). Text laid over an illustration gets a solid backing when the text is enlarged (see `OnboardingSlide`). |
+| Screen readers | Every interactive element has a semantic label (icon-only buttons must pass a `label`); screen titles are marked `Semantics(header: true)`; page indicators say "Page x of y"; decorative images are excluded; logo uses the label "JustQlic" |
 | Focus and keyboard | Logical focus order; visible focus; inputs use correct `keyboardType` and autofill hints |
 | Motion | Respect reduce-motion (splash progress animation, page transitions) |
 | State | Never rely on colour alone to show errors or selection |
@@ -215,16 +216,16 @@ Contrast of the current colour pairs (calculated):
 | White on `brandAccent` | 4.71 | Pass |
 | `brandMutedText` on `brandBackground` | 4.41 | Marginal (just under 4.5) |
 | `brandMutedText` on `brandSurfaceTint` | 4.20 | Fail for body text |
-| Skip text on `onboardingSkipBackground` | 4.10 | Fail |
-| `onboardingSubtitle` on onboarding fade | 3.26 | Fail |
+| Skip text `#4A4AE0` on `onboardingSkipBackground` | 5.25 | Pass (was 4.10) |
+| `onboardingSubtitle` `#6F6B6B` on `brandBackground` | 4.88 | Pass (was 3.12) |
 | `brandPlaceholder` on `brandSurfaceTint` | 2.26 | Fail |
 | `brandPlaceholder` hint on `brandBackground` | 2.38 | Fail |
 
-These Figma colours need designer sign-off to darken `brandMutedText`, `brandPlaceholder`, `onboardingSubtitle` and `onboardingSkipText` to at least 4.5:1. Until then, treat them as known gaps, not as a pattern to copy.
+The onboarding colours are fixed. `brandMutedText` and `brandPlaceholder` are still to be darkened to at least 4.5:1 (US-110). Until then, treat them as known gaps, not as a pattern to copy. `test/core/theme/contrast_test.dart` holds the contrast checks; add a row there for every new colour pair.
 
 New registration controls (gender choices, state picker, calendar icon, show/hide, resend and change links, avatar tiles, switch) are 44 dp or larger. The inline "Terms and Conditions" link inside a sentence is smaller; it is the only exception.
 
-Known gaps to close before release: tap target on Skip (64×31), fixed-height text boxes on onboarding, missing semantic labels on icon buttons and illustrations, reduce-motion handling.
+Known gaps to close before release (tracked in `App UI review findings.md`, story US-110): the other registration screens, missing semantic labels on illustrations, reduce-motion handling.
 
 ---
 
@@ -300,6 +301,11 @@ Decisions taken so far. Add a row for every approved conflict resolution (sectio
 | 2026-10-06 | Avatars | Final artwork not available | Placeholder avatars drawn from Material icons on brand-tinted circles; male-looking `avatar-01..04`, female-looking `05..08`, neutral `09..12`; ids unchanged when artwork arrives |
 | 2026-10-06 | Hindi text | DM Sans has no Devanagari glyphs | `AppFonts.bodyFallback` uses Poppins, which has Devanagari; no new font |
 | 2026-10-06 | Back button size | Figma 35 px against the 44 dp standard | **Approved: enlarge.** `SquareBackButton` has a 44×44 tap area around the unchanged 35 px visual (content below moves down about 9 px) |
+
+| 2026-10-07 | Onboarding colours | Figma subtitle `#8F8B8B` (3.1:1) and Skip text `#5B5BF7` (4.1:1) fail contrast | **Approved: darken** to `#6F6B6B` (4.9:1) and `#4A4AE0` (5.3:1) |
+| 2026-10-07 | Touch targets | 44 dp minimum is below Material's 48 dp | **Approved: 48 dp** (`AppSizes.minTouchTarget`); CODING_STANDARDS 3.4 updated; back button tap area grows from 44 to 48 |
+| 2026-10-07 | Onboarding Skip, Next and Back | Drawings of 31 and 45 px are below 48 dp | **Approved:** drawing unchanged, tap area 48 dp; Skip text 14 px medium |
+| 2026-10-07 | Onboarding at 200% text | Fixed-height text boxes clipped the copy | **Approved:** boxes grow with the text and the copy gets a solid backing over the illustration when text is enlarged |
 
 ### Approved exceptions
 
