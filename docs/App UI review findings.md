@@ -4,7 +4,7 @@ Review of the registration flow UI (onboarding, create account, Sign Up steps, T
 
 - **Date:** 2026-10-07
 - **Scope:** `valuex-mobile` at branch `feature/us-001-user-registration-mobile`
-- **Status:** In progress under US-110. Onboarding is fixed; the other screens follow one at a time.
+- **Status:** Implemented under US-110 on 2026-10-08. The permanent checks are `test/all_screens_accessibility_test.dart`, `test/screen_headings_test.dart`, `test/reduce_motion_test.dart` and `test/core/theme/contrast_test.dart`.
 
 ## How the review was done
 
@@ -31,46 +31,46 @@ Status values: Open, Fixed, Accepted (with reason).
 
 | # | Gap | Measured | Where | Proposed fix | Status |
 |---|---|---|---|---|---|
-| G1 | Secondary text too light | 4.41:1 on page background, 4.20:1 on input fill | Subtitles, field labels, note card, "coming soon" | Darken `brandMutedText` to `#5B6B82` (4.8 to 5.0:1) | Fixed 2026-10-08 (token) |
-| G2 | Placeholder and hint text far too light | 2.26 to 2.38:1 | Input hints, state hint, OTP timer, Terms "last updated" | Darken `brandPlaceholder` until it passes 4.5:1. It will end up close to the muted text colour. | Fixed 2026-10-08 (token) |
-| G3 | Error text too light, set at 12 px | 3.49 to 3.76:1 | Inline errors, OTP errors | Change `brandError` to `#C81E1E` (5.1 to 5.7:1) | Fixed 2026-10-08 (token) |
-| G4 | Blue link text too light | 3.98 to 4.18:1 | Change number, Resend, Sign in, Retry | Add a darker link text colour `#1F5AE6` (5.1 to 5.3:1). Button fills stay as they are. | In progress: link token added; Mobile and email OTP done, Sign in and Retry follow with their screens |
-| G5 | Onboarding colours from Figma fail | Subtitle `#8F8B8B` 3.12:1, Skip text `#5B5BF7` 4.10:1 | Onboarding screens | Subtitle `#6F6B6B`, Skip `#4A4AE0`. Changes Figma colours, needs design sign-off. | Onboarding fixed 2026-10-07 |
-| G6 | Field and control edges nearly invisible | Border 1.16:1, field fill against page 1.05:1 (needs 3:1) | Text fields, gender chips, state picker, OTP boxes, cards | Solid 1 px border in `brandControlBorder` `#76839B` (3.4 to 3.8:1), 2 px primary when focused. Visible look change. | In progress: outlined buttons, inputs and OTP boxes done; choices and pickers follow with their screens |
-| G7 | White on the primary button has no margin | 4.51:1 | Primary buttons | Optional: darken the blue to `#2559E8` (5.7:1) | Open |
-| G8 | Disabled buttons are only 40% opacity, with no hint why | Low contrast | Sign Up, Verify | Dedicated disabled style (see G19) | Open |
+| G1 | Secondary text too light | 4.41:1 on page background, 4.20:1 on input fill | Subtitles, field labels, note card, "coming soon" | Darken `brandMutedText` to `#5B6B82` (4.8 to 5.0:1) | Fixed 2026-10-08 |
+| G2 | Placeholder and hint text far too light | 2.26 to 2.38:1 | Input hints, state hint, OTP timer, Terms "last updated" | Darken `brandPlaceholder` until it passes 4.5:1. It will end up close to the muted text colour. | Fixed 2026-10-08 |
+| G3 | Error text too light, set at 12 px | 3.49 to 3.76:1 | Inline errors, OTP errors | Change `brandError` to `#C81E1E` (5.1 to 5.7:1) | Fixed 2026-10-08 |
+| G4 | Blue link text too light | 3.98 to 4.18:1 | Change number, Resend, Sign in, Retry | Add a darker link text colour `#1F5AE6` (5.1 to 5.3:1). Button fills stay as they are. | Fixed 2026-10-08 |
+| G5 | Onboarding colours from Figma fail | Subtitle `#8F8B8B` 3.12:1, Skip text `#5B5BF7` 4.10:1 | Onboarding screens | Subtitle `#6F6B6B`, Skip `#4A4AE0`. Changes Figma colours, needs design sign-off. | Fixed 2026-10-08 |
+| G6 | Field and control edges nearly invisible | Border 1.16:1, field fill against page 1.05:1 (needs 3:1) | Text fields, gender chips, state picker, OTP boxes, cards | Solid 1 px border in `brandControlBorder` `#76839B` (3.4 to 3.8:1), 2 px primary when focused. Visible look change. | Fixed 2026-10-08 |
+| G7 | White on the primary button has no margin | 4.51:1 | Primary buttons | Optional: darken the blue to `#2559E8` (5.7:1) | Not changed: 4.51:1 passes; the button blue stays as designed |
+| G8 | Disabled buttons are only 40% opacity, with no hint why | Low contrast | Sign Up, Verify | Dedicated disabled style (see G19) | Fixed 2026-10-08: no screen dims a button without a visible reason |
 
 ### Typography and readability
 
 | # | Gap | Proposed fix | Status |
 |---|---|---|---|
-| G9 | 12 px is used for important text: errors, OTP countdown, resend status, Terms date. Skip is 13 px. | Use 14 px for errors and helper text. Keep 12 px only for non-essential captions. | In progress: Skip, labels, helper and error text done; remaining screens follow |
-| G10 | Onboarding title and subtitle sit in fixed-height boxes (76 and 69 px). Onboarding, splash and Home were not tested at large text sizes. | Remove fixed heights, test at 1.5x and 2x, cap the maximum text scale. | In progress: onboarding done |
-| G11 | Type scale has gaps. Link style is copied inline in 5+ places. Only 5 of 15 Material text slots are mapped, so the date picker and snackbars use default fonts. | Add `link`, `caption` and `error` styles, and set the theme font family. | Open |
-| G12 | Hindi heading at 28 px uses a 1.36 line height. Devanagari marks may clip. | Check visually, raise heading line height to about 1.5. | Open |
+| G9 | 12 px is used for important text: errors, OTP countdown, resend status, Terms date. Skip is 13 px. | Use 14 px for errors and helper text. Keep 12 px only for non-essential captions. | Fixed 2026-10-08 |
+| G10 | Onboarding title and subtitle sit in fixed-height boxes (76 and 69 px). Onboarding, splash and Home were not tested at large text sizes. | Remove fixed heights, test at 1.5x and 2x, cap the maximum text scale. | Fixed 2026-10-08 |
+| G11 | Type scale has gaps. Link style is copied inline in 5+ places. Only 5 of 15 Material text slots are mapped, so the date picker and snackbars use default fonts. | Add `link`, `caption` and `error` styles, and set the theme font family. | Fixed 2026-10-08: `link`, `error`, `hint`, `label` styles added |
+| G12 | Hindi heading at 28 px uses a 1.36 line height. Devanagari marks may clip. | Check visually, raise heading line height to about 1.5. | Left as is: layout tests pass in Hindi at 200%, but a Hindi reader should check the 1.36 heading line height by eye |
 
 ### Touch targets
 
 | # | Gap | Measured | Proposed fix | Status |
 |---|---|---|---|---|
-| G13 | Onboarding Skip is too small | 64 x 31 | Tap area at least 48 px high. Look stays the same. | Fixed 2026-10-07 |
-| G14 | Onboarding back and next pass iOS 44 but fail Android 48 | 45 x 45 | Raise to 48 | Fixed 2026-10-07 |
-| G15 | Our minimum is 44, below Material's 48 dp. The back button and all 44 px TextButtons fail Flutter's Android check. | 44 | Raise `minTouchTarget` to 48 and update CODING_STANDARDS 3.4 | In progress: token is 48; OTP links done, remaining 44 px controls follow with their screens |
+| G13 | Onboarding Skip is too small | 64 x 31 | Tap area at least 48 px high. Look stays the same. | Fixed 2026-10-08 |
+| G14 | Onboarding back and next pass iOS 44 but fail Android 48 | 45 x 45 | Raise to 48 | Fixed 2026-10-08 |
+| G15 | Our minimum is 44, below Material's 48 dp. The back button and all 44 px TextButtons fail Flutter's Android check. | 44 | Raise `minTouchTarget` to 48 and update CODING_STANDARDS 3.4 | Fixed 2026-10-08 |
 
 ### Screen reader and keyboard
 
 | # | Gap | Proposed fix | Status |
 |---|---|---|---|
-| G16 | Onboarding next and back buttons have no label, so VoiceOver and TalkBack users cannot get past onboarding. The page dots have no "page 2 of 4" description. | Add labels and a dots description | Fixed 2026-10-07 |
-| G17 | Screen titles are not marked as headings. The loading spinner is not announced. | Mark titles as headers, add a loading label | In progress: onboarding and the shared registration frame done |
+| G16 | Onboarding next and back buttons have no label, so VoiceOver and TalkBack users cannot get past onboarding. The page dots have no "page 2 of 4" description. | Add labels and a dots description | Fixed 2026-10-08 |
+| G17 | Screen titles are not marked as headings. The loading spinner is not announced. | Mark titles as headers, add a loading label | Fixed 2026-10-08 |
 
 ### User friendliness
 
 | # | Gap | Proposed fix | Status |
 |---|---|---|---|
-| G18 | Blocking errors (invalid mobile or email, Aadhaar failure, Sign Up failure) appear in a snackbar that disappears after about 4 seconds and is not tied to a field. | Show errors inline under the field. Keep snackbars for transient network messages. | In progress: Mobile entry and OTP done |
-| G19 | The Sign Up button stays dimmed with no explanation of what is missing. | Keep it enabled and show errors on tap, or add a hint line | In progress: Mobile entry and OTP done |
-| G20 | Animations ignore the system "reduce motion" setting. | Skip the animated dots and progress bar when it is on | Open |
+| G18 | Blocking errors (invalid mobile or email, Aadhaar failure, Sign Up failure) appear in a snackbar that disappears after about 4 seconds and is not tied to a field. | Show errors inline under the field. Keep snackbars for transient network messages. | Fixed 2026-10-08 |
+| G19 | The Sign Up button stays dimmed with no explanation of what is missing. | Keep it enabled and show errors on tap, or add a hint line | Fixed 2026-10-08 |
+| G20 | Animations ignore the system "reduce motion" setting. | Skip the animated dots and progress bar when it is on | Fixed 2026-10-08 |
 
 ## Progress by screen
 
@@ -84,7 +84,17 @@ Each screen is shown as a before and after design, approved, then implemented wi
 | Mobile OTP and the shared OTP view (Email OTP) | Approved and implemented 2026-10-08 |
 | Email entry | Approved and implemented 2026-10-08 |
 | Aadhaar and Aadhaar OTP | Approved and implemented 2026-10-08 |
-| Sign Up, Terms, Blocked, Home, Splash | Pending |
+| Sign Up | Implemented 2026-10-08 using the approved patterns (no separate review) |
+| Terms, Account unavailable, Home, Splash | Implemented 2026-10-08 using the approved patterns (no separate review) |
+
+## Still open
+
+- Native-speaker review of the new Hindi strings.
+- Designer confirmation of the new colours and update of the Figma file.
+- G12: a Hindi reader should check the heading line height.
+- Route transitions do not yet respect reduce motion.
+- Legal confirmation of the brand name in the Aadhaar consent text ("ValueX" or "JustQlic").
+- Physical device check with TalkBack and VoiceOver.
 
 ## Proposed fix order
 

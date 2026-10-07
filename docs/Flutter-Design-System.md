@@ -124,7 +124,7 @@ Shared widgets live in `lib/core/widgets/`. Reuse them; extract a new shared ato
 | `FieldError` | atom | **The one way to show a form error:** error icon plus `error` text in a live region. Use it under every field and OTP input. |
 | `ProtectedScreen` | utility | Wraps a screen that must block screenshots (Aadhaar now; payment, escrow and bank details later). Reference counted through `ScreenProtectionService`. |
 
-Auth feature widgets (`lib/features/auth/presentation/widgets/`): `AuthFormScaffold` (back, logo, title, scrolling content, fixed bottom actions; used by every registration step), `OtpVerificationView`, `AadhaarNoteCard` (tint card with `brandAccent` icon), `GenderSelector` (three equal choices, selected = `brandPrimary` 2 px border on `brandSurfaceTint`), `DateOfBirthField` (typed DD/MM/YYYY plus a calendar icon), `StatePickerField` (field-style row opening a list sheet), `AvatarImage` and the avatar picker sheet.
+Auth feature widgets (`lib/features/auth/presentation/widgets/`): `AuthFormScaffold` (back, logo, title, scrolling content, fixed bottom actions; used by every registration step), `OtpVerificationView`, `AadhaarNoteCard` (tint card with `brandAccent` icon), `GenderSelector` (three equal choices, stacked one per line at large text; selected = `brandPrimary` 2 px border on `brandSurfaceTint`; unselected `brandControlBorder`; takes an `errorText`), `DateOfBirthField` (typed DD/MM/YYYY plus a calendar icon), `StatePickerField` (field-style row opening a list sheet), `AvatarImage` and the avatar picker sheet.
 
 ### 4.1 Button rules for new screens
 
@@ -211,7 +211,7 @@ Target: **WCAG 2.2 AA** for all screens in the first release.
 | Text scaling | Layouts must work at 200% system font size: no clipping, scrollable pages, no fixed-height text boxes (use a minimum height and let text grow). Text laid over an illustration gets a solid backing when the text is enlarged (see `OnboardingSlide`). |
 | Screen readers | Every interactive element has a semantic label (icon-only buttons must pass a `label`); screen titles are marked `Semantics(header: true)`; page indicators say "Page x of y"; decorative images are excluded; logo uses the label "JustQlic" |
 | Focus and keyboard | Logical focus order; visible focus; inputs use correct `keyboardType` and autofill hints |
-| Motion | Respect reduce-motion (splash progress animation, page transitions) |
+| Motion | Respect reduce-motion: wrap every animation duration in `motionDuration(context, ...)` (`core/utils/motion.dart`); never pass a zero duration to `animateToPage` or `nextPage`, jump instead. The splash bar is shown full, onboarding changes page at once. |
 | State | Never rely on colour alone to show errors or selection |
 
 Contrast of the current colour pairs (calculated):
@@ -228,11 +228,13 @@ Contrast of the current colour pairs (calculated):
 | `onboardingSubtitle` `#6F6B6B` on `brandBackground` | 4.88 | Pass (was 3.12) |
 | `brandPlaceholder` `#5F6D83` on `brandSurfaceTint` / `brandBackground` | 4.63 / 4.87 | Pass (was 2.26) |
 
-All text colours now reach 4.5:1 except the blue link text (`brandPrimary` on the page is 4.18), which is fixed with its screens (US-110). `test/core/theme/contrast_test.dart` holds the contrast checks; add a row there for every new colour pair.
+All text colours reach 4.5:1 (links use `brandLink`; do not use `brandPrimary` for text). `test/core/theme/contrast_test.dart` holds the contrast checks; add a row there for every new colour pair.
 
 New registration controls (gender choices, state picker, calendar icon, show/hide, resend and change links, avatar tiles, switch) are 44 dp or larger. The inline "Terms and Conditions" link inside a sentence is smaller; it is the only exception.
 
-Known gaps to close before release (tracked in `App UI review findings.md`, story US-110): the other registration screens, missing semantic labels on illustrations, reduce-motion handling.
+**Enforced by tests (US-110):** `test/all_screens_accessibility_test.dart` runs Flutter's tap target (Android 48 dp, iOS 44 pt), label and text contrast guidelines on every screen; `test/screen_headings_test.dart` checks headings; `test/reduce_motion_test.dart` checks reduce motion. **Add every new screen to the first two.** A screen that fails them does not merge.
+
+**New screen checklist:** tokens only; 48 dp tap areas; every control labelled; title and section titles marked as headings; errors under the field with `FieldError`, submit buttons enabled with validation on tap, the first message scrolled into view; text laid out at 200% in English and Hindi; animations through `motionDuration`; a row in `contrast_test.dart` for any new colour pair; strings in both ARB files.
 
 ---
 
@@ -281,13 +283,13 @@ Don't:
 |---|---|
 | Transparent JustQlic logo | Designer |
 | Transparent Create Account illustration (faint edge lines show on `brandBackground` today) | Designer |
-| Darker colours for the failing contrast pairs | Designer |
+| Confirm the darker colours chosen in US-110 (muted text, placeholder, error, link, onboarding, control border) and update Figma | Designer |
 | Clean export of the onboarding screen 4 illustration (baked-in status bar) | Designer |
 | Native-speaker review of the Hindi strings in `lib/l10n/app_hi.arb` | Product |
 | Final avatar artwork (placeholders drawn from icons today; US-003) | Designer |
 | Figma frames for the Sign Up form, gender choices, date field, state picker, avatar picker and OTP boxes (built from tokens without a design) | Designer |
 | Role-based `ThemeExtension` and dark theme | Engineering |
-| Tap-target, text-scaling and semantics fixes | Engineering |
+| Page transitions between routes do not yet respect reduce motion (GoRouter default transitions) | Engineering |
 
 ---
 
@@ -327,6 +329,10 @@ Decisions taken so far. Add a row for every approved conflict resolution (sectio
 | 2026-10-08 | Email entry | Same gaps as mobile entry | **Approved:** same pattern: inline `FieldError`, Send OTP stays enabled, field label announced |
 
 | 2026-10-08 | Aadhaar and development Aadhaar OTP | Snackbar errors, dimmed Verify, 44 dp controls, unlabeled field | **Approved:** same form pattern as mobile entry; consent shows its own message with a red checkbox; the form scrolls to its messages; the consent copy keeps "ValueX" until legal confirms the brand name |
+
+| 2026-10-08 | Sign Up | Submit dimmed with no reason; messages only for typed-in invalid values; unlabeled fields and switch; faint edges on choices and pickers; 44 dp controls; gender words broken at 200% | **Applied from the approved patterns:** Submit stays enabled and shows a message under every missing or invalid field, scrolling to the first; fields and the terms switch are labelled; `brandControlBorder` edges; 48 dp; gender choices stack at large text; server errors show under the form |
+| 2026-10-08 | Terms, Account unavailable, Home, Splash | Plain titles; 44 dp close button; 12 px splash label; fixed-height blocked page | **Applied:** titles and Terms sections are headings; 48 dp close button; 14 px splash label; blocked page scrolls at large text |
+| 2026-10-08 | Reduce motion | Animations ignored the system setting | **Applied:** `motionDuration` helper; splash bar static, onboarding jumps, dots and scroll-to-message do not animate |
 
 ### Approved exceptions
 
