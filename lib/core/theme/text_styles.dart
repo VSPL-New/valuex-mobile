@@ -142,7 +142,7 @@ class AppTextStyles {
   static const TextStyle splashProgressLabel = TextStyle(
     fontFamily: AppFonts.body,
     fontFamilyFallback: AppFonts.bodyFallback,
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.brandForeground,
   );

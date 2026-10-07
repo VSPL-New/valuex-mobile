@@ -36,10 +36,18 @@ class TermsScreen extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Expanded(child: Text(l10n.termsTitle, style: AppTextStyles.heading2)),
+                  Expanded(
+                    child: Semantics(
+                      header: true,
+                      child: Text(l10n.termsTitle, style: AppTextStyles.heading2),
+                    ),
+                  ),
                   IconButton(
                     tooltip: l10n.commonClose,
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(
+                      minWidth: AppSizes.minTouchTarget,
+                      minHeight: AppSizes.minTouchTarget,
+                    ),
                     onPressed: () => context.pop(),
                     icon: const Icon(Icons.close_rounded, color: AppColors.brandForeground),
                   ),
@@ -58,7 +66,13 @@ class TermsScreen extends StatelessWidget {
                   Text(l10n.termsLastUpdated, style: AppTextStyles.hint),
                   for (final title in sections) ...[
                     const SizedBox(height: AppSpacing.lg),
-                    Text(title, style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w700)),
+                    Semantics(
+                      header: true,
+                      child: Text(
+                        title,
+                        style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w700),
+                      ),
+                    ),
                     const SizedBox(height: AppSpacing.sm),
                     Text(l10n.termsPlaceholder, style: AppTextStyles.bodySecondary),
                   ],

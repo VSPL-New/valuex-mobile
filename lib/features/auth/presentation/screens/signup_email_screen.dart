@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routing/route_names.dart';
 import '../../../../core/theme/colors.dart';
+import '../../../../core/utils/motion.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../../../core/utils/validators.dart';
@@ -50,7 +51,8 @@ class _SignupEmailScreenState extends ConsumerState<SignupEmailScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final context = _fieldKey.currentContext;
       if (context != null && context.mounted) {
-        Scrollable.ensureVisible(context, duration: const Duration(milliseconds: 200));
+        Scrollable.ensureVisible(context,
+            duration: motionDuration(context, const Duration(milliseconds: 200)));
       }
     });
   }

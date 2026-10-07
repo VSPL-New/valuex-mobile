@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/config/app_config.dart';
 import '../../../../core/routing/route_names.dart';
 import '../../../../core/theme/colors.dart';
+import '../../../../core/utils/motion.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../../../core/widgets/brand_gradient_button.dart';
@@ -35,7 +36,8 @@ class _AadhaarScreenState extends ConsumerState<AadhaarScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final target = _formKey.currentContext;
       if (target != null && target.mounted) {
-        Scrollable.ensureVisible(target, duration: const Duration(milliseconds: 200));
+        Scrollable.ensureVisible(target,
+            duration: motionDuration(target, const Duration(milliseconds: 200)));
       }
     });
   }

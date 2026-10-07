@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/theme/colors.dart';
+import '../../../../core/utils/motion.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../../../core/widgets/field_error.dart';
@@ -33,7 +34,8 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
     if (widget.errorText != null && widget.errorText != oldWidget.errorText) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          Scrollable.ensureVisible(context, duration: const Duration(milliseconds: 200));
+          Scrollable.ensureVisible(context,
+              duration: motionDuration(context, const Duration(milliseconds: 200)));
         }
       });
     }

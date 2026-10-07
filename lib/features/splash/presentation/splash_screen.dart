@@ -111,6 +111,8 @@ class _ProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // With reduce motion on, show the bar full instead of animating it.
+    final still = MediaQuery.disableAnimationsOf(context);
     return SizedBox(
       width: 242,
       height: 7,
@@ -126,7 +128,7 @@ class _ProgressBar extends StatelessWidget {
               ),
               FractionallySizedBox(
                 alignment: Alignment.centerLeft,
-                widthFactor: animation.value,
+                widthFactor: still ? 1 : animation.value,
                 child: const DecoratedBox(
                   decoration: BoxDecoration(gradient: AppGradients.brand),
                 ),

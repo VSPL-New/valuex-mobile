@@ -68,7 +68,7 @@ class AppHarness {
   }
 
   /// Starts the app, waits out the splash and optionally opens [location].
-  Future<void> launch({String? location}) async {
+  Future<void> launch({String? location, bool waitOutSplash = true}) async {
     // A typical phone: 360x800 logical pixels.
     tester.view.physicalSize = const Size(1080, 2400);
     tester.view.devicePixelRatio = 3;
@@ -85,6 +85,7 @@ class AppHarness {
       ),
     );
     await tester.pump();
+    if (!waitOutSplash) return;
     await tester.pump(const Duration(milliseconds: 2300));
     await settle();
     if (location != null) {

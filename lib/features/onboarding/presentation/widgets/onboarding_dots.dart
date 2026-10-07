@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/colors.dart';
+import '../../../../core/utils/motion.dart';
 import '../../../../l10n/app_localizations.dart';
 
 /// Page indicator with one dot per onboarding page; the active dot is elongated.
@@ -21,7 +22,7 @@ class OnboardingDots extends StatelessWidget {
         final isActive = index == activeDot;
         final color = isActive ? AppColors.onboardingDotActive : AppColors.onboardingDotInactive;
         return AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+          duration: motionDuration(context, const Duration(milliseconds: 200)),
           margin: const EdgeInsets.symmetric(horizontal: 3),
           height: 6,
           width: isActive ? 33 : 6,
