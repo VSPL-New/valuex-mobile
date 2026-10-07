@@ -28,6 +28,9 @@ void main() {
   final graphicPairs = <String, (Color, Color)>{
     'onboarding next button icon': (Colors.white, AppColors.onboardingNextButton),
     'onboarding back button icon': (Colors.white, AppColors.onboardingBackButton),
+    'control border on white': (AppColors.brandControlBorder, AppColors.brandSurface),
+    'control border on the page': (AppColors.brandControlBorder, AppColors.brandBackground),
+    'control border on input fill': (AppColors.brandControlBorder, AppColors.brandSurfaceTint),
   };
 
   graphicPairs.forEach((name, pair) {

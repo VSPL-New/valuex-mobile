@@ -25,6 +25,9 @@ class AppColors {
   static const Color brandBorder = Color(0x1F2D6BFF);
   static const Color brandBorderFocused = Color(0x4D2D6BFF);
   static const Color brandOutline = Color(0xFFDEDEDE);
+
+  /// Edge of a control that must be seen to be found (3:1 on white, page and input fill).
+  static const Color brandControlBorder = Color(0xFF76839B);
   static const Color brandDivider = Color(0xFFDCE4E8);
   static const Color brandError = Color(0xFFEF4444);
 

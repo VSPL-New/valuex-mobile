@@ -24,29 +24,37 @@ class OutlinedIconButton extends StatelessWidget {
       color: AppColors.brandSurface,
       shape: RoundedRectangleBorder(
         borderRadius: radius,
-        side: const BorderSide(color: AppColors.brandOutline),
+        side: const BorderSide(color: AppColors.brandControlBorder),
       ),
       child: InkWell(
         borderRadius: radius,
         onTap: onPressed,
-        child: SizedBox(
-          height: AppSizes.buttonMedium,
-          width: double.infinity,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(iconAsset, width: 29, height: 29),
-              const SizedBox(width: 12),
-              Flexible(
-                child: Text(
-                  label,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.button.copyWith(
-                    color: AppColors.brandForeground,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minHeight: AppSizes.buttonMedium,
+            minWidth: double.infinity,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(iconAsset, width: 29, height: 29),
+                const SizedBox(width: 12),
+                Flexible(
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.button.copyWith(
+                      color: AppColors.brandForeground,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

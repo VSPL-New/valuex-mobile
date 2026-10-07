@@ -26,14 +26,23 @@ class SingleToneButton extends StatelessWidget {
         child: InkWell(
           borderRadius: radius,
           onTap: onPressed,
-          child: SizedBox(
-            height: AppSizes.buttonMedium,
-            width: double.infinity,
-            child: Center(
-              child: Text(
-                label,
-                style: AppTextStyles.button.copyWith(
-                  color: AppColors.brandForeground,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              minHeight: AppSizes.buttonMedium,
+              minWidth: double.infinity,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.sm,
+              ),
+              child: Center(
+                child: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.button.copyWith(
+                    color: AppColors.brandForeground,
+                  ),
                 ),
               ),
             ),
