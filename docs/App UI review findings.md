@@ -34,9 +34,9 @@ Status values: Open, Fixed, Accepted (with reason).
 | G1 | Secondary text too light | 4.41:1 on page background, 4.20:1 on input fill | Subtitles, field labels, note card, "coming soon" | Darken `brandMutedText` to `#5B6B82` (4.8 to 5.0:1) | Fixed 2026-10-08 (token) |
 | G2 | Placeholder and hint text far too light | 2.26 to 2.38:1 | Input hints, state hint, OTP timer, Terms "last updated" | Darken `brandPlaceholder` until it passes 4.5:1. It will end up close to the muted text colour. | Fixed 2026-10-08 (token) |
 | G3 | Error text too light, set at 12 px | 3.49 to 3.76:1 | Inline errors, OTP errors | Change `brandError` to `#C81E1E` (5.1 to 5.7:1) | Fixed 2026-10-08 (token) |
-| G4 | Blue link text too light | 3.98 to 4.18:1 | Change number, Resend, Sign in, Retry | Add a darker link text colour `#1F5AE6` (5.1 to 5.3:1). Button fills stay as they are. | Open |
+| G4 | Blue link text too light | 3.98 to 4.18:1 | Change number, Resend, Sign in, Retry | Add a darker link text colour `#1F5AE6` (5.1 to 5.3:1). Button fills stay as they are. | In progress: link token added; Mobile and email OTP done, Sign in and Retry follow with their screens |
 | G5 | Onboarding colours from Figma fail | Subtitle `#8F8B8B` 3.12:1, Skip text `#5B5BF7` 4.10:1 | Onboarding screens | Subtitle `#6F6B6B`, Skip `#4A4AE0`. Changes Figma colours, needs design sign-off. | Onboarding fixed 2026-10-07 |
-| G6 | Field and control edges nearly invisible | Border 1.16:1, field fill against page 1.05:1 (needs 3:1) | Text fields, gender chips, state picker, OTP boxes, cards | Solid 1 px border in `brandControlBorder` `#76839B` (3.4 to 3.8:1), 2 px primary when focused. Visible look change. | In progress: outlined buttons and inputs done; choices, pickers and OTP boxes follow with their screens |
+| G6 | Field and control edges nearly invisible | Border 1.16:1, field fill against page 1.05:1 (needs 3:1) | Text fields, gender chips, state picker, OTP boxes, cards | Solid 1 px border in `brandControlBorder` `#76839B` (3.4 to 3.8:1), 2 px primary when focused. Visible look change. | In progress: outlined buttons, inputs and OTP boxes done; choices and pickers follow with their screens |
 | G7 | White on the primary button has no margin | 4.51:1 | Primary buttons | Optional: darken the blue to `#2559E8` (5.7:1) | Open |
 | G8 | Disabled buttons are only 40% opacity, with no hint why | Low contrast | Sign Up, Verify | Dedicated disabled style (see G19) | Open |
 
@@ -55,7 +55,7 @@ Status values: Open, Fixed, Accepted (with reason).
 |---|---|---|---|---|
 | G13 | Onboarding Skip is too small | 64 x 31 | Tap area at least 48 px high. Look stays the same. | Fixed 2026-10-07 |
 | G14 | Onboarding back and next pass iOS 44 but fail Android 48 | 45 x 45 | Raise to 48 | Fixed 2026-10-07 |
-| G15 | Our minimum is 44, below Material's 48 dp. The back button and all 44 px TextButtons fail Flutter's Android check. | 44 | Raise `minTouchTarget` to 48 and update CODING_STANDARDS 3.4 | In progress: token is 48, remaining 44 px controls follow with their screens |
+| G15 | Our minimum is 44, below Material's 48 dp. The back button and all 44 px TextButtons fail Flutter's Android check. | 44 | Raise `minTouchTarget` to 48 and update CODING_STANDARDS 3.4 | In progress: token is 48; OTP links done, remaining 44 px controls follow with their screens |
 
 ### Screen reader and keyboard
 
@@ -68,8 +68,8 @@ Status values: Open, Fixed, Accepted (with reason).
 
 | # | Gap | Proposed fix | Status |
 |---|---|---|---|
-| G18 | Blocking errors (invalid mobile or email, Aadhaar failure, Sign Up failure) appear in a snackbar that disappears after about 4 seconds and is not tied to a field. | Show errors inline under the field. Keep snackbars for transient network messages. | In progress: Mobile entry done |
-| G19 | The Sign Up button stays dimmed with no explanation of what is missing. | Keep it enabled and show errors on tap, or add a hint line | In progress: Mobile entry done |
+| G18 | Blocking errors (invalid mobile or email, Aadhaar failure, Sign Up failure) appear in a snackbar that disappears after about 4 seconds and is not tied to a field. | Show errors inline under the field. Keep snackbars for transient network messages. | In progress: Mobile entry and OTP done |
+| G19 | The Sign Up button stays dimmed with no explanation of what is missing. | Keep it enabled and show errors on tap, or add a hint line | In progress: Mobile entry and OTP done |
 | G20 | Animations ignore the system "reduce motion" setting. | Skip the animated dots and progress bar when it is on | Open |
 
 ## Progress by screen
@@ -81,7 +81,8 @@ Each screen is shown as a before and after design, approved, then implemented wi
 | Onboarding | Approved and implemented 2026-10-07 |
 | Create Account | Approved and implemented 2026-10-08 |
 | Mobile | Approved and implemented 2026-10-08 |
-| Mobile OTP, Email, Email OTP, Aadhaar, Aadhaar OTP, Sign Up, Terms, Blocked, Home, Splash | Pending |
+| Mobile OTP and the shared OTP view (Email OTP) | Approved and implemented 2026-10-08 |
+| Email, Aadhaar, Aadhaar OTP, Sign Up, Terms, Blocked, Home, Splash | Pending |
 
 ## Proposed fix order
 

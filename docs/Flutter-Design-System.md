@@ -39,6 +39,7 @@ Global tokens are prefixed `brand`. Screen-specific tokens use the screen name (
 | `brandOnPrimary` | `#FFFFFF` | Text on brand fills |
 | `brandPrimary` | `#2D6BFF` | Brand blue, cursor, focus |
 | `brandAccent` | `#C026D3` | Brand magenta |
+| `brandLink` | `#1F5AE6` | Text links (Resend code, Change number). `brandPrimary` is only 4.2:1 on the page, this is 5.3:1 |
 | `brandBorder` | `#2D6BFF` at 12% | Input and card borders |
 | `brandBorderFocused` | `#2D6BFF` at 30% | Decorative only; inputs now focus with a 2 px `brandPrimary` border |
 | `brandOutline` | `#DEDEDE` | Decorative outlines only (no longer used for controls) |
@@ -71,6 +72,7 @@ Two families only. Do not add a third.
 | `label` | DM Sans 14 / 20 medium, letter spacing 0.4, muted (field labels) |
 | `hint` | DM Sans 14 / 20, muted (helper text, timers; 12 px is for non-essential captions only) |
 | `error` | DM Sans 14 / 20 medium, `brandError` (message under a field, always with an icon) |
+| `link` | DM Sans 16 / 24 semi-bold, `brandLink` (tappable text; give it a 48 dp tap area) |
 | `button` | DM Sans 16, w700, white; on `OutlinedIconButton` the colour is `brandForeground` |
 | `dividerLabel` | DM Sans 14, w500, spacing -0.28 |
 
@@ -118,7 +120,8 @@ Shared widgets live in `lib/core/widgets/`. Reuse them; extract a new shared ato
 | `OnboardingNavButton` | atom | Onboarding next (radius 7) and back (radius 12) controls. 45 px drawing inside a 48 dp tap area; requires a `label` for screen readers. |
 | `BrandLogo` | atom | The logo |
 | `AppTextField`, `ErrorView`, `LoadingIndicator` | atoms | Generic building blocks themed from `AppTheme` |
-| `OtpInput` | molecule | Six-digit code drawn as boxes over one real text field (paste, autofill, backspace). Boxes use the input tint and border; the current box and errors use `brandPrimary` and `brandError` borders. |
+| `OtpInput` | molecule | Six-digit code drawn as boxes over one real text field (paste, autofill, backspace). Boxes use the input tint and `brandControlBorder`; the current box and errors use 2 px `brandPrimary` and `brandError` borders. Boxes grow with the text size. Screen readers hear the typed digits. Give it a new `key` to empty it. |
+| `FieldError` | atom | **The one way to show a form error:** error icon plus `error` text in a live region. Use it under every field and OTP input. |
 | `ProtectedScreen` | utility | Wraps a screen that must block screenshots (Aadhaar now; payment, escrow and bank details later). Reference counted through `ScreenProtectionService`. |
 
 Auth feature widgets (`lib/features/auth/presentation/widgets/`): `AuthFormScaffold` (back, logo, title, scrolling content, fixed bottom actions; used by every registration step), `OtpVerificationView`, `AadhaarNoteCard` (tint card with `brandAccent` icon), `GenderSelector` (three equal choices, selected = `brandPrimary` 2 px border on `brandSurfaceTint`), `DateOfBirthField` (typed DD/MM/YYYY plus a calendar icon), `StatePickerField` (field-style row opening a list sheet), `AvatarImage` and the avatar picker sheet.
@@ -136,7 +139,7 @@ Feature widgets: `OnboardingSlide`, `OnboardingDots` (one dot per page), `Onboar
 
 Inputs inherit `InputDecorationTheme` from `AppTheme`: tint fill, 12 px radius, 1 px `brandControlBorder`, 2 px `brandPrimary` when focused, 2 px `brandError` on error. Do not restyle them per screen.
 
-**Form error rule:** show an error under the field (14 px `error` style, an icon, `Semantics(liveRegion: true)`), not in a snackbar, and keep it until the user edits the field. Scroll it into view at large text. Snackbars are for passing messages only. A submit button stays enabled; tapping it with invalid input shows the error (see `SignupMobileScreen`). Each field also announces its label to screen readers.
+**Form error rule:** show an error under the field with `FieldError` (14 px `error` style, an icon, live region), not in a snackbar, and keep it until the user edits the field. Scroll it into view at large text. Snackbars are for passing messages only. A submit button stays enabled; tapping it with invalid input shows the error (see `SignupMobileScreen`). Each field also announces its label to screen readers.
 
 ---
 
@@ -318,6 +321,8 @@ Decisions taken so far. Add a row for every approved conflict resolution (sectio
 | 2026-10-08 | Secondary, placeholder and error colours | `#64748B` (4.2:1), `#94A3B8` (2.3:1) and `#EF4444` (3.5:1) fail contrast | **Approved:** `brandMutedText` `#5B6B82`, `brandPlaceholder` `#5F6D83`, `brandError` `#C81E1E` |
 | 2026-10-08 | Input look and text sizes | Input edge 1.2:1; 12 px helper and label text; 14 px typed text | **Approved:** inputs use `brandControlBorder` with a 2 px focus and error border; `label` and `hint` 14 px; `input` 16 px |
 | 2026-10-08 | Mobile entry behaviour | Send OTP was disabled with no reason; errors went to a snackbar | **Approved:** Send OTP stays enabled and shows an inline error under the field; server errors also show inline |
+
+| 2026-10-08 | Mobile and email OTP | Box edge 1.2:1; verify dimmed without a reason; links 4.2:1 and 44 dp; digits clipped at 200%; typed digits not announced; old digits left after Resend | **Approved:** `brandControlBorder` edges, Verify stays enabled and asks for six digits, `brandLink` text and 48 dp links, boxes grow with text, digits announced, boxes empty after Resend |
 
 ### Approved exceptions
 
