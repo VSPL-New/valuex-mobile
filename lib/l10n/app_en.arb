@@ -102,6 +102,8 @@
   "aadhaarHideNumber": "Hide Aadhaar number",
   "aadhaarConsent": "I consent to ValueX using my Aadhaar number to verify my identity",
   "aadhaarVerifyButton": "Verify Aadhaar",
+  "aadhaarNumberInvalid": "Enter your 12-digit Aadhaar number",
+  "aadhaarConsentRequired": "Please accept to continue",
   "aadhaarSkip": "Skip for now",
   "aadhaarNotNow": "Not now",
   "aadhaarComingSoon": "Aadhaar verification is coming soon. You can skip for now and complete it before your first transaction.",

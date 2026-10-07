@@ -543,6 +543,18 @@ abstract class AppLocalizations {
   /// **'Verify Aadhaar'**
   String get aadhaarVerifyButton;
 
+  /// No description provided for @aadhaarNumberInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your 12-digit Aadhaar number'**
+  String get aadhaarNumberInvalid;
+
+  /// No description provided for @aadhaarConsentRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please accept to continue'**
+  String get aadhaarConsentRequired;
+
   /// No description provided for @aadhaarSkip.
   ///
   /// In en, this message translates to:

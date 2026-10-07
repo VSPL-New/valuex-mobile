@@ -45,6 +45,7 @@ class AuthFormScaffold extends StatelessWidget {
                       Text(subtitle, style: AppTextStyles.bodySecondary),
                       const SizedBox(height: AppSpacing.xl),
                       ...content,
+                      const SizedBox(height: AppSpacing.md),
                     ],
                   ),
                 ),

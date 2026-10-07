@@ -248,6 +248,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aadhaarVerifyButton => 'Verify Aadhaar';
 
   @override
+  String get aadhaarNumberInvalid => 'Enter your 12-digit Aadhaar number';
+
+  @override
+  String get aadhaarConsentRequired => 'Please accept to continue';
+
+  @override
   String get aadhaarSkip => 'Skip for now';
 
   @override

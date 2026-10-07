@@ -74,6 +74,8 @@
   "aadhaarShowNumber": "आधार नंबर दिखाएँ",
   "aadhaarHideNumber": "आधार नंबर छिपाएँ",
   "aadhaarConsent": "मैं अपनी पहचान सत्यापित करने के लिए ValueX को अपना आधार नंबर उपयोग करने की सहमति देता/देती हूँ",
+  "aadhaarNumberInvalid": "12 अंकों का आधार नंबर दर्ज करें",
+  "aadhaarConsentRequired": "आगे बढ़ने के लिए सहमति दें",
   "aadhaarVerifyButton": "आधार सत्यापित करें",
   "aadhaarSkip": "अभी छोड़ें",
   "aadhaarNotNow": "अभी नहीं",

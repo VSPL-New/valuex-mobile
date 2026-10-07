@@ -249,6 +249,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String get aadhaarVerifyButton => 'आधार सत्यापित करें';
 
   @override
+  String get aadhaarNumberInvalid => '12 अंकों का आधार नंबर दर्ज करें';
+
+  @override
+  String get aadhaarConsentRequired => 'आगे बढ़ने के लिए सहमति दें';
+
+  @override
   String get aadhaarSkip => 'अभी छोड़ें';
 
   @override
