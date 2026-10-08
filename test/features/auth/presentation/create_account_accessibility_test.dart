@@ -116,7 +116,7 @@ void main() {
     final harness = AppHarness(tester)..signedInAs(AccountStatus.active);
     await harness.launch();
 
-    expect(find.text('Home — coming soon'), findsOneWidget);
+    expect(find.text('Featured Deals Near You'), findsOneWidget);
     await harness.dispose();
   });
 }

@@ -15,6 +15,7 @@ import '../../features/auth/presentation/screens/signup_profile_screen.dart';
 import '../../features/auth/presentation/screens/terms_screen.dart';
 import '../../features/auth/presentation/screens/verify_email_otp_screen.dart';
 import '../../features/auth/presentation/screens/verify_mobile_otp_screen.dart';
+import '../../features/home/presentation/category_selection_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import 'route_guard.dart';
 import 'route_names.dart';
@@ -97,6 +98,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: RouteNames.home,
         name: 'home',
         builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.categories,
+        name: 'categories',
+        builder: (context, state) => const CategorySelectionScreen(),
       ),
     ],
   );

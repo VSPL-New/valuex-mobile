@@ -15,6 +15,7 @@ const Map<String, Set<RegistrationStep>> _gatedRoutes = {
   RouteNames.terms: {RegistrationStep.signup},
   RouteNames.accountBlocked: {RegistrationStep.blocked},
   RouteNames.home: {RegistrationStep.home},
+  RouteNames.categories: {RegistrationStep.home},
 };
 
 const Set<String> _aadhaarRoutes = {RouteNames.signupAadhaar, RouteNames.devAadhaarOtp};

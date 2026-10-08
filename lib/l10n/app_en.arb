@@ -13,7 +13,6 @@
     }
   },
   "splashInitializing": "Initializing A1 Engine...",
-  "homeComingSoon": "Home — coming soon",
   "onboardingTitle1": "JustQlic Makes Selling Simple",
   "onboardingSubtitle1": "Snap your item and let AI create the listing, suggest details, and help you sell faster.",
   "onboardingTitle2": "JustQlic Helps You\nFind",
@@ -184,5 +183,81 @@
   "termsSection5": "5. Payments and fees",
   "termsSection6": "6. Privacy and your data",
   "termsSection7": "7. Changes to these terms",
-  "termsSection8": "8. Contact us"
+  "termsSection8": "8. Contact us",
+  "loading": "Loading",
+  "navHome": "Home",
+  "navSearch": "Search",
+  "navSell": "Sell",
+  "navChats": "Chats",
+  "navProfile": "Profile",
+  "homeSearchHint": "Search here ...",
+  "homeSearchLabel": "Search",
+  "homePhotoSearchLabel": "Search with a photo",
+  "homeCartLabel": "{count, plural, =0{Cart, empty} =1{Cart, 1 item} other{Cart, {count} items}}",
+  "@homeCartLabel": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "homeNotificationsLabel": "{count, plural, =0{Notifications} =1{Notifications, 1 unread} other{Notifications, {count} unread}}",
+  "@homeNotificationsLabel": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "homeLocationLabel": "Location: {place}. Change",
+  "@homeLocationLabel": {
+    "placeholders": {
+      "place": {"type": "String"}
+    }
+  },
+  "homeLocating": "Finding your location…",
+  "homeSetLocation": "Set your location",
+  "homeSetLocationHint": "Tap to choose",
+  "homePromoSection": "#SPECIAL FOR YOU",
+  "homeSeeAll": "See All",
+  "homeSeeAllCount": "See All ({count})",
+  "@homeSeeAllCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "homeBrowse": "Browse",
+  "homeMore": "More",
+  "homeFeaturedTitle": "Featured Deals Near You",
+  "homeBoosted": "BOOSTED",
+  "conditionNew": "New",
+  "conditionLikeNew": "Like New",
+  "conditionExcellent": "Excellent",
+  "conditionGood": "Good",
+  "conditionFair": "Fair",
+  "conditionPoor": "Poor",
+  "homeRatingLabel": "Rated {rating} out of 5",
+  "@homeRatingLabel": {
+    "placeholders": {
+      "rating": {"type": "String"}
+    }
+  },
+  "homeLoadFailed": "Unable to load Home. Pull down or tap Retry",
+  "homeNoListings": "No items near you yet. Try another address",
+  "homeCategoriesFailed": "Unable to load categories. Try again",
+  "homeLocationPromptTitle": "See items near you",
+  "homeLocationPromptBody": "Allow location access to see items near you, or enter your address.",
+  "homeUseMyLocation": "Use my location",
+  "homeEnterAddress": "Enter address",
+  "homeOpenSettings": "Open settings",
+  "homeLocationDenied": "Location access is off. Enter your address to see items near you",
+  "homeLocationUnavailable": "Unable to detect your location. Enter your address instead",
+  "homeLocationServiceOff": "Location is turned off on this device. Turn it on or enter your address",
+  "homeLocationSheetTitle": "Choose your location",
+  "homeAreaLabel": "AREA (OPTIONAL)",
+  "homeAreaHint": "For example, Andheri East",
+  "homeCityLabel": "CITY",
+  "homeCityHint": "Your city",
+  "homeSaveLocation": "Save location",
+  "homeCityError": "Enter a valid city",
+  "homeStateError": "Select your state",
+  "homeFeatureComingSoon": "This is coming soon",
+  "homeSellAadhaarRequired": "Please complete Aadhaar verification to proceed",
+  "categoriesTitle": "All categories"
 }

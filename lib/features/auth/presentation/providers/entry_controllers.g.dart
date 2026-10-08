@@ -129,7 +129,7 @@ final class MobileEntryControllerProvider
   MobileEntryController create() => MobileEntryController();
 }
 
-String _$mobileEntryControllerHash() => r'6e40330419cc2534070d40b337519b4097eb573c';
+String _$mobileEntryControllerHash() => r'f7d65e1310443c8dfaa7c57227363f2e2a34eec1';
 
 /// Sends the registration OTP to the typed mobile number.
 
@@ -174,7 +174,7 @@ final class EmailEntryControllerProvider
   EmailEntryController create() => EmailEntryController();
 }
 
-String _$emailEntryControllerHash() => r'9302e2cb65aebd0047d713fc9cd852d0554c71ca';
+String _$emailEntryControllerHash() => r'eb312e5592c98e508097ae59670ca3411d5071b3';
 
 /// Sends the verification OTP to the typed email address.
 

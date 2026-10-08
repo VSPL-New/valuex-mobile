@@ -135,12 +135,6 @@ abstract class AppLocalizations {
   /// **'Initializing A1 Engine...'**
   String get splashInitializing;
 
-  /// No description provided for @homeComingSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Home — coming soon'**
-  String get homeComingSoon;
-
   /// No description provided for @onboardingTitle1.
   ///
   /// In en, this message translates to:
@@ -998,6 +992,312 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'8. Contact us'**
   String get termsSection8;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get loading;
+
+  /// No description provided for @navHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// No description provided for @navSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get navSearch;
+
+  /// No description provided for @navSell.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell'**
+  String get navSell;
+
+  /// No description provided for @navChats.
+  ///
+  /// In en, this message translates to:
+  /// **'Chats'**
+  String get navChats;
+
+  /// No description provided for @navProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get navProfile;
+
+  /// No description provided for @homeSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search here ...'**
+  String get homeSearchHint;
+
+  /// No description provided for @homeSearchLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get homeSearchLabel;
+
+  /// No description provided for @homePhotoSearchLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search with a photo'**
+  String get homePhotoSearchLabel;
+
+  /// No description provided for @homeCartLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Cart, empty} =1{Cart, 1 item} other{Cart, {count} items}}'**
+  String homeCartLabel(int count);
+
+  /// No description provided for @homeNotificationsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Notifications} =1{Notifications, 1 unread} other{Notifications, {count} unread}}'**
+  String homeNotificationsLabel(int count);
+
+  /// No description provided for @homeLocationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Location: {place}. Change'**
+  String homeLocationLabel(String place);
+
+  /// No description provided for @homeLocating.
+  ///
+  /// In en, this message translates to:
+  /// **'Finding your location…'**
+  String get homeLocating;
+
+  /// No description provided for @homeSetLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Set your location'**
+  String get homeSetLocation;
+
+  /// No description provided for @homeSetLocationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to choose'**
+  String get homeSetLocationHint;
+
+  /// No description provided for @homePromoSection.
+  ///
+  /// In en, this message translates to:
+  /// **'#SPECIAL FOR YOU'**
+  String get homePromoSection;
+
+  /// No description provided for @homeSeeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See All'**
+  String get homeSeeAll;
+
+  /// No description provided for @homeSeeAllCount.
+  ///
+  /// In en, this message translates to:
+  /// **'See All ({count})'**
+  String homeSeeAllCount(int count);
+
+  /// No description provided for @homeBrowse.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse'**
+  String get homeBrowse;
+
+  /// No description provided for @homeMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get homeMore;
+
+  /// No description provided for @homeFeaturedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Featured Deals Near You'**
+  String get homeFeaturedTitle;
+
+  /// No description provided for @homeBoosted.
+  ///
+  /// In en, this message translates to:
+  /// **'BOOSTED'**
+  String get homeBoosted;
+
+  /// No description provided for @conditionNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get conditionNew;
+
+  /// No description provided for @conditionLikeNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Like New'**
+  String get conditionLikeNew;
+
+  /// No description provided for @conditionExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent'**
+  String get conditionExcellent;
+
+  /// No description provided for @conditionGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get conditionGood;
+
+  /// No description provided for @conditionFair.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair'**
+  String get conditionFair;
+
+  /// No description provided for @conditionPoor.
+  ///
+  /// In en, this message translates to:
+  /// **'Poor'**
+  String get conditionPoor;
+
+  /// No description provided for @homeRatingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Rated {rating} out of 5'**
+  String homeRatingLabel(String rating);
+
+  /// No description provided for @homeLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load Home. Pull down or tap Retry'**
+  String get homeLoadFailed;
+
+  /// No description provided for @homeNoListings.
+  ///
+  /// In en, this message translates to:
+  /// **'No items near you yet. Try another address'**
+  String get homeNoListings;
+
+  /// No description provided for @homeCategoriesFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load categories. Try again'**
+  String get homeCategoriesFailed;
+
+  /// No description provided for @homeLocationPromptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'See items near you'**
+  String get homeLocationPromptTitle;
+
+  /// No description provided for @homeLocationPromptBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow location access to see items near you, or enter your address.'**
+  String get homeLocationPromptBody;
+
+  /// No description provided for @homeUseMyLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Use my location'**
+  String get homeUseMyLocation;
+
+  /// No description provided for @homeEnterAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter address'**
+  String get homeEnterAddress;
+
+  /// No description provided for @homeOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get homeOpenSettings;
+
+  /// No description provided for @homeLocationDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Location access is off. Enter your address to see items near you'**
+  String get homeLocationDenied;
+
+  /// No description provided for @homeLocationUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to detect your location. Enter your address instead'**
+  String get homeLocationUnavailable;
+
+  /// No description provided for @homeLocationServiceOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Location is turned off on this device. Turn it on or enter your address'**
+  String get homeLocationServiceOff;
+
+  /// No description provided for @homeLocationSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your location'**
+  String get homeLocationSheetTitle;
+
+  /// No description provided for @homeAreaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'AREA (OPTIONAL)'**
+  String get homeAreaLabel;
+
+  /// No description provided for @homeAreaHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For example, Andheri East'**
+  String get homeAreaHint;
+
+  /// No description provided for @homeCityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'CITY'**
+  String get homeCityLabel;
+
+  /// No description provided for @homeCityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your city'**
+  String get homeCityHint;
+
+  /// No description provided for @homeSaveLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Save location'**
+  String get homeSaveLocation;
+
+  /// No description provided for @homeCityError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid city'**
+  String get homeCityError;
+
+  /// No description provided for @homeStateError.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your state'**
+  String get homeStateError;
+
+  /// No description provided for @homeFeatureComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'This is coming soon'**
+  String get homeFeatureComingSoon;
+
+  /// No description provided for @homeSellAadhaarRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please complete Aadhaar verification to proceed'**
+  String get homeSellAadhaarRequired;
+
+  /// No description provided for @categoriesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All categories'**
+  String get categoriesTitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

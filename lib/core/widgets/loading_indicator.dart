@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/app_localizations.dart';
 import '../theme/colors.dart';
 
 class LoadingIndicator extends StatelessWidget {
@@ -19,6 +20,7 @@ class LoadingIndicator extends StatelessWidget {
         width: size,
         child: CircularProgressIndicator(
           strokeWidth: 3,
+          semanticsLabel: AppLocalizations.of(context).loading,
           color: color ?? AppColors.brandPrimary,
         ),
       ),

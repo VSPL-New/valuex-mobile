@@ -43,7 +43,7 @@ final class SignupFormProvider extends $NotifierProvider<SignupForm, SignupFormS
   }
 }
 
-String _$signupFormHash() => r'5bbf41d36e95552e0513f360bcea6388e0de4033';
+String _$signupFormHash() => r'b1caefb6754af10ba008063af83bcb4b8ce4913d';
 
 /// The Sign Up form: values, validation and submission.
 

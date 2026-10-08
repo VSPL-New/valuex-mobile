@@ -146,4 +146,79 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
     color: AppColors.brandForeground,
   );
+
+  /// Badges, chips and tab labels only; 12 px is not for body or helper text.
+  static const TextStyle caption = TextStyle(
+    fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
+    fontSize: 12,
+    height: 16 / 12,
+    fontWeight: FontWeight.w600,
+    color: AppColors.brandMutedText,
+  );
+
+  /// Title of a section on a page (Browse, Featured Deals).
+  static const TextStyle sectionTitle = TextStyle(
+    fontFamily: AppFonts.heading,
+    fontSize: 16,
+    height: 24 / 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.brandForeground,
+  );
+
+  /// Small tappable text such as See All; give it a 48 dp tap area.
+  static const TextStyle linkSmall = TextStyle(
+    fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
+    fontSize: 14,
+    height: 20 / 14,
+    fontWeight: FontWeight.w600,
+    color: AppColors.brandLink,
+  );
+
+  // Home
+  static const TextStyle cardTitle = TextStyle(
+    fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
+    fontSize: 14,
+    height: 20 / 14,
+    fontWeight: FontWeight.w600,
+    color: AppColors.brandForeground,
+  );
+
+  static const TextStyle cardPrice = TextStyle(
+    fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
+    fontSize: 16,
+    height: 24 / 16,
+    fontWeight: FontWeight.w700,
+    color: AppColors.brandLink,
+  );
+
+  /// Text on the brand gradient or on a dark promo card.
+  static const TextStyle onGradientStrong = TextStyle(
+    fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
+    fontSize: 14,
+    height: 20 / 14,
+    fontWeight: FontWeight.w700,
+    color: AppColors.brandOnPrimary,
+  );
+
+  static const TextStyle onGradient = TextStyle(
+    fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
+    fontSize: 14,
+    height: 20 / 14,
+    fontWeight: FontWeight.w400,
+    color: AppColors.brandOnPrimary,
+  );
+
+  static const TextStyle promoTitle = TextStyle(
+    fontFamily: AppFonts.heading,
+    fontSize: 18,
+    height: 24 / 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.brandOnPrimary,
+  );
 }

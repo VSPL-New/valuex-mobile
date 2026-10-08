@@ -32,9 +32,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get splashInitializing => 'A1 इंजन शुरू हो रहा है...';
 
   @override
-  String get homeComingSoon => 'होम — जल्द आ रहा है';
-
-  @override
   String get onboardingTitle1 => 'JustQlic से बेचना हुआ आसान';
 
   @override
@@ -482,4 +479,184 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get termsSection8 => '8. हमसे संपर्क करें';
+
+  @override
+  String get loading => 'लोड हो रहा है';
+
+  @override
+  String get navHome => 'होम';
+
+  @override
+  String get navSearch => 'खोजें';
+
+  @override
+  String get navSell => 'बेचें';
+
+  @override
+  String get navChats => 'चैट';
+
+  @override
+  String get navProfile => 'प्रोफ़ाइल';
+
+  @override
+  String get homeSearchHint => 'यहाँ खोजें ...';
+
+  @override
+  String get homeSearchLabel => 'खोजें';
+
+  @override
+  String get homePhotoSearchLabel => 'फ़ोटो से खोजें';
+
+  @override
+  String homeCartLabel(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'कार्ट, $count आइटम',
+      one: 'कार्ट, 1 आइटम',
+      zero: 'कार्ट, खाली',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeNotificationsLabel(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'सूचनाएँ, $count अपठित',
+      one: 'सूचनाएँ, 1 अपठित',
+      zero: 'सूचनाएँ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeLocationLabel(String place) {
+    return 'स्थान: $place। बदलें';
+  }
+
+  @override
+  String get homeLocating => 'आपका स्थान खोजा जा रहा है…';
+
+  @override
+  String get homeSetLocation => 'अपना स्थान चुनें';
+
+  @override
+  String get homeSetLocationHint => 'चुनने के लिए टैप करें';
+
+  @override
+  String get homePromoSection => '#आपके लिए विशेष';
+
+  @override
+  String get homeSeeAll => 'सभी देखें';
+
+  @override
+  String homeSeeAllCount(int count) {
+    return 'सभी देखें ($count)';
+  }
+
+  @override
+  String get homeBrowse => 'ब्राउज़ करें';
+
+  @override
+  String get homeMore => 'और';
+
+  @override
+  String get homeFeaturedTitle => 'आपके पास की खास डील';
+
+  @override
+  String get homeBoosted => 'बूस्टेड';
+
+  @override
+  String get conditionNew => 'नया';
+
+  @override
+  String get conditionLikeNew => 'नए जैसा';
+
+  @override
+  String get conditionExcellent => 'उत्कृष्ट';
+
+  @override
+  String get conditionGood => 'अच्छा';
+
+  @override
+  String get conditionFair => 'ठीक-ठाक';
+
+  @override
+  String get conditionPoor => 'खराब';
+
+  @override
+  String homeRatingLabel(String rating) {
+    return '5 में से $rating रेटिंग';
+  }
+
+  @override
+  String get homeLoadFailed => 'होम लोड नहीं हो सका। नीचे खींचें या पुनः प्रयास दबाएँ';
+
+  @override
+  String get homeNoListings => 'आपके पास अभी कोई सामान नहीं है। कोई दूसरा पता आज़माएँ';
+
+  @override
+  String get homeCategoriesFailed => 'श्रेणियाँ लोड नहीं हो सकीं। फिर से कोशिश करें';
+
+  @override
+  String get homeLocationPromptTitle => 'अपने पास का सामान देखें';
+
+  @override
+  String get homeLocationPromptBody =>
+      'अपने पास का सामान देखने के लिए लोकेशन की अनुमति दें, या अपना पता दर्ज करें।';
+
+  @override
+  String get homeUseMyLocation => 'मेरी लोकेशन इस्तेमाल करें';
+
+  @override
+  String get homeEnterAddress => 'पता दर्ज करें';
+
+  @override
+  String get homeOpenSettings => 'सेटिंग्स खोलें';
+
+  @override
+  String get homeLocationDenied =>
+      'लोकेशन की अनुमति बंद है। अपने पास का सामान देखने के लिए अपना पता दर्ज करें';
+
+  @override
+  String get homeLocationUnavailable => 'आपकी लोकेशन पता नहीं चल सकी। इसके बजाय अपना पता दर्ज करें';
+
+  @override
+  String get homeLocationServiceOff =>
+      'इस डिवाइस पर लोकेशन बंद है। इसे चालू करें या अपना पता दर्ज करें';
+
+  @override
+  String get homeLocationSheetTitle => 'अपना स्थान चुनें';
+
+  @override
+  String get homeAreaLabel => 'इलाका (वैकल्पिक)';
+
+  @override
+  String get homeAreaHint => 'उदाहरण: अंधेरी ईस्ट';
+
+  @override
+  String get homeCityLabel => 'शहर';
+
+  @override
+  String get homeCityHint => 'आपका शहर';
+
+  @override
+  String get homeSaveLocation => 'स्थान सहेजें';
+
+  @override
+  String get homeCityError => 'सही शहर दर्ज करें';
+
+  @override
+  String get homeStateError => 'अपना राज्य चुनें';
+
+  @override
+  String get homeFeatureComingSoon => 'यह जल्द आ रहा है';
+
+  @override
+  String get homeSellAadhaarRequired => 'आगे बढ़ने के लिए कृपया आधार सत्यापन पूरा करें';
+
+  @override
+  String get categoriesTitle => 'सभी श्रेणियाँ';
 }

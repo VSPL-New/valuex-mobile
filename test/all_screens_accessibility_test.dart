@@ -20,6 +20,7 @@ void main() {
     RouteNames.terms: AccountStatus.signupPending,
     RouteNames.accountBlocked: AccountStatus.suspended,
     RouteNames.home: AccountStatus.active,
+    RouteNames.categories: AccountStatus.active,
   };
 
   final guidelines = <String, AccessibilityGuideline>{
