@@ -62,13 +62,13 @@ Status values: Open, Fixed, Accepted (with reason).
 | # | Gap | Proposed fix | Status |
 |---|---|---|---|
 | G16 | Onboarding next and back buttons have no label, so VoiceOver and TalkBack users cannot get past onboarding. The page dots have no "page 2 of 4" description. | Add labels and a dots description | Fixed 2026-10-08 |
-| G17 | Screen titles are not marked as headings. The loading spinner is not announced. | Mark titles as headers, add a loading label | Fixed 2026-10-08 |
+| G17 | Screen titles are not marked as headings. The loading spinner is not announced. | Mark titles as headers, add a loading label | Fixed 2026-10-08: titles are headings; `LoadingIndicator` says "Loading" and a button spinner keeps the button's label |
 
 ### User friendliness
 
 | # | Gap | Proposed fix | Status |
 |---|---|---|---|
-| G18 | Blocking errors (invalid mobile or email, Aadhaar failure, Sign Up failure) appear in a snackbar that disappears after about 4 seconds and is not tied to a field. | Show errors inline under the field. Keep snackbars for transient network messages. | Fixed 2026-10-08 |
+| G18 | Blocking errors (invalid mobile or email, Aadhaar failure, Sign Up failure) appear in a snackbar that disappears after about 4 seconds and is not tied to a field. | Show errors inline under the field. Keep snackbars for transient network messages. | Fixed 2026-10-08: all form errors use `FieldError` under the field; the only snackbars left are passing messages (coming soon, OTP resent, session expired) |
 | G19 | The Sign Up button stays dimmed with no explanation of what is missing. | Keep it enabled and show errors on tap, or add a hint line | Fixed 2026-10-08 |
 | G20 | Animations ignore the system "reduce motion" setting. | Skip the animated dots and progress bar when it is on | Fixed 2026-10-08 |
 
@@ -114,7 +114,7 @@ Each step ends with `flutter analyze` and the tests. The design system doc ([Flu
 |---|---|---|
 | Change the look for G5 (Figma colours) and G6 (more visible field borders)? | Yes / No / Middle option: 1 px border at exactly 3:1 | G5 approved 2026-10-07; G6 approved with the colour `#76839B` on 2026-10-08 |
 | Touch target minimum | 48 (recommended) / keep 44 | 48 approved 2026-10-07 |
-| Move blocking errors inline (G18)? | Yes (recommended) / keep snackbars | Pending |
+| Move blocking errors inline (G18)? | Yes (recommended) / keep snackbars | Yes, implemented 2026-10-08. Snackbars remain only for passing messages (coming soon, OTP resent, session expired) |
 
 ## Evidence
 
