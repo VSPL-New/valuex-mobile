@@ -29,6 +29,11 @@ class MobileEntryController extends _$MobileEntryController {
   @override
   FutureOr<void> build() {}
 
+  /// Removes the last send error once the user edits the number.
+  void clearError() {
+    if (state.hasError) state = const AsyncData(null);
+  }
+
   /// Returns true when the OTP was sent.
   Future<bool> sendOtp() async {
     final mobile = ref.read(mobileInputProvider);
@@ -50,6 +55,11 @@ class MobileEntryController extends _$MobileEntryController {
 class EmailEntryController extends _$EmailEntryController {
   @override
   FutureOr<void> build() {}
+
+  /// Removes the last send error once the user edits the address.
+  void clearError() {
+    if (state.hasError) state = const AsyncData(null);
+  }
 
   Future<bool> sendOtp() async {
     final email = ref.read(emailInputProvider).trim();

@@ -56,7 +56,10 @@ class _OtpInputState extends State<OtpInput> {
     return Semantics(
       label: widget.semanticLabel,
       textField: true,
+      value: text.split('').join(' '),
+      onTap: widget.enabled ? _focusNode.requestFocus : null,
       child: GestureDetector(
+        excludeFromSemantics: true,
         behavior: HitTestBehavior.opaque,
         onTap: widget.enabled ? _focusNode.requestFocus : null,
         child: Stack(
@@ -125,12 +128,12 @@ class _OtpBox extends StatelessWidget {
         ? AppColors.brandError
         : active
             ? AppColors.brandPrimary
-            : AppColors.brandBorder;
+            : AppColors.brandControlBorder;
 
     return Opacity(
       opacity: enabled ? 1 : 0.5,
       child: Container(
-        height: AppSizes.buttonMedium,
+        constraints: const BoxConstraints(minHeight: AppSizes.buttonMedium),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: AppColors.brandSurfaceTint,

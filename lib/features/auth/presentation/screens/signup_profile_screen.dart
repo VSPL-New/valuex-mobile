@@ -5,9 +5,11 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_error_messages.dart';
 import '../../../../core/routing/route_names.dart';
 import '../../../../core/theme/colors.dart';
+import '../../../../core/utils/motion.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../../../core/widgets/brand_gradient_button.dart';
+import '../../../../core/widgets/field_error.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/user_profile.dart';
 import '../auth_error_messages.dart';
@@ -20,22 +22,45 @@ import '../widgets/gender_selector.dart';
 import '../widgets/state_picker_field.dart';
 
 /// Registration step 7 ("Create your profile"): the last step before the account is active.
-class SignupProfileScreen extends ConsumerWidget {
+class SignupProfileScreen extends ConsumerStatefulWidget {
   const SignupProfileScreen({super.key});
 
-  String? _fieldError(AppLocalizations l10n, SignupFieldError? error) {
+  @override
+  ConsumerState<SignupProfileScreen> createState() => _SignupProfileScreenState();
+}
+
+class _SignupProfileScreenState extends ConsumerState<SignupProfileScreen> {
+  /// One key per field so the form can scroll to the first message.
+  final _keys = {for (final field in SignupFieldError.values) field: GlobalKey()};
+  final _formErrorKey = GlobalKey();
+
+  String? _fieldError(AppLocalizations l10n, SignupFieldError? error, {bool termsViewed = true}) {
     return switch (error) {
       SignupFieldError.name => l10n.signupErrorName,
+      SignupFieldError.gender => l10n.signupErrorGender,
+      SignupFieldError.state => l10n.signupErrorState,
       SignupFieldError.city => l10n.signupErrorCity,
       SignupFieldError.address => l10n.signupErrorAddress,
       SignupFieldError.pincode => l10n.signupErrorPincode,
       SignupFieldError.dobFormat => l10n.signupErrorDobFormat,
       SignupFieldError.dobFuture => l10n.signupErrorDobFuture,
+      SignupFieldError.terms => termsViewed ? l10n.signupErrorTerms : l10n.signupTermsHint,
       null => null,
     };
   }
 
-  Future<void> _pickDate(BuildContext context, WidgetRef ref, SignupFormState form) async {
+  /// Brings a message into view; at large text sizes it can sit below the fold.
+  void _scrollTo(GlobalKey? key) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final target = key?.currentContext;
+      if (target != null && target.mounted) {
+        Scrollable.ensureVisible(target,
+            duration: motionDuration(target, const Duration(milliseconds: 200)));
+      }
+    });
+  }
+
+  Future<void> _pickDate(SignupFormState form) async {
     final now = DateTime.now();
     final picked = await showDatePicker(
       context: context,
@@ -47,24 +72,35 @@ class SignupProfileScreen extends ConsumerWidget {
     if (picked != null) ref.read(signupFormProvider.notifier).setDateOfBirth(picked);
   }
 
-  Future<void> _openTerms(BuildContext context, WidgetRef ref) async {
+  Future<void> _openTerms() async {
     await context.push<void>(RouteNames.terms);
     ref.read(signupFormProvider.notifier).markTermsViewed();
   }
 
+  Future<void> _chooseAvatar(SignupFormState form) async {
+    final id = await showAvatarPicker(context, selectedId: form.avatarId);
+    if (id != null) ref.read(signupFormProvider.notifier).chooseAvatar(id);
+  }
+
+  Future<void> _submit() async {
+    final controller = ref.read(signupFormProvider.notifier);
+    if (!ref.read(signupFormProvider).isValid) {
+      controller.showValidation();
+      final first = ref.read(signupFormProvider).firstError;
+      _scrollTo(_keys[first == SignupFieldError.dobFuture ? SignupFieldError.dobFormat : first]);
+      return;
+    }
+    final done = await controller.submit();
+    if (!done) _scrollTo(_formErrorKey);
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final form = ref.watch(signupFormProvider);
     final controller = ref.read(signupFormProvider.notifier);
     final profile = ref.watch(currentUserProfileProvider);
-
-    ref.listen(signupFormProvider.select((state) => state.error), (previous, error) {
-      if (error == null || !context.mounted) return;
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(authErrorMessage(l10n, error))));
-    });
+    final serverError = form.error;
 
     return AuthFormScaffold(
       onBack: () => context.go(RouteNames.createAccount),
@@ -76,16 +112,10 @@ class SignupProfileScreen extends ConsumerWidget {
             button: true,
             label: l10n.signupAvatarEdit,
             excludeSemantics: true,
-            onTap: () async {
-              final id = await showAvatarPicker(context, selectedId: form.avatarId);
-              if (id != null) controller.chooseAvatar(id);
-            },
+            onTap: () => _chooseAvatar(form),
             child: GestureDetector(
               key: const Key('avatarEdit'),
-              onTap: () async {
-                final id = await showAvatarPicker(context, selectedId: form.avatarId);
-                if (id != null) controller.chooseAvatar(id);
-              },
+              onTap: () => _chooseAvatar(form),
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
@@ -115,7 +145,9 @@ class SignupProfileScreen extends ConsumerWidget {
         ),
         const SizedBox(height: AppSpacing.lg),
         _Labeled(
+          key: _keys[SignupFieldError.name],
           label: l10n.signupNameLabel,
+          labelsChild: true,
           child: TextField(
             textCapitalization: TextCapitalization.words,
             textInputAction: TextInputAction.next,
@@ -124,25 +156,29 @@ class SignupProfileScreen extends ConsumerWidget {
             onChanged: controller.setDisplayName,
             style: AppTextStyles.input,
             cursorColor: AppColors.brandPrimary,
-            decoration: InputDecoration(
-              hintText: l10n.signupNameHint,
-              errorText: _fieldError(l10n, form.nameError),
-            ),
+            decoration: _decoration(l10n.signupNameHint, _fieldError(l10n, form.nameError)),
           ),
         ),
         _Labeled(
+          key: _keys[SignupFieldError.gender],
           label: l10n.signupGenderLabel,
-          child: GenderSelector(value: form.gender, onChanged: controller.setGender),
+          child: GenderSelector(
+            value: form.gender,
+            onChanged: controller.setGender,
+            errorText: _fieldError(l10n, form.genderError),
+          ),
         ),
         _Labeled(
+          key: _keys[SignupFieldError.dobFormat],
           label: l10n.signupDobLabel,
           child: DateOfBirthField(
             text: form.dobText,
             hint: l10n.signupDobHint,
             pickTooltip: l10n.signupDobPick,
+            semanticLabel: l10n.signupDobLabel,
             errorText: _fieldError(l10n, form.dobError),
             onChanged: controller.setDobText,
-            onPickDate: () => _pickDate(context, ref, form),
+            onPickDate: () => _pickDate(form),
           ),
         ),
         _Labeled(
@@ -162,11 +198,18 @@ class SignupProfileScreen extends ConsumerWidget {
           ),
         ),
         _Labeled(
+          key: _keys[SignupFieldError.state],
           label: l10n.signupStateLabel,
-          child: StatePickerField(value: form.state, onChanged: controller.setState),
+          child: StatePickerField(
+            value: form.state,
+            onChanged: controller.setState,
+            errorText: _fieldError(l10n, form.stateError),
+          ),
         ),
         _Labeled(
+          key: _keys[SignupFieldError.city],
           label: l10n.signupCityLabel,
+          labelsChild: true,
           child: TextField(
             textCapitalization: TextCapitalization.words,
             textInputAction: TextInputAction.next,
@@ -174,14 +217,13 @@ class SignupProfileScreen extends ConsumerWidget {
             onChanged: controller.setCity,
             style: AppTextStyles.input,
             cursorColor: AppColors.brandPrimary,
-            decoration: InputDecoration(
-              hintText: l10n.signupCityHint,
-              errorText: _fieldError(l10n, form.cityError),
-            ),
+            decoration: _decoration(l10n.signupCityHint, _fieldError(l10n, form.cityError)),
           ),
         ),
         _Labeled(
+          key: _keys[SignupFieldError.address],
           label: l10n.signupAddressLabel,
+          labelsChild: true,
           child: TextField(
             minLines: 3,
             maxLines: 5,
@@ -192,14 +234,13 @@ class SignupProfileScreen extends ConsumerWidget {
             onChanged: controller.setAddress,
             style: AppTextStyles.input,
             cursorColor: AppColors.brandPrimary,
-            decoration: InputDecoration(
-              hintText: l10n.signupAddressHint,
-              errorText: _fieldError(l10n, form.addressError),
-            ),
+            decoration: _decoration(l10n.signupAddressHint, _fieldError(l10n, form.addressError)),
           ),
         ),
         _Labeled(
+          key: _keys[SignupFieldError.pincode],
           label: l10n.signupPincodeLabel,
+          labelsChild: true,
           child: TextField(
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.done,
@@ -211,25 +252,32 @@ class SignupProfileScreen extends ConsumerWidget {
             onChanged: controller.setPincode,
             style: AppTextStyles.input,
             cursorColor: AppColors.brandPrimary,
-            decoration: InputDecoration(
-              hintText: l10n.signupPincodeHint,
-              errorText: _fieldError(l10n, form.pincodeError),
-            ),
+            decoration: _decoration(l10n.signupPincodeHint, _fieldError(l10n, form.pincodeError)),
           ),
         ),
-        _TermsRow(
-          viewed: form.termsViewed,
-          accepted: form.termsAccepted,
-          onOpenTerms: () => _openTerms(context, ref),
-          onChanged: controller.setTermsAccepted,
+        KeyedSubtree(
+          key: _keys[SignupFieldError.terms],
+          child: _TermsRow(
+            viewed: form.termsViewed,
+            accepted: form.termsAccepted,
+            errorText: _fieldError(l10n, form.termsError, termsViewed: form.termsViewed),
+            onOpenTerms: _openTerms,
+            onChanged: controller.setTermsAccepted,
+          ),
         ),
+        if (serverError != null)
+          Padding(
+            key: _formErrorKey,
+            padding: const EdgeInsets.only(bottom: AppSpacing.md),
+            child: FieldError(text: authErrorMessage(l10n, serverError)),
+          ),
       ],
       bottom: Column(
         children: [
           BrandGradientButton(
             label: l10n.signupSubmit,
             isLoading: form.isSubmitting,
-            onPressed: form.canSubmit ? controller.submit : null,
+            onPressed: form.isSubmitting ? null : _submit,
           ),
           const SizedBox(height: AppSpacing.sm),
           Wrap(
@@ -243,19 +291,22 @@ class SignupProfileScreen extends ConsumerWidget {
                     ..hideCurrentSnackBar()
                     ..showSnackBar(SnackBar(content: Text(l10n.createAccountSignInComingSoon)));
                 },
-                style: TextButton.styleFrom(minimumSize: const Size(44, 44)),
-                child: Text(
-                  l10n.signupSignIn,
-                  style: AppTextStyles.input.copyWith(
-                    color: AppColors.brandPrimary,
-                    fontWeight: FontWeight.w700,
-                  ),
+                style: TextButton.styleFrom(
+                  minimumSize: const Size(AppSizes.minTouchTarget, AppSizes.minTouchTarget),
                 ),
+                child: Text(l10n.signupSignIn, style: AppTextStyles.link),
               ),
             ],
           ),
         ],
       ),
+    );
+  }
+
+  InputDecoration _decoration(String hint, String? errorText) {
+    return InputDecoration(
+      hintText: hint,
+      error: errorText == null ? null : FieldError(text: errorText),
     );
   }
 }
@@ -264,7 +315,10 @@ class _Labeled extends StatelessWidget {
   final String label;
   final Widget child;
 
-  const _Labeled({required this.label, required this.child});
+  /// True for plain text fields, which have no label of their own for screen readers.
+  final bool labelsChild;
+
+  const _Labeled({super.key, required this.label, required this.child, this.labelsChild = false});
 
   @override
   Widget build(BuildContext context) {
@@ -273,9 +327,9 @@ class _Labeled extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: AppTextStyles.label),
+          ExcludeSemantics(excluding: labelsChild, child: Text(label, style: AppTextStyles.label)),
           const SizedBox(height: AppSpacing.sm),
-          child,
+          labelsChild ? Semantics(label: label, child: child) : child,
         ],
       ),
     );
@@ -297,16 +351,13 @@ class _ReadOnlyField extends StatelessWidget {
     if (profile.hasError) {
       return Row(
         children: [
-          Expanded(
-            child: Text(
-              apiErrorMessage(l10n, profile.error!),
-              style: AppTextStyles.hint.copyWith(color: AppColors.brandError),
-            ),
-          ),
+          Expanded(child: FieldError(text: apiErrorMessage(l10n, profile.error!))),
           TextButton(
             onPressed: onRetry,
-            style: TextButton.styleFrom(minimumSize: const Size(44, 44)),
-            child: Text(l10n.commonRetry),
+            style: TextButton.styleFrom(
+              minimumSize: const Size(AppSizes.minTouchTarget, AppSizes.minTouchTarget),
+            ),
+            child: Text(l10n.commonRetry, style: AppTextStyles.link),
           ),
         ],
       );
@@ -317,8 +368,8 @@ class _ReadOnlyField extends StatelessWidget {
       label: value,
       excludeSemantics: true,
       child: Container(
-        height: AppSizes.buttonMedium,
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+        constraints: const BoxConstraints(minHeight: AppSizes.buttonMedium),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
         decoration: BoxDecoration(
           color: AppColors.brandSurfaceTint.withValues(alpha: 0.6),
           borderRadius: BorderRadius.circular(AppRadius.lg),
@@ -344,12 +395,14 @@ class _ReadOnlyField extends StatelessWidget {
 class _TermsRow extends StatelessWidget {
   final bool viewed;
   final bool accepted;
+  final String? errorText;
   final VoidCallback onOpenTerms;
   final ValueChanged<bool> onChanged;
 
   const _TermsRow({
     required this.viewed,
     required this.accepted,
+    required this.errorText,
     required this.onOpenTerms,
     required this.onChanged,
   });
@@ -357,6 +410,7 @@ class _TermsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final errorText = this.errorText;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -364,11 +418,20 @@ class _TermsRow extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Switch(
-              value: accepted,
-              onChanged: viewed ? onChanged : null,
-              activeThumbColor: AppColors.brandOnPrimary,
-              activeTrackColor: AppColors.brandPrimary,
+            Semantics(
+              label: '${l10n.signupTermsPrefix}${l10n.signupTermsLink}${l10n.signupTermsSuffix}',
+              child: Switch(
+                value: accepted,
+                onChanged: viewed ? onChanged : null,
+                activeThumbColor: AppColors.brandOnPrimary,
+                activeTrackColor: AppColors.brandPrimary,
+                inactiveThumbColor: AppColors.brandControlBorder,
+                trackOutlineColor: WidgetStateProperty.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? Colors.transparent
+                      : AppColors.brandControlBorder,
+                ),
+              ),
             ),
             const SizedBox(width: AppSpacing.sm),
             Expanded(
@@ -387,7 +450,8 @@ class _TermsRow extends StatelessWidget {
                           child: Text(
                             l10n.signupTermsLink,
                             style: AppTextStyles.bodySecondary.copyWith(
-                              color: AppColors.brandPrimary,
+                              color: AppColors.brandLink,
+                              fontWeight: FontWeight.w600,
                               decoration: TextDecoration.underline,
                             ),
                           ),
@@ -401,7 +465,12 @@ class _TermsRow extends StatelessWidget {
             ),
           ],
         ),
-        if (!viewed)
+        if (errorText != null)
+          Padding(
+            padding: const EdgeInsets.only(top: AppSpacing.xs),
+            child: FieldError(text: errorText),
+          )
+        else if (!viewed)
           Padding(
             padding: const EdgeInsets.only(top: AppSpacing.xs),
             child: Text(l10n.signupTermsHint, style: AppTextStyles.hint),

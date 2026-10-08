@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/routing/route_names.dart';
+import '../../../core/utils/motion.dart';
 import '../../../l10n/app_localizations.dart';
 import 'onboarding_content.dart';
 import 'widgets/onboarding_slide.dart';
@@ -30,17 +31,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       _finish();
       return;
     }
-    _pageController.nextPage(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
+    _goToPage(_currentPage + 1);
   }
 
-  void _back() {
-    _pageController.previousPage(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
+  void _back() => _goToPage(_currentPage - 1);
+
+  /// Slides to [page], or jumps when the user asked the system to reduce motion.
+  void _goToPage(int page) {
+    final duration = motionDuration(context, const Duration(milliseconds: 300));
+    if (duration == Duration.zero) {
+      _pageController.jumpToPage(page);
+      return;
+    }
+    _pageController.animateToPage(page, duration: duration, curve: Curves.easeInOut);
   }
 
   @override

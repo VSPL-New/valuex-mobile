@@ -4,6 +4,14 @@
   "commonBack": "Back",
   "commonRetry": "Retry",
   "commonSkip": "Skip",
+  "commonNext": "Next",
+  "onboardingPageOf": "Page {current} of {total}",
+  "@onboardingPageOf": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
   "splashInitializing": "Initializing A1 Engine...",
   "homeComingSoon": "Home — coming soon",
   "onboardingTitle1": "JustQlic Makes Selling Simple",
@@ -26,6 +34,7 @@
   "signupMobileLabel": "MOBILE NUMBER",
   "signupMobileHint": "We'll send an OTP to verify your number",
   "signupMobileSendOtp": "Send OTP",
+  "signupMobileInvalid": "Enter a valid 10-digit mobile number",
   "signupMobileOtpComingSoon": "OTP verification is coming soon",
   "errorUnableToConnect": "Unable to connect — Retry",
   "errorSomethingWentWrong": "Something went wrong — Try Again",
@@ -48,6 +57,7 @@
   "emailEntryFieldHint": "name@example.com",
   "emailEntryHint": "We'll send an OTP to verify your email",
   "emailEntrySendOtp": "Send OTP",
+  "emailEntryInvalid": "Enter a valid email address",
   "otpMobileTitle": "Verify your number",
   "otpEmailTitle": "Verify your email",
   "otpSubtitle": "Enter the 6-digit code sent to {target}",
@@ -60,6 +70,7 @@
   },
   "otpFieldLabel": "6-digit one-time code",
   "otpVerify": "Verify",
+  "otpIncomplete": "Enter the 6-digit code",
   "otpResend": "Resend code",
   "otpResendIn": "Resend code in {seconds}s",
   "@otpResendIn": {
@@ -91,6 +102,8 @@
   "aadhaarHideNumber": "Hide Aadhaar number",
   "aadhaarConsent": "I consent to ValueX using my Aadhaar number to verify my identity",
   "aadhaarVerifyButton": "Verify Aadhaar",
+  "aadhaarNumberInvalid": "Enter your 12-digit Aadhaar number",
+  "aadhaarConsentRequired": "Please accept to continue",
   "aadhaarSkip": "Skip for now",
   "aadhaarNotNow": "Not now",
   "aadhaarComingSoon": "Aadhaar verification is coming soon. You can skip for now and complete it before your first transaction.",
@@ -147,6 +160,9 @@
   "signupSubmit": "Submit",
   "signupHaveAccount": "Already have an account?",
   "signupSignIn": "Sign In",
+  "signupErrorGender": "Choose one option",
+  "signupErrorState": "Choose your state",
+  "signupErrorTerms": "Accept the Terms and Conditions to continue",
   "signupErrorName": "Enter 3 to 50 letters",
   "signupErrorCity": "Enter 2 to 100 letters",
   "signupErrorAddress": "Enter 10 to 255 characters",

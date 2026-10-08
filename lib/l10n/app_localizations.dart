@@ -117,6 +117,18 @@ abstract class AppLocalizations {
   /// **'Skip'**
   String get commonSkip;
 
+  /// No description provided for @commonNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get commonNext;
+
+  /// No description provided for @onboardingPageOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {current} of {total}'**
+  String onboardingPageOf(int current, int total);
+
   /// No description provided for @splashInitializing.
   ///
   /// In en, this message translates to:
@@ -248,6 +260,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Send OTP'**
   String get signupMobileSendOtp;
+
+  /// No description provided for @signupMobileInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid 10-digit mobile number'**
+  String get signupMobileInvalid;
 
   /// No description provided for @signupMobileOtpComingSoon.
   ///
@@ -381,6 +399,12 @@ abstract class AppLocalizations {
   /// **'Send OTP'**
   String get emailEntrySendOtp;
 
+  /// No description provided for @emailEntryInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address'**
+  String get emailEntryInvalid;
+
   /// No description provided for @otpMobileTitle.
   ///
   /// In en, this message translates to:
@@ -410,6 +434,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Verify'**
   String get otpVerify;
+
+  /// No description provided for @otpIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code'**
+  String get otpIncomplete;
 
   /// No description provided for @otpResend.
   ///
@@ -512,6 +542,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Verify Aadhaar'**
   String get aadhaarVerifyButton;
+
+  /// No description provided for @aadhaarNumberInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your 12-digit Aadhaar number'**
+  String get aadhaarNumberInvalid;
+
+  /// No description provided for @aadhaarConsentRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please accept to continue'**
+  String get aadhaarConsentRequired;
 
   /// No description provided for @aadhaarSkip.
   ///
@@ -806,6 +848,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign In'**
   String get signupSignIn;
+
+  /// No description provided for @signupErrorGender.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose one option'**
+  String get signupErrorGender;
+
+  /// No description provided for @signupErrorState.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your state'**
+  String get signupErrorState;
+
+  /// No description provided for @signupErrorTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept the Terms and Conditions to continue'**
+  String get signupErrorTerms;
 
   /// No description provided for @signupErrorName.
   ///

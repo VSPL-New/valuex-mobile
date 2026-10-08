@@ -8,6 +8,7 @@ import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../../../core/widgets/brand_gradient_button.dart';
+import '../../../../core/widgets/field_error.dart';
 import '../../../../core/widgets/otp_input.dart';
 import '../../../../core/widgets/protected_screen.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -40,10 +41,11 @@ class AadhaarDevOtpScreen extends ConsumerWidget {
 
     ref.listen(aadhaarOtpControllerProvider.select((value) => value.error), (previous, error) {
       if (error == null || !context.mounted) return;
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(authErrorMessage(l10n, error))));
+      // The message must outlive the screen when the transaction is gone.
       if (_sessionErrors.contains(error.code)) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(content: Text(authErrorMessage(l10n, error))));
         context.go(RouteNames.signupAadhaar);
       }
     });
@@ -72,24 +74,31 @@ class AadhaarDevOtpScreen extends ConsumerWidget {
           OtpInput(
             semanticLabel: l10n.otpFieldLabel,
             enabled: !state.isVerifying,
-            hasError: state.error != null,
+            hasError: state.error != null || state.codeIncomplete,
             onChanged: controller.setCode,
           ),
+          if (state.error != null || state.codeIncomplete) ...[
+            const SizedBox(height: AppSpacing.md),
+            FieldError(
+              text: state.error != null ? authErrorMessage(l10n, state.error!) : l10n.otpIncomplete,
+            ),
+          ],
         ],
         bottom: Column(
           children: [
             BrandGradientButton(
               label: l10n.otpVerify,
               isLoading: state.isVerifying,
-              onPressed: state.canVerify ? controller.verify : null,
+              onPressed: state.isVerifying ? null : controller.verify,
             ),
             const SizedBox(height: AppSpacing.sm),
             TextButton(
               onPressed: () => context.go(RouteNames.signupAadhaar),
-              style: TextButton.styleFrom(minimumSize: const Size(44, 44)),
+              style: TextButton.styleFrom(
+                  minimumSize: const Size(AppSizes.minTouchTarget, AppSizes.minTouchTarget)),
               child: Text(
                 l10n.aadhaarChangeNumber,
-                style: AppTextStyles.input.copyWith(color: AppColors.brandPrimary),
+                style: AppTextStyles.link,
               ),
             ),
           ],

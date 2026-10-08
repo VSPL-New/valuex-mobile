@@ -16,16 +16,21 @@ class AadhaarFormState {
   final bool isSubmitting;
   final ApiError? error;
 
+  /// The user tapped Verify with something missing; show what is wrong.
+  final bool showValidation;
+
   const AadhaarFormState({
     this.number = '',
     this.obscured = true,
     this.consentGivenAt,
     this.isSubmitting = false,
     this.error,
+    this.showValidation = false,
   });
 
   bool get hasConsent => consentGivenAt != null;
-  bool get canVerify => Validators.isValidAadhaar(number) && hasConsent && !isSubmitting;
+  bool get isNumberValid => Validators.isValidAadhaar(number);
+  bool get canVerify => isNumberValid && hasConsent && !isSubmitting;
 
   AadhaarFormState copyWith({
     String? number,
@@ -34,6 +39,7 @@ class AadhaarFormState {
     bool clearConsent = false,
     bool? isSubmitting,
     ApiError? error,
+    bool? showValidation,
     bool clearError = false,
   }) {
     return AadhaarFormState(
@@ -42,6 +48,7 @@ class AadhaarFormState {
       consentGivenAt: clearConsent ? null : (consentGivenAt ?? this.consentGivenAt),
       isSubmitting: isSubmitting ?? this.isSubmitting,
       error: clearError ? null : (error ?? this.error),
+      showValidation: showValidation ?? this.showValidation,
     );
   }
 }
@@ -54,6 +61,9 @@ class AadhaarForm extends _$AadhaarForm {
   AadhaarFormState build() => const AadhaarFormState();
 
   void setNumber(String value) => state = state.copyWith(number: value, clearError: true);
+
+  /// Called when Verify is tapped with a missing number or consent.
+  void showValidation() => state = state.copyWith(showValidation: true);
 
   void toggleObscured() => state = state.copyWith(obscured: !state.obscured);
 
@@ -118,7 +128,15 @@ class AadhaarOtpState {
   final bool isVerifying;
   final ApiError? error;
 
-  const AadhaarOtpState({this.code = '', this.isVerifying = false, this.error});
+  /// The user tapped Verify before entering all six digits.
+  final bool codeIncomplete;
+
+  const AadhaarOtpState({
+    this.code = '',
+    this.isVerifying = false,
+    this.error,
+    this.codeIncomplete = false,
+  });
 
   bool get canVerify => Validators.isValidOtp(code) && !isVerifying;
 }
@@ -129,11 +147,20 @@ class AadhaarOtpController extends _$AadhaarOtpController {
   @override
   AadhaarOtpState build() => const AadhaarOtpState();
 
-  void setCode(String code) => state = AadhaarOtpState(code: code);
+  void setCode(String code) {
+    state = AadhaarOtpState(
+      code: code,
+      codeIncomplete: Validators.isValidOtp(code) ? false : state.codeIncomplete,
+    );
+  }
 
   Future<bool> verify() async {
     final transactionId = ref.read(registrationFlowProvider).aadhaarTransactionId;
-    if (!state.canVerify || transactionId == null) return false;
+    if (state.isVerifying || transactionId == null) return false;
+    if (!Validators.isValidOtp(state.code)) {
+      state = AadhaarOtpState(code: state.code, codeIncomplete: true);
+      return false;
+    }
     final code = state.code;
     final repository = ref.read(authRepositoryProvider);
     final session = ref.read(sessionControllerProvider.notifier);
