@@ -20,6 +20,9 @@ class OtpVerificationState {
   final bool isResending;
   final ApiError? error;
 
+  /// The user tapped Verify before entering all six digits.
+  final bool codeIncomplete;
+
   const OtpVerificationState({
     required this.secondsUntilExpiry,
     required this.secondsUntilResend,
@@ -28,6 +31,7 @@ class OtpVerificationState {
     this.isVerifying = false,
     this.isResending = false,
     this.error,
+    this.codeIncomplete = false,
   });
 
   bool get isExpired => secondsUntilExpiry <= 0;
@@ -37,6 +41,9 @@ class OtpVerificationState {
       sendCount < OtpVerificationController.maxSends &&
       !isResending &&
       !isVerifying;
+
+  /// Verify is tappable unless something visible already explains why not.
+  bool get canSubmit => !isExpired && !isLocked && !isVerifying && !isResending;
   bool get canVerify =>
       Validators.isValidOtp(code) && !isExpired && !isLocked && !isVerifying && !isResending;
 
@@ -48,6 +55,7 @@ class OtpVerificationState {
     bool? isVerifying,
     bool? isResending,
     ApiError? error,
+    bool? codeIncomplete,
     bool clearError = false,
   }) {
     return OtpVerificationState(
@@ -58,6 +66,7 @@ class OtpVerificationState {
       isVerifying: isVerifying ?? this.isVerifying,
       isResending: isResending ?? this.isResending,
       error: clearError ? null : (error ?? this.error),
+      codeIncomplete: codeIncomplete ?? this.codeIncomplete,
     );
   }
 }
@@ -93,12 +102,20 @@ class OtpVerificationController extends _$OtpVerificationController {
   }
 
   void setCode(String code) {
-    state = state.copyWith(code: code, clearError: state.error != null && !state.isLocked);
+    state = state.copyWith(
+      code: code,
+      clearError: state.error != null && !state.isLocked,
+      codeIncomplete: Validators.isValidOtp(code) ? false : state.codeIncomplete,
+    );
   }
 
   /// Returns true when the step succeeded and the session now reflects the new status.
   Future<bool> verify() async {
-    if (!state.canVerify) return false;
+    if (!state.canSubmit) return false;
+    if (!Validators.isValidOtp(state.code)) {
+      state = state.copyWith(codeIncomplete: true);
+      return false;
+    }
     final code = state.code;
     final flow = ref.read(registrationFlowProvider);
     final repository = ref.read(authRepositoryProvider);

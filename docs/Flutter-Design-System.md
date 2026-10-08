@@ -34,18 +34,20 @@ Global tokens are prefixed `brand`. Screen-specific tokens use the screen name (
 | `brandSurfaceTint` | `#EEF0FF` | Input fill |
 | `brandMuted` | `#E2E8FF` | Light tint of brand blue: `SingleToneButton` fill, progress track |
 | `brandForeground` | `#0A0D1E` | Primary text |
-| `brandMutedText` | `#64748B` | Secondary text, labels |
-| `brandPlaceholder` | `#94A3B8` | Placeholders, hints |
+| `brandMutedText` | `#5B6B82` | Secondary text, field labels, helper text, icons beside helper text |
+| `brandPlaceholder` | `#5F6D83` | Placeholder text inside inputs (not for helper text or icons; use `brandMutedText`) |
 | `brandOnPrimary` | `#FFFFFF` | Text on brand fills |
 | `brandPrimary` | `#2D6BFF` | Brand blue, cursor, focus |
 | `brandAccent` | `#C026D3` | Brand magenta |
+| `brandLink` | `#1F5AE6` | Text links (Resend code, Change number). `brandPrimary` is only 4.2:1 on the page, this is 5.3:1 |
 | `brandBorder` | `#2D6BFF` at 12% | Input and card borders |
-| `brandBorderFocused` | `#2D6BFF` at 30% | Focused input border |
-| `brandOutline` | `#DEDEDE` | Outlined button border |
+| `brandBorderFocused` | `#2D6BFF` at 30% | Decorative only; inputs now focus with a 2 px `brandPrimary` border |
+| `brandOutline` | `#DEDEDE` | Decorative outlines only (no longer used for controls) |
+| `brandControlBorder` | `#76839B` | **Edge of every control that must be seen to be found** (outlined buttons now; inputs, choices and pickers as their screens are reviewed). 3.4–3.8:1 on white, page and input fill |
 | `brandDivider` | `#DCE4E8` | Divider lines |
-| `brandError` | `#EF4444` | Errors |
+| `brandError` | `#C81E1E` | Error text, icons and borders (5.1 to 5.7:1) |
 
-Onboarding-only: `onboardingSkipBackground` `#E9E9FF`, `onboardingSkipText` `#5B5BF7`, `onboardingSubtitle` `#8F8B8B`, `onboardingDotActive` `#D708B7`, `onboardingDotInactive` `#0149FD`, `onboardingBackButton` `#E703B2`, `onboardingNextButton` `#0149FD`.
+Onboarding-only: `onboardingSkipBackground` `#E9E9FF`, `onboardingSkipText` `#4A4AE0`, `onboardingSubtitle` `#6F6B6B`, `onboardingDotActive` `#D708B7`, `onboardingDotInactive` `#0149FD`, `onboardingBackButton` `#E703B2`, `onboardingNextButton` `#0149FD`. The Skip text and subtitle colours are darker than Figma's `#5B5BF7` and `#8F8B8B` to reach 4.5:1 (approved 2026-10-07).
 
 ### 2.2 Gradient — `AppGradients.brand` (`gradients.dart`)
 
@@ -65,10 +67,12 @@ Two families only. Do not add a third.
 | `heading1` | Poppins 28 / 38, w700 (onboarding titles) |
 | `heading2` | Poppins 24 / 1.5, w700 (page titles) |
 | `body` | DM Sans 16 / 1.5 |
-| `input` | DM Sans 14 / 20, foreground |
+| `input` | DM Sans 16 / 24, foreground (typed text and placeholder) |
 | `bodySecondary` | DM Sans 14 / 20, muted |
-| `label` | DM Sans 12, letter spacing 0.6, muted (use uppercase text) |
-| `hint` | DM Sans 12, placeholder colour |
+| `label` | DM Sans 14 / 20 medium, letter spacing 0.4, muted (field labels) |
+| `hint` | DM Sans 14 / 20, muted (helper text, timers; 12 px is for non-essential captions only) |
+| `error` | DM Sans 14 / 20 medium, `brandError` (message under a field, always with an icon) |
+| `link` | DM Sans 16 / 24 semi-bold, `brandLink` (tappable text; give it a 48 dp tap area) |
 | `button` | DM Sans 16, w700, white; on `OutlinedIconButton` the colour is `brandForeground` |
 | `dividerLabel` | DM Sans 14, w500, spacing -0.28 |
 
@@ -82,6 +86,7 @@ Inter, Outfit, Plus Jakarta Sans, General Sans and Parkinsans are not used.
 | `AppRadius` sm / md / lg / xl | 6 / 10 / 12 / 16 |
 | `AppSizes.buttonMedium` | 56 (every button and text input) |
 | `AppSizes.backButton` | 35.1 (Figma back button) |
+| `AppSizes.minTouchTarget` | 48 (smallest tap area of any control; Material's 48 dp, which also covers iOS's 44 pt) |
 
 Figma's 55 and 60 px buttons are normalised to 56. The onboarding Next button keeps its Figma radius of 7.
 
@@ -109,29 +114,32 @@ Shared widgets live in `lib/core/widgets/`. Reuse them; extract a new shared ato
 |---|---|---|
 | `BrandGradientButton` | atom | **Primary action.** Brand gradient, 56 high, radius 16, DM Sans 16 bold, glow. |
 | `SingleToneButton` | atom | **Secondary action.** Same size, radius and type as the primary, on a light tint of brand blue (`brandMuted`) with `brandForeground` text. |
-| `OutlinedIconButton` | atom | **Alternative sign-in or action with a leading icon** (Google, Guest). White, `brandOutline` border, radius 10, DM Sans 16 bold in `brandForeground`. |
+| `OutlinedIconButton` | atom | **Alternative sign-in or action with a leading icon** (Google, Guest). White, `brandControlBorder` border, radius 10, DM Sans 16 bold in `brandForeground`. The label wraps to a second line at large text. |
 | `AppButton` | atom | **Generic utility button** (Retry, dialogs, forms outside the main flow). Solid `brandPrimary` (the gradient's blue end), outlined variant, loading state. |
-| `SquareBackButton` | atom | **Canonical back button** (Figma rounded square, 44×44 tap area). Use on every page that goes back. |
-| `OnboardingNavButton` | atom | Onboarding next (radius 7) and back (radius 12) controls |
+| `SquareBackButton` | atom | **Canonical back button** (Figma rounded square, 48×48 tap area). Use on every page that goes back. |
+| `OnboardingNavButton` | atom | Onboarding next (radius 7) and back (radius 12) controls. 45 px drawing inside a 48 dp tap area; requires a `label` for screen readers. |
 | `BrandLogo` | atom | The logo |
 | `AppTextField`, `ErrorView`, `LoadingIndicator` | atoms | Generic building blocks themed from `AppTheme` |
-| `OtpInput` | molecule | Six-digit code drawn as boxes over one real text field (paste, autofill, backspace). Boxes use the input tint and border; the current box and errors use `brandPrimary` and `brandError` borders. |
+| `OtpInput` | molecule | Six-digit code drawn as boxes over one real text field (paste, autofill, backspace). Boxes use the input tint and `brandControlBorder`; the current box and errors use 2 px `brandPrimary` and `brandError` borders. Boxes grow with the text size. Screen readers hear the typed digits. Give it a new `key` to empty it. |
+| `FieldError` | atom | **The one way to show a form error:** error icon plus `error` text in a live region. Use it under every field and OTP input. |
 | `ProtectedScreen` | utility | Wraps a screen that must block screenshots (Aadhaar now; payment, escrow and bank details later). Reference counted through `ScreenProtectionService`. |
 
-Auth feature widgets (`lib/features/auth/presentation/widgets/`): `AuthFormScaffold` (back, logo, title, scrolling content, fixed bottom actions; used by every registration step), `OtpVerificationView`, `AadhaarNoteCard` (tint card with `brandAccent` icon), `GenderSelector` (three equal choices, selected = `brandPrimary` 2 px border on `brandSurfaceTint`), `DateOfBirthField` (typed DD/MM/YYYY plus a calendar icon), `StatePickerField` (field-style row opening a list sheet), `AvatarImage` and the avatar picker sheet.
+Auth feature widgets (`lib/features/auth/presentation/widgets/`): `AuthFormScaffold` (back, logo, title, scrolling content, fixed bottom actions; used by every registration step), `OtpVerificationView`, `AadhaarNoteCard` (tint card with `brandAccent` icon), `GenderSelector` (three equal choices, stacked one per line at large text; selected = `brandPrimary` 2 px border on `brandSurfaceTint`; unselected `brandControlBorder`; takes an `errorText`), `DateOfBirthField` (typed DD/MM/YYYY plus a calendar icon), `StatePickerField` (field-style row opening a list sheet), `AvatarImage` and the avatar picker sheet.
 
 ### 4.1 Button rules for new screens
 
 - Use only the widgets above. **Do not create a new button style or a per-screen variant.**
 - One primary (`BrandGradientButton`) per screen. A second action next to it uses `SingleToneButton`. Alternative methods use `OutlinedIconButton`. Use `AppButton` only for generic utility actions.
-- All buttons are 56 high. Disabled means `onPressed: null` (shown at 40% opacity); do not hide or restyle disabled buttons.
+- All buttons are at least 56 high and grow when the label wraps at large text (never truncate a label). Disabled means `onPressed: null` (shown at 40% opacity); do not hide or restyle disabled buttons.
 - Button labels use sentence case ("Create an Account", "Sign In"), not UPPERCASE.
 - Only `brandPrimary` and `brandAccent` (the two ends of the brand gradient) may be used as button colours.
 - Placement: bottom-anchored actions respect the safe-area inset; stacked buttons are separated by `AppSpacing.sm` to `AppSpacing.md`.
 
 Feature widgets: `OnboardingSlide`, `OnboardingDots` (one dot per page), `OnboardingNavButton`, `LabeledDivider`, `MobileNumberField` (+91 prefix, 10 digits).
 
-Inputs inherit `InputDecorationTheme` from `AppTheme` (tint fill, 12 px radius, `brandBorder`, focused `brandBorderFocused`). Do not restyle them per screen.
+Inputs inherit `InputDecorationTheme` from `AppTheme`: tint fill, 12 px radius, 1 px `brandControlBorder`, 2 px `brandPrimary` when focused, 2 px `brandError` on error. Do not restyle them per screen.
+
+**Form error rule:** show an error under the field with `FieldError` (14 px `error` style, an icon, live region), not in a snackbar, and keep it until the user edits the field. Scroll it into view at large text. For a plain `TextField` pass `InputDecoration(error: FieldError(text: ...))`; the theme then draws the red 2 px border (see `SignupEmailScreen`). Snackbars are for passing messages only. A submit button stays enabled; tapping it with invalid input shows the error (see `SignupMobileScreen`). Each field also announces its label to screen readers. When a form can fail below the fold, scroll its first message into view with `Scrollable.ensureVisible` (see `AadhaarScreen`).
 
 ---
 
@@ -199,11 +207,11 @@ Target: **WCAG 2.2 AA** for all screens in the first release.
 | Area | Rule |
 |---|---|
 | Text contrast | Body text at least 4.5:1; large text (24 px, or 18.7 px bold) at least 3:1; UI components and icons at least 3:1 |
-| Tap targets | At least 48×48 dp (CODING_STANDARDS 3.4 requires 44 as the minimum). Extend the hit area with padding when the visual is smaller (Back 35 px, Skip 64×31). |
-| Text scaling | Layouts must work at 200% system font size: no clipping, scrollable pages, no fixed-height text boxes |
-| Screen readers | Every interactive element has a semantic label; decorative images are excluded; logo uses the label "JustQlic" |
+| Tap targets | At least `AppSizes.minTouchTarget` (48×48 dp, CODING_STANDARDS 3.4). When the visual is smaller (Back 35 px, Skip pill 31 px high, onboarding arrows 45 px) keep the drawing and extend the tap area: a `SizedBox` of the minimum size with an opaque `GestureDetector`, plus `Semantics(button: true, label: ..., onTap: ...)`. |
+| Text scaling | Layouts must work at 200% system font size: no clipping, scrollable pages, no fixed-height text boxes (use a minimum height and let text grow). Text laid over an illustration gets a solid backing when the text is enlarged (see `OnboardingSlide`). |
+| Screen readers | Every interactive element has a semantic label (icon-only buttons must pass a `label`); screen titles are marked `Semantics(header: true)`; page indicators say "Page x of y"; decorative images are excluded; logo uses the label "JustQlic" |
 | Focus and keyboard | Logical focus order; visible focus; inputs use correct `keyboardType` and autofill hints |
-| Motion | Respect reduce-motion (splash progress animation, page transitions) |
+| Motion | Respect reduce-motion: wrap every animation duration in `motionDuration(context, ...)` (`core/utils/motion.dart`); never pass a zero duration to `animateToPage` or `nextPage`, jump instead. The splash bar is shown full, onboarding changes page at once. |
 | State | Never rely on colour alone to show errors or selection |
 
 Contrast of the current colour pairs (calculated):
@@ -213,18 +221,20 @@ Contrast of the current colour pairs (calculated):
 | `brandForeground` on `brandBackground` | 17.9 | Pass |
 | White on `brandPrimary` | 4.51 | Pass |
 | White on `brandAccent` | 4.71 | Pass |
-| `brandMutedText` on `brandBackground` | 4.41 | Marginal (just under 4.5) |
-| `brandMutedText` on `brandSurfaceTint` | 4.20 | Fail for body text |
-| Skip text on `onboardingSkipBackground` | 4.10 | Fail |
-| `onboardingSubtitle` on onboarding fade | 3.26 | Fail |
-| `brandPlaceholder` on `brandSurfaceTint` | 2.26 | Fail |
-| `brandPlaceholder` hint on `brandBackground` | 2.38 | Fail |
+| `brandMutedText` `#5B6B82` on `brandBackground` | 5.03 | Pass (was 4.41) |
+| `brandMutedText` on `brandSurfaceTint` | 4.79 | Pass (was 4.20) |
+| `brandError` `#C81E1E` on `brandBackground` / white / input fill | 5.32 / 5.74 / 5.07 | Pass (was 3.49) |
+| Skip text `#4A4AE0` on `onboardingSkipBackground` | 5.25 | Pass (was 4.10) |
+| `onboardingSubtitle` `#6F6B6B` on `brandBackground` | 4.88 | Pass (was 3.12) |
+| `brandPlaceholder` `#5F6D83` on `brandSurfaceTint` / `brandBackground` | 4.63 / 4.87 | Pass (was 2.26) |
 
-These Figma colours need designer sign-off to darken `brandMutedText`, `brandPlaceholder`, `onboardingSubtitle` and `onboardingSkipText` to at least 4.5:1. Until then, treat them as known gaps, not as a pattern to copy.
+All text colours reach 4.5:1 (links use `brandLink`; do not use `brandPrimary` for text). `test/core/theme/contrast_test.dart` holds the contrast checks; add a row there for every new colour pair.
 
 New registration controls (gender choices, state picker, calendar icon, show/hide, resend and change links, avatar tiles, switch) are 44 dp or larger. The inline "Terms and Conditions" link inside a sentence is smaller; it is the only exception.
 
-Known gaps to close before release: tap target on Skip (64×31), fixed-height text boxes on onboarding, missing semantic labels on icon buttons and illustrations, reduce-motion handling.
+**Enforced by tests (US-110):** `test/all_screens_accessibility_test.dart` runs Flutter's tap target (Android 48 dp, iOS 44 pt), label and text contrast guidelines on every screen; `test/screen_headings_test.dart` checks headings; `test/reduce_motion_test.dart` checks reduce motion. **Add every new screen to the first two.** A screen that fails them does not merge.
+
+**New screen checklist:** tokens only; 48 dp tap areas; every control labelled; title and section titles marked as headings; errors under the field with `FieldError`, submit buttons enabled with validation on tap, the first message scrolled into view; text laid out at 200% in English and Hindi; animations through `motionDuration`; a row in `contrast_test.dart` for any new colour pair; strings in both ARB files.
 
 ---
 
@@ -261,6 +271,7 @@ Don't:
 - Set a page background on a `Scaffold` or use a white or other full-page colour.
 - Use Inter, Outfit, Plus Jakarta Sans, General Sans or Parkinsans.
 - Create a back button, input or button style per screen.
+- Show a form error only in a snackbar, or disable a submit button without saying why.
 - Hand-draw icons or edit exported assets.
 - Silently copy a Figma value that conflicts with a token, or silently change a token.
 
@@ -272,13 +283,13 @@ Don't:
 |---|---|
 | Transparent JustQlic logo | Designer |
 | Transparent Create Account illustration (faint edge lines show on `brandBackground` today) | Designer |
-| Darker colours for the failing contrast pairs | Designer |
+| Confirm the darker colours chosen in US-110 (muted text, placeholder, error, link, onboarding, control border) and update Figma | Designer |
 | Clean export of the onboarding screen 4 illustration (baked-in status bar) | Designer |
 | Native-speaker review of the Hindi strings in `lib/l10n/app_hi.arb` | Product |
 | Final avatar artwork (placeholders drawn from icons today; US-003) | Designer |
 | Figma frames for the Sign Up form, gender choices, date field, state picker, avatar picker and OTP boxes (built from tokens without a design) | Designer |
 | Role-based `ThemeExtension` and dark theme | Engineering |
-| Tap-target, text-scaling and semantics fixes | Engineering |
+| Page transitions between routes do not yet respect reduce motion (GoRouter default transitions) | Engineering |
 
 ---
 
@@ -300,6 +311,28 @@ Decisions taken so far. Add a row for every approved conflict resolution (sectio
 | 2026-10-06 | Avatars | Final artwork not available | Placeholder avatars drawn from Material icons on brand-tinted circles; male-looking `avatar-01..04`, female-looking `05..08`, neutral `09..12`; ids unchanged when artwork arrives |
 | 2026-10-06 | Hindi text | DM Sans has no Devanagari glyphs | `AppFonts.bodyFallback` uses Poppins, which has Devanagari; no new font |
 | 2026-10-06 | Back button size | Figma 35 px against the 44 dp standard | **Approved: enlarge.** `SquareBackButton` has a 44×44 tap area around the unchanged 35 px visual (content below moves down about 9 px) |
+
+| 2026-10-07 | Onboarding colours | Figma subtitle `#8F8B8B` (3.1:1) and Skip text `#5B5BF7` (4.1:1) fail contrast | **Approved: darken** to `#6F6B6B` (4.9:1) and `#4A4AE0` (5.3:1) |
+| 2026-10-07 | Touch targets | 44 dp minimum is below Material's 48 dp | **Approved: 48 dp** (`AppSizes.minTouchTarget`); CODING_STANDARDS 3.4 updated; back button tap area grows from 44 to 48 |
+| 2026-10-07 | Onboarding Skip, Next and Back | Drawings of 31 and 45 px are below 48 dp | **Approved:** drawing unchanged, tap area 48 dp; Skip text 14 px medium |
+| 2026-10-07 | Onboarding at 200% text | Fixed-height text boxes clipped the copy | **Approved:** boxes grow with the text and the copy gets a solid backing over the illustration when text is enlarged |
+
+| 2026-10-08 | Create Account outlined buttons | Border `#DEDEDE` was 1.25:1 against white and the page | **Approved:** new `brandControlBorder` `#76839B` (3.4 to 3.8:1) |
+| 2026-10-08 | Shared buttons at large text | Fixed 56 px height cut the Google and Guest labels at 200% | **Approved:** buttons keep a 56 dp minimum and grow; labels wrap instead of being truncated |
+
+| 2026-10-08 | Secondary, placeholder and error colours | `#64748B` (4.2:1), `#94A3B8` (2.3:1) and `#EF4444` (3.5:1) fail contrast | **Approved:** `brandMutedText` `#5B6B82`, `brandPlaceholder` `#5F6D83`, `brandError` `#C81E1E` |
+| 2026-10-08 | Input look and text sizes | Input edge 1.2:1; 12 px helper and label text; 14 px typed text | **Approved:** inputs use `brandControlBorder` with a 2 px focus and error border; `label` and `hint` 14 px; `input` 16 px |
+| 2026-10-08 | Mobile entry behaviour | Send OTP was disabled with no reason; errors went to a snackbar | **Approved:** Send OTP stays enabled and shows an inline error under the field; server errors also show inline |
+
+| 2026-10-08 | Mobile and email OTP | Box edge 1.2:1; verify dimmed without a reason; links 4.2:1 and 44 dp; digits clipped at 200%; typed digits not announced; old digits left after Resend | **Approved:** `brandControlBorder` edges, Verify stays enabled and asks for six digits, `brandLink` text and 48 dp links, boxes grow with text, digits announced, boxes empty after Resend |
+
+| 2026-10-08 | Email entry | Same gaps as mobile entry | **Approved:** same pattern: inline `FieldError`, Send OTP stays enabled, field label announced |
+
+| 2026-10-08 | Aadhaar and development Aadhaar OTP | Snackbar errors, dimmed Verify, 44 dp controls, unlabeled field | **Approved:** same form pattern as mobile entry; consent shows its own message with a red checkbox; the form scrolls to its messages; the consent copy keeps "ValueX" until legal confirms the brand name |
+
+| 2026-10-08 | Sign Up | Submit dimmed with no reason; messages only for typed-in invalid values; unlabeled fields and switch; faint edges on choices and pickers; 44 dp controls; gender words broken at 200% | **Applied from the approved patterns:** Submit stays enabled and shows a message under every missing or invalid field, scrolling to the first; fields and the terms switch are labelled; `brandControlBorder` edges; 48 dp; gender choices stack at large text; server errors show under the form |
+| 2026-10-08 | Terms, Account unavailable, Home, Splash | Plain titles; 44 dp close button; 12 px splash label; fixed-height blocked page | **Applied:** titles and Terms sections are headings; 48 dp close button; 14 px splash label; blocked page scrolls at large text |
+| 2026-10-08 | Reduce motion | Animations ignored the system setting | **Applied:** `motionDuration` helper; splash bar static, onboarding jumps, dots and scroll-to-message do not animate |
 
 ### Approved exceptions
 

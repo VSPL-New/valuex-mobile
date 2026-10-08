@@ -21,6 +21,14 @@ class AppLocalizationsHi extends AppLocalizations {
   String get commonSkip => 'छोड़ें';
 
   @override
+  String get commonNext => 'आगे';
+
+  @override
+  String onboardingPageOf(int current, int total) {
+    return '$total में से पृष्ठ $current';
+  }
+
+  @override
   String get splashInitializing => 'A1 इंजन शुरू हो रहा है...';
 
   @override
@@ -91,6 +99,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get signupMobileSendOtp => 'OTP भेजें';
 
   @override
+  String get signupMobileInvalid => '10 अंकों का मान्य मोबाइल नंबर दर्ज करें';
+
+  @override
   String get signupMobileOtpComingSoon => 'OTP सत्यापन जल्द उपलब्ध होगा';
 
   @override
@@ -158,6 +169,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get emailEntrySendOtp => 'OTP भेजें';
 
   @override
+  String get emailEntryInvalid => 'मान्य ईमेल पता दर्ज करें';
+
+  @override
   String get otpMobileTitle => 'अपना नंबर सत्यापित करें';
 
   @override
@@ -173,6 +187,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get otpVerify => 'सत्यापित करें';
+
+  @override
+  String get otpIncomplete => '6 अंकों का कोड दर्ज करें';
 
   @override
   String get otpResend => 'कोड फिर से भेजें';
@@ -230,6 +247,12 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get aadhaarVerifyButton => 'आधार सत्यापित करें';
+
+  @override
+  String get aadhaarNumberInvalid => '12 अंकों का आधार नंबर दर्ज करें';
+
+  @override
+  String get aadhaarConsentRequired => 'आगे बढ़ने के लिए सहमति दें';
 
   @override
   String get aadhaarSkip => 'अभी छोड़ें';
@@ -384,6 +407,15 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get signupSignIn => 'साइन इन';
+
+  @override
+  String get signupErrorGender => 'एक विकल्प चुनें';
+
+  @override
+  String get signupErrorState => 'अपना राज्य चुनें';
+
+  @override
+  String get signupErrorTerms => 'आगे बढ़ने के लिए नियम और शर्तें स्वीकार करें';
 
   @override
   String get signupErrorName => '3 से 50 अक्षर दर्ज करें';

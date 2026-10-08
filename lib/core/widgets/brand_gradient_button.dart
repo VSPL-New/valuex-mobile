@@ -44,20 +44,28 @@ class BrandGradientButton extends StatelessWidget {
             child: InkWell(
               borderRadius: radius,
               onTap: isLoading ? null : onPressed,
-              child: SizedBox(
-                height: AppSizes.buttonMedium,
-                width: double.infinity,
-                child: Center(
-                  child: isLoading
-                      ? const SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.5,
-                            color: AppColors.brandOnPrimary,
-                          ),
-                        )
-                      : Text(label, style: AppTextStyles.button),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  minHeight: AppSizes.buttonMedium,
+                  minWidth: double.infinity,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.md,
+                    vertical: AppSpacing.sm,
+                  ),
+                  child: Center(
+                    child: isLoading
+                        ? const SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                              color: AppColors.brandOnPrimary,
+                            ),
+                          )
+                        : Text(label, textAlign: TextAlign.center, style: AppTextStyles.button),
+                  ),
                 ),
               ),
             ),

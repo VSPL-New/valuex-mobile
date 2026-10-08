@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
+import '../../../../core/widgets/field_error.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/indian_states.dart';
 
@@ -9,8 +10,14 @@ import '../../domain/entities/indian_states.dart';
 class StatePickerField extends StatelessWidget {
   final String? value;
   final ValueChanged<String> onChanged;
+  final String? errorText;
 
-  const StatePickerField({super.key, required this.value, required this.onChanged});
+  const StatePickerField({
+    super.key,
+    required this.value,
+    required this.onChanged,
+    this.errorText,
+  });
 
   Future<void> _pick(BuildContext context) async {
     final chosen = await showModalBottomSheet<String>(
@@ -29,8 +36,9 @@ class StatePickerField extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final radius = BorderRadius.circular(AppRadius.lg);
+    final errorText = this.errorText;
 
-    return Semantics(
+    final field = Semantics(
       button: true,
       label: l10n.signupStateLabel,
       value: value,
@@ -43,11 +51,14 @@ class StatePickerField extends StatelessWidget {
           borderRadius: radius,
           onTap: () => _pick(context),
           child: Container(
-            height: AppSizes.buttonMedium,
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            constraints: const BoxConstraints(minHeight: AppSizes.buttonMedium),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
             decoration: BoxDecoration(
               borderRadius: radius,
-              border: Border.all(color: AppColors.brandBorder),
+              border: Border.all(
+                color: errorText != null ? AppColors.brandError : AppColors.brandControlBorder,
+                width: errorText != null ? 2 : 1,
+              ),
             ),
             child: Row(
               children: [
@@ -66,6 +77,16 @@ class StatePickerField extends StatelessWidget {
           ),
         ),
       ),
+    );
+
+    if (errorText == null) return field;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        field,
+        const SizedBox(height: AppSpacing.sm),
+        FieldError(text: errorText),
+      ],
     );
   }
 }

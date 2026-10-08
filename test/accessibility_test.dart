@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/routing/route_names.dart';
+import 'package:valuex_mobile/core/theme/spacing.dart';
 import 'package:valuex_mobile/core/widgets/square_back_button.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/aadhaar_transaction.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
@@ -96,18 +97,18 @@ void main() {
   });
 
   group('touch targets', () {
-    testWidgets('the back button has a 44 by 44 tap area', (tester) async {
+    testWidgets('the back button has a 48 by 48 tap area', (tester) async {
       final harness = AppHarness(tester);
       await harness.launch(location: RouteNames.signupMobile);
 
       final size = tester.getSize(find.byType(SquareBackButton));
 
-      expect(size.width, greaterThanOrEqualTo(44));
-      expect(size.height, greaterThanOrEqualTo(44));
+      expect(size.width, greaterThanOrEqualTo(AppSizes.minTouchTarget));
+      expect(size.height, greaterThanOrEqualTo(AppSizes.minTouchTarget));
       await harness.dispose();
     });
 
-    testWidgets('the Sign Up controls are at least 44 by 44', (tester) async {
+    testWidgets('the Sign Up controls are at least 48 by 48', (tester) async {
       final harness = AppHarness(tester)..signedInAs(AccountStatus.signupPending);
       await harness.launch();
 
@@ -120,11 +121,14 @@ void main() {
         await tester.ensureVisible(finder);
         await tester.pump();
         final size = tester.getSize(finder.first);
-        expect(size.height, greaterThanOrEqualTo(44), reason: '$finder');
+        expect(size.height, greaterThanOrEqualTo(AppSizes.minTouchTarget), reason: '$finder');
       }
+      expect(tester.getSize(find.byTooltip('Choose date of birth')).width,
+          greaterThanOrEqualTo(AppSizes.minTouchTarget));
       expect(
-          tester.getSize(find.byTooltip('Choose date of birth')).width, greaterThanOrEqualTo(44));
-      expect(tester.getSize(find.byType(AvatarImage)).shortestSide, greaterThanOrEqualTo(44));
+        tester.getSize(find.byType(AvatarImage)).shortestSide,
+        greaterThanOrEqualTo(AppSizes.minTouchTarget),
+      );
       await harness.dispose();
     });
   });

@@ -89,25 +89,33 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('Verify Aadhaar needs twelve digits and the consent', (tester) async {
+    testWidgets('Verify Aadhaar shows what is missing and sends nothing', (tester) async {
       await openAadhaar(tester);
-      expect(_enabled(tester, 'Verify Aadhaar'), isFalse);
+      expect(_enabled(tester, 'Verify Aadhaar'), isTrue);
 
       await tester.enterText(find.byType(TextField), '12341234');
       await tester.pump();
-      expect(_enabled(tester, 'Verify Aadhaar'), isFalse);
+      await tester.ensureVisible(_verifyAadhaarButton);
+      await tester.tap(_verifyAadhaarButton);
+      await harness.settle();
+
+      expect(find.text('Enter your 12-digit Aadhaar number'), findsOneWidget);
+      expect(find.text('Please accept to continue'), findsOneWidget);
+      expect(find.byType(SnackBar), findsNothing);
+      verifyNever(
+        () => harness.repository.initiateAadhaar(
+          aadhaarNumber: any(named: 'aadhaarNumber'),
+          consentToken: any(named: 'consentToken'),
+        ),
+      );
 
       await tester.enterText(find.byType(TextField), '123412341234');
       await tester.pump();
-      expect(_enabled(tester, 'Verify Aadhaar'), isFalse);
+      expect(find.text('Enter your 12-digit Aadhaar number'), findsNothing);
+      expect(find.text('Please accept to continue'), findsOneWidget);
 
       await _tapConsent(tester);
-      await tester.pump();
-      expect(_enabled(tester, 'Verify Aadhaar'), isTrue);
-
-      await _tapConsent(tester);
-      await tester.pump();
-      expect(_enabled(tester, 'Verify Aadhaar'), isFalse);
+      expect(find.text('Please accept to continue'), findsNothing);
       await harness.dispose();
     });
 
@@ -129,8 +137,8 @@ void main() {
       await tester.enterText(find.byType(TextField), '12ab34567890123456');
       await tester.pump();
 
-      expect(tester.widget<TextField>(find.byType(TextField)).controller?.text ?? '', anything);
-      expect(_enabled(tester, 'Verify Aadhaar'), isFalse);
+      expect(
+          tester.widget<EditableText>(find.byType(EditableText)).controller.text, '123456789012');
       await harness.dispose();
     });
 

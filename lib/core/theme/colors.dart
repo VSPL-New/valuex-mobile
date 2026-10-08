@@ -13,25 +13,31 @@ class AppColors {
 
   // Text
   static const Color brandForeground = Color(0xFF0A0D1E);
-  static const Color brandMutedText = Color(0xFF64748B);
-  static const Color brandPlaceholder = Color(0xFF94A3B8);
+  static const Color brandMutedText = Color(0xFF5B6B82);
+  static const Color brandPlaceholder = Color(0xFF5F6D83);
   static const Color brandOnPrimary = Color(0xFFFFFFFF);
 
   // Brand
   static const Color brandPrimary = Color(0xFF2D6BFF);
   static const Color brandAccent = Color(0xFFC026D3);
 
+  /// Blue for text links; `brandPrimary` is 4.2:1 on the page, this is 5.3:1.
+  static const Color brandLink = Color(0xFF1F5AE6);
+
   // Lines and status
   static const Color brandBorder = Color(0x1F2D6BFF);
   static const Color brandBorderFocused = Color(0x4D2D6BFF);
   static const Color brandOutline = Color(0xFFDEDEDE);
+
+  /// Edge of a control that must be seen to be found (3:1 on white, page and input fill).
+  static const Color brandControlBorder = Color(0xFF76839B);
   static const Color brandDivider = Color(0xFFDCE4E8);
-  static const Color brandError = Color(0xFFEF4444);
+  static const Color brandError = Color(0xFFC81E1E);
 
   // Onboarding only (Figma: Just Qlic)
   static const Color onboardingSkipBackground = Color(0xFFE9E9FF);
-  static const Color onboardingSkipText = Color(0xFF5B5BF7);
-  static const Color onboardingSubtitle = Color(0xFF8F8B8B);
+  static const Color onboardingSkipText = Color(0xFF4A4AE0);
+  static const Color onboardingSubtitle = Color(0xFF6F6B6B);
   static const Color onboardingDotActive = Color(0xFFD708B7);
   static const Color onboardingDotInactive = Color(0xFF0149FD);
   static const Color onboardingBackButton = Color(0xFFE703B2);

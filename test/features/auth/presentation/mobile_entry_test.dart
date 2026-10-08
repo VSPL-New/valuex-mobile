@@ -10,16 +10,9 @@ import '../../../helpers/app_harness.dart';
 
 const _mobilePath = '/signup/mobile';
 
-Finder get _sendButton => find.text('Send OTP');
+const _invalidMessage = 'Enter a valid 10-digit mobile number';
 
-bool _enabled(WidgetTester tester) {
-  final inkWell = tester.widget<InkWell>(
-    find.descendant(
-        of: find.ancestor(of: _sendButton, matching: find.byType(Ink)).first,
-        matching: find.byType(InkWell)),
-  );
-  return inkWell.onTap != null;
-}
+Finder get _sendButton => find.text('Send OTP');
 
 void main() {
   late AppHarness harness;
@@ -31,29 +24,45 @@ void main() {
     await harness.launch(location: _mobilePath);
   }
 
-  testWidgets('shows the mobile page with Send OTP disabled', (tester) async {
+  testWidgets('shows the mobile page with Send OTP available and no error', (tester) async {
     await open(tester);
 
     expect(find.byType(SignupMobileScreen), findsOneWidget);
     expect(find.text('Create Account'), findsOneWidget);
-    expect(_enabled(tester), isFalse);
+    expect(find.text(_invalidMessage), findsNothing);
     await harness.dispose();
   });
 
-  testWidgets('enables Send OTP only for a valid Indian mobile number', (tester) async {
+  for (final entry in const {'too short': '98765', 'wrong first digit': '1234567890'}.entries) {
+    testWidgets('shows an inline error and sends nothing for a number that is ${entry.key}', (
+      tester,
+    ) async {
+      await open(tester);
+
+      await tester.enterText(find.byType(TextField), entry.value);
+      await tester.pump();
+      await tester.tap(_sendButton);
+      await harness.settle();
+
+      expect(find.text(_invalidMessage), findsOneWidget);
+      expect(find.byType(SnackBar), findsNothing);
+      verifyNever(() => harness.repository.initiateRegistration(any()));
+      await harness.dispose();
+    });
+  }
+
+  testWidgets('clears the invalid number error once the number is valid', (tester) async {
     await open(tester);
-
-    await tester.enterText(find.byType(TextField), '1234567890');
-    await tester.pump();
-    expect(_enabled(tester), isFalse);
-
     await tester.enterText(find.byType(TextField), '98765');
     await tester.pump();
-    expect(_enabled(tester), isFalse);
+    await tester.tap(_sendButton);
+    await harness.settle();
+    expect(find.text(_invalidMessage), findsOneWidget);
 
     await tester.enterText(find.byType(TextField), '9876543210');
     await tester.pump();
-    expect(_enabled(tester), isTrue);
+
+    expect(find.text(_invalidMessage), findsNothing);
     await harness.dispose();
   });
 
@@ -91,6 +100,7 @@ void main() {
     await harness.settle();
 
     expect(find.text('This mobile number is already registered'), findsOneWidget);
+    expect(find.byType(SnackBar), findsNothing);
     expect(find.byType(SignupMobileScreen), findsOneWidget);
     await harness.dispose();
   });
@@ -107,6 +117,30 @@ void main() {
     await harness.settle();
 
     expect(find.text('Unable to connect — Retry'), findsOneWidget);
+    expect(find.byType(SnackBar), findsNothing);
+    await harness.dispose();
+  });
+
+  testWidgets('removes the server error when the number is edited', (tester) async {
+    await open(tester);
+    when(() => harness.repository.initiateRegistration(any())).thenThrow(
+      const ApiError(
+        type: ApiErrorType.business,
+        message: 'x',
+        code: 'ERROR_MOBILE_ALREADY_REGISTERED',
+        statusCode: 400,
+      ),
+    );
+    await tester.enterText(find.byType(TextField), '9876543210');
+    await tester.pump();
+    await tester.tap(_sendButton);
+    await harness.settle();
+    expect(find.text('This mobile number is already registered'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextField), '987654321');
+    await tester.pump();
+
+    expect(find.text('This mobile number is already registered'), findsNothing);
     await harness.dispose();
   });
 

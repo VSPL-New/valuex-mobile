@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/text_styles.dart';
+import '../../../../core/theme/spacing.dart';
 import '../../../../core/utils/date_input_formatter.dart';
+import '../../../../core/widgets/field_error.dart';
 
 /// Date typed as DD/MM/YYYY, or picked from the calendar through the trailing icon.
 class DateOfBirthField extends StatefulWidget {
@@ -9,6 +11,7 @@ class DateOfBirthField extends StatefulWidget {
   final String hint;
   final String pickTooltip;
   final String? errorText;
+  final String semanticLabel;
   final ValueChanged<String> onChanged;
   final VoidCallback onPickDate;
 
@@ -17,6 +20,7 @@ class DateOfBirthField extends StatefulWidget {
     required this.text,
     required this.hint,
     required this.pickTooltip,
+    required this.semanticLabel,
     required this.onChanged,
     required this.onPickDate,
     this.errorText,
@@ -48,21 +52,28 @@ class _DateOfBirthFieldState extends State<DateOfBirthField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: _controller,
-      keyboardType: TextInputType.number,
-      inputFormatters: [DateInputFormatter()],
-      onChanged: widget.onChanged,
-      style: AppTextStyles.input,
-      cursorColor: AppColors.brandPrimary,
-      decoration: InputDecoration(
-        hintText: widget.hint,
-        errorText: widget.errorText,
-        suffixIcon: IconButton(
-          tooltip: widget.pickTooltip,
-          constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
-          onPressed: widget.onPickDate,
-          icon: const Icon(Icons.calendar_today_outlined, color: AppColors.brandMutedText),
+    final errorText = widget.errorText;
+    return Semantics(
+      label: widget.semanticLabel,
+      child: TextField(
+        controller: _controller,
+        keyboardType: TextInputType.number,
+        inputFormatters: [DateInputFormatter()],
+        onChanged: widget.onChanged,
+        style: AppTextStyles.input,
+        cursorColor: AppColors.brandPrimary,
+        decoration: InputDecoration(
+          hintText: widget.hint,
+          error: errorText == null ? null : FieldError(text: errorText),
+          suffixIcon: IconButton(
+            tooltip: widget.pickTooltip,
+            constraints: const BoxConstraints(
+              minWidth: AppSizes.minTouchTarget,
+              minHeight: AppSizes.minTouchTarget,
+            ),
+            onPressed: widget.onPickDate,
+            icon: const Icon(Icons.calendar_today_outlined, color: AppColors.brandMutedText),
+          ),
         ),
       ),
     );

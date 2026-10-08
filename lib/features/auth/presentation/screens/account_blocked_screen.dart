@@ -21,21 +21,32 @@ class AccountBlockedScreen extends ConsumerWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.lg),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const BrandLogo(height: 32),
-              const SizedBox(height: AppSpacing.xl),
-              Text(l10n.accountBlockedTitle, style: AppTextStyles.heading2),
-              const SizedBox(height: AppSpacing.sm),
-              Text(l10n.accountBlockedMessage, style: AppTextStyles.bodySecondary),
-              const Spacer(),
-              BrandGradientButton(
-                label: l10n.accountBlockedAction,
-                onPressed: () async {
-                  await ref.read(sessionControllerProvider.notifier).signOutLocally();
-                  if (context.mounted) context.go(RouteNames.createAccount);
-                },
+          child: CustomScrollView(
+            slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const BrandLogo(height: 32),
+                    const SizedBox(height: AppSpacing.xl),
+                    Semantics(
+                      header: true,
+                      child: Text(l10n.accountBlockedTitle, style: AppTextStyles.heading2),
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    Text(l10n.accountBlockedMessage, style: AppTextStyles.bodySecondary),
+                    const Spacer(),
+                    const SizedBox(height: AppSpacing.lg),
+                    BrandGradientButton(
+                      label: l10n.accountBlockedAction,
+                      onPressed: () async {
+                        await ref.read(sessionControllerProvider.notifier).signOutLocally();
+                        if (context.mounted) context.go(RouteNames.createAccount);
+                      },
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

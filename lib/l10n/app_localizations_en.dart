@@ -21,6 +21,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonSkip => 'Skip';
 
   @override
+  String get commonNext => 'Next';
+
+  @override
+  String onboardingPageOf(int current, int total) {
+    return 'Page $current of $total';
+  }
+
+  @override
   String get splashInitializing => 'Initializing A1 Engine...';
 
   @override
@@ -91,6 +99,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signupMobileSendOtp => 'Send OTP';
 
   @override
+  String get signupMobileInvalid => 'Enter a valid 10-digit mobile number';
+
+  @override
   String get signupMobileOtpComingSoon => 'OTP verification is coming soon';
 
   @override
@@ -158,6 +169,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emailEntrySendOtp => 'Send OTP';
 
   @override
+  String get emailEntryInvalid => 'Enter a valid email address';
+
+  @override
   String get otpMobileTitle => 'Verify your number';
 
   @override
@@ -173,6 +187,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get otpVerify => 'Verify';
+
+  @override
+  String get otpIncomplete => 'Enter the 6-digit code';
 
   @override
   String get otpResend => 'Resend code';
@@ -229,6 +246,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aadhaarVerifyButton => 'Verify Aadhaar';
+
+  @override
+  String get aadhaarNumberInvalid => 'Enter your 12-digit Aadhaar number';
+
+  @override
+  String get aadhaarConsentRequired => 'Please accept to continue';
 
   @override
   String get aadhaarSkip => 'Skip for now';
@@ -384,6 +407,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signupSignIn => 'Sign In';
+
+  @override
+  String get signupErrorGender => 'Choose one option';
+
+  @override
+  String get signupErrorState => 'Choose your state';
+
+  @override
+  String get signupErrorTerms => 'Accept the Terms and Conditions to continue';
 
   @override
   String get signupErrorName => 'Enter 3 to 50 letters';

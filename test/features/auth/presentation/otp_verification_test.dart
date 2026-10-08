@@ -63,17 +63,28 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('Verify stays disabled until six digits are entered', (tester) async {
+    testWidgets('Verify with an incomplete code shows an inline message and verifies nothing', (
+      tester,
+    ) async {
       await openVerifyScreen(tester);
-      expect(_verifyEnabled(tester), isFalse);
+      expect(_verifyEnabled(tester), isTrue);
 
       await tester.enterText(find.byType(TextField), '12345');
       await tester.pump();
-      expect(_verifyEnabled(tester), isFalse);
+      await tester.tap(_verifyButton);
+      await harness.settle();
+
+      expect(find.text('Enter the 6-digit code'), findsOneWidget);
+      expect(find.byType(SnackBar), findsNothing);
+      verifyNever(
+        () => harness.repository
+            .verifyMobileOtp(mobile: any(named: 'mobile'), otp: any(named: 'otp')),
+      );
 
       await tester.enterText(find.byType(TextField), '123456');
       await tester.pump();
-      expect(_verifyEnabled(tester), isTrue);
+
+      expect(find.text('Enter the 6-digit code'), findsNothing);
       await harness.dispose();
     });
 
@@ -254,27 +265,23 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('Send OTP needs a valid email', (tester) async {
+    testWidgets('an invalid email shows an inline error and sends nothing', (tester) async {
       await openEmailEntry(tester);
-      Finder send = find.text('Send OTP');
-      bool enabled() =>
-          tester
-              .widget<InkWell>(
-                find.descendant(
-                  of: find.ancestor(of: send, matching: find.byType(Ink)).first,
-                  matching: find.byType(InkWell),
-                ),
-              )
-              .onTap !=
-          null;
+      expect(find.text('Enter a valid email address'), findsNothing);
 
-      expect(enabled(), isFalse);
       await tester.enterText(find.byType(TextField), 'not-an-email');
       await tester.pump();
-      expect(enabled(), isFalse);
+      await tester.tap(find.text('Send OTP'));
+      await harness.settle();
+
+      expect(find.text('Enter a valid email address'), findsOneWidget);
+      expect(find.byType(SnackBar), findsNothing);
+      verifyNever(() => harness.repository.sendEmailOtp(any()));
+
       await tester.enterText(find.byType(TextField), 'asha@example.com');
       await tester.pump();
-      expect(enabled(), isTrue);
+
+      expect(find.text('Enter a valid email address'), findsNothing);
       await harness.dispose();
     });
 
@@ -290,7 +297,13 @@ void main() {
       await harness.settle();
 
       expect(find.text('This email is already linked to another account'), findsOneWidget);
+      expect(find.byType(SnackBar), findsNothing);
       expect(find.byType(SignupEmailScreen), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), 'asha@example.org');
+      await tester.pump();
+
+      expect(find.text('This email is already linked to another account'), findsNothing);
       await harness.dispose();
     });
 
