@@ -341,6 +341,51 @@
         "lastSyncedAt": "2026-10-08T19:07:05Z",
         "status": "in-sync"
       }
+    },
+    {
+      "figma": {
+        "fileKey": "D1BtJ1lsMVRBLtUPBv1UIr",
+        "nodeId": "3:247",
+        "nodeName": "Mobile No Sign In"
+      },
+      "local": {
+        "components": [
+          {
+            "path": "lib/features/auth/presentation/screens/sign_in_mobile_screen.dart",
+            "tier": "page"
+          },
+          {
+            "path": "lib/features/auth/presentation/screens/sign_in_otp_screen.dart",
+            "tier": "page"
+          },
+          {
+            "path": "lib/features/auth/presentation/widgets/auth_form_scaffold.dart",
+            "tier": "template"
+          },
+          {
+            "path": "lib/features/auth/presentation/widgets/auth_switch_prompt.dart",
+            "tier": "molecule"
+          },
+          {
+            "path": "lib/features/auth/presentation/widgets/mobile_number_field.dart",
+            "tier": "molecule"
+          },
+          {
+            "path": "lib/core/widgets/brand_gradient_button.dart",
+            "tier": "atom"
+          }
+        ],
+        "tokens": [
+          "lib/core/theme/colors.dart",
+          "lib/core/theme/text_styles.dart"
+        ],
+        "stories": []
+      },
+      "sync": {
+        "contentHash": "sha256:f78c3ab96676a689e76cc7906c20d9ad02c9493f757b29e699a618dbfeb55034",
+        "lastSyncedAt": "2026-10-09T15:09:36Z",
+        "status": "in-sync"
+      }
     }
   ]
 }
