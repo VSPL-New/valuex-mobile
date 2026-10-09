@@ -9,7 +9,8 @@ void main() {
   final titles = <String, (String, AccountStatus?)>{
     RouteNames.terms: ('Terms and Conditions', AccountStatus.signupPending),
     RouteNames.accountBlocked: ('Account unavailable', AccountStatus.suspended),
-    RouteNames.home: ('Home — coming soon', AccountStatus.active),
+    RouteNames.home: ('Featured Deals Near You', AccountStatus.active),
+    RouteNames.categories: ('All categories', AccountStatus.active),
     RouteNames.signupProfile: ('Create your profile', AccountStatus.signupPending),
     RouteNames.signupAadhaar: ('Verify Aadhaar', AccountStatus.identityVerificationPending),
     RouteNames.signupEmail: ('Verify Email', AccountStatus.emailVerificationPending),

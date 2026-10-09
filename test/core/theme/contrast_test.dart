@@ -28,6 +28,12 @@ void main() {
     'error text on the page': (AppColors.brandError, AppColors.brandBackground),
     'error text on white': (AppColors.brandError, AppColors.brandSurface),
     'error text on the input fill': (AppColors.brandError, AppColors.brandSurfaceTint),
+    'card price on white': (AppColors.brandLink, AppColors.brandSurface),
+    'condition chip on its tint': (AppColors.brandForeground, AppColors.brandSurfaceTint),
+    'Boosted badge': (AppColors.brandOnPrimary, AppColors.brandAccent),
+    'promo text on the dark card': (AppColors.brandOnPrimary, AppColors.brandForeground),
+    'active tab label on white': (AppColors.brandLink, AppColors.brandSurface),
+    'inactive tab label on white': (AppColors.brandMutedText, AppColors.brandSurface),
   };
 
   textPairs.forEach((name, pair) {

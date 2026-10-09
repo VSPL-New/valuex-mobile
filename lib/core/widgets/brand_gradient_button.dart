@@ -56,12 +56,15 @@ class BrandGradientButton extends StatelessWidget {
                   ),
                   child: Center(
                     child: isLoading
-                        ? const SizedBox(
-                            width: 22,
-                            height: 22,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.5,
-                              color: AppColors.brandOnPrimary,
+                        ? Semantics(
+                            label: label,
+                            child: const SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                color: AppColors.brandOnPrimary,
+                              ),
                             ),
                           )
                         : Text(label, textAlign: TextAlign.center, style: AppTextStyles.button),

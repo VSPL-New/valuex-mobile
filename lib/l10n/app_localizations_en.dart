@@ -32,9 +32,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get splashInitializing => 'Initializing A1 Engine...';
 
   @override
-  String get homeComingSoon => 'Home — coming soon';
-
-  @override
   String get onboardingTitle1 => 'JustQlic Makes Selling Simple';
 
   @override
@@ -482,4 +479,185 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get termsSection8 => '8. Contact us';
+
+  @override
+  String get loading => 'Loading';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navSearch => 'Search';
+
+  @override
+  String get navSell => 'Sell';
+
+  @override
+  String get navChats => 'Chats';
+
+  @override
+  String get navProfile => 'Profile';
+
+  @override
+  String get homeSearchHint => 'Search here ...';
+
+  @override
+  String get homeSearchLabel => 'Search';
+
+  @override
+  String get homePhotoSearchLabel => 'Search with a photo';
+
+  @override
+  String homeCartLabel(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Cart, $count items',
+      one: 'Cart, 1 item',
+      zero: 'Cart, empty',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeNotificationsLabel(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Notifications, $count unread',
+      one: 'Notifications, 1 unread',
+      zero: 'Notifications',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeLocationLabel(String place) {
+    return 'Location: $place. Change';
+  }
+
+  @override
+  String get homeLocating => 'Finding your location…';
+
+  @override
+  String get homeSetLocation => 'Set your location';
+
+  @override
+  String get homeSetLocationHint => 'Tap to choose';
+
+  @override
+  String get homePromoSection => '#SPECIAL FOR YOU';
+
+  @override
+  String get homeSeeAll => 'See All';
+
+  @override
+  String homeSeeAllCount(int count) {
+    return 'See All ($count)';
+  }
+
+  @override
+  String get homeBrowse => 'Browse';
+
+  @override
+  String get homeMore => 'More';
+
+  @override
+  String get homeFeaturedTitle => 'Featured Deals Near You';
+
+  @override
+  String get homeBoosted => 'BOOSTED';
+
+  @override
+  String get conditionNew => 'New';
+
+  @override
+  String get conditionLikeNew => 'Like New';
+
+  @override
+  String get conditionExcellent => 'Excellent';
+
+  @override
+  String get conditionGood => 'Good';
+
+  @override
+  String get conditionFair => 'Fair';
+
+  @override
+  String get conditionPoor => 'Poor';
+
+  @override
+  String homeRatingLabel(String rating) {
+    return 'Rated $rating out of 5';
+  }
+
+  @override
+  String get homeLoadFailed => 'Unable to load Home. Pull down or tap Retry';
+
+  @override
+  String get homeNoListings => 'No items near you yet. Try another address';
+
+  @override
+  String get homeCategoriesFailed => 'Unable to load categories. Try again';
+
+  @override
+  String get homeLocationPromptTitle => 'See items near you';
+
+  @override
+  String get homeLocationPromptBody =>
+      'Allow location access to see items near you, or enter your address.';
+
+  @override
+  String get homeUseMyLocation => 'Use my location';
+
+  @override
+  String get homeEnterAddress => 'Enter address';
+
+  @override
+  String get homeOpenSettings => 'Open settings';
+
+  @override
+  String get homeLocationDenied =>
+      'Location access is off. Enter your address to see items near you';
+
+  @override
+  String get homeLocationUnavailable =>
+      'Unable to detect your location. Enter your address instead';
+
+  @override
+  String get homeLocationServiceOff =>
+      'Location is turned off on this device. Turn it on or enter your address';
+
+  @override
+  String get homeLocationSheetTitle => 'Choose your location';
+
+  @override
+  String get homeAreaLabel => 'AREA (OPTIONAL)';
+
+  @override
+  String get homeAreaHint => 'For example, Andheri East';
+
+  @override
+  String get homeCityLabel => 'CITY';
+
+  @override
+  String get homeCityHint => 'Your city';
+
+  @override
+  String get homeSaveLocation => 'Save location';
+
+  @override
+  String get homeCityError => 'Enter a valid city';
+
+  @override
+  String get homeStateError => 'Select your state';
+
+  @override
+  String get homeFeatureComingSoon => 'This is coming soon';
+
+  @override
+  String get homeSellAadhaarRequired => 'Please complete Aadhaar verification to proceed';
+
+  @override
+  String get categoriesTitle => 'All categories';
 }

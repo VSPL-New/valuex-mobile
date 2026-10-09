@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:valuex_mobile/app.dart';
 import 'package:valuex_mobile/core/config/app_config.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
@@ -12,7 +13,9 @@ import 'package:valuex_mobile/core/security/screen_protection_service.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/user_profile.dart';
 import 'package:valuex_mobile/features/auth/presentation/providers/auth_providers.dart';
+import 'package:valuex_mobile/features/home/presentation/providers/home_providers.dart';
 
+import 'fake_location_service.dart';
 import 'mocks.dart';
 
 final testConfig = AppConfig.parse(
@@ -42,10 +45,12 @@ class AppHarness {
   final MockAuthRepository repository = MockAuthRepository();
   final MockApiClient apiClient = MockApiClient();
   final FakeScreenProtection screenProtection = FakeScreenProtection();
+  final FakeLocationService locationService = FakeLocationService();
   final StreamController<void> sessionExpired = StreamController<void>.broadcast();
   final AppConfig config;
 
   AppHarness(this.tester, {AppConfig? config}) : config = config ?? testConfig {
+    SharedPreferences.setMockInitialValues({});
     when(() => apiClient.onSessionExpired).thenAnswer((_) => sessionExpired.stream);
     when(() => repository.hasSession()).thenAnswer((_) async => false);
     when(() => repository.clearSession()).thenAnswer((_) async {});
@@ -80,6 +85,7 @@ class AppHarness {
           authRepositoryProvider.overrideWithValue(repository),
           apiClientProvider.overrideWithValue(apiClient),
           screenProtectionServiceProvider.overrideWithValue(screenProtection),
+          locationServiceProvider.overrideWithValue(locationService),
         ],
         child: const ValueXApp(),
       ),

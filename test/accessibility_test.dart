@@ -27,6 +27,8 @@ void main() {
     RouteNames.signupProfile: AccountStatus.signupPending,
     RouteNames.terms: AccountStatus.signupPending,
     RouteNames.accountBlocked: AccountStatus.suspended,
+    RouteNames.home: AccountStatus.active,
+    RouteNames.categories: AccountStatus.active,
   };
 
   for (final locale in const [Locale('en'), Locale('hi')]) {

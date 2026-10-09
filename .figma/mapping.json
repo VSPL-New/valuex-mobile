@@ -36,12 +36,27 @@
       },
       "local": {
         "components": [
-          { "path": "lib/features/onboarding/presentation/onboarding_screen.dart", "tier": "page" },
-          { "path": "lib/features/onboarding/presentation/widgets/onboarding_slide.dart", "tier": "template" },
-          { "path": "lib/features/onboarding/presentation/widgets/onboarding_nav_button.dart", "tier": "atom" },
-          { "path": "lib/features/onboarding/presentation/widgets/onboarding_dots.dart", "tier": "molecule" }
+          {
+            "path": "lib/features/onboarding/presentation/onboarding_screen.dart",
+            "tier": "page"
+          },
+          {
+            "path": "lib/features/onboarding/presentation/widgets/onboarding_slide.dart",
+            "tier": "template"
+          },
+          {
+            "path": "lib/features/onboarding/presentation/widgets/onboarding_nav_button.dart",
+            "tier": "atom"
+          },
+          {
+            "path": "lib/features/onboarding/presentation/widgets/onboarding_dots.dart",
+            "tier": "molecule"
+          }
         ],
-        "tokens": ["lib/core/theme/colors.dart", "lib/core/theme/text_styles.dart"],
+        "tokens": [
+          "lib/core/theme/colors.dart",
+          "lib/core/theme/text_styles.dart"
+        ],
         "stories": []
       },
       "sync": {
@@ -58,10 +73,19 @@
       },
       "local": {
         "components": [
-          { "path": "lib/features/onboarding/presentation/onboarding_screen.dart", "tier": "page" },
-          { "path": "lib/features/onboarding/presentation/widgets/onboarding_slide.dart", "tier": "template" }
+          {
+            "path": "lib/features/onboarding/presentation/onboarding_screen.dart",
+            "tier": "page"
+          },
+          {
+            "path": "lib/features/onboarding/presentation/widgets/onboarding_slide.dart",
+            "tier": "template"
+          }
         ],
-        "tokens": ["lib/core/theme/colors.dart", "lib/core/theme/text_styles.dart"],
+        "tokens": [
+          "lib/core/theme/colors.dart",
+          "lib/core/theme/text_styles.dart"
+        ],
         "stories": []
       },
       "sync": {
@@ -78,10 +102,19 @@
       },
       "local": {
         "components": [
-          { "path": "lib/features/onboarding/presentation/onboarding_screen.dart", "tier": "page" },
-          { "path": "lib/features/onboarding/presentation/widgets/onboarding_slide.dart", "tier": "template" }
+          {
+            "path": "lib/features/onboarding/presentation/onboarding_screen.dart",
+            "tier": "page"
+          },
+          {
+            "path": "lib/features/onboarding/presentation/widgets/onboarding_slide.dart",
+            "tier": "template"
+          }
         ],
-        "tokens": ["lib/core/theme/colors.dart", "lib/core/theme/text_styles.dart"],
+        "tokens": [
+          "lib/core/theme/colors.dart",
+          "lib/core/theme/text_styles.dart"
+        ],
         "stories": []
       },
       "sync": {
@@ -98,10 +131,19 @@
       },
       "local": {
         "components": [
-          { "path": "lib/features/onboarding/presentation/onboarding_screen.dart", "tier": "page" },
-          { "path": "lib/features/onboarding/presentation/widgets/onboarding_slide.dart", "tier": "template" }
+          {
+            "path": "lib/features/onboarding/presentation/onboarding_screen.dart",
+            "tier": "page"
+          },
+          {
+            "path": "lib/features/onboarding/presentation/widgets/onboarding_slide.dart",
+            "tier": "template"
+          }
         ],
-        "tokens": ["lib/core/theme/colors.dart", "lib/core/theme/text_styles.dart"],
+        "tokens": [
+          "lib/core/theme/colors.dart",
+          "lib/core/theme/text_styles.dart"
+        ],
         "stories": []
       },
       "sync": {
@@ -118,14 +160,36 @@
       },
       "local": {
         "components": [
-          { "path": "lib/features/auth/presentation/screens/create_account_screen.dart", "tier": "page" },
-          { "path": "lib/features/auth/presentation/widgets/labeled_divider.dart", "tier": "molecule" },
-          { "path": "lib/core/widgets/gradient_button.dart", "tier": "atom" },
-          { "path": "lib/core/widgets/tonal_button.dart", "tier": "atom" },
-          { "path": "lib/core/widgets/outlined_icon_button.dart", "tier": "atom" },
-          { "path": "lib/core/widgets/square_back_button.dart", "tier": "atom" }
+          {
+            "path": "lib/features/auth/presentation/screens/create_account_screen.dart",
+            "tier": "page"
+          },
+          {
+            "path": "lib/features/auth/presentation/widgets/labeled_divider.dart",
+            "tier": "molecule"
+          },
+          {
+            "path": "lib/core/widgets/gradient_button.dart",
+            "tier": "atom"
+          },
+          {
+            "path": "lib/core/widgets/tonal_button.dart",
+            "tier": "atom"
+          },
+          {
+            "path": "lib/core/widgets/outlined_icon_button.dart",
+            "tier": "atom"
+          },
+          {
+            "path": "lib/core/widgets/square_back_button.dart",
+            "tier": "atom"
+          }
         ],
-        "tokens": ["lib/core/theme/colors.dart", "lib/core/theme/text_styles.dart", "pubspec.yaml"],
+        "tokens": [
+          "lib/core/theme/colors.dart",
+          "lib/core/theme/text_styles.dart",
+          "pubspec.yaml"
+        ],
         "stories": []
       },
       "sync": {
@@ -142,16 +206,139 @@
       },
       "local": {
         "components": [
-          { "path": "lib/features/auth/presentation/screens/signup_mobile_screen.dart", "tier": "page" },
-          { "path": "lib/features/auth/presentation/widgets/mobile_number_field.dart", "tier": "molecule" },
-          { "path": "lib/core/widgets/brand_gradient_button.dart", "tier": "atom" }
+          {
+            "path": "lib/features/auth/presentation/screens/signup_mobile_screen.dart",
+            "tier": "page"
+          },
+          {
+            "path": "lib/features/auth/presentation/widgets/mobile_number_field.dart",
+            "tier": "molecule"
+          },
+          {
+            "path": "lib/core/widgets/brand_gradient_button.dart",
+            "tier": "atom"
+          }
         ],
-        "tokens": ["lib/core/theme/colors.dart"],
+        "tokens": [
+          "lib/core/theme/colors.dart"
+        ],
         "stories": []
       },
       "sync": {
         "contentHash": "sha256:36586ee1aa95a5deb936b1594ceeed42a9fb3c41bfbe48a85dccef03e3165749",
         "lastSyncedAt": "2026-10-04T10:38:28Z",
+        "status": "in-sync"
+      }
+    },
+    {
+      "figma": {
+        "fileKey": "D1BtJ1lsMVRBLtUPBv1UIr",
+        "nodeId": "2017:635",
+        "nodeName": "Home Page"
+      },
+      "local": {
+        "components": [
+          {
+            "path": "lib/features/home/presentation/home_screen.dart",
+            "tier": "page"
+          },
+          {
+            "path": "lib/features/home/presentation/category_selection_screen.dart",
+            "tier": "page"
+          },
+          {
+            "path": "lib/features/home/presentation/widgets/promo_carousel.dart",
+            "tier": "organism"
+          },
+          {
+            "path": "lib/features/home/presentation/widgets/category_tile.dart",
+            "tier": "molecule"
+          },
+          {
+            "path": "lib/features/home/presentation/widgets/listing_card.dart",
+            "tier": "molecule"
+          },
+          {
+            "path": "lib/features/home/presentation/widgets/section_header.dart",
+            "tier": "molecule"
+          },
+          {
+            "path": "lib/features/home/presentation/widgets/location_prompt.dart",
+            "tier": "molecule"
+          },
+          {
+            "path": "lib/features/home/presentation/widgets/location_sheet.dart",
+            "tier": "organism"
+          },
+          {
+            "path": "lib/core/widgets/app_image.dart",
+            "tier": "atom"
+          }
+        ],
+        "tokens": [
+          "lib/core/theme/colors.dart",
+          "lib/core/theme/text_styles.dart",
+          "lib/core/constants/app_assets.dart",
+          "pubspec.yaml"
+        ],
+        "stories": []
+      },
+      "sync": {
+        "contentHash": "sha256:4e632471fe53e89520aef00bb466d481cd2158acd3ff76d6a193e6aeef94abca",
+        "lastSyncedAt": "2026-10-08T19:07:05Z",
+        "status": "in-sync"
+      }
+    },
+    {
+      "figma": {
+        "fileKey": "D1BtJ1lsMVRBLtUPBv1UIr",
+        "nodeId": "2019:2022",
+        "nodeName": "Location & Notification Row"
+      },
+      "local": {
+        "components": [
+          {
+            "path": "lib/features/home/presentation/widgets/home_header.dart",
+            "tier": "organism"
+          },
+          {
+            "path": "lib/core/widgets/count_badge_icon_button.dart",
+            "tier": "atom"
+          }
+        ],
+        "tokens": [
+          "lib/core/theme/text_styles.dart"
+        ],
+        "stories": []
+      },
+      "sync": {
+        "contentHash": "sha256:c7e523fd25a1b13011a432760ca689b926fc63699f0449f95eeebd3a302ac75f",
+        "lastSyncedAt": "2026-10-08T19:07:05Z",
+        "status": "in-sync"
+      }
+    },
+    {
+      "figma": {
+        "fileKey": "D1BtJ1lsMVRBLtUPBv1UIr",
+        "nodeId": "2021:2850",
+        "nodeName": "App (bottom navigation)"
+      },
+      "local": {
+        "components": [
+          {
+            "path": "lib/core/widgets/brand_bottom_nav.dart",
+            "tier": "organism"
+          }
+        ],
+        "tokens": [
+          "lib/core/theme/colors.dart",
+          "lib/core/theme/text_styles.dart"
+        ],
+        "stories": []
+      },
+      "sync": {
+        "contentHash": "sha256:d5367d705e7c90abc0a83ef4e7d793abc447f5a3c92aa027f5314fa84deb5cab",
+        "lastSyncedAt": "2026-10-08T19:07:05Z",
         "status": "in-sync"
       }
     }

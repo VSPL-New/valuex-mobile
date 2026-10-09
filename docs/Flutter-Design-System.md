@@ -75,6 +75,12 @@ Two families only. Do not add a third.
 | `link` | DM Sans 16 / 24 semi-bold, `brandLink` (tappable text; give it a 48 dp tap area) |
 | `button` | DM Sans 16, w700, white; on `OutlinedIconButton` the colour is `brandForeground` |
 | `dividerLabel` | DM Sans 14, w500, spacing -0.28 |
+| `caption` | DM Sans 12 / 16 semi-bold, muted. **Badges, chips and tab labels only**, never body or helper text |
+| `sectionTitle` | Poppins 16 / 24 semi-bold (a section of a page: Browse, Featured Deals) |
+| `linkSmall` | DM Sans 14 / 20 semi-bold, `brandLink` (See All; give it a 48 dp tap area) |
+| `cardTitle`, `cardPrice` | DM Sans 14 semi-bold foreground; DM Sans 16 bold `brandLink` (listing cards) |
+| `onGradientStrong`, `onGradient` | DM Sans 14 bold and regular white, for the brand gradient header and dark promo cards |
+| `promoTitle` | Poppins 18 / 24 semi-bold white (promo card heading) |
 
 Inter, Outfit, Plus Jakarta Sans, General Sans and Parkinsans are not used.
 
@@ -123,6 +129,9 @@ Shared widgets live in `lib/core/widgets/`. Reuse them; extract a new shared ato
 | `OtpInput` | molecule | Six-digit code drawn as boxes over one real text field (paste, autofill, backspace). Boxes use the input tint and `brandControlBorder`; the current box and errors use 2 px `brandPrimary` and `brandError` borders. Boxes grow with the text size. Screen readers hear the typed digits. Give it a new `key` to empty it. |
 | `FieldError` | atom | **The one way to show a form error:** error icon plus `error` text in a live region. Use it under every field and OTP input. |
 | `ProtectedScreen` | utility | Wraps a screen that must block screenshots (Aadhaar now; payment, escrow and bank details later). Reference counted through `ScreenProtectionService`. |
+| `AppImage` | atom | An image from an asset path or a network URL (cached) with a neutral fallback; decorative, so the control that holds it carries the label. Pass `cacheWidth` for large images in lists. |
+| `CountBadgeIconButton` | atom | Round translucent icon button for the brand gradient, 40 px drawing in a 48 dp tap area, with a white dot when there is something new. The label carries the count ("Cart, 2 items"). |
+| `BrandBottomNav` | organism | Main navigation: Home, Search, a raised gradient Sell button, Chats, Profile. The current tab is shown by colour and a short gradient bar, and announced as selected. Labels grow up to 1.4x text size only (five tabs share the width); each tab is announced by its full label. |
 
 Auth feature widgets (`lib/features/auth/presentation/widgets/`): `AuthFormScaffold` (back, logo, title, scrolling content, fixed bottom actions; used by every registration step), `OtpVerificationView`, `AadhaarNoteCard` (tint card with `brandAccent` icon), `GenderSelector` (three equal choices, stacked one per line at large text; selected = `brandPrimary` 2 px border on `brandSurfaceTint`; unselected `brandControlBorder`; takes an `errorText`), `DateOfBirthField` (typed DD/MM/YYYY plus a calendar icon), `StatePickerField` (field-style row opening a list sheet), `AvatarImage` and the avatar picker sheet.
 
@@ -130,12 +139,14 @@ Auth feature widgets (`lib/features/auth/presentation/widgets/`): `AuthFormScaff
 
 - Use only the widgets above. **Do not create a new button style or a per-screen variant.**
 - One primary (`BrandGradientButton`) per screen. A second action next to it uses `SingleToneButton`. Alternative methods use `OutlinedIconButton`. Use `AppButton` only for generic utility actions.
-- All buttons are at least 56 high and grow when the label wraps at large text (never truncate a label). Disabled means `onPressed: null` (shown at 40% opacity); do not hide or restyle disabled buttons.
+- All buttons are at least 56 high and grow when the label wraps at large text (never truncate a label). `onPressed: null` (shown at 40% opacity) is only for "busy" (`isLoading`) or a state the screen already explains. **Never dim a button with no visible reason**: keep it enabled and show the error under the field on tap (see the form error rule below). A loading button keeps its label for screen readers.
 - Button labels use sentence case ("Create an Account", "Sign In"), not UPPERCASE.
 - Only `brandPrimary` and `brandAccent` (the two ends of the brand gradient) may be used as button colours.
 - Placement: bottom-anchored actions respect the safe-area inset; stacked buttons are separated by `AppSpacing.sm` to `AppSpacing.md`.
 
 Feature widgets: `OnboardingSlide`, `OnboardingDots` (one dot per page), `OnboardingNavButton`, `LabeledDivider`, `MobileNumberField` (+91 prefix, 10 digits).
+
+Home feature widgets (`lib/features/home/presentation/widgets/`): `HomeHeader` (gradient header: location, cart and bell buttons, search bar with photo search), `PromoCarousel` and `PromoCard` (dark `brandForeground` card, text and a `BrandGradientButton`; swipeable, dots only when there is more than one; cards are at least 232 high and grow with the text), `CategoryRow` and `CategoryTile` (first five categories scroll sideways, More stays in view; the tile is as wide as the text needs), `ListingCard` (announced as one button with title, price, city, rating, condition and Boosted; edge `brandControlBorder`; the condition chip sits on `brandSurfaceTint` in `brandForeground` text, so condition is told by words, not by a colour), `SectionHeader` (heading plus optional See All), `CarouselDots`, `LocationPrompt` (shown at the top of Home until a place is known) and the location sheet. Two-column listing grids are rows of two equal-height cards, never a fixed-height grid, so they grow with the text size.
 
 Inputs inherit `InputDecorationTheme` from `AppTheme`: tint fill, 12 px radius, 1 px `brandControlBorder`, 2 px `brandPrimary` when focused, 2 px `brandError` on error. Do not restyle them per screen.
 
@@ -151,18 +162,18 @@ Inputs inherit `InputDecorationTheme` from `AppTheme`: tint fill, 12 px radius, 
 - Anchor bottom content (buttons, CTAs) to the bottom using Figma offsets, and always add the system safe-area inset.
 - Respect `SafeArea` at the top; do not draw under the status bar unless the design requires it.
 - Page side padding is 24 (`AppSpacing.lg`) on Make-based pages and 21.5 on the Figma Create Account page.
-- Do not use fixed heights for text that can wrap. Fixed-height text boxes (currently onboarding title 76 and subtitle 69) must be replaced before large text sizes are supported (see 7).
+- Do not use fixed heights for text that can wrap. Use a minimum height and let text grow (the old onboarding fixed boxes are gone). Scrolling pages must still reach every control at 200% text.
 
 ---
 
 ## 6. Figma to Flutter workflow
 
 1. Read the target node with the Figma tools and load the `nova-figma-to-code` skill first. Read the Make source for branding.
-2. Map colours, fonts, radii, spacing and component styles to the tokens and components in this document. If anything conflicts or has no token, stop and follow section 6.1 before writing code for it.
+2. Map colours, fonts, radii, spacing and component styles to the tokens and components in this document. If anything conflicts or has no token, stop and follow section 6.1 before writing code for it. Then run the compliance pass in section 7.1 on the frame **before** writing code: a Figma colour, size or control that fails it is a conflict.
 3. Reuse existing components. Classify every new element (atom, molecule, organism, template, page).
 4. Download exact assets with `curl`; register paths in `AppAssets`.
 5. Record the node in `.figma/mapping.json` (path, tier, content hash). On a revisit, check for drift and ask before overwriting.
-6. Run `dart format`, `flutter analyze` and `flutter test`. Verify on the Android emulator and iOS simulator with screenshots.
+6. Add the screen to `test/all_screens_accessibility_test.dart` and `test/screen_headings_test.dart`, and a row to `test/core/theme/contrast_test.dart` for any new colour pair. Run `dart format`, `flutter analyze` and `flutter test`. Verify on the Android emulator and iOS simulator with screenshots.
 7. Branch from `main` (`feature/<kebab-case>`), open a PR to `main`. List every conflict found and the decision taken in the PR description.
 
 ### 6.1 Conflicting design tokens (mandatory protocol)
@@ -209,7 +220,7 @@ Target: **WCAG 2.2 AA** for all screens in the first release.
 | Text contrast | Body text at least 4.5:1; large text (24 px, or 18.7 px bold) at least 3:1; UI components and icons at least 3:1 |
 | Tap targets | At least `AppSizes.minTouchTarget` (48×48 dp, CODING_STANDARDS 3.4). When the visual is smaller (Back 35 px, Skip pill 31 px high, onboarding arrows 45 px) keep the drawing and extend the tap area: a `SizedBox` of the minimum size with an opaque `GestureDetector`, plus `Semantics(button: true, label: ..., onTap: ...)`. |
 | Text scaling | Layouts must work at 200% system font size: no clipping, scrollable pages, no fixed-height text boxes (use a minimum height and let text grow). Text laid over an illustration gets a solid backing when the text is enlarged (see `OnboardingSlide`). |
-| Screen readers | Every interactive element has a semantic label (icon-only buttons must pass a `label`); screen titles are marked `Semantics(header: true)`; page indicators say "Page x of y"; decorative images are excluded; logo uses the label "JustQlic" |
+| Screen readers | Every interactive element has a semantic label (icon-only buttons must pass a `label`); screen titles and section titles are marked `Semantics(header: true)`; page indicators say "Page x of y"; decorative images are excluded; logo uses the label "JustQlic"; a standalone spinner says "Loading" (`LoadingIndicator`), a button spinner keeps the button label; every text field announces its label |
 | Focus and keyboard | Logical focus order; visible focus; inputs use correct `keyboardType` and autofill hints |
 | Motion | Respect reduce-motion: wrap every animation duration in `motionDuration(context, ...)` (`core/utils/motion.dart`); never pass a zero duration to `animateToPage` or `nextPage`, jump instead. The splash bar is shown full, onboarding changes page at once. |
 | State | Never rely on colour alone to show errors or selection |
@@ -233,6 +244,24 @@ All text colours reach 4.5:1 (links use `brandLink`; do not use `brandPrimary` f
 New registration controls (gender choices, state picker, calendar icon, show/hide, resend and change links, avatar tiles, switch) are 44 dp or larger. The inline "Terms and Conditions" link inside a sentence is smaller; it is the only exception.
 
 **Enforced by tests (US-110):** `test/all_screens_accessibility_test.dart` runs Flutter's tap target (Android 48 dp, iOS 44 pt), label and text contrast guidelines on every screen; `test/screen_headings_test.dart` checks headings; `test/reduce_motion_test.dart` checks reduce motion. **Add every new screen to the first two.** A screen that fails them does not merge.
+
+### 7.1 Compliance pass for every screen imported from Figma
+
+These are the rules behind the 20 findings of the US-110 UI review (`App UI review findings.md`). Apply them to every frame before coding. Figma values that fail them are conflicts (section 6.1); the default is the document token.
+
+| Finding | Check on the Figma frame | Do this in Flutter |
+|---|---|---|
+| G1 to G5 colour | Every text colour against its background: 4.5:1 for text (3:1 for 24 px or 18.7 px bold and larger). Typical Figma failures: light grey subtitles, light blue links, pastel placeholders, red `#EF4444` errors | Use `brandMutedText`, `brandPlaceholder`, `brandLink`, `brandError`; never `brandPrimary` for text. Add a `contrast_test.dart` row for any new pair |
+| G6 control edges | Fields, chips, pickers, cards and outlined buttons drawn with a faint or no border | `brandControlBorder` (3:1) edge, 2 px `brandPrimary` focus, 2 px `brandError` error. Inputs inherit this from `AppTheme`; do not restyle |
+| G7, G8 buttons | Disabled or dimmed buttons, colours beyond the gradient ends | Only the button set in section 4. Dim only when busy or when the reason is shown |
+| G9, G11 type | Text under 14 px for anything important (errors, hints, timers, dates), copied inline styles | Use `AppTextStyles` (`error`, `hint`, `label`, `link`, `input`). 12 px only for non-essential captions |
+| G10, G12 large text | Fixed-height text boxes, text laid over images, rows that will not wrap | Lay out at 200% in English and Hindi: minimum heights, wrapping labels, scrolling pages, a solid backing behind text over illustrations. The Hindi heading line height still needs a visual check |
+| G13 to G15 touch | Any control drawn under 48×48 (back, skip, links, icons, chips) | `AppSizes.minTouchTarget` tap area around the unchanged drawing; the inline legal link in a sentence is the only exception |
+| G16, G17 screen reader | Icon-only controls, page dots, titles, spinners | A `label` on every control, `header: true` on titles and section titles, "Page x of y", a loading label |
+| G18, G19 errors | Errors shown in a snackbar or dialog, submit buttons dimmed until valid | `FieldError` under the field (icon plus text, live region), scrolled into view, kept until the user edits; the submit button stays enabled and validates on tap. Snackbars only for passing messages |
+| G20 motion | Animations, progress bars, auto-scrolling | `motionDuration(context, ...)`; no animated change when the system asks for reduced motion |
+
+Not yet covered: route transitions and reduce motion, a maximum text scale (layouts are tested to 200%), and a TalkBack and VoiceOver check on real devices.
 
 **New screen checklist:** tokens only; 48 dp tap areas; every control labelled; title and section titles marked as headings; errors under the field with `FieldError`, submit buttons enabled with validation on tap, the first message scrolled into view; text laid out at 200% in English and Hindi; animations through `motionDuration`; a row in `contrast_test.dart` for any new colour pair; strings in both ARB files.
 
@@ -272,6 +301,8 @@ Don't:
 - Use Inter, Outfit, Plus Jakarta Sans, General Sans or Parkinsans.
 - Create a back button, input or button style per screen.
 - Show a form error only in a snackbar, or disable a submit button without saying why.
+- Use a control smaller than 48×48 dp, text under 14 px for errors or hints, or a text colour below 4.5:1.
+- Use a fixed-height box for text that can wrap, or an animation that ignores reduce motion.
 - Hand-draw icons or edit exported assets.
 - Silently copy a Figma value that conflicts with a token, or silently change a token.
 
@@ -290,6 +321,12 @@ Don't:
 | Figma frames for the Sign Up form, gender choices, date field, state picker, avatar picker and OTP boxes (built from tokens without a design) | Designer |
 | Role-based `ThemeExtension` and dark theme | Engineering |
 | Page transitions between routes do not yet respect reduce motion (GoRouter default transitions) | Engineering |
+| Real listing photos: the Sony camera card uses the Cameras category picture because the Figma image was broken; all Home images and the promo are sample content | Designer, Product |
+| The small shield icon after the Good and Excellent condition chips in Figma has no stated meaning, so it is not built. Confirm what it should say (for example a verified seller) | Product |
+| Promo cards: content (title, text, image, target, dates) is created by the product team before launch; one sample card is shown today | Product |
+| Home location: the typed-address sheet is a stand-in for the address component of US-108 | Engineering |
+| Home needs backend endpoints for categories, the home feed and promos (a mock repository supplies them today) | Engineering |
+| Native-speaker review of the new Home strings in `lib/l10n/app_hi.arb` | Product |
 
 ---
 
@@ -333,6 +370,14 @@ Decisions taken so far. Add a row for every approved conflict resolution (sectio
 | 2026-10-08 | Sign Up | Submit dimmed with no reason; messages only for typed-in invalid values; unlabeled fields and switch; faint edges on choices and pickers; 44 dp controls; gender words broken at 200% | **Applied from the approved patterns:** Submit stays enabled and shows a message under every missing or invalid field, scrolling to the first; fields and the terms switch are labelled; `brandControlBorder` edges; 48 dp; gender choices stack at large text; server errors show under the form |
 | 2026-10-08 | Terms, Account unavailable, Home, Splash | Plain titles; 44 dp close button; 12 px splash label; fixed-height blocked page | **Applied:** titles and Terms sections are headings; 48 dp close button; 14 px splash label; blocked page scrolls at large text |
 | 2026-10-08 | Reduce motion | Animations ignored the system setting | **Applied:** `motionDuration` helper; splash bar static, onboarding jumps, dots and scroll-to-message do not animate |
+| 2026-10-08 | Blocking errors (G18) | Errors in a disappearing snackbar | **Approved:** inline `FieldError` everywhere; snackbars only for passing messages |
+| 2026-10-08 | Loading (G17) | Spinners were silent and a loading button lost its name | **Applied:** `LoadingIndicator` says "Loading" (en, hi); a button spinner keeps the button label |
+
+| 2026-10-09 | Home page (Figma `2017:635`) | Header gradient ran left to right; page background was a lilac-to-white gradient; promo card used a dark navy gradient; frame was 390 wide | **Owner rule: the design system wins.** Header uses `AppGradients.brand`; page is `brandBackground`; promo card is solid `brandForeground`; layout follows the 428 base and grows with the screen |
+| 2026-10-09 | Home text and colours | Poppins used for body text; 9 to 12 px for titles, city, rating, chips and tab labels; price `#2B7FFF` (3.7:1), muted `#64748B` and inactive tab `#94A3B8` (2.6:1) fail contrast; chips in green and magenta tints | **Applied:** DM Sans for body; card text 14 and 16 px; `caption` (12 px) only for badges, chips and tab labels; price `brandLink`; muted `brandMutedText`; chips `brandSurfaceTint` with `brandForeground` text |
+| 2026-10-09 | Home controls | Cards, category tiles, See All, dots, Skip-size icons and the camera icon were under 48 dp; fixed card heights; nothing but colour told the current tab | **Applied:** 48 dp tap areas, card edge `brandControlBorder`, equal-height rows that grow with text, current tab also marked by a bar and announced as selected |
+| 2026-10-09 | Home bell and cart | Both named "View notifications", counts only as dots | **Owner:** bell on the far right with the cart next to it. Each announces its count ("Cart, 2 items", "Notifications, 3 unread") |
+| 2026-10-09 | Home Sell button and promo button | New raised button and a 36 px promo button | **Applied:** raised Sell button inside `BrandBottomNav` (a nav item, not a general button); the promo uses `BrandGradientButton` at 56 dp, so the card is taller than in Figma |
 
 ### Approved exceptions
 
