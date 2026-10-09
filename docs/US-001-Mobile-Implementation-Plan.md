@@ -43,7 +43,7 @@ Aadhaar note text (verbatim from you):
 
 **In scope (backend, separate PR):** section 6.
 
-**Out of scope here:** returning-user login UI (US-106), Google sign-in (US-101), Google Places and address verification (US-108), SSL pinning, root detection and device ID (US-109), profile hub, logout, security settings, avatar editing after sign-up (US-003), real Home content, the third-party Aadhaar integration, a language-picker screen (US-044; the app follows the device language, English fallback). "Sign In" and "Google" buttons stay "coming soon".
+**Out of scope here:** returning-user login UI (US-106; delivered later, see its plan in `Documents/US-Implementation-Plans`), Google sign-in (US-101), Google Places and address verification (US-108), SSL pinning, root detection and device ID (US-109), profile hub, logout, security settings, avatar editing after sign-up (US-003), real Home content, the third-party Aadhaar integration, a language-picker screen (US-044; the app follows the device language, English fallback). The "Google" button stays "coming soon"; "Sign In" was a "coming soon" stub here and now opens the US-106 Sign In screen.
 
 ---
 
@@ -132,7 +132,7 @@ Source: **Make** = Figma Make app, **Figma** = design file. Every screen follows
 | Pincode | Number field, 6 digits | Required; first digit not 0 |
 | Terms | Themed `Switch` with the link "Terms and Conditions" | Disabled until screen 8 has been opened and closed; one toggle covers terms and consent (D12) |
 | Submit | `BrandGradientButton` | Enabled only with all fields valid and the toggle on |
-| Footer | "Already have an account? Sign In" | "Coming soon" snackbar |
+| Footer | "Already have an account? Sign In" | Opens Sign In (US-106) and carries a valid entered number; originally a "Coming soon" snackbar |
 
 `termsVersion` is a constant ("template-0" until legal text exists). Address entry is manual; US-108 replaces it with Places search and verification.
 
@@ -215,7 +215,7 @@ config/dev_local.json     (git-ignored: physical device with your machine's LAN 
 ### 7.3 Networking, errors and token refresh (standards 3.6)
 - Endpoints in `ApiConstants`; base URL from `AppConfig`.
 - `ApiClient` unwraps the envelope, maps every `error.code` to a typed `ApiError` (Appendix A), adds `X-Correlation-Id`, and sends no bearer token to the public endpoints.
-- **On 401: attempt `POST /refresh` once** with the stored refresh token, save the new pair, retry the original request once; concurrent 401s share one refresh call. If refresh fails: clear the session and show "Session expired — Login again" (route to Create Account until US-106 exists).
+- **On 401: attempt `POST /refresh` once** with the stored refresh token, save the new pair, retry the original request once; concurrent 401s share one refresh call. If refresh fails: clear the session and show "Session expired — Login again" (routes to Sign In since US-106).
 - Standard error UI: "Unable to connect — Retry", "Something went wrong — Try Again".
 - **Fix the logging interceptor:** it logs bodies in debug builds (OTPs, Aadhaar, tokens). Redact `/auth/*` bodies and `Authorization` (standards 1.4, 1.7). No `print()`.
 - Add the Android `INTERNET` permission to the main manifest.
@@ -358,7 +358,7 @@ Phases 1 to 3 can start before the backend changes; phases 4 and later need them
 
 | Code | Raised by | Mobile behaviour |
 |---|---|---|
-| `ERROR_MOBILE_ALREADY_REGISTERED` | initiate | Field error; suggest Sign In |
+| `ERROR_MOBILE_ALREADY_REGISTERED` | initiate | Field error; suggest Sign In (the screen's footer "Sign In" link opens Sign In since US-106) |
 | `ERROR_OTP_RATE_LIMIT` | initiate, email send | Disable resend; "try again in 10 minutes" |
 | `ERROR_MOBILE_NOT_FOUND`, `ERROR_INVALID_STATE` | verify, email, aadhaar, complete | Resume or restart from the account status |
 | `ERROR_INVALID_OTP` | all verify | Inline error; clear boxes |
