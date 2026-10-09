@@ -75,9 +75,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get createAccountContinueGuest => 'अतिथि के रूप में जारी रखें';
 
   @override
-  String get createAccountSignInComingSoon => 'साइन इन जल्द उपलब्ध होगा';
-
-  @override
   String get createAccountGoogleComingSoon => 'Google साइन-इन जल्द उपलब्ध होगा';
 
   @override
@@ -118,7 +115,7 @@ class AppLocalizationsHi extends AppLocalizations {
       'यह खाता अभी उपयोग नहीं किया जा सकता। कृपया सहायता के लिए सपोर्ट से संपर्क करें।';
 
   @override
-  String get accountBlockedAction => 'शुरुआत पर वापस जाएँ';
+  String get accountBlockedAction => 'साइन इन पर वापस जाएँ';
 
   @override
   String get authErrorMobileRegistered => 'यह मोबाइल नंबर पहले से पंजीकृत है';
@@ -404,6 +401,36 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get signupSignIn => 'साइन इन';
+
+  @override
+  String get signInTitle => 'साइन इन';
+
+  @override
+  String get signInSubtitle => 'वापसी पर स्वागत है! जारी रखने के लिए कृपया साइन इन करें।';
+
+  @override
+  String get signInNoAccount => 'खाता नहीं है?';
+
+  @override
+  String get signInSignUp => 'साइन अप करें';
+
+  @override
+  String get signInCreateAccount => 'खाता बनाएँ';
+
+  @override
+  String get authErrorMobileNotRegistered =>
+      'इस मोबाइल नंबर से कोई खाता नहीं मिला। कृपया खाता बनाएँ';
+
+  @override
+  String get authErrorSignInIncomplete =>
+      'यह नंबर अभी सत्यापित नहीं है। कृपया खाता बनाकर इसे पूरा करें';
+
+  @override
+  String get authErrorAccountSuspended => 'आपका खाता निलंबित है। कृपया सपोर्ट से संपर्क करें';
+
+  @override
+  String get authErrorAccountRecovery =>
+      'आपके खाते को पुनर्प्राप्ति की आवश्यकता है। कृपया सपोर्ट से संपर्क करें';
 
   @override
   String get signupErrorGender => 'एक विकल्प चुनें';

@@ -17,6 +17,9 @@ class FakeAuthRepository implements AuthRepository {
   SignupDetails? signup;
   final List<String> calls = [];
 
+  /// The account on the "server", which outlives the local session after a sign-out.
+  AccountStatus? _lastKnown;
+
   FakeAuthRepository({this.status});
 
   static ApiError _business(String code) {
@@ -40,7 +43,10 @@ class FakeAuthRepository implements AuthRepository {
   Future<bool> hasSession() async => status != null;
 
   @override
-  Future<void> clearSession() async => status = null;
+  Future<void> clearSession() async {
+    _lastKnown = status ?? _lastKnown;
+    status = null;
+  }
 
   @override
   Future<UserProfile> fetchProfile() async {
@@ -66,6 +72,30 @@ class FakeAuthRepository implements AuthRepository {
     calls.add('verifyMobileOtp');
     if (otp != '123456') throw _business('ERROR_INVALID_OTP');
     return _result(AccountStatus.emailVerificationPending);
+  }
+
+  @override
+  Future<OtpSent> initiateLogin(String mobile) async {
+    calls.add('initiateLogin');
+    final account = _loginAccount(mobile);
+    if (account == AccountStatus.suspended) throw _business('ERROR_ACCOUNT_SUSPENDED');
+    return const OtpSent(expiresInSeconds: 300);
+  }
+
+  @override
+  Future<AuthResult> verifyLogin({required String mobile, required String otp}) async {
+    calls.add('verifyLogin');
+    final account = _loginAccount(mobile);
+    if (otp != '123456') throw _business('ERROR_INVALID_OTP');
+    return _result(account);
+  }
+
+  AccountStatus _loginAccount(String mobile) {
+    final account = status ?? _lastKnown;
+    if (account == null || (this.mobile != null && this.mobile != mobile)) {
+      throw _business('ERROR_MOBILE_NOT_REGISTERED');
+    }
+    return account;
   }
 
   @override

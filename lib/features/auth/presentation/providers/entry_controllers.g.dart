@@ -55,6 +55,58 @@ abstract class _$MobileInput extends $Notifier<String> {
   }
 }
 
+/// Number typed on the Sign In screen; separate from the sign-up number so the two never mix.
+
+@ProviderFor(SignInMobileInput)
+const signInMobileInputProvider = SignInMobileInputProvider._();
+
+/// Number typed on the Sign In screen; separate from the sign-up number so the two never mix.
+final class SignInMobileInputProvider extends $NotifierProvider<SignInMobileInput, String> {
+  /// Number typed on the Sign In screen; separate from the sign-up number so the two never mix.
+  const SignInMobileInputProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'signInMobileInputProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$signInMobileInputHash();
+
+  @$internal
+  @override
+  SignInMobileInput create() => SignInMobileInput();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(String value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<String>(value),
+    );
+  }
+}
+
+String _$signInMobileInputHash() => r'5b8e4071b63f7c57757104c3eb830e9481fbdbd3';
+
+/// Number typed on the Sign In screen; separate from the sign-up number so the two never mix.
+
+abstract class _$SignInMobileInput extends $Notifier<String> {
+  String build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<String, String>;
+    final element =
+        ref.element as $ClassProviderElement<AnyNotifier<String, String>, String, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(EmailInput)
 const emailInputProvider = EmailInputProvider._();
 
@@ -134,6 +186,51 @@ String _$mobileEntryControllerHash() => r'f7d65e1310443c8dfaa7c57227363f2e2a34ee
 /// Sends the registration OTP to the typed mobile number.
 
 abstract class _$MobileEntryController extends $AsyncNotifier<void> {
+  FutureOr<void> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    build();
+    final ref = this.ref as $Ref<AsyncValue<void>, void>;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<void>, void>,
+        AsyncValue<void>, Object?, Object?>;
+    element.handleValue(ref, null);
+  }
+}
+
+/// Sends the sign-in OTP to the typed mobile number of an existing account.
+
+@ProviderFor(SignInEntryController)
+const signInEntryControllerProvider = SignInEntryControllerProvider._();
+
+/// Sends the sign-in OTP to the typed mobile number of an existing account.
+final class SignInEntryControllerProvider
+    extends $AsyncNotifierProvider<SignInEntryController, void> {
+  /// Sends the sign-in OTP to the typed mobile number of an existing account.
+  const SignInEntryControllerProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'signInEntryControllerProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$signInEntryControllerHash();
+
+  @$internal
+  @override
+  SignInEntryController create() => SignInEntryController();
+}
+
+String _$signInEntryControllerHash() => r'8afdedadcec0bb4e0ce375676dd4bd7652fcfbaf';
+
+/// Sends the sign-in OTP to the typed mobile number of an existing account.
+
+abstract class _$SignInEntryController extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override

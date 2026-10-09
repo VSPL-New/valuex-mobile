@@ -162,16 +162,6 @@ void main() {
       expect(find.text('a***@mail.com'), findsOneWidget);
       await harness.dispose();
     });
-
-    testWidgets('Sign In at the bottom says it is coming soon', (tester) async {
-      await openSignup(tester);
-
-      await tester.tap(find.text('Sign In'));
-      await tester.pump();
-
-      expect(find.text('Sign in is coming soon'), findsOneWidget);
-      await harness.dispose();
-    });
   });
 
   group('avatar', () {

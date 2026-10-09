@@ -75,9 +75,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createAccountContinueGuest => 'Continue as Guest';
 
   @override
-  String get createAccountSignInComingSoon => 'Sign in is coming soon';
-
-  @override
   String get createAccountGoogleComingSoon => 'Google sign-in is coming soon';
 
   @override
@@ -118,7 +115,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'This account cannot be used right now. Please contact support for help.';
 
   @override
-  String get accountBlockedAction => 'Back to start';
+  String get accountBlockedAction => 'Back to Sign In';
 
   @override
   String get authErrorMobileRegistered => 'This mobile number is already registered';
@@ -404,6 +401,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signupSignIn => 'Sign In';
+
+  @override
+  String get signInTitle => 'Sign In';
+
+  @override
+  String get signInSubtitle => 'Welcome back! Please sign in to continue.';
+
+  @override
+  String get signInNoAccount => 'Don\'t have an account?';
+
+  @override
+  String get signInSignUp => 'Sign up';
+
+  @override
+  String get signInCreateAccount => 'Create an account';
+
+  @override
+  String get authErrorMobileNotRegistered =>
+      'No account found with this mobile number. Please create an account';
+
+  @override
+  String get authErrorSignInIncomplete =>
+      'This number isn\'t verified yet. Please create an account to finish setting it up';
+
+  @override
+  String get authErrorAccountSuspended => 'Your account is suspended. Please contact support';
+
+  @override
+  String get authErrorAccountRecovery => 'Your account requires recovery. Please contact support';
 
   @override
   String get signupErrorGender => 'Choose one option';

@@ -13,6 +13,7 @@ void main() {
   final screens = <String, AccountStatus?>{
     'onboarding': null,
     RouteNames.createAccount: null,
+    RouteNames.signIn: null,
     RouteNames.signupMobile: null,
     RouteNames.signupEmail: AccountStatus.emailVerificationPending,
     RouteNames.signupAadhaar: AccountStatus.identityVerificationPending,

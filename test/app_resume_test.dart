@@ -12,7 +12,7 @@ import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart'
 import 'package:valuex_mobile/features/auth/domain/entities/user_profile.dart';
 import 'package:valuex_mobile/features/auth/presentation/providers/auth_providers.dart';
 import 'package:valuex_mobile/features/auth/presentation/screens/account_blocked_screen.dart';
-import 'package:valuex_mobile/features/auth/presentation/screens/create_account_screen.dart';
+import 'package:valuex_mobile/features/auth/presentation/screens/sign_in_mobile_screen.dart';
 import 'package:valuex_mobile/features/home/presentation/home_screen.dart';
 import 'package:valuex_mobile/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:valuex_mobile/features/splash/presentation/splash_screen.dart';
@@ -118,7 +118,7 @@ void main() {
     sessionExpired.add(null);
     await settle(tester);
 
-    expect(find.byType(CreateAccountScreen), findsOneWidget);
+    expect(find.byType(SignInMobileScreen), findsOneWidget);
     expect(find.text('Session expired — Login again'), findsOneWidget);
   });
 }

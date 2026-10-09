@@ -65,7 +65,7 @@ class CreateAccountScreen extends StatelessWidget {
                   const SizedBox(height: 11),
                   SingleToneButton(
                     label: l10n.createAccountSignIn,
-                    onPressed: () => _comingSoon(context, l10n.createAccountSignInComingSoon),
+                    onPressed: () => context.go(RouteNames.signIn),
                   ),
                   const SizedBox(height: 25),
                   LabeledDivider(label: l10n.createAccountOrLoginWith),

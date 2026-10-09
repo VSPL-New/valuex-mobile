@@ -9,7 +9,7 @@ import 'session_controller.dart';
 
 part 'otp_verification_controller.g.dart';
 
-enum OtpChannel { mobile, email }
+enum OtpChannel { mobile, email, login }
 
 class OtpVerificationState {
   final String code;
@@ -130,6 +130,10 @@ class OtpVerificationController extends _$OtpVerificationController {
         case OtpChannel.email:
           await repository.verifyEmailOtp(email: flow.email!, otp: code);
           await session.refreshStatus();
+        case OtpChannel.login:
+          // The result carries the current status; the router resumes the matching step.
+          final result = await repository.verifyLogin(mobile: flow.mobile!, otp: code);
+          session.signedIn(result);
       }
     } on ApiError catch (error) {
       if (ref.mounted) {
@@ -150,9 +154,11 @@ class OtpVerificationController extends _$OtpVerificationController {
 
     state = state.copyWith(isResending: true, clearError: true);
     try {
-      final sent = channel == OtpChannel.mobile
-          ? await repository.initiateRegistration(flow.mobile!)
-          : await repository.sendEmailOtp(flow.email!);
+      final sent = switch (channel) {
+        OtpChannel.mobile => await repository.initiateRegistration(flow.mobile!),
+        OtpChannel.email => await repository.sendEmailOtp(flow.email!),
+        OtpChannel.login => await repository.initiateLogin(flow.mobile!),
+      };
       if (!ref.mounted) return;
       state = state.copyWith(
         isResending: false,

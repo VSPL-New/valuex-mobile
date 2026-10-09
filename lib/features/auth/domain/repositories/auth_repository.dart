@@ -17,6 +17,12 @@ abstract interface class AuthRepository {
   /// Stores the issued tokens.
   Future<AuthResult> verifyMobileOtp({required String mobile, required String otp});
 
+  /// Sends a sign-in OTP to an already registered mobile number.
+  Future<OtpSent> initiateLogin(String mobile);
+
+  /// Stores the issued tokens; the result carries the account's current status.
+  Future<AuthResult> verifyLogin({required String mobile, required String otp});
+
   Future<OtpSent> sendEmailOtp(String email);
 
   Future<void> verifyEmailOtp({required String email, required String otp});

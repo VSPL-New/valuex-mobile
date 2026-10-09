@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:valuex_mobile/features/auth/presentation/screens/create_account_screen.dart';
+import 'package:valuex_mobile/features/auth/presentation/screens/sign_in_mobile_screen.dart';
 import 'package:valuex_mobile/features/auth/presentation/screens/signup_mobile_screen.dart';
 import 'package:valuex_mobile/features/home/presentation/home_screen.dart';
 import 'package:valuex_mobile/features/home/presentation/providers/home_providers.dart';
@@ -59,6 +60,17 @@ void main() {
 
         expect(find.text(l10n.signupMobileTitle), findsOneWidget);
         expect(find.text(l10n.signupMobileSendOtp), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      });
+
+      testWidgets('sign in screen shows localized copy', (tester) async {
+        await tester.pumpWidget(_app(locale, const SignInMobileScreen()));
+        await tester.pump();
+        final l10n = AppLocalizations.of(tester.element(find.byType(SignInMobileScreen)));
+
+        expect(find.text(l10n.signInTitle), findsOneWidget);
+        expect(find.text(l10n.signInSubtitle), findsOneWidget);
+        expect(find.text(l10n.signInSignUp), findsOneWidget);
         expect(tester.takeException(), isNull);
       });
 

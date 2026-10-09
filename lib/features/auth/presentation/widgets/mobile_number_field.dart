@@ -14,12 +14,14 @@ class MobileNumberField extends StatefulWidget {
   final ValueChanged<String> onChanged;
   final String semanticLabel;
   final String? errorText;
+  final String initialValue;
 
   const MobileNumberField({
     super.key,
     required this.onChanged,
     required this.semanticLabel,
     this.errorText,
+    this.initialValue = '',
   });
 
   @override
@@ -27,6 +29,14 @@ class MobileNumberField extends StatefulWidget {
 }
 
 class _MobileNumberFieldState extends State<MobileNumberField> {
+  late final TextEditingController _controller = TextEditingController(text: widget.initialValue);
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   void didUpdateWidget(MobileNumberField oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -81,6 +91,7 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                 child: Semantics(
                   label: '${widget.semanticLabel} +91',
                   child: TextField(
+                    controller: _controller,
                     keyboardType: TextInputType.phone,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,

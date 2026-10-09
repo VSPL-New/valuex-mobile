@@ -9,6 +9,8 @@ import '../../features/auth/presentation/screens/aadhaar_dev_otp_screen.dart';
 import '../../features/auth/presentation/screens/aadhaar_screen.dart';
 import '../../features/auth/presentation/screens/account_blocked_screen.dart';
 import '../../features/auth/presentation/screens/create_account_screen.dart';
+import '../../features/auth/presentation/screens/sign_in_mobile_screen.dart';
+import '../../features/auth/presentation/screens/sign_in_otp_screen.dart';
 import '../../features/auth/presentation/screens/signup_email_screen.dart';
 import '../../features/auth/presentation/screens/signup_mobile_screen.dart';
 import '../../features/auth/presentation/screens/signup_profile_screen.dart';
@@ -50,9 +52,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const CreateAccountScreen(),
       ),
       GoRoute(
+        path: RouteNames.signIn,
+        name: 'signIn',
+        builder: (context, state) => const SignInMobileScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.signInVerify,
+        name: 'signInVerify',
+        builder: (context, state) => const SignInOtpScreen(),
+      ),
+      GoRoute(
         path: RouteNames.signupMobile,
         name: 'signupMobile',
-        builder: (context, state) => const SignupMobileScreen(),
+        // Sign In passes the typed number as `extra` when the account does not exist yet.
+        builder: (context, state) => SignupMobileScreen(initialMobile: state.extra as String?),
       ),
       GoRoute(
         path: RouteNames.signupMobileVerify,
