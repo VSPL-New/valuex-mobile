@@ -89,9 +89,6 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get
-      # android/gradle.properties pins a macOS-only JDK path for local builds.
-      - name: Drop local-only JDK pin
-        run: sed -i '/^org.gradle.java.home=/d' android/gradle.properties
       - run: flutter build apk --debug --dart-define-from-file=config/dev_android.json
 
   changes:
