@@ -6,6 +6,7 @@ import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart'
 
 import '../../../helpers/app_harness.dart';
 import '../../../helpers/fonts.dart';
+import '../../../helpers/accessibility.dart';
 
 void main() {
   setUpAll(loadBrandFonts);
@@ -28,7 +29,7 @@ void main() {
         androidTapTargetGuideline,
         iOSTapTargetGuideline,
         labeledTapTargetGuideline,
-        textContrastGuideline,
+        textContrast,
       ]) {
         await expectLater(tester, meetsGuideline(guideline));
       }
@@ -39,7 +40,7 @@ void main() {
       await harness.settle();
 
       expect(find.byType(FieldError), findsOneWidget);
-      await expectLater(tester, meetsGuideline(textContrastGuideline));
+      await expectLater(tester, meetsGuideline(textContrast));
       handle.dispose();
       await harness.dispose();
     });

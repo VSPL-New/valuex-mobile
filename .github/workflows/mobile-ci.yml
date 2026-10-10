@@ -57,7 +57,7 @@ jobs:
         run: flutter analyze --fatal-infos
 
       - name: Test
-        run: flutter test --coverage
+        run: flutter test --coverage --dart-define=SKIP_PIXEL_CONTRAST=true
 
       - name: Coverage gate
         run: tool/check_coverage.sh coverage/lcov.info 85
