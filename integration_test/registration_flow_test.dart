@@ -6,6 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/app.dart';
 import 'package:valuex_mobile/core/config/app_config.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
+import 'package:valuex_mobile/core/network/session_event.dart';
 import 'package:valuex_mobile/core/security/screen_protection_service.dart';
 import 'package:valuex_mobile/core/widgets/brand_gradient_button.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
@@ -45,7 +46,7 @@ void main() {
     addTearDown(tester.view.reset);
 
     final apiClient = MockApiClient();
-    when(() => apiClient.onSessionExpired).thenAnswer((_) => const Stream<void>.empty());
+    when(() => apiClient.sessionEvents).thenAnswer((_) => const Stream<SessionEvent>.empty());
     final protection = FakeScreenProtection();
 
     await tester.pumpWidget(

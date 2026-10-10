@@ -9,6 +9,7 @@ import 'api_error_mapper.dart';
 import 'api_interceptor.dart';
 import 'api_log_interceptor.dart';
 import 'api_response.dart';
+import 'session_event.dart';
 import 'token_refresher.dart';
 
 final apiClientProvider = Provider<ApiClient>((ref) {
@@ -61,8 +62,8 @@ class ApiClient {
     ]);
   }
 
-  /// Emits when the session cannot be renewed; the app must return to sign-in.
-  Stream<void> get onSessionExpired => _refresher.onSessionExpired;
+  /// Emits after each token refresh and when the session cannot be renewed.
+  Stream<SessionEvent> get sessionEvents => _refresher.events;
 
   Future<T> get<T>(
     String path, {
