@@ -15,6 +15,15 @@ class MobileInput extends _$MobileInput {
   void update(String value) => state = value;
 }
 
+/// Number typed on the Sign In screen; separate from the sign-up number so the two never mix.
+@riverpod
+class SignInMobileInput extends _$SignInMobileInput {
+  @override
+  String build() => '';
+
+  void update(String value) => state = value;
+}
+
 @riverpod
 class EmailInput extends _$EmailInput {
   @override
@@ -42,6 +51,33 @@ class MobileEntryController extends _$MobileEntryController {
     state = const AsyncLoading();
     final result = await AsyncValue.guard(() async {
       final sent = await ref.read(authRepositoryProvider).initiateRegistration(mobile);
+      ref.read(registrationFlowProvider.notifier).mobileOtpSent(mobile, sent.expiresInSeconds);
+    });
+    if (!ref.mounted) return !result.hasError;
+    state = result;
+    return !result.hasError;
+  }
+}
+
+/// Sends the sign-in OTP to the typed mobile number of an existing account.
+@riverpod
+class SignInEntryController extends _$SignInEntryController {
+  @override
+  FutureOr<void> build() {}
+
+  /// Removes the last send error once the user edits the number.
+  void clearError() {
+    if (state.hasError) state = const AsyncData(null);
+  }
+
+  /// Returns true when the OTP was sent.
+  Future<bool> sendOtp() async {
+    final mobile = ref.read(signInMobileInputProvider);
+    if (!Validators.isValidMobile(mobile) || state.isLoading) return false;
+
+    state = const AsyncLoading();
+    final result = await AsyncValue.guard(() async {
+      final sent = await ref.read(authRepositoryProvider).initiateLogin(mobile);
       ref.read(registrationFlowProvider.notifier).mobileOtpSent(mobile, sent.expiresInSeconds);
     });
     if (!ref.mounted) return !result.hasError;

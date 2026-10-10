@@ -42,7 +42,7 @@ class AccountBlockedScreen extends ConsumerWidget {
                       label: l10n.accountBlockedAction,
                       onPressed: () async {
                         await ref.read(sessionControllerProvider.notifier).signOutLocally();
-                        if (context.mounted) context.go(RouteNames.createAccount);
+                        if (context.mounted) context.go(RouteNames.signIn);
                       },
                     ),
                   ],

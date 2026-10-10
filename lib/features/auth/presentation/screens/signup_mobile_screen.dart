@@ -11,12 +11,16 @@ import '../../../../l10n/app_localizations.dart';
 import '../auth_error_messages.dart';
 import '../providers/entry_controllers.dart';
 import '../widgets/auth_form_scaffold.dart';
+import '../widgets/auth_switch_prompt.dart';
 import '../widgets/mobile_number_field.dart';
 
 /// Registration step 1: enter a mobile number to receive an OTP
 /// (Figma Make: signup-phone "Create Account").
 class SignupMobileScreen extends ConsumerStatefulWidget {
-  const SignupMobileScreen({super.key});
+  /// A number typed on the Sign In screen, so the user does not type it again.
+  final String? initialMobile;
+
+  const SignupMobileScreen({super.key, this.initialMobile});
 
   @override
   ConsumerState<SignupMobileScreen> createState() => _SignupMobileScreenState();
@@ -24,6 +28,18 @@ class SignupMobileScreen extends ConsumerStatefulWidget {
 
 class _SignupMobileScreenState extends ConsumerState<SignupMobileScreen> {
   bool _showInvalid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final initial = widget.initialMobile;
+    if (initial != null && initial.isNotEmpty) {
+      // Providers cannot change while the widget tree is building.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) ref.read(mobileInputProvider.notifier).update(initial);
+      });
+    }
+  }
 
   void _onChanged(String value) {
     ref.read(mobileInputProvider.notifier).update(value);
@@ -63,6 +79,7 @@ class _SignupMobileScreenState extends ConsumerState<SignupMobileScreen> {
         MobileNumberField(
           semanticLabel: l10n.signupMobileLabel,
           errorText: errorText,
+          initialValue: widget.initialMobile ?? '',
           onChanged: _onChanged,
         ),
         const SizedBox(height: AppSpacing.md),
@@ -78,10 +95,20 @@ class _SignupMobileScreenState extends ConsumerState<SignupMobileScreen> {
           ],
         ),
       ],
-      bottom: BrandGradientButton(
-        label: l10n.signupMobileSendOtp,
-        isLoading: submit.isLoading,
-        onPressed: _submit,
+      bottom: Column(
+        children: [
+          BrandGradientButton(
+            label: l10n.signupMobileSendOtp,
+            isLoading: submit.isLoading,
+            onPressed: _submit,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          AuthSwitchPrompt(
+            prompt: l10n.signupHaveAccount,
+            actionLabel: l10n.signupSignIn,
+            onPressed: () => context.go(RouteNames.signIn),
+          ),
+        ],
       ),
     );
   }

@@ -34,6 +34,8 @@ void main() {
       for (final route in [
         RouteNames.onboarding,
         RouteNames.createAccount,
+        RouteNames.signIn,
+        RouteNames.signInVerify,
         RouteNames.signupMobile,
         RouteNames.signupMobileVerify,
         RouteNames.home,
@@ -121,6 +123,26 @@ void main() {
       expect(redirectFor(session: session, location: RouteNames.signupMobile), RouteNames.home);
       expect(redirectFor(session: session, location: RouteNames.signupProfile), RouteNames.home);
       expect(redirectFor(session: session, location: RouteNames.signupAadhaar), RouteNames.home);
+    });
+
+    test('a signed-in account never sees the Sign In pages', () {
+      for (final route in [RouteNames.signIn, RouteNames.signInVerify]) {
+        expect(
+          redirectFor(session: _signedIn(AccountStatus.active), location: route),
+          RouteNames.home,
+          reason: route,
+        );
+        expect(
+          redirectFor(session: _signedIn(AccountStatus.signupPending), location: route),
+          RouteNames.signupProfile,
+          reason: route,
+        );
+        expect(
+          redirectFor(session: _signedIn(AccountStatus.suspended), location: route),
+          RouteNames.accountBlocked,
+          reason: route,
+        );
+      }
     });
 
     test('a blocked account only sees the blocked page', () {

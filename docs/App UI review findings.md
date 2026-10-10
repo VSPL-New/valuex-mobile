@@ -86,6 +86,7 @@ Each screen is shown as a before and after design, approved, then implemented wi
 | Aadhaar and Aadhaar OTP | Approved and implemented 2026-10-08 |
 | Sign Up | Implemented 2026-10-08 using the approved patterns (no separate review) |
 | Terms, Account unavailable, Home, Splash | Implemented 2026-10-08 using the approved patterns (no separate review) |
+| Sign In and Sign In code (US-106) | Implemented 2026-10-09 using the approved patterns and the design-system owner rule (see the decision log in `Flutter-Design-System.md`); widget accessibility tests added, device screen-reader check still open |
 
 ## Still open
 

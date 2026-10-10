@@ -49,6 +49,11 @@ class OtpVerificationView extends ConsumerWidget {
     });
 
     final error = state.error;
+    final errorText = error == null
+        ? null
+        : channel == OtpChannel.login
+            ? signInErrorMessage(l10n, error)
+            : authErrorMessage(l10n, error);
 
     return AuthFormScaffold(
       onBack: onChange,
@@ -64,8 +69,8 @@ class OtpVerificationView extends ConsumerWidget {
           onChanged: controller.setCode,
         ),
         const SizedBox(height: AppSpacing.md),
-        if (error != null)
-          FieldError(text: authErrorMessage(l10n, error))
+        if (errorText != null)
+          FieldError(text: errorText)
         else if (state.codeIncomplete)
           FieldError(text: l10n.otpIncomplete)
         else if (state.isExpired)

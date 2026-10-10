@@ -23,7 +23,7 @@ class SessionExpiryListener extends ConsumerWidget {
         ..showSnackBar(
           SnackBar(content: Text(AppLocalizations.of(context).errorSessionExpired)),
         );
-      ref.read(appRouterProvider).go(RouteNames.createAccount);
+      ref.read(appRouterProvider).go(RouteNames.signIn);
     });
     return child;
   }

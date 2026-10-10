@@ -27,6 +27,24 @@ class AuthRemoteDataSource {
     );
   }
 
+  Future<MessageResponseModel> initiateLogin(String mobile) {
+    return _client.post(
+      ApiConstants.loginInitiate,
+      data: {'mobile': mobile},
+      authenticated: false,
+      parse: MessageResponseModel.fromJson,
+    );
+  }
+
+  Future<AuthResponseModel> verifyLogin({required String mobile, required String otp}) {
+    return _client.post(
+      ApiConstants.loginVerifyMobile,
+      data: {'mobile': mobile, 'otp': otp},
+      authenticated: false,
+      parse: AuthResponseModel.fromJson,
+    );
+  }
+
   Future<MessageResponseModel> sendEmailOtp(String email) {
     return _client.post(
       ApiConstants.emailSendOtp,

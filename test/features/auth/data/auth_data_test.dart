@@ -68,11 +68,12 @@ void main() {
     setUp(() {
       adapter = FakeHttpAdapter((options) async {
         return switch (options.path) {
-          '/auth/register/initiate' => FakeHttpAdapter.ok({
+          '/auth/register/initiate' || '/auth/login/initiate' => FakeHttpAdapter.ok({
               'message': 'OTP sent',
               'otpExpiresInSeconds': 300,
             }),
           '/auth/register/verify-mobile' ||
+          '/auth/login/verify-mobile' ||
           '/auth/register/skip-aadhaar' ||
           '/auth/register/complete' ||
           '/auth/aadhaar/verify' =>
@@ -106,6 +107,21 @@ void main() {
       expect(request.path, '/auth/register/verify-mobile');
       expect(request.data, {'mobile': '9876543210', 'otp': '123456'});
       expect(request.headers.containsKey('Authorization'), isFalse);
+    });
+
+    test('sign in sends the number and verifies the code without a bearer token', () async {
+      final sent = await dataSource.initiateLogin('9876543210');
+      final result = await dataSource.verifyLogin(mobile: '9876543210', otp: '123456');
+
+      expect(adapter.requests[0].path, '/auth/login/initiate');
+      expect(adapter.requests[0].data, {'mobile': '9876543210'});
+      expect(adapter.requests[1].path, '/auth/login/verify-mobile');
+      expect(adapter.requests[1].data, {'mobile': '9876543210', 'otp': '123456'});
+      for (final request in adapter.requests) {
+        expect(request.headers.containsKey('Authorization'), isFalse);
+      }
+      expect(sent.otpExpiresInSeconds, 300);
+      expect(result.status, 'EMAIL_VERIFICATION_PENDING');
     });
 
     test('email calls carry the bearer token', () async {
@@ -202,6 +218,36 @@ void main() {
       expect(storage.accessToken, 'access-1');
       expect(storage.refreshToken, 'refresh-1');
       expect(storage.userId, 'user-1');
+    });
+
+    test('signing in stores the issued session and reports the current status', () async {
+      storage.accessToken = 'stale';
+      when(() => remote.verifyLogin(mobile: '9876543210', otp: '123456')).thenAnswer(
+        (_) async => AuthResponseModel.fromJson({
+          ..._authJson,
+          'status': 'ACTIVE',
+          'aadhaarVerified': true,
+        }),
+      );
+
+      final result = await repository.verifyLogin(mobile: '9876543210', otp: '123456');
+
+      expect(result.status, AccountStatus.active);
+      expect(result.aadhaarVerified, isTrue);
+      expect(storage.accessToken, 'access-1');
+      expect(storage.refreshToken, 'refresh-1');
+      expect(storage.userId, 'user-1');
+    });
+
+    test('requesting a sign-in OTP does not touch the stored session', () async {
+      when(() => remote.initiateLogin('9876543210')).thenAnswer(
+        (_) async => const MessageResponseModel(otpExpiresInSeconds: 300),
+      );
+
+      final sent = await repository.initiateLogin('9876543210');
+
+      expect(sent.expiresInSeconds, 300);
+      expect(storage.accessToken, isNull);
     });
 
     test('completing sign up stores the activated session', () async {

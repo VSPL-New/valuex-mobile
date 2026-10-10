@@ -5,6 +5,8 @@ import 'route_names.dart';
 
 /// Registration routes and the account steps allowed to show them.
 const Map<String, Set<RegistrationStep>> _gatedRoutes = {
+  RouteNames.signIn: {RegistrationStep.mobile},
+  RouteNames.signInVerify: {RegistrationStep.mobile},
   RouteNames.signupMobile: {RegistrationStep.mobile},
   RouteNames.signupMobileVerify: {RegistrationStep.mobile},
   RouteNames.signupEmail: {RegistrationStep.email},

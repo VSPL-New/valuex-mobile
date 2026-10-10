@@ -2,7 +2,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'registration_flow.g.dart';
 
-/// Values carried between registration screens (never persisted; the server status is the truth).
+/// Values carried between the registration and sign-in screens (never persisted; the server
+/// status is the truth).
 class RegistrationFlowState {
   final String? mobile;
   final String? email;

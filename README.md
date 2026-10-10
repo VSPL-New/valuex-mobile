@@ -137,13 +137,13 @@ flutter test test/widget_test.dart        # single file
 flutter test --coverage                   # report at coverage/lcov.info
 ```
 
-Integration test (registration end to end with an in-memory server; needs an emulator or simulator, and replaces the installed app):
+Integration tests (registration and Sign In end to end with an in-memory server; need an emulator or simulator, and replace the installed app):
 
 ```bash
 flutter test integration_test -d <device-id>
 ```
 
-The same scenarios also run on the host: copy `integration_test/registration_flow_test.dart` into `test/`, change the `../test/helpers/` imports to `helpers/`, run it, then delete the copy.
+The same scenarios also run on the host: copy `integration_test/registration_flow_test.dart` (or `sign_in_flow_test.dart`) into `test/`, change the `../test/helpers/` imports to `helpers/`, run it, then delete the copy.
 
 Optional HTML coverage report (`brew install lcov`):
 
@@ -158,7 +158,7 @@ Guidelines:
 - Do not hit the real backend in unit or widget tests. `test/helpers/app_harness.dart` runs the real app against a mocked repository; `test/helpers/fake_auth_repository.dart` is an in-memory server for whole flows.
 - Layout tests load the bundled fonts (`test/helpers/fonts.dart`); the default test font is much wider than DM Sans.
 
-Manual test guides per user story and sprint are in [../Documents](../Documents), e.g. `US-001-Testing-Guide.md`, `Sprint-1-Combined-Testing-Guide.md`, `Sprint-1-OTP-Regression-Checklist.md`.
+Manual test guides per user story and sprint are in [../Documents](../Documents) (`Manual Testing Guides/`, `Sprint-1-Combined-Testing-Guide.md` with the US-106 mobile scenarios, `Sprint-1-OTP-Regression-Checklist.md`).
 
 ## Static analysis and formatting
 

@@ -39,6 +39,16 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<OtpSent> initiateLogin(String mobile) async {
+    return (await _remote.initiateLogin(mobile)).toOtpSent();
+  }
+
+  @override
+  Future<AuthResult> verifyLogin({required String mobile, required String otp}) {
+    return _store(_remote.verifyLogin(mobile: mobile, otp: otp));
+  }
+
+  @override
   Future<OtpSent> sendEmailOtp(String email) async {
     return (await _remote.sendEmailOtp(email)).toOtpSent();
   }

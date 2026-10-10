@@ -213,12 +213,6 @@ abstract class AppLocalizations {
   /// **'Continue as Guest'**
   String get createAccountContinueGuest;
 
-  /// No description provided for @createAccountSignInComingSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign in is coming soon'**
-  String get createAccountSignInComingSoon;
-
   /// No description provided for @createAccountGoogleComingSoon.
   ///
   /// In en, this message translates to:
@@ -300,7 +294,7 @@ abstract class AppLocalizations {
   /// No description provided for @accountBlockedAction.
   ///
   /// In en, this message translates to:
-  /// **'Back to start'**
+  /// **'Back to Sign In'**
   String get accountBlockedAction;
 
   /// No description provided for @authErrorMobileRegistered.
@@ -842,6 +836,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign In'**
   String get signupSignIn;
+
+  /// No description provided for @signInTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get signInTitle;
+
+  /// No description provided for @signInSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back! Please sign in to continue.'**
+  String get signInSubtitle;
+
+  /// No description provided for @signInNoAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account?'**
+  String get signInNoAccount;
+
+  /// No description provided for @signInSignUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up'**
+  String get signInSignUp;
+
+  /// No description provided for @signInCreateAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an account'**
+  String get signInCreateAccount;
+
+  /// No description provided for @authErrorMobileNotRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'No account found with this mobile number. Please create an account'**
+  String get authErrorMobileNotRegistered;
+
+  /// No description provided for @authErrorSignInIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'This number isn\'t verified yet. Please create an account to finish setting it up'**
+  String get authErrorSignInIncomplete;
+
+  /// No description provided for @authErrorAccountSuspended.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is suspended. Please contact support'**
+  String get authErrorAccountSuspended;
+
+  /// No description provided for @authErrorAccountRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account requires recovery. Please contact support'**
+  String get authErrorAccountRecovery;
 
   /// No description provided for @signupErrorGender.
   ///

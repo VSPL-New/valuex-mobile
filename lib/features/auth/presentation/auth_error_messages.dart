@@ -16,6 +16,8 @@ String authErrorMessage(AppLocalizations l10n, Object error) {
     'ERROR_OTP_MAX_ATTEMPTS' => l10n.authErrorOtpMaxAttempts,
     'ERROR_INVALID_STATE' || 'ERROR_MOBILE_NOT_FOUND' => l10n.authErrorInvalidState,
     'ERROR_USER_NOT_FOUND' => l10n.authErrorUserNotFound,
+    'ERROR_MOBILE_NOT_REGISTERED' => l10n.authErrorMobileNotRegistered,
+    'ERROR_ACCOUNT_SUSPENDED' => l10n.authErrorAccountSuspended,
     'ERROR_INVALID_ADDRESS_STATE' => l10n.authErrorInvalidAddressState,
     'ERROR_INVALID_DATE_OF_BIRTH' => l10n.authErrorInvalidDob,
     'ERROR_TERMS_NOT_ACCEPTED' => l10n.authErrorTermsNotAccepted,
@@ -30,4 +32,24 @@ String authErrorMessage(AppLocalizations l10n, Object error) {
     'ERROR_AADHAAR_VERIFICATION_FAILED' => l10n.authErrorAadhaarFailed,
     _ => apiErrorMessage(l10n, error),
   };
+}
+
+/// Sign-in errors whose fix is to create (or finish creating) an account.
+bool signInNeedsAccount(Object error) {
+  return error is ApiError &&
+      (error.code == 'ERROR_MOBILE_NOT_REGISTERED' || error.code == 'ERROR_INVALID_STATE');
+}
+
+/// Like [authErrorMessage], but for the sign-in screens, where a few codes mean something
+/// different than during registration.
+String signInErrorMessage(AppLocalizations l10n, Object error) {
+  if (error is ApiError) {
+    switch (error.code) {
+      case 'ERROR_INVALID_STATE':
+        return l10n.authErrorSignInIncomplete;
+      case 'ERROR_ACCOUNT_RECOVERY_REQUIRED':
+        return l10n.authErrorAccountRecovery;
+    }
+  }
+  return authErrorMessage(l10n, error);
 }

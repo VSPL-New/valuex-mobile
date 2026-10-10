@@ -272,33 +272,10 @@ class _SignupProfileScreenState extends ConsumerState<SignupProfileScreen> {
             child: FieldError(text: authErrorMessage(l10n, serverError)),
           ),
       ],
-      bottom: Column(
-        children: [
-          BrandGradientButton(
-            label: l10n.signupSubmit,
-            isLoading: form.isSubmitting,
-            onPressed: form.isSubmitting ? null : _submit,
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Wrap(
-            alignment: WrapAlignment.center,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              Text(l10n.signupHaveAccount, style: AppTextStyles.bodySecondary),
-              TextButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context)
-                    ..hideCurrentSnackBar()
-                    ..showSnackBar(SnackBar(content: Text(l10n.createAccountSignInComingSoon)));
-                },
-                style: TextButton.styleFrom(
-                  minimumSize: const Size(AppSizes.minTouchTarget, AppSizes.minTouchTarget),
-                ),
-                child: Text(l10n.signupSignIn, style: AppTextStyles.link),
-              ),
-            ],
-          ),
-        ],
+      bottom: BrandGradientButton(
+        label: l10n.signupSubmit,
+        isLoading: form.isSubmitting,
+        onPressed: form.isSubmitting ? null : _submit,
       ),
     );
   }
