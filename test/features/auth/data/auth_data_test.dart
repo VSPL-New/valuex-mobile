@@ -7,6 +7,7 @@ import 'package:valuex_mobile/features/auth/data/models/auth_models.dart';
 import 'package:valuex_mobile/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/gender.dart';
+import 'package:valuex_mobile/features/auth/domain/entities/google_sign_in_result.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/signup_details.dart';
 
 import '../../../helpers/fake_http_adapter.dart';
@@ -50,6 +51,35 @@ void main() {
       expect(profile.displayName, isNull);
     });
 
+    test('GoogleSignInModel for a linked account carries the issued session and status', () {
+      final result = GoogleSignInModel.fromJson({
+        'requiresMobileVerification': false,
+        'accessToken': 'access-1',
+        'refreshToken': 'refresh-1',
+        'userId': 'user-1',
+        'status': 'ACTIVE',
+        'aadhaarVerified': true,
+      }).toResult();
+
+      expect(result, isA<GoogleSignedIn>());
+      final auth = (result as GoogleSignedIn).auth;
+      expect(auth.session.refreshToken, 'refresh-1');
+      expect(auth.status, AccountStatus.active);
+      expect(auth.aadhaarVerified, isTrue);
+    });
+
+    test('GoogleSignInModel for a new Google account carries the session and email', () {
+      final result = GoogleSignInModel.fromJson({
+        'requiresMobileVerification': true,
+        'socialSessionToken': 'social-1',
+        'googleEmail': 'a@gmail.com',
+      }).toResult();
+
+      expect(result, isA<GoogleNeedsMobile>());
+      expect((result as GoogleNeedsMobile).socialSessionToken, 'social-1');
+      expect(result.email, 'a@gmail.com');
+    });
+
     test('MessageResponseModel reads the OTP lifetime', () {
       expect(
         MessageResponseModel.fromJson({'message': 'sent', 'otpExpiresInSeconds': 300})
@@ -72,8 +102,18 @@ void main() {
               'message': 'OTP sent',
               'otpExpiresInSeconds': 300,
             }),
+          '/auth/social/google/initiate-mobile' => FakeHttpAdapter.ok({
+              'message': 'OTP sent',
+              'otpExpiresInSeconds': 300,
+            }),
+          '/auth/social/google' => FakeHttpAdapter.ok({
+              'requiresMobileVerification': true,
+              'socialSessionToken': 'social-1',
+              'googleEmail': 'a@gmail.com',
+            }),
           '/auth/register/verify-mobile' ||
           '/auth/login/verify-mobile' ||
+          '/auth/social/google/verify-mobile' ||
           '/auth/register/skip-aadhaar' ||
           '/auth/register/complete' ||
           '/auth/aadhaar/verify' =>
@@ -122,6 +162,37 @@ void main() {
       }
       expect(sent.otpExpiresInSeconds, 300);
       expect(result.status, 'EMAIL_VERIFICATION_PENDING');
+    });
+
+    test('Google calls send the ID token, session token and number without a bearer token',
+        () async {
+      final started = await dataSource.signInWithGoogle('id-token-1');
+      final sent = await dataSource.initiateGoogleMobile(
+        socialSessionToken: 'social-1',
+        mobile: '9876543210',
+      );
+      final verified = await dataSource.verifyGoogleMobile(
+        socialSessionToken: 'social-1',
+        mobile: '9876543210',
+        otp: '123456',
+      );
+
+      expect(adapter.requests[0].path, '/auth/social/google');
+      expect(adapter.requests[0].data, {'idToken': 'id-token-1'});
+      expect(adapter.requests[1].path, '/auth/social/google/initiate-mobile');
+      expect(adapter.requests[1].data, {'socialSessionToken': 'social-1', 'mobile': '9876543210'});
+      expect(adapter.requests[2].path, '/auth/social/google/verify-mobile');
+      expect(adapter.requests[2].data, {
+        'socialSessionToken': 'social-1',
+        'mobile': '9876543210',
+        'otp': '123456',
+      });
+      for (final request in adapter.requests) {
+        expect(request.headers.containsKey('Authorization'), isFalse);
+      }
+      expect(started.requiresMobileVerification, isTrue);
+      expect(sent.otpExpiresInSeconds, 300);
+      expect(verified.status, 'EMAIL_VERIFICATION_PENDING');
     });
 
     test('email calls carry the bearer token', () async {
@@ -235,6 +306,76 @@ void main() {
       expect(result.status, AccountStatus.active);
       expect(result.aadhaarVerified, isTrue);
       expect(storage.accessToken, 'access-1');
+      expect(storage.refreshToken, 'refresh-1');
+      expect(storage.userId, 'user-1');
+    });
+
+    test('Google sign-in of a linked account stores the issued session', () async {
+      when(() => remote.signInWithGoogle('id-token-1')).thenAnswer(
+        (_) async => GoogleSignInModel.fromJson({
+          'requiresMobileVerification': false,
+          'accessToken': 'access-1',
+          'refreshToken': 'refresh-1',
+          'userId': 'user-1',
+          'status': 'ACTIVE',
+          'aadhaarVerified': true,
+        }),
+      );
+
+      final result = await repository.signInWithGoogle('id-token-1');
+
+      expect(result, isA<GoogleSignedIn>());
+      expect(storage.accessToken, 'access-1');
+      expect(storage.refreshToken, 'refresh-1');
+      expect(storage.userId, 'user-1');
+    });
+
+    test('Google sign-in of a new account stores nothing until the mobile is verified', () async {
+      when(() => remote.signInWithGoogle('id-token-1')).thenAnswer(
+        (_) async => GoogleSignInModel.fromJson({
+          'requiresMobileVerification': true,
+          'socialSessionToken': 'social-1',
+          'googleEmail': 'a@gmail.com',
+        }),
+      );
+
+      final result = await repository.signInWithGoogle('id-token-1');
+
+      expect(result, isA<GoogleNeedsMobile>());
+      expect(storage.accessToken, isNull);
+      expect(storage.refreshToken, isNull);
+    });
+
+    test('requesting the Google mobile OTP leaves the stored session alone', () async {
+      when(
+        () => remote.initiateGoogleMobile(socialSessionToken: 'social-1', mobile: '9876543210'),
+      ).thenAnswer((_) async => const MessageResponseModel(otpExpiresInSeconds: 300));
+
+      final sent = await repository.initiateGoogleMobile(
+        socialSessionToken: 'social-1',
+        mobile: '9876543210',
+      );
+
+      expect(sent.expiresInSeconds, 300);
+      expect(storage.accessToken, isNull);
+    });
+
+    test('verifying the Google mobile OTP stores the issued session', () async {
+      when(
+        () => remote.verifyGoogleMobile(
+          socialSessionToken: 'social-1',
+          mobile: '9876543210',
+          otp: '123456',
+        ),
+      ).thenAnswer((_) async => AuthResponseModel.fromJson({..._authJson, 'status': 'ACTIVE'}));
+
+      final result = await repository.verifyGoogleMobile(
+        socialSessionToken: 'social-1',
+        mobile: '9876543210',
+        otp: '123456',
+      );
+
+      expect(result.status, AccountStatus.active);
       expect(storage.refreshToken, 'refresh-1');
       expect(storage.userId, 'user-1');
     });

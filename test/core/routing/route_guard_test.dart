@@ -36,6 +36,8 @@ void main() {
         RouteNames.createAccount,
         RouteNames.signIn,
         RouteNames.signInVerify,
+        RouteNames.googleMobile,
+        RouteNames.googleVerify,
         RouteNames.signupMobile,
         RouteNames.signupMobileVerify,
         RouteNames.home,
@@ -125,8 +127,13 @@ void main() {
       expect(redirectFor(session: session, location: RouteNames.signupAadhaar), RouteNames.home);
     });
 
-    test('a signed-in account never sees the Sign In pages', () {
-      for (final route in [RouteNames.signIn, RouteNames.signInVerify]) {
+    test('a signed-in account never sees the Sign In or Google pages', () {
+      for (final route in [
+        RouteNames.signIn,
+        RouteNames.signInVerify,
+        RouteNames.googleMobile,
+        RouteNames.googleVerify,
+      ]) {
         expect(
           redirectFor(session: _signedIn(AccountStatus.active), location: route),
           RouteNames.home,

@@ -10,11 +10,17 @@ class RegistrationFlowState {
   final int? otpExpiresInSeconds;
   final String? aadhaarTransactionId;
 
+  /// Google sign-in in progress: the server session that the mobile OTP completes.
+  final String? socialSessionToken;
+  final String? googleEmail;
+
   const RegistrationFlowState({
     this.mobile,
     this.email,
     this.otpExpiresInSeconds,
     this.aadhaarTransactionId,
+    this.socialSessionToken,
+    this.googleEmail,
   });
 }
 
@@ -40,6 +46,19 @@ class RegistrationFlow extends _$RegistrationFlow {
       mobile: state.mobile,
       email: state.email,
       aadhaarTransactionId: transactionId,
+    );
+  }
+
+  void googleSessionStarted({required String socialSessionToken, required String email}) {
+    state = RegistrationFlowState(socialSessionToken: socialSessionToken, googleEmail: email);
+  }
+
+  void googleMobileOtpSent(String mobile, int? expiresInSeconds) {
+    state = RegistrationFlowState(
+      mobile: mobile,
+      otpExpiresInSeconds: expiresInSeconds,
+      socialSessionToken: state.socialSessionToken,
+      googleEmail: state.googleEmail,
     );
   }
 

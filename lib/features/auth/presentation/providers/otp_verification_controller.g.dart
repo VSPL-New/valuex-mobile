@@ -60,7 +60,7 @@ final class OtpVerificationControllerProvider
   }
 }
 
-String _$otpVerificationControllerHash() => r'8785bbc0929d3125556e8374094db1618589b30b';
+String _$otpVerificationControllerHash() => r'3fc52c4f37e5d57c969c26467c09f38151beac49';
 
 /// Code entry, countdowns, resend limits and verification for one OTP step.
 

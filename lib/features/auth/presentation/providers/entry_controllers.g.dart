@@ -107,6 +107,58 @@ abstract class _$SignInMobileInput extends $Notifier<String> {
   }
 }
 
+/// Number typed when Google sign-in asks for a mobile number.
+
+@ProviderFor(GoogleMobileInput)
+const googleMobileInputProvider = GoogleMobileInputProvider._();
+
+/// Number typed when Google sign-in asks for a mobile number.
+final class GoogleMobileInputProvider extends $NotifierProvider<GoogleMobileInput, String> {
+  /// Number typed when Google sign-in asks for a mobile number.
+  const GoogleMobileInputProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'googleMobileInputProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$googleMobileInputHash();
+
+  @$internal
+  @override
+  GoogleMobileInput create() => GoogleMobileInput();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(String value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<String>(value),
+    );
+  }
+}
+
+String _$googleMobileInputHash() => r'7dfd1567802fddcc2621d06c873ef1467883ebf9';
+
+/// Number typed when Google sign-in asks for a mobile number.
+
+abstract class _$GoogleMobileInput extends $Notifier<String> {
+  String build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<String, String>;
+    final element =
+        ref.element as $ClassProviderElement<AnyNotifier<String, String>, String, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(EmailInput)
 const emailInputProvider = EmailInputProvider._();
 
@@ -231,6 +283,55 @@ String _$signInEntryControllerHash() => r'8afdedadcec0bb4e0ce375676dd4bd7652fcfb
 /// Sends the sign-in OTP to the typed mobile number of an existing account.
 
 abstract class _$SignInEntryController extends $AsyncNotifier<void> {
+  FutureOr<void> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    build();
+    final ref = this.ref as $Ref<AsyncValue<void>, void>;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<void>, void>,
+        AsyncValue<void>, Object?, Object?>;
+    element.handleValue(ref, null);
+  }
+}
+
+/// Sends the OTP that proves the mobile number for a new Google account (or links Google to
+/// an existing one).
+
+@ProviderFor(GoogleMobileEntryController)
+const googleMobileEntryControllerProvider = GoogleMobileEntryControllerProvider._();
+
+/// Sends the OTP that proves the mobile number for a new Google account (or links Google to
+/// an existing one).
+final class GoogleMobileEntryControllerProvider
+    extends $AsyncNotifierProvider<GoogleMobileEntryController, void> {
+  /// Sends the OTP that proves the mobile number for a new Google account (or links Google to
+  /// an existing one).
+  const GoogleMobileEntryControllerProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'googleMobileEntryControllerProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$googleMobileEntryControllerHash();
+
+  @$internal
+  @override
+  GoogleMobileEntryController create() => GoogleMobileEntryController();
+}
+
+String _$googleMobileEntryControllerHash() => r'23eb7162b1d2b60fe036d65ecdd3871cd3454162';
+
+/// Sends the OTP that proves the mobile number for a new Google account (or links Google to
+/// an existing one).
+
+abstract class _$GoogleMobileEntryController extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override

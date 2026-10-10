@@ -7,6 +7,8 @@ import 'route_names.dart';
 const Map<String, Set<RegistrationStep>> _gatedRoutes = {
   RouteNames.signIn: {RegistrationStep.mobile},
   RouteNames.signInVerify: {RegistrationStep.mobile},
+  RouteNames.googleMobile: {RegistrationStep.mobile},
+  RouteNames.googleVerify: {RegistrationStep.mobile},
   RouteNames.signupMobile: {RegistrationStep.mobile},
   RouteNames.signupMobileVerify: {RegistrationStep.mobile},
   RouteNames.signupEmail: {RegistrationStep.email},

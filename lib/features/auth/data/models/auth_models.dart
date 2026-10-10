@@ -1,6 +1,7 @@
 import '../../domain/entities/aadhaar_transaction.dart';
 import '../../domain/entities/account_status.dart';
 import '../../domain/entities/auth_session.dart';
+import '../../domain/entities/google_sign_in_result.dart';
 import '../../domain/entities/otp_sent.dart';
 import '../../domain/entities/user_profile.dart';
 
@@ -40,6 +41,64 @@ class AuthResponseModel {
       ),
       status: AccountStatus.fromApi(status),
       aadhaarVerified: aadhaarVerified,
+    );
+  }
+}
+
+/// `SocialSignInResponse`: either tokens (account already linked) or a session token for the
+/// mobile verification that follows.
+class GoogleSignInModel {
+  final bool requiresMobileVerification;
+  final String? accessToken;
+  final String? refreshToken;
+  final String? userId;
+  final String? status;
+  final bool aadhaarVerified;
+  final String? socialSessionToken;
+  final String? googleEmail;
+
+  const GoogleSignInModel({
+    required this.requiresMobileVerification,
+    this.accessToken,
+    this.refreshToken,
+    this.userId,
+    this.status,
+    this.aadhaarVerified = false,
+    this.socialSessionToken,
+    this.googleEmail,
+  });
+
+  factory GoogleSignInModel.fromJson(Object? json) {
+    final map = json as Map<String, dynamic>;
+    return GoogleSignInModel(
+      requiresMobileVerification: map['requiresMobileVerification'] as bool? ?? false,
+      accessToken: map['accessToken'] as String?,
+      refreshToken: map['refreshToken'] as String?,
+      userId: map['userId'] as String?,
+      status: map['status'] as String?,
+      aadhaarVerified: map['aadhaarVerified'] as bool? ?? false,
+      socialSessionToken: map['socialSessionToken'] as String?,
+      googleEmail: map['googleEmail'] as String?,
+    );
+  }
+
+  GoogleSignInResult toResult() {
+    if (requiresMobileVerification) {
+      return GoogleNeedsMobile(
+        socialSessionToken: socialSessionToken!,
+        email: googleEmail ?? '',
+      );
+    }
+    return GoogleSignedIn(
+      AuthResult(
+        session: AuthSession(
+          accessToken: accessToken!,
+          refreshToken: refreshToken!,
+          userId: userId!,
+        ),
+        status: AccountStatus.fromApi(status),
+        aadhaarVerified: aadhaarVerified,
+      ),
     );
   }
 }

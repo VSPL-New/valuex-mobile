@@ -6,6 +6,9 @@ class ApiConstants {
   static const String registerComplete = '/auth/register/complete';
   static const String loginInitiate = '/auth/login/initiate';
   static const String loginVerifyMobile = '/auth/login/verify-mobile';
+  static const String googleSignIn = '/auth/social/google';
+  static const String googleInitiateMobile = '/auth/social/google/initiate-mobile';
+  static const String googleVerifyMobile = '/auth/social/google/verify-mobile';
   static const String skipAadhaar = '/auth/register/skip-aadhaar';
   static const String emailSendOtp = '/auth/email/send-otp';
   static const String emailVerifyOtp = '/auth/email/verify-otp';

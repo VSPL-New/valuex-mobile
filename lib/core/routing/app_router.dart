@@ -9,6 +9,8 @@ import '../../features/auth/presentation/screens/aadhaar_dev_otp_screen.dart';
 import '../../features/auth/presentation/screens/aadhaar_screen.dart';
 import '../../features/auth/presentation/screens/account_blocked_screen.dart';
 import '../../features/auth/presentation/screens/create_account_screen.dart';
+import '../../features/auth/presentation/screens/google_mobile_screen.dart';
+import '../../features/auth/presentation/screens/google_otp_screen.dart';
 import '../../features/auth/presentation/screens/sign_in_mobile_screen.dart';
 import '../../features/auth/presentation/screens/sign_in_otp_screen.dart';
 import '../../features/auth/presentation/screens/signup_email_screen.dart';
@@ -60,6 +62,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: RouteNames.signInVerify,
         name: 'signInVerify',
         builder: (context, state) => const SignInOtpScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.googleMobile,
+        name: 'googleMobile',
+        builder: (context, state) => const GoogleMobileScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.googleVerify,
+        name: 'googleVerify',
+        builder: (context, state) => const GoogleOtpScreen(),
       ),
       GoRoute(
         path: RouteNames.signupMobile,
