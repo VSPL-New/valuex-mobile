@@ -226,7 +226,7 @@ final class FeaturedListingsProvider
   }
 }
 
-String _$featuredListingsHash() => r'fa37a618af07d1d8fc7f936169422f1dbac19e38';
+String _$featuredListingsHash() => r'96315245719bc121925bf7836cc195478be804d6';
 
 /// The place Home measures "near you" from: an address the user chose, otherwise the device
 /// location when permission is given.

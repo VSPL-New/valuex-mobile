@@ -19,7 +19,7 @@ ValueX C2C marketplace mobile app (Flutter). Targets Android and iOS; a `web/` r
 
 - Flutter `>= 3.22.0` (stable) with Dart `>= 3.4.0 < 4.0.0`
 - Git
-- Android: Android Studio, Android SDK + platform tools, an emulator or USB device, JDK 17 (Gradle and Kotlin target Java 17)
+- Android: Android Studio, Android SDK + platform tools, an emulator or USB device, JDK 17 (Gradle and Kotlin target Java 17). If several JDKs are installed, point Gradle at 17 on your machine only, in `~/.gradle/gradle.properties` (not in the repo): `org.gradle.java.home=/path/to/jdk-17`
 - iOS (macOS only): Xcode (latest stable) with command line tools, CocoaPods (`brew install cocoapods`), iOS 15.0+ simulator or device
 - For API-backed features: the `valuex-backend` service running locally (see [Backend](#backend))
 
@@ -163,12 +163,35 @@ Manual test guides per user story and sprint are in [../Documents](../Documents)
 ## Static analysis and formatting
 
 ```bash
-flutter analyze
-dart format lib test
-dart format --output=none --set-exit-if-changed lib test   # CI-style check
+flutter analyze --fatal-infos
+dart format lib test integration_test
+dart format --output=none --set-exit-if-changed lib test integration_test   # CI-style check
 ```
 
-Rules come from `flutter_lints` ([analysis_options.yaml](analysis_options.yaml)). Resolve all analyzer issues before opening a PR.
+Rules come from `flutter_lints` and `riverpod_lint` ([analysis_options.yaml](analysis_options.yaml); `riverpod_lint` is enabled under `plugins:`, and the first analyze downloads it). Resolve all analyzer issues, infos included, before opening a PR.
+
+## Continuous integration
+
+[.github/workflows/mobile-ci.yml](.github/workflows/mobile-ci.yml) runs on every pull request and on `main`:
+
+| Job | Checks |
+|---|---|
+| `pr-title` | Conventional Commits title |
+| `quality` | generated code up to date, format, `flutter analyze --fatal-infos`, tests, coverage gate (85%, generated and l10n files excluded) |
+| `store-compliance` | `tool/check_store_compliance.sh` (see below) |
+| `android-build` | debug APK |
+| `ios-build` | debug iOS build without signing, only when `ios/` or the pubspec files change |
+
+The Flutter version is pinned in the workflow (`FLUTTER_VERSION`); update it deliberately. Run the same checks locally before pushing:
+
+```bash
+dart run build_runner build --delete-conflicting-outputs && flutter gen-l10n && dart format lib test integration_test && git diff --exit-code -- lib
+flutter test --coverage && tool/check_coverage.sh coverage/lcov.info 85
+```
+
+## Store compliance
+
+`tool/check_store_compliance.sh` checks what can be verified from the repo for Google Play and the App Store (release signing, privacy manifest, encryption declaration, permissions, usage strings, placeholder hosts). It reports findings as warnings; `--strict` (or the `strict_store_checks` input of a manual CI run) fails on any finding. The manual checklist and current gaps are in [docs/Store-Compliance.md](docs/Store-Compliance.md).
 
 ## Building
 
@@ -189,7 +212,7 @@ Application ID / bundle ID: `com.valuex.valuex_mobile`. Version is set by `versi
 |---|---|
 | Stale dependencies or odd build errors | `flutter clean && flutter pub get` |
 | iOS pod errors | `cd ios && pod install --repo-update` |
-| Android Gradle failures | Confirm JDK 17 (`flutter doctor -v`), then `cd android && ./gradlew clean` |
+| Android Gradle failures | Confirm JDK 17 (`flutter doctor -v`); with several JDKs installed, set `org.gradle.java.home` in `~/.gradle/gradle.properties`, then `cd android && ./gradlew clean` |
 | Android licence errors | `flutter doctor --android-licenses` |
 | API unreachable from Android emulator | Use `10.0.2.2` instead of `localhost` |
 | API unreachable in Android release build | Add the `INTERNET` permission to the main manifest |
@@ -200,4 +223,4 @@ Application ID / bundle ID: `com.valuex.valuex_mobile`. Version is set by `versi
 
 - Do not commit `build/`, `.dart_tool/`, `android/local.properties`, or IDE files.
 - Commit `pubspec.lock`.
-- Run `flutter analyze` and `flutter test` before every push.
+- Run `flutter analyze` and `flutter test` before every push (CI runs both, plus the other checks above).
