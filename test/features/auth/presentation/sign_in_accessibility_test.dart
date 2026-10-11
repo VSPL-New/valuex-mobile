@@ -8,6 +8,7 @@ import 'package:valuex_mobile/core/widgets/field_error.dart';
 
 import '../../../helpers/app_harness.dart';
 import '../../../helpers/fonts.dart';
+import '../../../helpers/accessibility.dart';
 
 void main() {
   setUpAll(loadBrandFonts);
@@ -38,7 +39,7 @@ void main() {
         androidTapTargetGuideline,
         iOSTapTargetGuideline,
         labeledTapTargetGuideline,
-        textContrastGuideline,
+        textContrast,
       ]) {
         await expectLater(tester, meetsGuideline(guideline));
       }
@@ -50,7 +51,7 @@ void main() {
       for (final guideline in [
         androidTapTargetGuideline,
         labeledTapTargetGuideline,
-        textContrastGuideline,
+        textContrast,
       ]) {
         await expectLater(tester, meetsGuideline(guideline));
       }

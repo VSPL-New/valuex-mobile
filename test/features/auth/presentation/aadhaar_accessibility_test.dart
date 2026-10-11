@@ -8,6 +8,7 @@ import 'package:valuex_mobile/features/auth/domain/entities/aadhaar_transaction.
 
 import '../../../helpers/app_harness.dart';
 import '../../../helpers/fonts.dart';
+import '../../../helpers/accessibility.dart';
 
 void main() {
   setUpAll(loadBrandFonts);
@@ -50,7 +51,7 @@ void main() {
         androidTapTargetGuideline,
         iOSTapTargetGuideline,
         labeledTapTargetGuideline,
-        textContrastGuideline,
+        textContrast,
       ]) {
         await expectLater(tester, meetsGuideline(guideline));
       }
@@ -58,7 +59,7 @@ void main() {
       await tapVerifyWithNothing(tester, harness);
 
       expect(find.byType(FieldError), findsNWidgets(2));
-      await expectLater(tester, meetsGuideline(textContrastGuideline));
+      await expectLater(tester, meetsGuideline(textContrast));
       handle.dispose();
       await harness.dispose();
     });
@@ -119,7 +120,7 @@ void main() {
         androidTapTargetGuideline,
         iOSTapTargetGuideline,
         labeledTapTargetGuideline,
-        textContrastGuideline,
+        textContrast,
       ]) {
         await expectLater(tester, meetsGuideline(guideline));
       }

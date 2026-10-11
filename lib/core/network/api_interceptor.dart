@@ -45,7 +45,7 @@ class ApiInterceptor extends Interceptor {
 
     final String? accessToken;
     try {
-      accessToken = await _refresher.refresh();
+      accessToken = await _currentIfRenewed(options) ?? await _refresher.refresh();
     } on ApiError catch (error) {
       return handler.reject(_rejection(err, error));
     }
@@ -60,6 +60,14 @@ class ApiInterceptor extends Interceptor {
     } on DioException catch (retryError) {
       handler.reject(retryError);
     }
+  }
+
+  /// A request that was sent before another call finished refreshing fails with the old
+  /// token; retry it with the new one instead of spending another refresh token.
+  Future<String?> _currentIfRenewed(RequestOptions options) async {
+    final current = await _storage.getAccessToken();
+    if (current == null || options.headers['Authorization'] == 'Bearer $current') return null;
+    return current;
   }
 
   DioException _rejection(DioException source, ApiError error) {

@@ -201,6 +201,8 @@ dart run build_runner build --delete-conflicting-outputs && flutter gen-l10n && 
 flutter test --coverage && tool/check_coverage.sh coverage/lcov.info 85
 ```
 
+CI adds `--dart-define=SKIP_PIXEL_CONTRAST=true` to `flutter test`: the framework's pixel-sampling text-contrast check reads thin text as far lighter on the Linux runner than on macOS, so it only runs locally. Token contrast is enforced on every platform by `test/core/theme/contrast_test.dart`. Major-version dependency upgrades are not proposed by Dependabot; do them deliberately.
+
 ## Store compliance
 
 `tool/check_store_compliance.sh` checks what can be verified from the repo for Google Play and the App Store (release signing, privacy manifest, encryption declaration, permissions, usage strings, placeholder hosts). It reports findings as warnings; `--strict` (or the `strict_store_checks` input of a manual CI run) fails on any finding. The manual checklist and current gaps are in [docs/Store-Compliance.md](docs/Store-Compliance.md).

@@ -4,6 +4,7 @@ import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart'
 
 import 'helpers/app_harness.dart';
 import 'helpers/fonts.dart';
+import 'helpers/accessibility.dart';
 
 /// Every screen must pass Flutter's accessibility guidelines. Add a screen here when it is built:
 /// a new screen that fails tap target size, labels or text contrast breaks this test.
@@ -28,7 +29,7 @@ void main() {
     'android tap target (48 dp)': androidTapTargetGuideline,
     'ios tap target (44 pt)': iOSTapTargetGuideline,
     'labelled tap targets': labeledTapTargetGuideline,
-    'text contrast (4.5:1)': textContrastGuideline,
+    'text contrast (4.5:1)': textContrast,
   };
 
   for (final entry in screens.entries) {
@@ -51,7 +52,7 @@ void main() {
     final harness = AppHarness(tester);
     await harness.launch(waitOutSplash: false);
 
-    await expectLater(tester, meetsGuideline(textContrastGuideline));
+    await expectLater(tester, meetsGuideline(textContrast));
     await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
     await tester.pump(const Duration(seconds: 3));
     handle.dispose();

@@ -39,7 +39,7 @@ final class SessionControllerProvider
   SessionController create() => SessionController();
 }
 
-String _$sessionControllerHash() => r'1770391ec4cc1ee2690872158ec6d1e8ebeaf148';
+String _$sessionControllerHash() => r'd0451a08abeaad6695b6f14e72076f1d0bf5e8d4';
 
 /// Account state of the signed-in user. Loading and error describe the startup
 /// lookup; routing decisions come from the server status, not from cached screens.

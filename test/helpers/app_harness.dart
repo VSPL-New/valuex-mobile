@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:valuex_mobile/app.dart';
 import 'package:valuex_mobile/core/config/app_config.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
+import 'package:valuex_mobile/core/network/session_event.dart';
 import 'package:valuex_mobile/core/routing/app_router.dart';
 import 'package:valuex_mobile/core/security/screen_protection_service.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
@@ -46,12 +47,12 @@ class AppHarness {
   final MockApiClient apiClient = MockApiClient();
   final FakeScreenProtection screenProtection = FakeScreenProtection();
   final FakeLocationService locationService = FakeLocationService();
-  final StreamController<void> sessionExpired = StreamController<void>.broadcast();
+  final StreamController<SessionEvent> sessionExpired = StreamController<SessionEvent>.broadcast();
   final AppConfig config;
 
   AppHarness(this.tester, {AppConfig? config}) : config = config ?? testConfig {
     SharedPreferences.setMockInitialValues({});
-    when(() => apiClient.onSessionExpired).thenAnswer((_) => sessionExpired.stream);
+    when(() => apiClient.sessionEvents).thenAnswer((_) => sessionExpired.stream);
     when(() => repository.hasSession()).thenAnswer((_) async => false);
     when(() => repository.clearSession()).thenAnswer((_) async {});
   }

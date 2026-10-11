@@ -6,18 +6,22 @@ import '../security/secure_storage_service.dart';
 import 'api_error.dart';
 import 'api_error_mapper.dart';
 import 'api_response.dart';
+import 'session_event.dart';
 
 /// Exchanges the stored refresh token for a new pair; concurrent callers share one request.
 class TokenRefresher {
+  static const _suspendedCode = 'ERROR_ACCOUNT_SUSPENDED';
+  static const _recoveryRequiredCode = 'ERROR_ACCOUNT_RECOVERY_REQUIRED';
+
   final SecureStorageService _storage;
   final Dio _dio;
-  final _expired = StreamController<void>.broadcast();
+  final _events = StreamController<SessionEvent>.broadcast();
   Future<String?>? _inFlight;
 
   TokenRefresher(this._storage, this._dio);
 
-  /// Emits when the session can no longer be renewed and the user must sign in again.
-  Stream<void> get onSessionExpired => _expired.stream;
+  /// Emits after each refresh and when the session can no longer be renewed.
+  Stream<SessionEvent> get events => _events.stream;
 
   /// Returns the new access token, or null when the session has expired.
   /// Throws a retryable [ApiError] when the failure is transient, keeping the tokens.
@@ -25,9 +29,9 @@ class TokenRefresher {
     return _inFlight ??= _refresh().whenComplete(() => _inFlight = null);
   }
 
-  Future<void> expire() async {
+  Future<void> expire([SessionEndReason reason = SessionEndReason.expired]) async {
     await _storage.clearSession();
-    _expired.add(null);
+    _events.add(SessionEnded(reason));
   }
 
   Future<String?> _refresh() async {
@@ -53,14 +57,22 @@ class TokenRefresher {
       }
       await _storage.saveAccessToken(accessToken);
       await _storage.saveRefreshToken(newRefreshToken);
+      _events.add(SessionRefreshed(
+        status: data?['status'] as String?,
+        aadhaarVerified: data?['aadhaarVerified'] as bool?,
+      ));
       return accessToken;
     } on DioException catch (e) {
       final error = ApiErrorMapper.fromDio(e);
       if (error.isRetryable) throw error;
-      await expire();
+      await expire(switch (error.code) {
+        _suspendedCode => SessionEndReason.suspended,
+        _recoveryRequiredCode => SessionEndReason.recoveryRequired,
+        _ => SessionEndReason.expired,
+      });
       return null;
     }
   }
 
-  void dispose() => _expired.close();
+  void dispose() => _events.close();
 }
