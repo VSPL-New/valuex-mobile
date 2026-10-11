@@ -233,7 +233,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aadhaarHideNumber => 'Hide Aadhaar number';
 
   @override
-  String get aadhaarConsent => 'I consent to ValueX using my Aadhaar number to verify my identity';
+  String get aadhaarConsent =>
+      'I consent to JustQlic using my Aadhaar number to verify my identity';
 
   @override
   String get aadhaarVerifyButton => 'Verify Aadhaar';
@@ -486,7 +487,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get termsSection2 => '2. Your account';
 
   @override
-  String get termsSection3 => '3. Using ValueX';
+  String get termsSection3 => '3. Using JustQlic';
 
   @override
   String get termsSection4 => '4. Listings and purchases';
@@ -689,7 +690,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String googleMobileSubtitle(String email) {
-    return 'You are signing in with $email. ValueX uses your mobile number to identify your account.';
+    return 'You are signing in with $email. JustQlic uses your mobile number to identify your account.';
   }
 
   @override
@@ -700,7 +701,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get googleErrorAlreadyLinked =>
-      'This Google account is already linked to another ValueX account';
+      'This Google account is already linked to another JustQlic account';
 
   @override
   String get googleErrorSessionExpired =>

@@ -234,7 +234,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get aadhaarConsent =>
-      'मैं अपनी पहचान सत्यापित करने के लिए ValueX को अपना आधार नंबर उपयोग करने की सहमति देता/देती हूँ';
+      'मैं अपनी पहचान सत्यापित करने के लिए JustQlic को अपना आधार नंबर उपयोग करने की सहमति देता/देती हूँ';
 
   @override
   String get aadhaarVerifyButton => 'आधार सत्यापित करें';
@@ -487,7 +487,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get termsSection2 => '2. आपका खाता';
 
   @override
-  String get termsSection3 => '3. ValueX का उपयोग';
+  String get termsSection3 => '3. JustQlic का उपयोग';
 
   @override
   String get termsSection4 => '4. लिस्टिंग और खरीदारी';
@@ -689,7 +689,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String googleMobileSubtitle(String email) {
-    return 'आप $email से साइन इन कर रहे हैं। ValueX आपके खाते की पहचान के लिए आपके मोबाइल नंबर का उपयोग करता है।';
+    return 'आप $email से साइन इन कर रहे हैं। JustQlic आपके खाते की पहचान के लिए आपके मोबाइल नंबर का उपयोग करता है।';
   }
 
   @override
@@ -699,7 +699,8 @@ class AppLocalizationsHi extends AppLocalizations {
   String get googleErrorUnavailable => 'Google साइन-इन अभी अस्थायी रूप से उपलब्ध नहीं है';
 
   @override
-  String get googleErrorAlreadyLinked => 'यह Google खाता पहले से किसी अन्य ValueX खाते से जुड़ा है';
+  String get googleErrorAlreadyLinked =>
+      'यह Google खाता पहले से किसी अन्य JustQlic खाते से जुड़ा है';
 
   @override
   String get googleErrorSessionExpired =>

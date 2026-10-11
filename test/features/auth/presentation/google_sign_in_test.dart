@@ -213,7 +213,7 @@ void main() {
       'ERROR_INVALID_STATE':
           'This number has an unfinished registration. Sign in with your mobile number to finish it',
       'ERROR_SOCIAL_ACCOUNT_ALREADY_LINKED':
-          'This Google account is already linked to another ValueX account',
+          'This Google account is already linked to another JustQlic account',
       'ERROR_SOCIAL_SESSION_EXPIRED':
           'Google sign-in session expired. Please sign in with Google again',
       'ERROR_ACCOUNT_RECOVERY_REQUIRED': 'Your account requires recovery. Please contact support',

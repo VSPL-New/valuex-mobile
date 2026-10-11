@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
+import 'package:valuex_mobile/core/network/session_event.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/auth_session.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/google_sign_in_result.dart';
@@ -37,7 +38,7 @@ void main() {
     repository = MockAuthRepository();
     tokenSource = _FakeTokenSource();
     final apiClient = MockApiClient();
-    when(() => apiClient.onSessionExpired).thenAnswer((_) => const Stream<void>.empty());
+    when(() => apiClient.sessionEvents).thenAnswer((_) => const Stream<SessionEvent>.empty());
     when(() => repository.hasSession()).thenAnswer((_) async => false);
     container = ProviderContainer(
       overrides: [

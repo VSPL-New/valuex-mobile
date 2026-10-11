@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,6 +34,24 @@ Widget _app(Locale locale, Widget home, {List<Override> overrides = const []}) {
 }
 
 void main() {
+  test('user-facing translations use the JustQlic product name', () {
+    for (final language in ['en', 'hi']) {
+      final messages =
+          jsonDecode(File('lib/l10n/app_$language.arb').readAsStringSync()) as Map<String, dynamic>;
+      expect(messages['appName'], 'JustQlic');
+      for (final entry in messages.entries) {
+        if (entry.key.startsWith('@') || entry.value is! String) continue;
+        expect(entry.value, isNot(contains('ValueX')), reason: '$language: ${entry.key}');
+        expect(entry.value, isNot(contains('valuex.com')), reason: '$language: ${entry.key}');
+      }
+      final localized = lookupAppLocalizations(Locale(language));
+      expect(localized.aadhaarConsent, contains('JustQlic'));
+      expect(localized.termsSection3, contains('JustQlic'));
+      expect(localized.googleMobileSubtitle('test@example.com'), contains('JustQlic'));
+      expect(localized.googleErrorAlreadyLinked, contains('JustQlic'));
+    }
+  });
+
   test('English and Hindi define the same keys', () {
     final en = lookupAppLocalizations(const Locale('en'));
     final hi = lookupAppLocalizations(const Locale('hi'));
