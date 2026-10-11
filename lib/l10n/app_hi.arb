@@ -70,7 +70,7 @@
   "aadhaarNumberHint": "12 अंकों का आधार नंबर",
   "aadhaarShowNumber": "आधार नंबर दिखाएँ",
   "aadhaarHideNumber": "आधार नंबर छिपाएँ",
-  "aadhaarConsent": "मैं अपनी पहचान सत्यापित करने के लिए ValueX को अपना आधार नंबर उपयोग करने की सहमति देता/देती हूँ",
+  "aadhaarConsent": "मैं अपनी पहचान सत्यापित करने के लिए JustQlic को अपना आधार नंबर उपयोग करने की सहमति देता/देती हूँ",
   "aadhaarNumberInvalid": "12 अंकों का आधार नंबर दर्ज करें",
   "aadhaarConsentRequired": "आगे बढ़ने के लिए सहमति दें",
   "aadhaarVerifyButton": "आधार सत्यापित करें",
@@ -151,7 +151,7 @@
   "termsPlaceholder": "[कानूनी पाठ जोड़ा जाएगा]",
   "termsSection1": "1. शर्तों की स्वीकृति",
   "termsSection2": "2. आपका खाता",
-  "termsSection3": "3. ValueX का उपयोग",
+  "termsSection3": "3. JustQlic का उपयोग",
   "termsSection4": "4. लिस्टिंग और खरीदारी",
   "termsSection5": "5. भुगतान और शुल्क",
   "termsSection6": "6. गोपनीयता और आपका डेटा",
@@ -209,7 +209,7 @@
   "homeSellAadhaarRequired": "आगे बढ़ने के लिए कृपया आधार सत्यापन पूरा करें",
   "categoriesTitle": "सभी श्रेणियाँ",
   "googleMobileTitle": "अपना मोबाइल नंबर जोड़ें",
-  "googleMobileSubtitle": "आप {email} से साइन इन कर रहे हैं। ValueX आपके खाते की पहचान के लिए आपके मोबाइल नंबर का उपयोग करता है।",
+  "googleMobileSubtitle": "आप {email} से साइन इन कर रहे हैं। JustQlic आपके खाते की पहचान के लिए आपके मोबाइल नंबर का उपयोग करता है।",
   "@googleMobileSubtitle": {
     "placeholders": {
       "email": {
@@ -219,7 +219,7 @@
   },
   "googleErrorFailed": "Google साइन-इन विफल रहा। कृपया दोबारा प्रयास करें",
   "googleErrorUnavailable": "Google साइन-इन अभी अस्थायी रूप से उपलब्ध नहीं है",
-  "googleErrorAlreadyLinked": "यह Google खाता पहले से किसी अन्य ValueX खाते से जुड़ा है",
+  "googleErrorAlreadyLinked": "यह Google खाता पहले से किसी अन्य JustQlic खाते से जुड़ा है",
   "googleErrorSessionExpired": "Google साइन-इन सत्र समाप्त हो गया। कृपया Google से दोबारा साइन इन करें",
   "googleErrorIncompleteAccount": "इस नंबर का पंजीकरण अधूरा है। इसे पूरा करने के लिए अपने मोबाइल नंबर से साइन इन करें",
   "googleMockBanner": "केवल डेवलपमेंट के लिए — नकली Google खाता। क्लाइंट आईडी कॉन्फ़िगर होने पर असली Google खाता चयन इसकी जगह लेगा",

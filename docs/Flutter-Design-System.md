@@ -15,7 +15,7 @@ Rules:
 - When a page exists in both, take layout from the design file and tokens (colours, fonts, gradient) from Make.
 - When a page exists only in Make, follow Make.
 - Conflicts between a Figma frame and this document are handled with the protocol in section 6.1, never by guessing.
-- The product name is **JustQlic**. Make's "ValueX" text and wordmark are replaced by the JustQlic logo and name. Package and bundle IDs stay `valuex_mobile` / `com.valuex.valuex_mobile`.
+- The product name is **JustQlic** and its domain is **justqlic.com**. ValueX remains the internal project name only. User-facing copy, consent, terms, notifications and logo labels use JustQlic. Make's "ValueX" text and wordmark are replaced by the JustQlic logo and name. Package and bundle IDs stay `valuex_mobile` / `com.valuex.valuex_mobile` (iOS: `com.valuex.valuexMobile`); changing them would affect installed apps and OAuth clients. Service subdomains require separate deployment configuration, not a branding-only replacement.
 
 ---
 
@@ -365,7 +365,7 @@ Decisions taken so far. Add a row for every approved conflict resolution (sectio
 
 | 2026-10-08 | Email entry | Same gaps as mobile entry | **Approved:** same pattern: inline `FieldError`, Send OTP stays enabled, field label announced |
 
-| 2026-10-08 | Aadhaar and development Aadhaar OTP | Snackbar errors, dimmed Verify, 44 dp controls, unlabeled field | **Approved:** same form pattern as mobile entry; consent shows its own message with a red checkbox; the form scrolls to its messages; the consent copy keeps "ValueX" until legal confirms the brand name |
+| 2026-10-08 | Aadhaar and development Aadhaar OTP | Snackbar errors, dimmed Verify, 44 dp controls, unlabeled field | **Approved:** same form pattern as mobile entry; consent shows its own message with a red checkbox; the form scrolls to its messages. The interim "ValueX" consent name was replaced by JustQlic on 2026-10-11 following the owner's product-name confirmation |
 
 | 2026-10-08 | Sign Up | Submit dimmed with no reason; messages only for typed-in invalid values; unlabeled fields and switch; faint edges on choices and pickers; 44 dp controls; gender words broken at 200% | **Applied from the approved patterns:** Submit stays enabled and shows a message under every missing or invalid field, scrolling to the first; fields and the terms switch are labelled; `brandControlBorder` edges; 48 dp; gender choices stack at large text; server errors show under the form |
 | 2026-10-08 | Terms, Account unavailable, Home, Splash | Plain titles; 44 dp close button; 12 px splash label; fixed-height blocked page | **Applied:** titles and Terms sections are headings; 48 dp close button; 14 px splash label; blocked page scrolls at large text |

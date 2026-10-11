@@ -101,7 +101,7 @@
   "aadhaarNumberHint": "12-digit Aadhaar number",
   "aadhaarShowNumber": "Show Aadhaar number",
   "aadhaarHideNumber": "Hide Aadhaar number",
-  "aadhaarConsent": "I consent to ValueX using my Aadhaar number to verify my identity",
+  "aadhaarConsent": "I consent to JustQlic using my Aadhaar number to verify my identity",
   "aadhaarVerifyButton": "Verify Aadhaar",
   "aadhaarNumberInvalid": "Enter your 12-digit Aadhaar number",
   "aadhaarConsentRequired": "Please accept to continue",
@@ -189,7 +189,7 @@
   "termsPlaceholder": "[Legal text to be added]",
   "termsSection1": "1. Acceptance of terms",
   "termsSection2": "2. Your account",
-  "termsSection3": "3. Using ValueX",
+  "termsSection3": "3. Using JustQlic",
   "termsSection4": "4. Listings and purchases",
   "termsSection5": "5. Payments and fees",
   "termsSection6": "6. Privacy and your data",
@@ -282,7 +282,7 @@
   "homeSellAadhaarRequired": "Please complete Aadhaar verification to proceed",
   "categoriesTitle": "All categories",
   "googleMobileTitle": "Add your mobile number",
-  "googleMobileSubtitle": "You are signing in with {email}. ValueX uses your mobile number to identify your account.",
+  "googleMobileSubtitle": "You are signing in with {email}. JustQlic uses your mobile number to identify your account.",
   "@googleMobileSubtitle": {
     "placeholders": {
       "email": {
@@ -292,7 +292,7 @@
   },
   "googleErrorFailed": "Google sign-in failed. Please try again",
   "googleErrorUnavailable": "Google Sign-In is temporarily unavailable",
-  "googleErrorAlreadyLinked": "This Google account is already linked to another ValueX account",
+  "googleErrorAlreadyLinked": "This Google account is already linked to another JustQlic account",
   "googleErrorSessionExpired": "Google sign-in session expired. Please sign in with Google again",
   "googleErrorIncompleteAccount": "This number has an unfinished registration. Sign in with your mobile number to finish it",
   "googleMockBanner": "DEVELOPMENT ONLY — mock Google account. The real Google account chooser replaces this once client IDs are configured",

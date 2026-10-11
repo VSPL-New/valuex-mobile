@@ -516,7 +516,7 @@ abstract class AppLocalizations {
   /// No description provided for @aadhaarConsent.
   ///
   /// In en, this message translates to:
-  /// **'I consent to ValueX using my Aadhaar number to verify my identity'**
+  /// **'I consent to JustQlic using my Aadhaar number to verify my identity'**
   String get aadhaarConsent;
 
   /// No description provided for @aadhaarVerifyButton.
@@ -1002,7 +1002,7 @@ abstract class AppLocalizations {
   /// No description provided for @termsSection3.
   ///
   /// In en, this message translates to:
-  /// **'3. Using ValueX'**
+  /// **'3. Using JustQlic'**
   String get termsSection3;
 
   /// No description provided for @termsSection4.
@@ -1350,7 +1350,7 @@ abstract class AppLocalizations {
   /// No description provided for @googleMobileSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'You are signing in with {email}. ValueX uses your mobile number to identify your account.'**
+  /// **'You are signing in with {email}. JustQlic uses your mobile number to identify your account.'**
   String googleMobileSubtitle(String email);
 
   /// No description provided for @googleErrorFailed.
@@ -1368,7 +1368,7 @@ abstract class AppLocalizations {
   /// No description provided for @googleErrorAlreadyLinked.
   ///
   /// In en, this message translates to:
-  /// **'This Google account is already linked to another ValueX account'**
+  /// **'This Google account is already linked to another JustQlic account'**
   String get googleErrorAlreadyLinked;
 
   /// No description provided for @googleErrorSessionExpired.
