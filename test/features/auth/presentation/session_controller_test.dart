@@ -4,9 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
+import 'package:valuex_mobile/core/network/session_event.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/auth_session.dart';
+import 'package:valuex_mobile/features/auth/domain/entities/registration_step.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/user_profile.dart';
 import 'package:valuex_mobile/features/auth/presentation/providers/auth_providers.dart';
 import 'package:valuex_mobile/features/auth/presentation/providers/session_controller.dart';
@@ -21,14 +23,14 @@ UserProfile _profile(AccountStatus status, {bool aadhaarVerified = false}) {
 void main() {
   late MockAuthRepository repository;
   late MockApiClient apiClient;
-  late StreamController<void> sessionExpired;
+  late StreamController<SessionEvent> sessionExpired;
   late ProviderContainer container;
 
   setUp(() {
     repository = MockAuthRepository();
     apiClient = MockApiClient();
-    sessionExpired = StreamController<void>.broadcast();
-    when(() => apiClient.onSessionExpired).thenAnswer((_) => sessionExpired.stream);
+    sessionExpired = StreamController<SessionEvent>.broadcast();
+    when(() => apiClient.sessionEvents).thenAnswer((_) => sessionExpired.stream);
     when(() => repository.clearSession()).thenAnswer((_) async {});
     container = ProviderContainer(
       overrides: [
@@ -77,11 +79,73 @@ void main() {
     when(() => repository.fetchProfile()).thenAnswer((_) async => _profile(AccountStatus.active));
     await resolve();
 
-    sessionExpired.add(null);
+    sessionExpired.add(const SessionEnded(SessionEndReason.expired));
     await Future<void>.delayed(Duration.zero);
 
     final state = container.read(sessionControllerProvider).value as Unauthenticated;
     expect(state.sessionExpired, isTrue);
+  });
+
+  test('a refresh that finds a changed account state publishes it', () async {
+    when(() => repository.hasSession()).thenAnswer((_) async => true);
+    when(() => repository.fetchProfile()).thenAnswer(
+      (_) async => _profile(AccountStatus.identityVerificationPending),
+    );
+    await resolve();
+
+    sessionExpired.add(const SessionRefreshed(status: 'ACTIVE', aadhaarVerified: true));
+    await Future<void>.delayed(Duration.zero);
+
+    final state = container.read(sessionControllerProvider).value as Authenticated;
+    expect(state.status, AccountStatus.active);
+    expect(state.aadhaarVerified, isTrue);
+  });
+
+  test('a refresh that finds nothing new leaves the state object alone', () async {
+    when(() => repository.hasSession()).thenAnswer((_) async => true);
+    when(() => repository.fetchProfile()).thenAnswer((_) async => _profile(AccountStatus.active));
+    await resolve();
+    final before = container.read(sessionControllerProvider).value;
+
+    sessionExpired.add(const SessionRefreshed(status: 'ACTIVE', aadhaarVerified: false));
+    await Future<void>.delayed(Duration.zero);
+
+    expect(identical(container.read(sessionControllerProvider).value, before), isTrue);
+  });
+
+  test('a refresh while signed out changes nothing', () async {
+    when(() => repository.hasSession()).thenAnswer((_) async => false);
+    await resolve();
+
+    sessionExpired.add(const SessionRefreshed(status: 'ACTIVE', aadhaarVerified: true));
+    await Future<void>.delayed(Duration.zero);
+
+    expect(container.read(sessionControllerProvider).value, isA<Unauthenticated>());
+  });
+
+  test('a suspended account found at refresh opens the blocked state', () async {
+    when(() => repository.hasSession()).thenAnswer((_) async => true);
+    when(() => repository.fetchProfile()).thenAnswer((_) async => _profile(AccountStatus.active));
+    await resolve();
+
+    sessionExpired.add(const SessionEnded(SessionEndReason.suspended));
+    await Future<void>.delayed(Duration.zero);
+
+    final state = container.read(sessionControllerProvider).value as Authenticated;
+    expect(state.status, AccountStatus.suspended);
+    expect(state.step, RegistrationStep.blocked);
+  });
+
+  test('an account needing recovery found at refresh opens the blocked state', () async {
+    when(() => repository.hasSession()).thenAnswer((_) async => true);
+    when(() => repository.fetchProfile()).thenAnswer((_) async => _profile(AccountStatus.active));
+    await resolve();
+
+    sessionExpired.add(const SessionEnded(SessionEndReason.recoveryRequired));
+    await Future<void>.delayed(Duration.zero);
+
+    final state = container.read(sessionControllerProvider).value as Authenticated;
+    expect(state.step, RegistrationStep.blocked);
   });
 
   test('signedIn publishes the status issued with the tokens', () async {

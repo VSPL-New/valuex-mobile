@@ -6,6 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/app.dart';
 import 'package:valuex_mobile/core/config/app_config.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
+import 'package:valuex_mobile/core/network/session_event.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
 import 'package:valuex_mobile/core/widgets/error_view.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
@@ -28,13 +29,13 @@ final _config = AppConfig.parse(
 void main() {
   late MockAuthRepository repository;
   late MockApiClient apiClient;
-  late StreamController<void> sessionExpired;
+  late StreamController<SessionEvent> sessionExpired;
 
   setUp(() {
     repository = MockAuthRepository();
     apiClient = MockApiClient();
-    sessionExpired = StreamController<void>.broadcast();
-    when(() => apiClient.onSessionExpired).thenAnswer((_) => sessionExpired.stream);
+    sessionExpired = StreamController<SessionEvent>.broadcast();
+    when(() => apiClient.sessionEvents).thenAnswer((_) => sessionExpired.stream);
     when(() => repository.clearSession()).thenAnswer((_) async {});
     addTearDown(sessionExpired.close);
   });
@@ -115,10 +116,23 @@ void main() {
     await launch(tester);
     expect(find.byType(HomeScreen), findsOneWidget);
 
-    sessionExpired.add(null);
+    sessionExpired.add(const SessionEnded(SessionEndReason.expired));
     await settle(tester);
 
     expect(find.byType(SignInMobileScreen), findsOneWidget);
     expect(find.text('Session expired — Login again'), findsOneWidget);
+  });
+
+  testWidgets('a suspension found while renewing the session shows the blocked page', (
+    tester,
+  ) async {
+    signedInAs(AccountStatus.active);
+    await launch(tester);
+    expect(find.byType(HomeScreen), findsOneWidget);
+
+    sessionExpired.add(const SessionEnded(SessionEndReason.suspended));
+    await settle(tester);
+
+    expect(find.byType(AccountBlockedScreen), findsOneWidget);
   });
 }

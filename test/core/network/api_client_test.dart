@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:valuex_mobile/core/config/app_config.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
+import 'package:valuex_mobile/core/network/session_event.dart';
 
 import '../../helpers/fake_http_adapter.dart';
 import '../../helpers/fake_secure_storage.dart';
@@ -184,8 +185,8 @@ void main() {
         return FakeHttpAdapter.error(401, 'UNAUTHORIZED', 'expired');
       });
       final client = _client(storage, adapter);
-      var expiredEvents = 0;
-      client.onSessionExpired.listen((_) => expiredEvents++);
+      final events = <SessionEvent>[];
+      client.sessionEvents.listen(events.add);
 
       final error = await _expectError(client.get<Object?>('/users/me'));
       await Future<void>.delayed(Duration.zero);
@@ -193,7 +194,90 @@ void main() {
       expect(error.type, ApiErrorType.sessionExpired);
       expect(storage.accessToken, isNull);
       expect(storage.refreshToken, isNull);
-      expect(expiredEvents, 1);
+      expect(events.single, isA<SessionEnded>());
+      expect((events.single as SessionEnded).reason, SessionEndReason.expired);
+    });
+
+    for (final (code, reason) in [
+      ('ERROR_ACCOUNT_SUSPENDED', SessionEndReason.suspended),
+      ('ERROR_ACCOUNT_RECOVERY_REQUIRED', SessionEndReason.recoveryRequired),
+      ('ERROR_INVALID_REFRESH_TOKEN', SessionEndReason.expired),
+      ('ERROR_WRONG_TOKEN_TYPE', SessionEndReason.expired),
+    ]) {
+      test('refresh failing with $code ends the session as $reason', () async {
+        final storage = FakeSecureStorage(accessToken: 'old', refreshToken: 'refresh-1');
+        final adapter = FakeHttpAdapter((options) async {
+          if (options.path == '/auth/refresh') {
+            return FakeHttpAdapter.error(400, code, 'message');
+          }
+          return FakeHttpAdapter.error(401, 'UNAUTHORIZED', 'expired');
+        });
+        final client = _client(storage, adapter);
+        final events = <SessionEvent>[];
+        client.sessionEvents.listen(events.add);
+
+        final error = await _expectError(client.get<Object?>('/users/me'));
+        await Future<void>.delayed(Duration.zero);
+
+        expect(error.type, ApiErrorType.sessionExpired);
+        expect(storage.refreshToken, isNull);
+        expect((events.single as SessionEnded).reason, reason);
+      });
+    }
+
+    test('a successful refresh reports the account state the server read', () async {
+      final storage = FakeSecureStorage(accessToken: 'old', refreshToken: 'refresh-1');
+      final adapter = FakeHttpAdapter((options) async {
+        if (options.path == '/auth/refresh') {
+          return FakeHttpAdapter.ok({
+            'accessToken': 'new',
+            'refreshToken': 'refresh-2',
+            'status': 'ACTIVE',
+            'aadhaarVerified': true,
+          });
+        }
+        return options.headers['Authorization'] == 'Bearer new'
+            ? FakeHttpAdapter.ok({'ok': true})
+            : FakeHttpAdapter.error(401, 'UNAUTHORIZED', 'expired');
+      });
+      final client = _client(storage, adapter);
+      final events = <SessionEvent>[];
+      client.sessionEvents.listen(events.add);
+
+      await client.get<Object?>('/users/me');
+      await Future<void>.delayed(Duration.zero);
+
+      final refreshed = events.single as SessionRefreshed;
+      expect(refreshed.status, 'ACTIVE');
+      expect(refreshed.aadhaarVerified, isTrue);
+    });
+
+    test(
+        'a request that failed with a token another call already replaced is retried '
+        'without a second refresh', () async {
+      final storage = FakeSecureStorage(accessToken: 'old', refreshToken: 'refresh-1');
+      late final ApiClient client;
+      final adapter = FakeHttpAdapter((options) async {
+        if (options.path == '/auth/refresh') return tokens('new', 'refresh-2');
+        if (options.path == '/slow') {
+          if (options.headers['Authorization'] == 'Bearer new') {
+            return FakeHttpAdapter.ok({'ok': true});
+          }
+          // Another call finishes refreshing while this one is still in flight.
+          await client.get<Object?>('/fast');
+          return FakeHttpAdapter.error(401, 'UNAUTHORIZED', 'expired');
+        }
+        return options.headers['Authorization'] == 'Bearer new'
+            ? FakeHttpAdapter.ok({'ok': true})
+            : FakeHttpAdapter.error(401, 'UNAUTHORIZED', 'expired');
+      });
+      client = _client(storage, adapter);
+
+      final result = await client.get<Object?>('/slow');
+
+      expect(result, {'ok': true});
+      expect(adapter.count('/auth/refresh'), 1);
+      expect(adapter.count('/slow'), 2);
     });
 
     test('a missing refresh token ends the session without calling refresh', () async {

@@ -215,7 +215,7 @@ config/dev_local.json     (git-ignored: physical device with your machine's LAN 
 ### 7.3 Networking, errors and token refresh (standards 3.6)
 - Endpoints in `ApiConstants`; base URL from `AppConfig`.
 - `ApiClient` unwraps the envelope, maps every `error.code` to a typed `ApiError` (Appendix A), adds `X-Correlation-Id`, and sends no bearer token to the public endpoints.
-- **On 401: attempt `POST /refresh` once** with the stored refresh token, save the new pair, retry the original request once; concurrent 401s share one refresh call. If refresh fails: clear the session and show "Session expired — Login again" (routes to Sign In since US-106).
+- **On 401: attempt `POST /refresh` once** with the stored refresh token, save the new pair, retry the original request once; concurrent 401s share one refresh call. If refresh fails: clear the session and show "Session expired — Login again" (routes to Sign In since US-106). US-107 extends this: a suspended or recovery-required account found at refresh opens the account-unavailable screen, the status returned by each refresh updates the account state, and a request that failed with an already-replaced token is retried without a second refresh (see LLD §14.6).
 - Standard error UI: "Unable to connect — Retry", "Something went wrong — Try Again".
 - **Fix the logging interceptor:** it logs bodies in debug builds (OTPs, Aadhaar, tokens). Redact `/auth/*` bodies and `Authorization` (standards 1.4, 1.7). No `print()`.
 - Add the Android `INTERNET` permission to the main manifest.

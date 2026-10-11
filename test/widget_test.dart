@@ -4,6 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/app.dart';
 import 'package:valuex_mobile/core/config/app_config.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
+import 'package:valuex_mobile/core/network/session_event.dart';
 import 'package:valuex_mobile/features/auth/presentation/providers/auth_providers.dart';
 import 'package:valuex_mobile/features/splash/presentation/splash_screen.dart';
 
@@ -13,7 +14,7 @@ void main() {
   testWidgets('ValueXApp builds and shows the splash screen', (tester) async {
     final repository = MockAuthRepository();
     final apiClient = MockApiClient();
-    when(() => apiClient.onSessionExpired).thenAnswer((_) => const Stream<void>.empty());
+    when(() => apiClient.sessionEvents).thenAnswer((_) => const Stream<SessionEvent>.empty());
     when(() => repository.hasSession()).thenAnswer((_) async => false);
 
     await tester.pumpWidget(
