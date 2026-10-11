@@ -91,6 +91,40 @@ Swagger UI (dev profile): `http://localhost:8080/swagger-ui.html`.
 
 Android note: cleartext HTTP is allowed in debug and profile builds only (needed for `10.0.2.2`). Release builds must use HTTPS. iOS allows local-network HTTP through `NSAllowsLocalNetworking`.
 
+## Profile Management (US-003)
+
+Home's Profile tab opens `/profile` for signed-in users; guests are routed to Sign In.
+The page follows the Figma Make `ProfileScreen`: a header (avatar, name with a verified mark,
+masked mobile, rating, transactions, city, edit button), the plan badge or Upgrade to Premium
+invite, the Listings/Sold/Reviews tiles, the Buying, Selling and Account menus, Sign Out and the
+main navigation. Menu rows, Upgrade and Sign Out are not built yet and answer with a passing
+"coming soon" message. Rating, transactions, listings, sold and plan come from
+`profileSummaryProvider` (`lib/features/profile/data/mock_profile_summary.dart`), which returns the
+mock values from Figma Make. Replace that provider with real data when the ratings, orders,
+listing and subscription stories are built.
+
+The edit button opens `/profile/details`, which reads `GET /users/me`, shows the server's masked
+mobile/email and joined date, and keeps verified Aadhaar name and other identity/address fields
+read-only. Edit profile sends only changed display-name/city fields with `PATCH /users/me`.
+
+Change avatar reads `GET /avatars`, displays only the returned catalog IDs using the existing
+bundled avatar renderer, and requires confirmation before `PUT /users/me/avatar`. A removed
+avatar remains displayed until another is selected; a rejected selection preserves the current
+avatar. Failed edits retain the draft, and leaving an edited profile asks before discarding changes.
+
+The backend only validates city format, not Indian geography. Ratings and viewing another user's
+profile are deferred backend capabilities. Security settings and logout remain
+US-103/US-105/US-104 work. The existing avatar illustrations are placeholders pending final artwork.
+Backend profile PATCH validation also differs from registration for Unicode combining marks;
+server rejections are displayed rather than treated as successful saves.
+
+Verification: `flutter test test/features/profile/profile_test.dart` covers repository payloads,
+navigation, retry, partial edits, avatar confirmation/rejection, accessibility and large-text layout.
+For manual testing, use an existing authenticated account, open Profile, edit one field, save,
+reopen and confirm persistence. Cancel a changed draft, try invalid names/cities, and test avatars
+with a modified server catalog. Do not reset the simulator Keychain to switch test users; use the
+debug-only `CLEAR_LOCAL_SESSION` launch flag.
+
 ## Project structure
 
 ```

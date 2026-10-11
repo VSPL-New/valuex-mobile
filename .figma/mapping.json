@@ -232,6 +232,64 @@
     },
     {
       "figma": {
+        "fileKey": "tzrpUwfrR0SYeyKkv1p0co",
+        "nodeId": "0:1",
+        "nodeName": "Figma Make: src/app/components/ProfileScreen.tsx"
+      },
+      "local": {
+        "components": [
+          {
+            "path": "lib/features/profile/presentation/profile_screen.dart",
+            "tier": "page"
+          },
+          {
+            "path": "lib/features/profile/presentation/widgets/profile_header.dart",
+            "tier": "organism"
+          },
+          {
+            "path": "lib/features/profile/presentation/widgets/profile_menu_section.dart",
+            "tier": "organism"
+          },
+          {
+            "path": "lib/features/profile/presentation/widgets/profile_plan_badge.dart",
+            "tier": "molecule"
+          },
+          {
+            "path": "lib/features/profile/presentation/widgets/profile_stats_row.dart",
+            "tier": "molecule"
+          },
+          {
+            "path": "lib/features/profile/data/mock_profile_summary.dart",
+            "tier": "page"
+          },
+          {
+            "path": "lib/features/profile/presentation/profile_details_screen.dart",
+            "tier": "page"
+          },
+          {
+            "path": "lib/features/home/presentation/main_nav.dart",
+            "tier": "organism"
+          },
+          {
+            "path": "lib/core/widgets/brand_bottom_nav.dart",
+            "tier": "organism"
+          }
+        ],
+        "tokens": [
+          "lib/core/theme/colors.dart",
+          "lib/core/theme/text_styles.dart",
+          "lib/core/theme/spacing.dart"
+        ],
+        "stories": []
+      },
+      "sync": {
+        "contentHash": "n/a: Figma Make source file, no node hash available",
+        "lastSyncedAt": "2026-10-12T00:00:00Z",
+        "status": "in-sync"
+      }
+    },
+    {
+      "figma": {
         "fileKey": "D1BtJ1lsMVRBLtUPBv1UIr",
         "nodeId": "2017:635",
         "nodeName": "Home Page"

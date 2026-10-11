@@ -10,10 +10,9 @@ import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/brand_bottom_nav.dart';
 import '../../../core/widgets/field_error.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../auth/presentation/providers/session_controller.dart';
-import '../../auth/presentation/providers/session_state.dart';
 import '../domain/entities/home_badges.dart';
 import '../domain/entities/listing.dart';
+import 'main_nav.dart';
 import 'providers/home_providers.dart';
 import 'widgets/category_tile.dart';
 import 'widgets/home_header.dart';
@@ -41,35 +40,6 @@ class HomeScreen extends ConsumerWidget {
     }
   }
 
-  void _comingSoon(BuildContext context) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).homeFeatureComingSoon)));
-  }
-
-  void _onNavSelected(BuildContext context, WidgetRef ref, BottomNavItem item) {
-    final l10n = AppLocalizations.of(context);
-    switch (item) {
-      case BottomNavItem.home:
-        return;
-      case BottomNavItem.sell:
-        final session = ref.read(sessionControllerProvider).value;
-        if (session is Authenticated && !session.aadhaarVerified) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(l10n.homeSellAadhaarRequired)));
-          return;
-        }
-        if (session is! Authenticated) {
-          context.go(RouteNames.createAccount);
-          return;
-        }
-        _comingSoon(context);
-      case BottomNavItem.search || BottomNavItem.chats || BottomNavItem.profile:
-        _comingSoon(context);
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
@@ -88,7 +58,8 @@ class HomeScreen extends ConsumerWidget {
       bottomNavigationBar: BrandBottomNav(
         current: BottomNavItem.home,
         chatsHasUnread: true,
-        onSelected: (item) => _onNavSelected(context, ref, item),
+        onSelected: (item) =>
+            onMainNavSelected(context, ref, current: BottomNavItem.home, item: item),
       ),
       body: RefreshIndicator(
         onRefresh: () => _refresh(ref),
@@ -102,10 +73,10 @@ class HomeScreen extends ConsumerWidget {
                 locating: locationAsync.isLoading,
                 badges: badges,
                 onLocation: () => showLocationSheet(context),
-                onCart: () => _comingSoon(context),
-                onNotifications: () => _comingSoon(context),
-                onSearch: () => _comingSoon(context),
-                onPhotoSearch: () => _comingSoon(context),
+                onCart: () => showComingSoon(context),
+                onNotifications: () => showComingSoon(context),
+                onSearch: () => showComingSoon(context),
+                onPhotoSearch: () => showComingSoon(context),
               ),
             ),
             SliverPadding(
@@ -123,15 +94,15 @@ class HomeScreen extends ConsumerWidget {
                   ],
                   PromoCarousel(
                     promos: promos,
-                    onPromoTap: (_) => _comingSoon(context),
-                    onSeeAll: () => _comingSoon(context),
+                    onPromoTap: (_) => showComingSoon(context),
+                    onSeeAll: () => showComingSoon(context),
                   ),
                   if (promos.isNotEmpty) const SizedBox(height: AppSpacing.md),
                   SectionHeader(title: l10n.homeBrowse),
                   categories.when(
                     data: (items) => CategoryRow(
                       categories: items,
-                      onSelect: (_) => _comingSoon(context),
+                      onSelect: (_) => showComingSoon(context),
                       onMore: () => context.push(RouteNames.categories),
                     ),
                     loading: () => const _Skeleton(height: 72),
@@ -147,7 +118,7 @@ class HomeScreen extends ConsumerWidget {
                       actionLabel: known != null && (listings.value?.isNotEmpty ?? false)
                           ? l10n.homeSeeAll
                           : null,
-                      onAction: () => _comingSoon(context),
+                      onAction: () => showComingSoon(context),
                     ),
                   ],
                 ]),
@@ -223,12 +194,12 @@ class HomeScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(
-                          child: ListingCard(listing: first, onTap: () => _comingSoon(context))),
+                          child: ListingCard(listing: first, onTap: () => showComingSoon(context))),
                       const SizedBox(width: AppSpacing.md - 4),
                       Expanded(
                         child: second == null
                             ? const SizedBox.shrink()
-                            : ListingCard(listing: second, onTap: () => _comingSoon(context)),
+                            : ListingCard(listing: second, onTap: () => showComingSoon(context)),
                       ),
                     ],
                   ),

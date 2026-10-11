@@ -21,6 +21,8 @@ import '../../features/auth/presentation/screens/verify_email_otp_screen.dart';
 import '../../features/auth/presentation/screens/verify_mobile_otp_screen.dart';
 import '../../features/home/presentation/category_selection_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
+import '../../features/profile/presentation/profile_details_screen.dart';
+import '../../features/profile/presentation/profile_screen.dart';
 import 'route_guard.dart';
 import 'route_names.dart';
 
@@ -38,6 +40,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       aadhaarSandbox: ref.read(appConfigProvider).useAadhaarSandbox,
     ),
     routes: [
+      GoRoute(
+        path: RouteNames.profile,
+        name: 'profile',
+        builder: (context, state) => const ProfileScreen(),
+        routes: [
+          GoRoute(
+            path: 'details',
+            name: 'profileDetails',
+            builder: (context, state) => const ProfileDetailsScreen(),
+          ),
+        ],
+      ),
       GoRoute(
         path: '/',
         name: 'splash',

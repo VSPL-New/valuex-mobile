@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,8 +50,10 @@ class AppHarness {
   final FakeLocationService locationService = FakeLocationService();
   final StreamController<SessionEvent> sessionExpired = StreamController<SessionEvent>.broadcast();
   final AppConfig config;
+  final List<Override> extraOverrides;
 
-  AppHarness(this.tester, {AppConfig? config}) : config = config ?? testConfig {
+  AppHarness(this.tester, {AppConfig? config, this.extraOverrides = const []})
+      : config = config ?? testConfig {
     SharedPreferences.setMockInitialValues({});
     when(() => apiClient.sessionEvents).thenAnswer((_) => sessionExpired.stream);
     when(() => repository.hasSession()).thenAnswer((_) async => false);
@@ -87,6 +90,7 @@ class AppHarness {
           apiClientProvider.overrideWithValue(apiClient),
           screenProtectionServiceProvider.overrideWithValue(screenProtection),
           locationServiceProvider.overrideWithValue(locationService),
+          ...extraOverrides,
         ],
         child: const ValueXApp(),
       ),

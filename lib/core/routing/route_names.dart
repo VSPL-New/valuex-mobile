@@ -18,5 +18,7 @@ class RouteNames {
   static const String terms = '/terms';
   static const String accountBlocked = '/account-blocked';
   static const String home = '/home';
+  static const String profile = '/profile';
+  static const String profileDetails = '/profile/details';
   static const String categories = '/home/categories';
 }

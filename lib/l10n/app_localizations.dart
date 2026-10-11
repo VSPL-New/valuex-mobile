@@ -1412,6 +1412,276 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get googleMockCancel;
+
+  /// No description provided for @profileDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile details'**
+  String get profileDetailsTitle;
+
+  /// No description provided for @profileEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit profile'**
+  String get profileEdit;
+
+  /// No description provided for @profileSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get profileSave;
+
+  /// No description provided for @profileSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get profileSaved;
+
+  /// No description provided for @profileAvatar.
+  ///
+  /// In en, this message translates to:
+  /// **'Change avatar'**
+  String get profileAvatar;
+
+  /// No description provided for @profileName.
+  ///
+  /// In en, this message translates to:
+  /// **'Display name'**
+  String get profileName;
+
+  /// No description provided for @profileCity.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get profileCity;
+
+  /// No description provided for @profileMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number'**
+  String get profileMobile;
+
+  /// No description provided for @profileEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get profileEmail;
+
+  /// No description provided for @profileVerifiedName.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified name'**
+  String get profileVerifiedName;
+
+  /// No description provided for @profileJoined.
+  ///
+  /// In en, this message translates to:
+  /// **'Joined'**
+  String get profileJoined;
+
+  /// No description provided for @profileMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Not provided'**
+  String get profileMissing;
+
+  /// No description provided for @profileDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard changes?'**
+  String get profileDiscard;
+
+  /// No description provided for @profileDiscardAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get profileDiscardAction;
+
+  /// No description provided for @profileKeepEditing.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep editing'**
+  String get profileKeepEditing;
+
+  /// No description provided for @profileGender.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get profileGender;
+
+  /// No description provided for @profileDob.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth'**
+  String get profileDob;
+
+  /// No description provided for @profileState.
+  ///
+  /// In en, this message translates to:
+  /// **'State'**
+  String get profileState;
+
+  /// No description provided for @profileAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get profileAddress;
+
+  /// No description provided for @profilePincode.
+  ///
+  /// In en, this message translates to:
+  /// **'Pincode'**
+  String get profilePincode;
+
+  /// No description provided for @profileCatalogEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No avatars are available. Please try again later'**
+  String get profileCatalogEmpty;
+
+  /// No description provided for @profileVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get profileVerified;
+
+  /// No description provided for @profileSectionBuying.
+  ///
+  /// In en, this message translates to:
+  /// **'Buying'**
+  String get profileSectionBuying;
+
+  /// No description provided for @profileSectionSelling.
+  ///
+  /// In en, this message translates to:
+  /// **'Selling'**
+  String get profileSectionSelling;
+
+  /// No description provided for @profileSectionAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get profileSectionAccount;
+
+  /// No description provided for @profileMyOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'My Orders'**
+  String get profileMyOrders;
+
+  /// No description provided for @profileSavedItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved Items'**
+  String get profileSavedItems;
+
+  /// No description provided for @profilePaymentHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment History'**
+  String get profilePaymentHistory;
+
+  /// No description provided for @profileMyListings.
+  ///
+  /// In en, this message translates to:
+  /// **'My Listings'**
+  String get profileMyListings;
+
+  /// No description provided for @profilePayoutDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Payout Details'**
+  String get profilePayoutDetails;
+
+  /// No description provided for @profileSellerAnalytics.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller Analytics'**
+  String get profileSellerAnalytics;
+
+  /// No description provided for @profileNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get profileNotifications;
+
+  /// No description provided for @profileLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get profileLanguage;
+
+  /// No description provided for @profileDisputeCenter.
+  ///
+  /// In en, this message translates to:
+  /// **'Dispute Center'**
+  String get profileDisputeCenter;
+
+  /// No description provided for @profileHelpSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & Support'**
+  String get profileHelpSupport;
+
+  /// No description provided for @profileSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get profileSignOut;
+
+  /// No description provided for @profileIncomingOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming Orders'**
+  String get profileIncomingOrders;
+
+  /// No description provided for @profileFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'JustQlic v{version} · ValueQuo Solutions Pvt. Ltd.'**
+  String profileFooter(String version);
+
+  /// No description provided for @profileRatingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating {rating} out of 5'**
+  String profileRatingLabel(String rating);
+
+  /// No description provided for @profileTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 transaction} other{{count} transactions}}'**
+  String profileTransactions(int count);
+
+  /// No description provided for @profilePlanActive.
+  ///
+  /// In en, this message translates to:
+  /// **'{plan} — Active'**
+  String profilePlanActive(String plan);
+
+  /// No description provided for @profileUpgrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Premium →'**
+  String get profileUpgrade;
+
+  /// No description provided for @profileStatListings.
+  ///
+  /// In en, this message translates to:
+  /// **'Listings'**
+  String get profileStatListings;
+
+  /// No description provided for @profileStatSold.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold'**
+  String get profileStatSold;
+
+  /// No description provided for @profileStatReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviews'**
+  String get profileStatReviews;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
