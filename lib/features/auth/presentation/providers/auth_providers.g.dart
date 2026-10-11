@@ -131,3 +131,44 @@ final class RestoreSessionProvider
 }
 
 String _$restoreSessionHash() => r'd877dfa4382456f958b117215fbbb3c7a07e7966';
+
+@ProviderFor(googleIdTokenSource)
+const googleIdTokenSourceProvider = GoogleIdTokenSourceProvider._();
+
+final class GoogleIdTokenSourceProvider
+    extends $FunctionalProvider<GoogleIdTokenSource, GoogleIdTokenSource, GoogleIdTokenSource>
+    with $Provider<GoogleIdTokenSource> {
+  const GoogleIdTokenSourceProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'googleIdTokenSourceProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$googleIdTokenSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<GoogleIdTokenSource> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GoogleIdTokenSource create(Ref ref) {
+    return googleIdTokenSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GoogleIdTokenSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GoogleIdTokenSource>(value),
+    );
+  }
+}
+
+String _$googleIdTokenSourceHash() => r'aa2fd15f48fe49ff41fc54b49c4048b85919cc18';

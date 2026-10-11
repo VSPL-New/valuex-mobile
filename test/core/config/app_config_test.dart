@@ -21,10 +21,59 @@ void main() {
         env: 'prod',
         apiBaseUrl: 'https://api.example.com/api/v1',
         aadhaarFlow: 'thirdparty',
+        googleSignIn: 'native',
+        googleServerClientId: 'web-client-id',
       );
 
       expect(config.isProd, isTrue);
       expect(config.aadhaarFlow, AadhaarFlow.thirdParty);
+      expect(config.googleSignIn, GoogleSignInMode.native);
+      expect(config.googleServerClientId, 'web-client-id');
+    });
+
+    test('Google sign-in is mocked by default outside prod', () {
+      final config = AppConfig.parse(
+        env: 'dev',
+        apiBaseUrl: 'http://localhost:8080/api/v1',
+        aadhaarFlow: 'sandbox',
+      );
+
+      expect(config.useMockGoogleSignIn, isTrue);
+    });
+
+    test('rejects an unknown Google sign-in mode', () {
+      expect(
+        () => AppConfig.parse(
+          env: 'dev',
+          apiBaseUrl: 'http://localhost:8080/api/v1',
+          aadhaarFlow: 'sandbox',
+          googleSignIn: 'fake',
+        ),
+        throwsA(isA<AppConfigException>()),
+      );
+    });
+
+    test('rejects the mock Google sign-in in prod', () {
+      expect(
+        () => AppConfig.parse(
+          env: 'prod',
+          apiBaseUrl: 'https://api.example.com/api/v1',
+          aadhaarFlow: 'thirdparty',
+        ),
+        throwsA(isA<AppConfigException>()),
+      );
+    });
+
+    test('native Google sign-in needs the server client ID', () {
+      expect(
+        () => AppConfig.parse(
+          env: 'dev',
+          apiBaseUrl: 'http://localhost:8080/api/v1',
+          aadhaarFlow: 'sandbox',
+          googleSignIn: 'native',
+        ),
+        throwsA(isA<AppConfigException>()),
+      );
     });
 
     test('fails fast when values are missing', () {
@@ -69,6 +118,8 @@ void main() {
           env: 'prod',
           apiBaseUrl: 'https://api.example.com/api/v1',
           aadhaarFlow: 'sandbox',
+          googleSignIn: 'native',
+          googleServerClientId: 'web-client-id',
         ),
         throwsA(isA<AppConfigException>()),
       );

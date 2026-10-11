@@ -276,6 +276,8 @@ void main() {
       env: 'prod',
       apiBaseUrl: 'https://api.example.com/api/v1',
       aadhaarFlow: 'thirdparty',
+      googleSignIn: 'native',
+      googleServerClientId: 'web-client-id',
     );
 
     testWidgets('hides number entry and offers only Skip for now', (tester) async {

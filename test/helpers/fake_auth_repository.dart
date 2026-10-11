@@ -2,6 +2,7 @@ import 'package:valuex_mobile/core/network/api_error.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/aadhaar_transaction.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/auth_session.dart';
+import 'package:valuex_mobile/features/auth/domain/entities/google_sign_in_result.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/otp_sent.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/signup_details.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/user_profile.dart';
@@ -16,6 +17,15 @@ class FakeAuthRepository implements AuthRepository {
   String? email;
   SignupDetails? signup;
   final List<String> calls = [];
+
+  /// Google tokens already linked to an account, and the status that account has.
+  final Set<String> linkedGoogleTokens = {};
+  AccountStatus linkedGoogleStatus = AccountStatus.active;
+
+  /// Status of an existing account that owns the mobile number typed after Google sign-in
+  /// (null: a new account is created).
+  AccountStatus? googleExistingAccount;
+  String? _pendingGoogleToken;
 
   /// The account on the "server", which outlives the local session after a sign-out.
   AccountStatus? _lastKnown;
@@ -96,6 +106,54 @@ class FakeAuthRepository implements AuthRepository {
       throw _business('ERROR_MOBILE_NOT_REGISTERED');
     }
     return account;
+  }
+
+  @override
+  Future<GoogleSignInResult> signInWithGoogle(String idToken) async {
+    calls.add('signInWithGoogle');
+    if (idToken == 'invalid') throw _business('ERROR_INVALID_GOOGLE_TOKEN');
+    if (linkedGoogleTokens.contains(idToken)) {
+      if (linkedGoogleStatus == AccountStatus.suspended) {
+        throw _business('ERROR_ACCOUNT_SUSPENDED');
+      }
+      return GoogleSignedIn(_result(linkedGoogleStatus));
+    }
+    _pendingGoogleToken = idToken;
+    return GoogleNeedsMobile(
+      socialSessionToken: 'social-1',
+      email: '${idToken.replaceFirst('mock-', '')}@gmail.com',
+    );
+  }
+
+  @override
+  Future<OtpSent> initiateGoogleMobile({
+    required String socialSessionToken,
+    required String mobile,
+  }) async {
+    calls.add('initiateGoogleMobile');
+    if (socialSessionToken != 'social-1') throw _business('ERROR_SOCIAL_SESSION_EXPIRED');
+    final existing = googleExistingAccount;
+    if (existing != null && existing != AccountStatus.active) {
+      throw _business('ERROR_INVALID_STATE');
+    }
+    this.mobile = mobile;
+    return const OtpSent(expiresInSeconds: 300);
+  }
+
+  @override
+  Future<AuthResult> verifyGoogleMobile({
+    required String socialSessionToken,
+    required String mobile,
+    required String otp,
+  }) async {
+    calls.add('verifyGoogleMobile');
+    if (socialSessionToken != 'social-1') throw _business('ERROR_SOCIAL_SESSION_EXPIRED');
+    if (otp != '123456') throw _business('ERROR_INVALID_OTP');
+    final token = _pendingGoogleToken;
+    if (token != null) linkedGoogleTokens.add(token);
+    final result = _result(googleExistingAccount ?? AccountStatus.identityVerificationPending);
+    linkedGoogleStatus = result.status;
+    return result;
   }
 
   @override

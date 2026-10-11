@@ -45,6 +45,40 @@ class AuthRemoteDataSource {
     );
   }
 
+  Future<GoogleSignInModel> signInWithGoogle(String idToken) {
+    return _client.post(
+      ApiConstants.googleSignIn,
+      data: {'idToken': idToken},
+      authenticated: false,
+      parse: GoogleSignInModel.fromJson,
+    );
+  }
+
+  Future<MessageResponseModel> initiateGoogleMobile({
+    required String socialSessionToken,
+    required String mobile,
+  }) {
+    return _client.post(
+      ApiConstants.googleInitiateMobile,
+      data: {'socialSessionToken': socialSessionToken, 'mobile': mobile},
+      authenticated: false,
+      parse: MessageResponseModel.fromJson,
+    );
+  }
+
+  Future<AuthResponseModel> verifyGoogleMobile({
+    required String socialSessionToken,
+    required String mobile,
+    required String otp,
+  }) {
+    return _client.post(
+      ApiConstants.googleVerifyMobile,
+      data: {'socialSessionToken': socialSessionToken, 'mobile': mobile, 'otp': otp},
+      authenticated: false,
+      parse: AuthResponseModel.fromJson,
+    );
+  }
+
   Future<MessageResponseModel> sendEmailOtp(String email) {
     return _client.post(
       ApiConstants.emailSendOtp,

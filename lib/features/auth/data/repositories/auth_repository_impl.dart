@@ -1,6 +1,7 @@
 import '../../../../core/security/secure_storage_service.dart';
 import '../../domain/entities/aadhaar_transaction.dart';
 import '../../domain/entities/auth_session.dart';
+import '../../domain/entities/google_sign_in_result.dart';
 import '../../domain/entities/otp_sent.dart';
 import '../../domain/entities/signup_details.dart';
 import '../../domain/entities/user_profile.dart';
@@ -49,6 +50,40 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<GoogleSignInResult> signInWithGoogle(String idToken) async {
+    final result = (await _remote.signInWithGoogle(idToken)).toResult();
+    if (result is GoogleSignedIn) await _saveSession(result.auth);
+    return result;
+  }
+
+  @override
+  Future<OtpSent> initiateGoogleMobile({
+    required String socialSessionToken,
+    required String mobile,
+  }) async {
+    final model = await _remote.initiateGoogleMobile(
+      socialSessionToken: socialSessionToken,
+      mobile: mobile,
+    );
+    return model.toOtpSent();
+  }
+
+  @override
+  Future<AuthResult> verifyGoogleMobile({
+    required String socialSessionToken,
+    required String mobile,
+    required String otp,
+  }) {
+    return _store(
+      _remote.verifyGoogleMobile(
+        socialSessionToken: socialSessionToken,
+        mobile: mobile,
+        otp: otp,
+      ),
+    );
+  }
+
+  @override
   Future<OtpSent> sendEmailOtp(String email) async {
     return (await _remote.sendEmailOtp(email)).toOtpSent();
   }
@@ -85,9 +120,13 @@ class AuthRepositoryImpl implements AuthRepository {
 
   Future<AuthResult> _store(Future<AuthResponseModel> call) async {
     final result = (await call).toEntity();
+    await _saveSession(result);
+    return result;
+  }
+
+  Future<void> _saveSession(AuthResult result) async {
     await _storage.saveAccessToken(result.session.accessToken);
     await _storage.saveRefreshToken(result.session.refreshToken);
     await _storage.saveUserId(result.session.userId);
-    return result;
   }
 }

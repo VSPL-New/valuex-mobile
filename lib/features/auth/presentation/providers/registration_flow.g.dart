@@ -41,7 +41,7 @@ final class RegistrationFlowProvider
   }
 }
 
-String _$registrationFlowHash() => r'd5bf2de51732e01d8f247a7b71c694e1a67719b3';
+String _$registrationFlowHash() => r'6cb5ea44e6ac28326eb88ae5e288fd0f38800fff';
 
 abstract class _$RegistrationFlow extends $Notifier<RegistrationFlowState> {
   RegistrationFlowState build();

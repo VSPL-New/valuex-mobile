@@ -6,6 +6,8 @@ class RouteNames {
   static const String createAccount = '/create-account';
   static const String signIn = '/sign-in';
   static const String signInVerify = '/sign-in/verify';
+  static const String googleMobile = '/google/mobile';
+  static const String googleVerify = '/google/verify';
   static const String signupMobile = '/signup/mobile';
   static const String signupMobileVerify = '/signup/mobile/verify';
   static const String signupEmail = '/signup/email';

@@ -1,5 +1,8 @@
 {
   "ENV": "prod",
   "API_BASE_URL": "https://api.example.invalid/api/v1",
-  "AADHAAR_FLOW": "thirdparty"
+  "AADHAAR_FLOW": "thirdparty",
+  "GOOGLE_SIGN_IN": "native",
+  "GOOGLE_SERVER_CLIENT_ID": "replace-before-use.invalid",
+  "GOOGLE_IOS_CLIENT_ID": "replace-before-use.invalid"
 }

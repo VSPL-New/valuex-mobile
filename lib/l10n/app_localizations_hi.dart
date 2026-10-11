@@ -75,9 +75,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get createAccountContinueGuest => 'अतिथि के रूप में जारी रखें';
 
   @override
-  String get createAccountGoogleComingSoon => 'Google साइन-इन जल्द उपलब्ध होगा';
-
-  @override
   String get signupMobileTitle => 'खाता बनाएँ';
 
   @override
@@ -686,4 +683,45 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get categoriesTitle => 'सभी श्रेणियाँ';
+
+  @override
+  String get googleMobileTitle => 'अपना मोबाइल नंबर जोड़ें';
+
+  @override
+  String googleMobileSubtitle(String email) {
+    return 'आप $email से साइन इन कर रहे हैं। ValueX आपके खाते की पहचान के लिए आपके मोबाइल नंबर का उपयोग करता है।';
+  }
+
+  @override
+  String get googleErrorFailed => 'Google साइन-इन विफल रहा। कृपया दोबारा प्रयास करें';
+
+  @override
+  String get googleErrorUnavailable => 'Google साइन-इन अभी अस्थायी रूप से उपलब्ध नहीं है';
+
+  @override
+  String get googleErrorAlreadyLinked => 'यह Google खाता पहले से किसी अन्य ValueX खाते से जुड़ा है';
+
+  @override
+  String get googleErrorSessionExpired =>
+      'Google साइन-इन सत्र समाप्त हो गया। कृपया Google से दोबारा साइन इन करें';
+
+  @override
+  String get googleErrorIncompleteAccount =>
+      'इस नंबर का पंजीकरण अधूरा है। इसे पूरा करने के लिए अपने मोबाइल नंबर से साइन इन करें';
+
+  @override
+  String get googleMockBanner =>
+      'केवल डेवलपमेंट के लिए — नकली Google खाता। क्लाइंट आईडी कॉन्फ़िगर होने पर असली Google खाता चयन इसकी जगह लेगा';
+
+  @override
+  String get googleMockTitle => 'नकली Google खाता';
+
+  @override
+  String get googleMockLabel => 'खाते का नाम';
+
+  @override
+  String get googleMockContinue => 'जारी रखें';
+
+  @override
+  String get googleMockCancel => 'रद्द करें';
 }

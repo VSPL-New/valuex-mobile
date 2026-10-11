@@ -24,6 +24,15 @@ class SignInMobileInput extends _$SignInMobileInput {
   void update(String value) => state = value;
 }
 
+/// Number typed when Google sign-in asks for a mobile number.
+@riverpod
+class GoogleMobileInput extends _$GoogleMobileInput {
+  @override
+  String build() => '';
+
+  void update(String value) => state = value;
+}
+
 @riverpod
 class EmailInput extends _$EmailInput {
   @override
@@ -79,6 +88,40 @@ class SignInEntryController extends _$SignInEntryController {
     final result = await AsyncValue.guard(() async {
       final sent = await ref.read(authRepositoryProvider).initiateLogin(mobile);
       ref.read(registrationFlowProvider.notifier).mobileOtpSent(mobile, sent.expiresInSeconds);
+    });
+    if (!ref.mounted) return !result.hasError;
+    state = result;
+    return !result.hasError;
+  }
+}
+
+/// Sends the OTP that proves the mobile number for a new Google account (or links Google to
+/// an existing one).
+@riverpod
+class GoogleMobileEntryController extends _$GoogleMobileEntryController {
+  @override
+  FutureOr<void> build() {}
+
+  /// Removes the last send error once the user edits the number.
+  void clearError() {
+    if (state.hasError) state = const AsyncData(null);
+  }
+
+  /// Returns true when the OTP was sent.
+  Future<bool> sendOtp() async {
+    final mobile = ref.read(googleMobileInputProvider);
+    final token = ref.read(registrationFlowProvider).socialSessionToken;
+    if (!Validators.isValidMobile(mobile) || token == null || state.isLoading) return false;
+
+    state = const AsyncLoading();
+    final result = await AsyncValue.guard(() async {
+      final sent = await ref.read(authRepositoryProvider).initiateGoogleMobile(
+            socialSessionToken: token,
+            mobile: mobile,
+          );
+      ref
+          .read(registrationFlowProvider.notifier)
+          .googleMobileOtpSent(mobile, sent.expiresInSeconds);
     });
     if (!ref.mounted) return !result.hasError;
     state = result;

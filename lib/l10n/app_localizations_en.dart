@@ -75,9 +75,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createAccountContinueGuest => 'Continue as Guest';
 
   @override
-  String get createAccountGoogleComingSoon => 'Google sign-in is coming soon';
-
-  @override
   String get signupMobileTitle => 'Create Account';
 
   @override
@@ -686,4 +683,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categoriesTitle => 'All categories';
+
+  @override
+  String get googleMobileTitle => 'Add your mobile number';
+
+  @override
+  String googleMobileSubtitle(String email) {
+    return 'You are signing in with $email. ValueX uses your mobile number to identify your account.';
+  }
+
+  @override
+  String get googleErrorFailed => 'Google sign-in failed. Please try again';
+
+  @override
+  String get googleErrorUnavailable => 'Google Sign-In is temporarily unavailable';
+
+  @override
+  String get googleErrorAlreadyLinked =>
+      'This Google account is already linked to another ValueX account';
+
+  @override
+  String get googleErrorSessionExpired =>
+      'Google sign-in session expired. Please sign in with Google again';
+
+  @override
+  String get googleErrorIncompleteAccount =>
+      'This number has an unfinished registration. Sign in with your mobile number to finish it';
+
+  @override
+  String get googleMockBanner =>
+      'DEVELOPMENT ONLY — mock Google account. The real Google account chooser replaces this once client IDs are configured';
+
+  @override
+  String get googleMockTitle => 'Mock Google account';
+
+  @override
+  String get googleMockLabel => 'Account name';
+
+  @override
+  String get googleMockContinue => 'Continue';
+
+  @override
+  String get googleMockCancel => 'Cancel';
 }

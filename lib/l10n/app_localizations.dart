@@ -213,12 +213,6 @@ abstract class AppLocalizations {
   /// **'Continue as Guest'**
   String get createAccountContinueGuest;
 
-  /// No description provided for @createAccountGoogleComingSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Google sign-in is coming soon'**
-  String get createAccountGoogleComingSoon;
-
   /// No description provided for @signupMobileTitle.
   ///
   /// In en, this message translates to:
@@ -1346,6 +1340,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All categories'**
   String get categoriesTitle;
+
+  /// No description provided for @googleMobileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your mobile number'**
+  String get googleMobileTitle;
+
+  /// No description provided for @googleMobileSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You are signing in with {email}. ValueX uses your mobile number to identify your account.'**
+  String googleMobileSubtitle(String email);
+
+  /// No description provided for @googleErrorFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Google sign-in failed. Please try again'**
+  String get googleErrorFailed;
+
+  /// No description provided for @googleErrorUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Sign-In is temporarily unavailable'**
+  String get googleErrorUnavailable;
+
+  /// No description provided for @googleErrorAlreadyLinked.
+  ///
+  /// In en, this message translates to:
+  /// **'This Google account is already linked to another ValueX account'**
+  String get googleErrorAlreadyLinked;
+
+  /// No description provided for @googleErrorSessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Google sign-in session expired. Please sign in with Google again'**
+  String get googleErrorSessionExpired;
+
+  /// No description provided for @googleErrorIncompleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'This number has an unfinished registration. Sign in with your mobile number to finish it'**
+  String get googleErrorIncompleteAccount;
+
+  /// No description provided for @googleMockBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'DEVELOPMENT ONLY — mock Google account. The real Google account chooser replaces this once client IDs are configured'**
+  String get googleMockBanner;
+
+  /// No description provided for @googleMockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mock Google account'**
+  String get googleMockTitle;
+
+  /// No description provided for @googleMockLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Account name'**
+  String get googleMockLabel;
+
+  /// No description provided for @googleMockContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get googleMockContinue;
+
+  /// No description provided for @googleMockCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get googleMockCancel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

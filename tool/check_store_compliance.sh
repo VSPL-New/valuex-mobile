@@ -106,6 +106,18 @@ for f in config/staging.json config/prod.json; do
   fi
 done
 
+if grep -q 'replace-before-use.invalid' config/prod.json; then
+  flag "config/prod.json still has placeholder Google client IDs"
+else
+  pass "config/prod.json has real Google client IDs"
+fi
+
+if grep -q '"GOOGLE_SIGN_IN": "native"' config/prod.json && ! grep -q 'com.googleusercontent.apps' "$PLIST"; then
+  flag "Info.plist has no reversed Google client ID URL scheme (native Google sign-in cannot return to the app on iOS)"
+else
+  pass "Info.plist URL scheme for Google sign-in present or not needed"
+fi
+
 if grep -q 'api.example.invalid' config/prod.json; then
   flag "config/prod.json still has the placeholder API host"
 else

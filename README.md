@@ -62,9 +62,21 @@ flutter run -d <device-id> --dart-define-from-file=config/dev_ios.json       # i
 | `config/staging.json` | staging | placeholder host, replace before use |
 | `config/prod.json` | production | placeholder host, replace before use |
 
-Keys: `ENV` (`dev`, `staging`, `prod`), `API_BASE_URL` (https outside dev), `AADHAAR_FLOW` (`sandbox` or `thirdparty`; `sandbox` is rejected in prod). The files hold public values only, never secrets. The same flag works for `flutter build`. VS Code launch entries are in `.vscode/launch.json`.
+Keys: `ENV` (`dev`, `staging`, `prod`), `API_BASE_URL` (https outside dev), `AADHAAR_FLOW` (`sandbox` or `thirdparty`; `sandbox` is rejected in prod), `GOOGLE_SIGN_IN` (`mock` or `native`; `mock` is rejected in prod and is the default), `GOOGLE_SERVER_CLIENT_ID` (required for `native`) and `GOOGLE_IOS_CLIENT_ID` (optional). The files hold public values only, never secrets. The same flag works for `flutter build`. VS Code launch entries are in `.vscode/launch.json`.
 
 Hot reload: `r`, hot restart: `R`, quit: `q`.
+
+## Google sign-in
+
+With `GOOGLE_SIGN_IN=mock` (all dev configs) "Continue with Google" opens a development-only chooser and sends `mock-<name>` to a backend running the mock verifier (`valuex.oauth.google.provider=mock`, the backend default). The same name always maps to the same Google account, so use a new name to act as a new user.
+
+With `native` the app shows the real Google account chooser (`google_sign_in`) and sends the ID token to the backend, which verifies it. One-time setup in Google Cloud Console:
+
+1. Create OAuth clients: **Web** (its ID is `GOOGLE_SERVER_CLIENT_ID`, the token audience the backend must list in `GOOGLE_CLIENT_ID_WEB`), **Android** (package `com.valuex.valuex_mobile` plus the SHA-1 of each signing key, debug and release) and **iOS** (bundle ID `com.valuex.valuexMobile`).
+2. Put the iOS client ID in `GOOGLE_IOS_CLIENT_ID` and add its reversed form as a URL scheme in `ios/Runner/Info.plist` (`CFBundleURLTypes`, scheme `com.googleusercontent.apps.<id>`).
+3. Start the backend with `GOOGLE_OAUTH_PROVIDER=http` and all three client IDs.
+
+Nothing is stored on the device for Google itself; the app signs the Google account out right after reading the token.
 
 ## Backend
 

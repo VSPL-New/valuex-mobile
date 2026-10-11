@@ -8,8 +8,12 @@
   "onboardingPageOf": "Page {current} of {total}",
   "@onboardingPageOf": {
     "placeholders": {
-      "current": {"type": "int"},
-      "total": {"type": "int"}
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "splashInitializing": "Initializing A1 Engine...",
@@ -26,7 +30,6 @@
   "createAccountOrLoginWith": "Or login with",
   "createAccountContinueGoogle": "Continue with Google",
   "createAccountContinueGuest": "Continue as Guest",
-  "createAccountGoogleComingSoon": "Google sign-in is coming soon",
   "signupMobileTitle": "Create Account",
   "signupMobileSubtitle": "Join 10L+ users on JustQlic",
   "signupMobileLabel": "MOBILE NUMBER",
@@ -204,19 +207,25 @@
   "homeCartLabel": "{count, plural, =0{Cart, empty} =1{Cart, 1 item} other{Cart, {count} items}}",
   "@homeCartLabel": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "homeNotificationsLabel": "{count, plural, =0{Notifications} =1{Notifications, 1 unread} other{Notifications, {count} unread}}",
   "@homeNotificationsLabel": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "homeLocationLabel": "Location: {place}. Change",
   "@homeLocationLabel": {
     "placeholders": {
-      "place": {"type": "String"}
+      "place": {
+        "type": "String"
+      }
     }
   },
   "homeLocating": "Finding your location…",
@@ -227,7 +236,9 @@
   "homeSeeAllCount": "See All ({count})",
   "@homeSeeAllCount": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "homeBrowse": "Browse",
@@ -243,7 +254,9 @@
   "homeRatingLabel": "Rated {rating} out of 5",
   "@homeRatingLabel": {
     "placeholders": {
-      "rating": {"type": "String"}
+      "rating": {
+        "type": "String"
+      }
     }
   },
   "homeLoadFailed": "Unable to load Home. Pull down or tap Retry",
@@ -267,5 +280,24 @@
   "homeStateError": "Select your state",
   "homeFeatureComingSoon": "This is coming soon",
   "homeSellAadhaarRequired": "Please complete Aadhaar verification to proceed",
-  "categoriesTitle": "All categories"
+  "categoriesTitle": "All categories",
+  "googleMobileTitle": "Add your mobile number",
+  "googleMobileSubtitle": "You are signing in with {email}. ValueX uses your mobile number to identify your account.",
+  "@googleMobileSubtitle": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "googleErrorFailed": "Google sign-in failed. Please try again",
+  "googleErrorUnavailable": "Google Sign-In is temporarily unavailable",
+  "googleErrorAlreadyLinked": "This Google account is already linked to another ValueX account",
+  "googleErrorSessionExpired": "Google sign-in session expired. Please sign in with Google again",
+  "googleErrorIncompleteAccount": "This number has an unfinished registration. Sign in with your mobile number to finish it",
+  "googleMockBanner": "DEVELOPMENT ONLY — mock Google account. The real Google account chooser replaces this once client IDs are configured",
+  "googleMockTitle": "Mock Google account",
+  "googleMockLabel": "Account name",
+  "googleMockContinue": "Continue",
+  "googleMockCancel": "Cancel"
 }

@@ -1,5 +1,6 @@
 {
   "ENV": "staging",
   "API_BASE_URL": "https://staging-api.example.invalid/api/v1",
-  "AADHAAR_FLOW": "sandbox"
+  "AADHAAR_FLOW": "sandbox",
+  "GOOGLE_SIGN_IN": "mock"
 }

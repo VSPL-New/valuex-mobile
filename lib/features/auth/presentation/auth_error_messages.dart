@@ -1,6 +1,7 @@
 import '../../../core/network/api_error.dart';
 import '../../../core/network/api_error_messages.dart';
 import '../../../l10n/app_localizations.dart';
+import '../domain/services/google_id_token_source.dart';
 
 /// User-facing text for an error from an auth endpoint, chosen by backend error code.
 String authErrorMessage(AppLocalizations l10n, Object error) {
@@ -47,6 +48,30 @@ String signInErrorMessage(AppLocalizations l10n, Object error) {
     switch (error.code) {
       case 'ERROR_INVALID_STATE':
         return l10n.authErrorSignInIncomplete;
+      case 'ERROR_ACCOUNT_RECOVERY_REQUIRED':
+        return l10n.authErrorAccountRecovery;
+    }
+  }
+  return authErrorMessage(l10n, error);
+}
+
+/// Like [authErrorMessage], for the Google sign-in screens and the mobile step that follows.
+String googleErrorMessage(AppLocalizations l10n, Object error) {
+  if (error is GoogleSignInUnavailable) return l10n.googleErrorUnavailable;
+  if (error is ApiError) {
+    switch (error.code) {
+      case 'ERROR_INVALID_GOOGLE_TOKEN':
+        return l10n.googleErrorFailed;
+      case 'ERROR_GOOGLE_SERVICE_UNAVAILABLE':
+        return l10n.googleErrorUnavailable;
+      case 'ERROR_SOCIAL_ACCOUNT_ALREADY_LINKED':
+        return l10n.googleErrorAlreadyLinked;
+      case 'ERROR_SOCIAL_SESSION_EXPIRED' ||
+            'ERROR_SOCIAL_SESSION_INVALID' ||
+            'ERROR_MOBILE_MISMATCH':
+        return l10n.googleErrorSessionExpired;
+      case 'ERROR_INVALID_STATE':
+        return l10n.googleErrorIncompleteAccount;
       case 'ERROR_ACCOUNT_RECOVERY_REQUIRED':
         return l10n.authErrorAccountRecovery;
     }

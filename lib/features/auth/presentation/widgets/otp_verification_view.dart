@@ -51,9 +51,11 @@ class OtpVerificationView extends ConsumerWidget {
     final error = state.error;
     final errorText = error == null
         ? null
-        : channel == OtpChannel.login
-            ? signInErrorMessage(l10n, error)
-            : authErrorMessage(l10n, error);
+        : switch (channel) {
+            OtpChannel.login => signInErrorMessage(l10n, error),
+            OtpChannel.googleLink => googleErrorMessage(l10n, error),
+            _ => authErrorMessage(l10n, error),
+          };
 
     return AuthFormScaffold(
       onBack: onChange,
