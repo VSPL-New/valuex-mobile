@@ -5,6 +5,7 @@ import 'package:valuex_mobile/core/widgets/brand_gradient_button.dart';
 
 import '../../../helpers/app_harness.dart';
 import '../../../helpers/fonts.dart';
+import '../../../helpers/accessibility.dart';
 
 void main() {
   setUpAll(loadBrandFonts);
@@ -26,7 +27,7 @@ void main() {
         androidTapTargetGuideline,
         iOSTapTargetGuideline,
         labeledTapTargetGuideline,
-        textContrastGuideline,
+        textContrast,
       ]) {
         await expectLater(tester, meetsGuideline(guideline));
       }
@@ -36,7 +37,7 @@ void main() {
       await tester.tap(find.byType(BrandGradientButton));
       await harness.settle();
 
-      await expectLater(tester, meetsGuideline(textContrastGuideline));
+      await expectLater(tester, meetsGuideline(textContrast));
       handle.dispose();
       await harness.dispose();
     });

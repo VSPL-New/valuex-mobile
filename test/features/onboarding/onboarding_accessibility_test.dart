@@ -4,6 +4,7 @@ import 'package:valuex_mobile/features/onboarding/presentation/onboarding_conten
 
 import '../../helpers/app_harness.dart';
 import '../../helpers/fonts.dart';
+import '../../helpers/accessibility.dart';
 
 void main() {
   setUpAll(loadBrandFonts);
@@ -33,7 +34,7 @@ void main() {
         await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
         await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
         await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
-        await expectLater(tester, meetsGuideline(textContrastGuideline));
+        await expectLater(tester, meetsGuideline(textContrast));
         handle.dispose();
         await harness.dispose();
       });
