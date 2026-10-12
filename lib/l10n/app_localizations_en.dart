@@ -726,4 +726,153 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get googleMockCancel => 'Cancel';
+
+  @override
+  String get profileDetailsTitle => 'Profile details';
+
+  @override
+  String get profileEdit => 'Edit profile';
+
+  @override
+  String get profileSave => 'Save changes';
+
+  @override
+  String get profileSaved => 'Profile updated';
+
+  @override
+  String get profileAvatar => 'Change avatar';
+
+  @override
+  String get profileName => 'Display name';
+
+  @override
+  String get profileCity => 'City';
+
+  @override
+  String get profileMobile => 'Mobile number';
+
+  @override
+  String get profileEmail => 'Email';
+
+  @override
+  String get profileVerifiedName => 'Verified name';
+
+  @override
+  String get profileJoined => 'Joined';
+
+  @override
+  String get profileMissing => 'Not provided';
+
+  @override
+  String get profileDiscard => 'Discard changes?';
+
+  @override
+  String get profileDiscardAction => 'Discard';
+
+  @override
+  String get profileKeepEditing => 'Keep editing';
+
+  @override
+  String get profileGender => 'Gender';
+
+  @override
+  String get profileDob => 'Date of birth';
+
+  @override
+  String get profileState => 'State';
+
+  @override
+  String get profileAddress => 'Address';
+
+  @override
+  String get profilePincode => 'Pincode';
+
+  @override
+  String get profileCatalogEmpty => 'No avatars are available. Please try again later';
+
+  @override
+  String get profileVerified => 'Verified';
+
+  @override
+  String get profileSectionBuying => 'Buying';
+
+  @override
+  String get profileSectionSelling => 'Selling';
+
+  @override
+  String get profileSectionAccount => 'Account';
+
+  @override
+  String get profileMyOrders => 'My Orders';
+
+  @override
+  String get profileSavedItems => 'Saved Items';
+
+  @override
+  String get profilePaymentHistory => 'Payment History';
+
+  @override
+  String get profileMyListings => 'My Listings';
+
+  @override
+  String get profilePayoutDetails => 'Payout Details';
+
+  @override
+  String get profileSellerAnalytics => 'Seller Analytics';
+
+  @override
+  String get profileNotifications => 'Notifications';
+
+  @override
+  String get profileLanguage => 'Language';
+
+  @override
+  String get profileDisputeCenter => 'Dispute Center';
+
+  @override
+  String get profileHelpSupport => 'Help & Support';
+
+  @override
+  String get profileSignOut => 'Sign Out';
+
+  @override
+  String get profileIncomingOrders => 'Incoming Orders';
+
+  @override
+  String profileFooter(String version) {
+    return 'JustQlic v$version · ValueQuo Solutions Pvt. Ltd.';
+  }
+
+  @override
+  String profileRatingLabel(String rating) {
+    return 'Rating $rating out of 5';
+  }
+
+  @override
+  String profileTransactions(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count transactions',
+      one: '1 transaction',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String profilePlanActive(String plan) {
+    return '$plan — Active';
+  }
+
+  @override
+  String get profileUpgrade => 'Upgrade to Premium →';
+
+  @override
+  String get profileStatListings => 'Listings';
+
+  @override
+  String get profileStatSold => 'Sold';
+
+  @override
+  String get profileStatReviews => 'Reviews';
 }

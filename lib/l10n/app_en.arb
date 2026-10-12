@@ -299,5 +299,78 @@
   "googleMockTitle": "Mock Google account",
   "googleMockLabel": "Account name",
   "googleMockContinue": "Continue",
-  "googleMockCancel": "Cancel"
+  "googleMockCancel": "Cancel",
+  "profileDetailsTitle": "Profile details",
+  "profileEdit": "Edit profile",
+  "profileSave": "Save changes",
+  "profileSaved": "Profile updated",
+  "profileAvatar": "Change avatar",
+  "profileName": "Display name",
+  "profileCity": "City",
+  "profileMobile": "Mobile number",
+  "profileEmail": "Email",
+  "profileVerifiedName": "Verified name",
+  "profileJoined": "Joined",
+  "profileMissing": "Not provided",
+  "profileDiscard": "Discard changes?",
+  "profileDiscardAction": "Discard",
+  "profileKeepEditing": "Keep editing",
+  "profileGender": "Gender",
+  "profileDob": "Date of birth",
+  "profileState": "State",
+  "profileAddress": "Address",
+  "profilePincode": "Pincode",
+  "profileCatalogEmpty": "No avatars are available. Please try again later",
+  "profileVerified": "Verified",
+  "profileSectionBuying": "Buying",
+  "profileSectionSelling": "Selling",
+  "profileSectionAccount": "Account",
+  "profileMyOrders": "My Orders",
+  "profileSavedItems": "Saved Items",
+  "profilePaymentHistory": "Payment History",
+  "profileMyListings": "My Listings",
+  "profilePayoutDetails": "Payout Details",
+  "profileSellerAnalytics": "Seller Analytics",
+  "profileNotifications": "Notifications",
+  "profileLanguage": "Language",
+  "profileDisputeCenter": "Dispute Center",
+  "profileHelpSupport": "Help & Support",
+  "profileSignOut": "Sign Out",
+  "profileIncomingOrders": "Incoming Orders",
+  "profileFooter": "JustQlic v{version} · ValueQuo Solutions Pvt. Ltd.",
+  "@profileFooter": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "profileRatingLabel": "Rating {rating} out of 5",
+  "@profileRatingLabel": {
+    "placeholders": {
+      "rating": {
+        "type": "String"
+      }
+    }
+  },
+  "profileTransactions": "{count, plural, =1{1 transaction} other{{count} transactions}}",
+  "@profileTransactions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profilePlanActive": "{plan} — Active",
+  "@profilePlanActive": {
+    "placeholders": {
+      "plan": {
+        "type": "String"
+      }
+    }
+  },
+  "profileUpgrade": "Upgrade to Premium →",
+  "profileStatListings": "Listings",
+  "profileStatSold": "Sold",
+  "profileStatReviews": "Reviews"
 }

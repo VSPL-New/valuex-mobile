@@ -105,6 +105,18 @@ class ApiClient {
     );
   }
 
+  Future<T> patch<T>(
+    String path, {
+    Object? data,
+    bool authenticated = true,
+    T Function(Object? data)? parse,
+  }) {
+    return _send(
+      () => dio.patch<dynamic>(path, data: data, options: _options(authenticated)),
+      parse,
+    );
+  }
+
   Future<T> delete<T>(
     String path, {
     Object? data,

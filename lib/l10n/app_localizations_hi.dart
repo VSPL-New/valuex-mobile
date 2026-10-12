@@ -725,4 +725,147 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get googleMockCancel => 'रद्द करें';
+
+  @override
+  String get profileDetailsTitle => 'प्रोफ़ाइल विवरण';
+
+  @override
+  String get profileEdit => 'प्रोफ़ाइल संपादित करें';
+
+  @override
+  String get profileSave => 'बदलाव सहेजें';
+
+  @override
+  String get profileSaved => 'प्रोफ़ाइल अपडेट हुई';
+
+  @override
+  String get profileAvatar => 'अवतार बदलें';
+
+  @override
+  String get profileName => 'प्रदर्शित नाम';
+
+  @override
+  String get profileCity => 'शहर';
+
+  @override
+  String get profileMobile => 'मोबाइल नंबर';
+
+  @override
+  String get profileEmail => 'ईमेल';
+
+  @override
+  String get profileVerifiedName => 'सत्यापित नाम';
+
+  @override
+  String get profileJoined => 'जुड़ने की तारीख';
+
+  @override
+  String get profileMissing => 'जानकारी उपलब्ध नहीं';
+
+  @override
+  String get profileDiscard => 'बदलाव छोड़ दें?';
+
+  @override
+  String get profileDiscardAction => 'छोड़ दें';
+
+  @override
+  String get profileKeepEditing => 'संपादन जारी रखें';
+
+  @override
+  String get profileGender => 'लिंग';
+
+  @override
+  String get profileDob => 'जन्म तिथि';
+
+  @override
+  String get profileState => 'राज्य';
+
+  @override
+  String get profileAddress => 'पता';
+
+  @override
+  String get profilePincode => 'पिनकोड';
+
+  @override
+  String get profileCatalogEmpty => 'कोई अवतार उपलब्ध नहीं है। कृपया बाद में दोबारा प्रयास करें';
+
+  @override
+  String get profileVerified => 'सत्यापित';
+
+  @override
+  String get profileSectionBuying => 'खरीदारी';
+
+  @override
+  String get profileSectionSelling => 'बिक्री';
+
+  @override
+  String get profileSectionAccount => 'खाता';
+
+  @override
+  String get profileMyOrders => 'मेरे ऑर्डर';
+
+  @override
+  String get profileSavedItems => 'सहेजे गए आइटम';
+
+  @override
+  String get profilePaymentHistory => 'भुगतान इतिहास';
+
+  @override
+  String get profileMyListings => 'मेरी लिस्टिंग';
+
+  @override
+  String get profilePayoutDetails => 'पेआउट विवरण';
+
+  @override
+  String get profileSellerAnalytics => 'विक्रेता एनालिटिक्स';
+
+  @override
+  String get profileNotifications => 'सूचनाएँ';
+
+  @override
+  String get profileLanguage => 'भाषा';
+
+  @override
+  String get profileDisputeCenter => 'विवाद केंद्र';
+
+  @override
+  String get profileHelpSupport => 'सहायता और समर्थन';
+
+  @override
+  String get profileSignOut => 'साइन आउट';
+
+  @override
+  String get profileIncomingOrders => 'आने वाले ऑर्डर';
+
+  @override
+  String profileFooter(String version) {
+    return 'JustQlic v$version · ValueQuo Solutions Pvt. Ltd.';
+  }
+
+  @override
+  String profileRatingLabel(String rating) {
+    return '5 में से $rating रेटिंग';
+  }
+
+  @override
+  String profileTransactions(int count) {
+    return '$count लेन-देन';
+  }
+
+  @override
+  String profilePlanActive(String plan) {
+    return '$plan — सक्रिय';
+  }
+
+  @override
+  String get profileUpgrade => 'प्रीमियम में अपग्रेड करें →';
+
+  @override
+  String get profileStatListings => 'लिस्टिंग';
+
+  @override
+  String get profileStatSold => 'बिके';
+
+  @override
+  String get profileStatReviews => 'समीक्षाएँ';
 }

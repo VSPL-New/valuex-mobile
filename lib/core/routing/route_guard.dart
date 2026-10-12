@@ -3,6 +3,14 @@ import '../../features/auth/domain/entities/registration_step.dart';
 import '../../features/auth/presentation/providers/session_state.dart';
 import 'route_names.dart';
 
+const Set<RegistrationStep> _profileSteps = {
+  RegistrationStep.mobile,
+  RegistrationStep.email,
+  RegistrationStep.aadhaar,
+  RegistrationStep.signup,
+  RegistrationStep.home,
+};
+
 /// Registration routes and the account steps allowed to show them.
 const Map<String, Set<RegistrationStep>> _gatedRoutes = {
   RouteNames.signIn: {RegistrationStep.mobile},
@@ -19,6 +27,8 @@ const Map<String, Set<RegistrationStep>> _gatedRoutes = {
   RouteNames.terms: {RegistrationStep.signup},
   RouteNames.accountBlocked: {RegistrationStep.blocked},
   RouteNames.home: {RegistrationStep.home},
+  RouteNames.profile: _profileSteps,
+  RouteNames.profileDetails: _profileSteps,
   RouteNames.categories: {RegistrationStep.home},
 };
 
@@ -62,6 +72,9 @@ String? redirectFor({
 
   switch (state) {
     case Unauthenticated():
+      if (location == RouteNames.profile || location == RouteNames.profileDetails) {
+        return RouteNames.signIn;
+      }
       // Signed-out users can enter the registration start and browse as guests.
       final open = allowedSteps.contains(RegistrationStep.mobile) ||
           allowedSteps.contains(RegistrationStep.home);
