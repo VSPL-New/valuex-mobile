@@ -39,7 +39,7 @@ dependencies:
   logger: ^2.2.0
 
   # Image Handling
-  image_picker: ^1.0.8
+  image_picker: ^1.2.4
 
   # Permissions
   permission_handler: ^11.3.1
