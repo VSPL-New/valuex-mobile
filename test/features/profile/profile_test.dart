@@ -4,12 +4,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/config/app_config.dart';
+import 'package:valuex_mobile/core/constants/storage_keys.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
 import 'package:valuex_mobile/core/routing/route_guard.dart';
 import 'package:valuex_mobile/core/routing/route_names.dart';
+import 'package:valuex_mobile/core/storage/preferences_service.dart';
+import 'package:valuex_mobile/core/widgets/loading_indicator.dart';
 import 'package:valuex_mobile/features/auth/data/models/auth_models.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
+import 'package:valuex_mobile/features/auth/domain/entities/logout_outcome.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/user_profile.dart';
 import 'package:valuex_mobile/features/auth/presentation/providers/session_state.dart';
 import 'package:valuex_mobile/features/auth/presentation/widgets/avatar_image.dart';
@@ -308,6 +312,92 @@ void main() {
       await harness.settle();
       expect(find.text('This is coming soon'), findsOneWidget);
       await harness.dispose();
+    });
+
+    group('sign out', () {
+      Future<void> openConfirmation(WidgetTester tester) async {
+        await showProfile(tester);
+        await tester.scrollUntilVisible(find.text('Sign Out'), 200);
+        await tester.tap(find.text('Sign Out'));
+        await harness.settle();
+      }
+
+      testWidgets('asks for confirmation first', (tester) async {
+        await openConfirmation(tester);
+
+        expect(find.text('Are you sure you want to log out?'), findsOneWidget);
+        expect(find.text('Cancel'), findsOneWidget);
+        verifyNever(() => harness.repository.logout());
+        await harness.dispose();
+      });
+
+      testWidgets('cancelling keeps the user signed in', (tester) async {
+        await openConfirmation(tester);
+
+        await tester.tap(find.text('Cancel'));
+        await harness.settle();
+
+        expect(find.text('Are you sure you want to log out?'), findsNothing);
+        expect(find.byType(ProfileScreen), findsOneWidget);
+        verifyNever(() => harness.repository.logout());
+        await harness.dispose();
+      });
+
+      testWidgets('confirming logs out and returns to Sign In', (tester) async {
+        await openConfirmation(tester);
+        when(() => harness.repository.logout()).thenAnswer((_) async => LogoutOutcome.revoked);
+
+        await tester.tap(find.widgetWithText(TextButton, 'Sign Out'));
+        await harness.settle();
+
+        verify(() => harness.repository.logout()).called(1);
+        expect(find.byType(ProfileScreen), findsNothing);
+        expect(find.text('Sign In'), findsWidgets);
+        expect(find.textContaining('Logged out on this device'), findsNothing);
+        await harness.dispose();
+      });
+
+      testWidgets('shows a progress indicator while the server is called', (tester) async {
+        await openConfirmation(tester);
+        final done = Completer<LogoutOutcome>();
+        when(() => harness.repository.logout()).thenAnswer((_) => done.future);
+
+        await tester.tap(find.widgetWithText(TextButton, 'Sign Out'));
+        await harness.settle();
+
+        expect(find.byType(LoadingIndicator), findsOneWidget);
+        expect(find.byType(AlertDialog), findsNothing);
+
+        done.complete(LogoutOutcome.revoked);
+        await harness.settle();
+        expect(find.byType(LoadingIndicator), findsNothing);
+        await harness.dispose();
+      });
+
+      testWidgets('tells the user when the server call is queued', (tester) async {
+        await openConfirmation(tester);
+        when(() => harness.repository.logout()).thenAnswer((_) async => LogoutOutcome.queued);
+
+        await tester.tap(find.widgetWithText(TextButton, 'Sign Out'));
+        await harness.settle();
+
+        expect(find.byType(ProfileScreen), findsNothing);
+        expect(find.textContaining('Logged out on this device'), findsOneWidget);
+        await harness.dispose();
+      });
+
+      testWidgets('forgets the saved Home address and half-finished sign-up', (tester) async {
+        await openConfirmation(tester);
+        when(() => harness.repository.logout()).thenAnswer((_) async => LogoutOutcome.revoked);
+        final prefs = harness.container.read(preferencesServiceProvider);
+        await prefs.setString(StorageKeys.homeLocation, '{"city":"Pune"}');
+
+        await tester.tap(find.widgetWithText(TextButton, 'Sign Out'));
+        await harness.settle();
+
+        expect(await prefs.getString(StorageKeys.homeLocation), isNull);
+        await harness.dispose();
+      });
     });
 
     testWidgets('Home tab leaves the profile page', (tester) async {

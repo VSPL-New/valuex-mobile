@@ -336,6 +336,8 @@
   "profileDisputeCenter": "Dispute Center",
   "profileHelpSupport": "Help & Support",
   "profileSignOut": "Sign Out",
+  "logoutConfirmMessage": "Are you sure you want to log out?",
+  "logoutQueued": "Logged out on this device. We will finish signing you out on our servers when you are back online",
   "profileIncomingOrders": "Incoming Orders",
   "profileFooter": "JustQlic v{version} · ValueQuo Solutions Pvt. Ltd.",
   "@profileFooter": {

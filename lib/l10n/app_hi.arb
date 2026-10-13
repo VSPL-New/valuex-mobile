@@ -263,6 +263,8 @@
   "profileDisputeCenter": "विवाद केंद्र",
   "profileHelpSupport": "सहायता और समर्थन",
   "profileSignOut": "साइन आउट",
+  "logoutConfirmMessage": "क्या आप वाकई लॉग आउट करना चाहते हैं?",
+  "logoutQueued": "इस डिवाइस से लॉग आउट हो गया। इंटरनेट लौटने पर हम हमारे सर्वर पर भी आपको साइन आउट कर देंगे",
   "profileIncomingOrders": "आने वाले ऑर्डर",
   "profileFooter": "JustQlic v{version} · ValueQuo Solutions Pvt. Ltd.",
   "profileRatingLabel": "5 में से {rating} रेटिंग",

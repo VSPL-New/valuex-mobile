@@ -1,19 +1,24 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/routing/route_names.dart';
+import '../../../core/theme/colors.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/theme/text_styles.dart';
 import '../../../core/widgets/brand_bottom_nav.dart';
 import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/loading_indicator.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../auth/domain/entities/logout_outcome.dart';
 import '../../auth/presentation/auth_error_messages.dart';
 import '../../home/presentation/main_nav.dart';
 import '../data/mock_profile_summary.dart';
 import '../data/profile_repository.dart';
 import '../domain/profile_menu_badges.dart';
+import 'providers/logout_action.dart';
 import 'widgets/profile_header.dart';
 import 'widgets/profile_menu_section.dart';
 
@@ -21,6 +26,48 @@ import 'widgets/profile_menu_section.dart';
 /// Screens that are not built yet answer with a passing "coming soon" message.
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
+
+  /// Confirms, then logs out. The page is gone once the session ends, so nothing here touches
+  /// `ref` or `context` after the logout call.
+  Future<void> _signOut(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+    final navigator = Navigator.of(context, rootNavigator: true);
+    final messenger = ScaffoldMessenger.of(context);
+    final logout = ref.read(logoutActionProvider);
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialog) => AlertDialog(
+        title: Text(l10n.profileSignOut),
+        content: Text(l10n.logoutConfirmMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialog, false),
+            child: Text(MaterialLocalizations.of(dialog).cancelButtonLabel),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: AppColors.brandError),
+            onPressed: () => Navigator.pop(dialog, true),
+            child: Text(l10n.profileSignOut),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+
+    unawaited(showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const PopScope(canPop: false, child: LoadingIndicator()),
+    ));
+    final outcome = await logout();
+    navigator.pop();
+    if (outcome == LogoutOutcome.queued) {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(l10n.logoutQueued)));
+    }
+  }
 
   Future<void> _refresh(WidgetRef ref) async {
     ref
@@ -132,7 +179,7 @@ class ProfileScreen extends ConsumerWidget {
                       const SizedBox(height: AppSpacing.lg),
                       ProfileSignOutTile(
                         label: l10n.profileSignOut,
-                        onTap: () => showComingSoon(context),
+                        onTap: () => _signOut(context, ref),
                       ),
                       const SizedBox(height: AppSpacing.lg),
                       Text(

@@ -102,7 +102,7 @@ section 8.3). The backend returns a key only once its story ships, so today no r
 missing key or a failed request shows no badge and never blocks the rows. Counts above 99 show as
 99+, and the screen reader hears the real number ("My Orders, 3 new"). The header also shows the
 joined month. Rows whose screens are not built answer with the "coming soon" message and are never
-hidden; Sign Out stays a coming-soon row until US-104 mobile. Push-driven badge refresh is not built
+hidden; Sign Out is covered under Account Logout (US-104). Push-driven badge refresh is not built
 yet (no push in the app), so badges refresh on visit and on pull down only.
 
 ## Profile Management (US-003)
@@ -111,7 +111,7 @@ Home's Profile tab opens `/profile` for signed-in users; guests are routed to Si
 The page follows the Figma Make `ProfileScreen`: a header (avatar, name with a verified mark,
 masked mobile, rating, transactions, city, edit button), the plan badge or Upgrade to Premium
 invite, the Listings/Sold/Reviews tiles, the Buying, Selling and Account menus, Sign Out and the
-main navigation. Menu rows, Upgrade and Sign Out are not built yet and answer with a passing
+main navigation. Menu rows and Upgrade are not built yet and answer with a passing
 "coming soon" message. Rating, transactions, listings, sold and plan come from
 `profileSummaryProvider` (`lib/features/profile/data/mock_profile_summary.dart`), which returns the
 mock values from Figma Make. Replace that provider with real data when the ratings, orders,
@@ -127,8 +127,8 @@ avatar remains displayed until another is selected; a rejected selection preserv
 avatar. Failed edits retain the draft, and leaving an edited profile asks before discarding changes.
 
 The backend only validates city format, not Indian geography. Ratings and viewing another user's
-profile are deferred backend capabilities. Security settings and logout remain
-US-105/US-104 work. The existing avatar illustrations are placeholders pending final artwork.
+profile are deferred backend capabilities. Security settings remain
+US-105 work. The existing avatar illustrations are placeholders pending final artwork.
 Backend profile PATCH validation also differs from registration for Unicode combining marks;
 server rejections are displayed rather than treated as successful saves.
 
@@ -138,6 +138,34 @@ For manual testing, use an existing authenticated account, open Profile, edit on
 reopen and confirm persistence. Cancel a changed draft, try invalid names/cities, and test avatars
 with a modified server catalog. Do not reset the simulator Keychain to switch test users; use the
 debug-only `CLEAR_LOCAL_SESSION` launch flag.
+
+## Account Logout (US-104)
+
+Profile's Sign Out row asks "Are you sure you want to log out?". Confirming shows a progress
+indicator while `POST /auth/logout` revokes the access token (the backend blocklists its `jti`,
+which also invalidates the paired refresh token). The device is then signed out and the router
+sends the user to Sign In. Cancel keeps the session.
+
+The device is always signed out, even if the call fails:
+
+- **Offline or server error (network, timeout, 5xx):** the access token is kept in secure
+  storage as a one-shot "pending revocation" record and a message says the server sign-out will
+  finish when the phone is back online. `SessionController` retries it with an explicit bearer
+  token (no refresh) on the next app start and after the next sign-in. It is dropped on success
+  or when the server no longer accepts it (401). Trade-off: until then, that access token
+  (valid for 1 h at most) stays on the device.
+- **Expired session (401):** treated as already logged out.
+
+Logout also clears the saved Home address and any unfinished sign-up state so the next person
+on a shared device does not see them (`LogoutAction`). The "session expired" notice is
+suppressed during a deliberate logout.
+
+Verification: `flutter test test/features/profile/profile_test.dart
+test/features/auth/data/auth_data_test.dart
+test/features/auth/presentation/session_controller_test.dart test/core/network/api_client_test.dart`.
+Manual: sign in, open Profile, Sign Out, confirm you land on Sign In and that reopening the
+app stays signed out; with the backend stopped, repeat and check the "finish signing you out"
+message, then restart the backend and the app and confirm the old token is rejected.
 
 ## Project structure
 

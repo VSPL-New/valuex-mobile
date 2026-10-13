@@ -1,6 +1,7 @@
 import '../entities/aadhaar_transaction.dart';
 import '../entities/auth_session.dart';
 import '../entities/google_sign_in_result.dart';
+import '../entities/logout_outcome.dart';
 import '../entities/otp_sent.dart';
 import '../entities/signup_details.dart';
 import '../entities/user_profile.dart';
@@ -12,6 +13,15 @@ abstract interface class AuthRepository {
   Future<UserProfile> fetchProfile();
 
   Future<void> clearSession();
+
+  /// Ends the session on the server and clears the tokens on this device. When the server
+  /// cannot be reached the token is kept aside for [revokePendingSession] and the result
+  /// is [LogoutOutcome.queued]; the device is logged out either way.
+  Future<LogoutOutcome> logout();
+
+  /// Sends a logout that could not be sent earlier. Keeps it for another try only when the
+  /// failure is transient.
+  Future<void> revokePendingSession();
 
   Future<OtpSent> initiateRegistration(String mobile);
 

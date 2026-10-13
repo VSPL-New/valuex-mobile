@@ -58,6 +58,7 @@ class AppHarness {
     when(() => apiClient.sessionEvents).thenAnswer((_) => sessionExpired.stream);
     when(() => repository.hasSession()).thenAnswer((_) async => false);
     when(() => repository.clearSession()).thenAnswer((_) async {});
+    when(() => repository.revokePendingSession()).thenAnswer((_) async {});
   }
 
   ProviderContainer get container =>

@@ -6,6 +6,7 @@ import '../../../../core/network/session_event.dart';
 import '../../../../core/utils/provider_retry.dart';
 import '../../domain/entities/account_status.dart';
 import '../../domain/entities/auth_session.dart';
+import '../../domain/entities/logout_outcome.dart';
 import 'auth_providers.dart';
 import 'session_state.dart';
 
@@ -19,14 +20,18 @@ class SessionController extends _$SessionController {
   Future<SessionState> build() async {
     final subscription = ref.watch(apiClientProvider).sessionEvents.listen(_onSessionEvent);
     ref.onDispose(subscription.cancel);
+    unawaited(_revokePendingLogout());
 
     final profile = await ref.watch(restoreSessionProvider).call();
     if (profile == null) return const Unauthenticated();
     return Authenticated(status: profile.status, aadhaarVerified: profile.aadhaarVerified);
   }
 
+  var _loggingOut = false;
+
   /// Call after an endpoint issued tokens (verify mobile, skip or verify Aadhaar).
   void signedIn(AuthResult result) {
+    unawaited(_revokePendingLogout());
     state = AsyncData(
       Authenticated(status: result.status, aadhaarVerified: result.aadhaarVerified),
     );
@@ -40,12 +45,34 @@ class SessionController extends _$SessionController {
     );
   }
 
+  /// Logs the user out of the server and this device, then returns to the signed-out state.
+  /// Session events are ignored meanwhile, so a failed refresh does not show "session expired".
+  Future<LogoutOutcome> logOut() async {
+    _loggingOut = true;
+    try {
+      final outcome = await ref.read(authRepositoryProvider).logout();
+      state = const AsyncData(Unauthenticated());
+      return outcome;
+    } finally {
+      _loggingOut = false;
+    }
+  }
+
+  Future<void> _revokePendingLogout() async {
+    try {
+      await ref.read(authRepositoryProvider).revokePendingSession();
+    } on Object {
+      // Tried again on the next start or sign-in.
+    }
+  }
+
   Future<void> signOutLocally() async {
     await ref.read(authRepositoryProvider).clearSession();
     state = const AsyncData(Unauthenticated());
   }
 
   void _onSessionEvent(SessionEvent event) {
+    if (_loggingOut) return;
     switch (event) {
       case SessionEnded(:final reason):
         final current = state.value;

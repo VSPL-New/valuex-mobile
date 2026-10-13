@@ -8,6 +8,7 @@ import 'package:valuex_mobile/core/network/session_event.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/auth_session.dart';
+import 'package:valuex_mobile/features/auth/domain/entities/logout_outcome.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/registration_step.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/user_profile.dart';
 import 'package:valuex_mobile/features/auth/presentation/providers/auth_providers.dart';
@@ -32,6 +33,7 @@ void main() {
     sessionExpired = StreamController<SessionEvent>.broadcast();
     when(() => apiClient.sessionEvents).thenAnswer((_) => sessionExpired.stream);
     when(() => repository.clearSession()).thenAnswer((_) async {});
+    when(() => repository.revokePendingSession()).thenAnswer((_) async {});
     container = ProviderContainer(
       overrides: [
         authRepositoryProvider.overrideWithValue(repository),
@@ -186,5 +188,93 @@ void main() {
 
     verify(() => repository.clearSession()).called(1);
     expect(container.read(sessionControllerProvider).value, isA<Unauthenticated>());
+  });
+
+  group('logOut', () {
+    Future<void> signIn() async {
+      when(() => repository.hasSession()).thenAnswer((_) async => true);
+      when(() => repository.fetchProfile()).thenAnswer((_) async => _profile(AccountStatus.active));
+      await resolve();
+    }
+
+    test('signs out and reports what the repository returned', () async {
+      await signIn();
+      when(() => repository.logout()).thenAnswer((_) async => LogoutOutcome.queued);
+
+      final outcome = await container.read(sessionControllerProvider.notifier).logOut();
+
+      expect(outcome, LogoutOutcome.queued);
+      final state = container.read(sessionControllerProvider).value as Unauthenticated;
+      expect(state.sessionExpired, isFalse);
+    });
+
+    test('a session that ends during the call does not show the expired notice', () async {
+      await signIn();
+      final done = Completer<LogoutOutcome>();
+      when(() => repository.logout()).thenAnswer((_) => done.future);
+
+      final pending = container.read(sessionControllerProvider.notifier).logOut();
+      sessionExpired.add(const SessionEnded(SessionEndReason.expired));
+      await Future<void>.delayed(Duration.zero);
+      done.complete(LogoutOutcome.revoked);
+      await pending;
+
+      final state = container.read(sessionControllerProvider).value as Unauthenticated;
+      expect(state.sessionExpired, isFalse);
+    });
+
+    test('events are listened to again after the logout', () async {
+      await signIn();
+      when(() => repository.logout()).thenAnswer((_) async => LogoutOutcome.revoked);
+      final notifier = container.read(sessionControllerProvider.notifier);
+      await notifier.logOut();
+      notifier.signedIn(
+        const AuthResult(
+          session: AuthSession(accessToken: 'a', refreshToken: 'r', userId: 'user-1'),
+          status: AccountStatus.active,
+          aadhaarVerified: false,
+        ),
+      );
+
+      sessionExpired.add(const SessionRefreshed(status: 'ACTIVE', aadhaarVerified: true));
+      await Future<void>.delayed(Duration.zero);
+
+      expect(container.read(sessionControllerProvider).value, isA<Authenticated>());
+    });
+  });
+
+  group('queued logout', () {
+    test('is retried when the app starts', () async {
+      when(() => repository.hasSession()).thenAnswer((_) async => false);
+
+      await resolve();
+
+      verify(() => repository.revokePendingSession()).called(1);
+    });
+
+    test('is retried after the next sign-in', () async {
+      when(() => repository.hasSession()).thenAnswer((_) async => false);
+      await resolve();
+
+      container.read(sessionControllerProvider.notifier).signedIn(
+            const AuthResult(
+              session: AuthSession(accessToken: 'a', refreshToken: 'r', userId: 'user-1'),
+              status: AccountStatus.active,
+              aadhaarVerified: true,
+            ),
+          );
+      await Future<void>.delayed(Duration.zero);
+
+      verify(() => repository.revokePendingSession()).called(2);
+    });
+
+    test('a failing retry does not break the session', () async {
+      when(() => repository.hasSession()).thenAnswer((_) async => false);
+      when(() => repository.revokePendingSession()).thenThrow(StateError('boom'));
+
+      final state = await resolve();
+
+      expect(state, isA<Unauthenticated>());
+    });
   });
 }

@@ -1,7 +1,9 @@
+import '../../../../core/network/api_error.dart';
 import '../../../../core/security/secure_storage_service.dart';
 import '../../domain/entities/aadhaar_transaction.dart';
 import '../../domain/entities/auth_session.dart';
 import '../../domain/entities/google_sign_in_result.dart';
+import '../../domain/entities/logout_outcome.dart';
 import '../../domain/entities/otp_sent.dart';
 import '../../domain/entities/signup_details.dart';
 import '../../domain/entities/user_profile.dart';
@@ -28,6 +30,36 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> clearSession() => _storage.clearSession();
+
+  @override
+  Future<LogoutOutcome> logout() async {
+    var outcome = LogoutOutcome.revoked;
+    try {
+      await _remote.logout();
+    } on ApiError catch (error) {
+      // A refresh during the call may have replaced the token, so read it again.
+      final token = await _storage.getAccessToken();
+      if (error.isRetryable && token != null) {
+        await _storage.savePendingLogoutToken(token);
+        outcome = LogoutOutcome.queued;
+      }
+    } finally {
+      await _storage.clearSession();
+    }
+    return outcome;
+  }
+
+  @override
+  Future<void> revokePendingSession() async {
+    final token = await _storage.getPendingLogoutToken();
+    if (token == null) return;
+    try {
+      await _remote.logout(bearerToken: token);
+    } on ApiError catch (error) {
+      if (error.isRetryable) return;
+    }
+    await _storage.clearPendingLogoutToken();
+  }
 
   @override
   Future<OtpSent> initiateRegistration(String mobile) async {

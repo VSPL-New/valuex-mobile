@@ -1629,6 +1629,18 @@ abstract class AppLocalizations {
   /// **'Sign Out'**
   String get profileSignOut;
 
+  /// No description provided for @logoutConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to log out?'**
+  String get logoutConfirmMessage;
+
+  /// No description provided for @logoutQueued.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged out on this device. We will finish signing you out on our servers when you are back online'**
+  String get logoutQueued;
+
   /// No description provided for @profileIncomingOrders.
   ///
   /// In en, this message translates to:

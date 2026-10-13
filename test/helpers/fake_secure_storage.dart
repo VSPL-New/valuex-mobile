@@ -6,6 +6,7 @@ class FakeSecureStorage extends Fake implements SecureStorageService {
   String? accessToken;
   String? refreshToken;
   String? userId;
+  String? pendingLogoutToken;
 
   FakeSecureStorage({this.accessToken, this.refreshToken});
 
@@ -33,6 +34,15 @@ class FakeSecureStorage extends Fake implements SecureStorageService {
     refreshToken = null;
     userId = null;
   }
+
+  @override
+  Future<String?> getPendingLogoutToken() async => pendingLogoutToken;
+
+  @override
+  Future<void> savePendingLogoutToken(String token) async => pendingLogoutToken = token;
+
+  @override
+  Future<void> clearPendingLogoutToken() async => pendingLogoutToken = null;
 
   @override
   Future<String?> getUserId() async => userId;

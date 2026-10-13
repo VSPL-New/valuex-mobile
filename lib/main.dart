@@ -11,6 +11,7 @@ Future<void> main() async {
   final config = AppConfig.fromEnvironment();
   if (kDebugMode && const bool.fromEnvironment('CLEAR_LOCAL_SESSION')) {
     await SecureStorageService().clearSession();
+    await SecureStorageService().clearPendingLogoutToken();
   }
 
   runApp(
