@@ -29,7 +29,18 @@ const Map<String, Set<RegistrationStep>> _gatedRoutes = {
   RouteNames.home: {RegistrationStep.home},
   RouteNames.profile: _profileSteps,
   RouteNames.profileDetails: _profileSteps,
+  RouteNames.accountSecurity: _profileSteps,
+  RouteNames.changeMobile: _profileSteps,
+  RouteNames.changeEmail: _profileSteps,
   RouteNames.categories: {RegistrationStep.home},
+};
+
+const Set<String> _signedInOnlyRoutes = {
+  RouteNames.profile,
+  RouteNames.profileDetails,
+  RouteNames.accountSecurity,
+  RouteNames.changeMobile,
+  RouteNames.changeEmail,
 };
 
 const Set<String> _aadhaarRoutes = {RouteNames.signupAadhaar, RouteNames.devAadhaarOtp};
@@ -72,9 +83,7 @@ String? redirectFor({
 
   switch (state) {
     case Unauthenticated():
-      if (location == RouteNames.profile || location == RouteNames.profileDetails) {
-        return RouteNames.signIn;
-      }
+      if (_signedInOnlyRoutes.contains(location)) return RouteNames.signIn;
       // Signed-out users can enter the registration start and browse as guests.
       final open = allowedSteps.contains(RegistrationStep.mobile) ||
           allowedSteps.contains(RegistrationStep.home);

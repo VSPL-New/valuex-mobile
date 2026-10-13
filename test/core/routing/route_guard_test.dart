@@ -173,4 +173,37 @@ void main() {
       expect(redirectFor(session: session, location: RouteNames.createAccount), isNull);
     });
   });
+
+  group('Account Security routes', () {
+    const routes = [RouteNames.accountSecurity, RouteNames.changeMobile, RouteNames.changeEmail];
+
+    test('signed-out users are sent to Sign In', () {
+      for (final route in routes) {
+        expect(redirectFor(session: _signedOut(), location: route), RouteNames.signIn,
+            reason: route);
+      }
+    });
+
+    test('active users, with or without Aadhaar, can open them', () {
+      for (final route in routes) {
+        for (final aadhaarVerified in [true, false]) {
+          expect(
+            redirectFor(
+                session: _signedIn(AccountStatus.active, aadhaarVerified: aadhaarVerified),
+                location: route),
+            isNull,
+            reason: route,
+          );
+        }
+      }
+    });
+
+    test('a suspended account is sent to the blocked page', () {
+      for (final route in routes) {
+        expect(redirectFor(session: _signedIn(AccountStatus.suspended), location: route),
+            RouteNames.accountBlocked,
+            reason: route);
+      }
+    });
+  });
 }

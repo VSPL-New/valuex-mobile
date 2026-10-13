@@ -127,8 +127,8 @@ avatar remains displayed until another is selected; a rejected selection preserv
 avatar. Failed edits retain the draft, and leaving an edited profile asks before discarding changes.
 
 The backend only validates city format, not Indian geography. Ratings and viewing another user's
-profile are deferred backend capabilities. Security settings remain
-US-105 work. The existing avatar illustrations are placeholders pending final artwork.
+profile are deferred backend capabilities. Security settings are
+covered under Account Security (US-105). The existing avatar illustrations are placeholders pending final artwork.
 Backend profile PATCH validation also differs from registration for Unicode combining marks;
 server rejections are displayed rather than treated as successful saves.
 
@@ -167,6 +167,46 @@ Manual: sign in, open Profile, Sign Out, confirm you land on Sign In and that re
 app stays signed out; with the backend stopped, repeat and check the "finish signing you out"
 message, then restart the backend and the app and confirm the old token is rejected.
 
+## Account Security (US-105)
+
+Profile > Account > Account Security (`/profile/security`) shows, from
+`GET /users/me/account-security` and `GET /users/me/sessions`:
+
+- **Sign-in details:** the masked mobile number and email, each with a Change button, and the
+  Aadhaar status (icon and words). When Aadhaar is not verified, "Verify now" opens the existing
+  Aadhaar step, which active users may open later.
+- **Active sessions:** up to 10 signed-in devices, most recent first, with the last active time,
+  the IP address and a "This device" tag. "Log out of all other devices" asks first, then calls
+  `POST /users/me/sessions/revoke-others`; it is hidden when this is the only device.
+- **Delete My Account:** answers with the "coming soon" message until Sprint 14 (US-063/US-098).
+
+Changing the mobile number or email (`/profile/security/mobile`, `/profile/security/email`) is
+two steps on one page: enter the new value, then confirm the 6-digit code sent to it
+(`.../change/initiate` and `.../change/verify`). The current value stays active on the server
+until the code is confirmed, so leaving midway changes nothing. Resend follows the sign-up rules
+(30 s cooldown, 3 sends); the backend also limits 3 sends and 5 wrong codes per 10 minutes per
+value. `ContactChangeController` holds the state; the OTP boxes and the resend line are the same
+widgets as the sign-up steps.
+
+The app names itself in its `User-Agent` header (`JustQlic/0.1.0 (iOS)`), which the backend stores
+as the session's device name. Sessions created before this (and tools such as Swagger) show the
+header as sent, or "Unknown device" for the Dart default.
+
+Known gaps and notes:
+
+- The backend serialises the session flag as `current` (the testing guide and LLD say
+  `isCurrent`); the app reads both.
+- The old mobile number or email gets no alert about the change: that needs US-077.
+- Revoked devices find out on their next request (401, then a failed refresh) and show the
+  "session expired" notice.
+- The Hindi strings need native-speaker review.
+
+Verification: `flutter test test/features/account_security`. Manual: open Profile > Account
+Security; change the number to an unused one with the code from the backend console; try a number
+that belongs to another account, a wrong code and an expired code; sign in on a second device or
+simulator, check both appear, then log out of other devices and confirm the second one is signed
+out on its next action.
+
 ## Project structure
 
 ```
@@ -190,6 +230,8 @@ lib/
     onboarding/presentation/
     auth/                   # data/, domain/, presentation/ (providers, screens, widgets)
     home/presentation/
+    profile/                # profile page, details, menu badges
+    account_security/       # US-105: sign-in details, contact change, active sessions
 test/                       # Unit and widget tests mirroring lib/
 ```
 

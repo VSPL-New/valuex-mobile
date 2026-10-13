@@ -91,11 +91,12 @@ class ProfileScreen extends ConsumerWidget {
     final summary = ref.watch(profileSummaryProvider);
     final badges = ref.watch(profileMenuBadgesProvider).value ?? const ProfileMenuBadges();
 
-    ProfileMenuItem item(IconData icon, String label, [String? badgeKey]) => ProfileMenuItem(
+    ProfileMenuItem item(IconData icon, String label, [String? badgeKey, VoidCallback? onTap]) =>
+        ProfileMenuItem(
           icon: icon,
           label: label,
           badge: badgeKey == null ? 0 : badges.count(badgeKey),
-          onTap: () => showComingSoon(context),
+          onTap: onTap ?? () => showComingSoon(context),
         );
 
     return PopScope(
@@ -167,6 +168,8 @@ class ProfileScreen extends ConsumerWidget {
                       ProfileMenuSection(
                         title: l10n.profileSectionAccount,
                         items: [
+                          item(Icons.lock_outline, l10n.profileAccountSecurity, null,
+                              () => context.push(RouteNames.accountSecurity)),
                           item(Icons.notifications_none, l10n.profileNotifications,
                               ProfileMenuKeys.notifications),
                           item(Icons.language, l10n.profileLanguage),

@@ -393,5 +393,61 @@
         "type": "int"
       }
     }
-  }
+  },
+  "profileAccountSecurity": "Account Security",
+  "securityTitle": "Account Security",
+  "securitySectionSignIn": "Sign-in details",
+  "securityMobileLabel": "Mobile number",
+  "securityEmailLabel": "Email",
+  "securityChange": "Change",
+  "securityChangeMobileA11y": "Change mobile number",
+  "securityChangeEmailA11y": "Change email",
+  "securityAadhaarLabel": "Aadhaar verification",
+  "securityAadhaarVerified": "Verified",
+  "securityAadhaarPending": "Not verified yet",
+  "securityAadhaarHint": "Required before your first buy or sell",
+  "securityAadhaarVerifyNow": "Verify now",
+  "securitySessionsTitle": "Active sessions",
+  "securitySessionsHint": "Devices signed in to your account",
+  "securityThisDevice": "This device",
+  "securityUnknownDevice": "Unknown device",
+  "securityLastActive": "Last active {date}",
+  "@securityLastActive": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "securitySessionsLoadFailed": "Unable to load your sessions",
+  "securityOnlyThisDevice": "This is the only device signed in",
+  "securityLogoutOthers": "Log out of all other devices",
+  "securityLogoutOthersTitle": "Log out of other devices?",
+  "securityLogoutOthersMessage": "Every other device will be signed out. This device stays signed in.",
+  "securityLogoutOthersConfirm": "Log out",
+  "securityLogoutOthersDone": "{count, plural, =1{Logged out of 1 other device} other{Logged out of {count} other devices}}",
+  "@securityLogoutOthersDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "securityNoOtherSessions": "No other active sessions found",
+  "securityDeleteAccount": "Delete My Account",
+  "securityChangeMobileTitle": "Change mobile number",
+  "securityChangeMobileSubtitle": "Enter your new number. We will send a code to confirm it.",
+  "securityChangeEmailTitle": "Change email",
+  "securityChangeEmailSubtitle": "Enter your new email address. We will send a code to confirm it.",
+  "securityNewMobileLabel": "New mobile number",
+  "securityNewEmailLabel": "New email address",
+  "securitySendCode": "Send code",
+  "securityMobileStaysActive": "Your current number stays active until you confirm the new one.",
+  "securityEmailStaysActive": "Your current email stays active until you confirm the new one.",
+  "securityConfirmMobileTitle": "Confirm new number",
+  "securityConfirmEmailTitle": "Confirm new email",
+  "securityMobileUpdated": "Mobile number updated",
+  "securityEmailUpdated": "Email updated",
+  "securitySameMobile": "This is already your mobile number. Enter a different number.",
+  "securitySameEmail": "This is already your email address. Enter a different address."
 }
