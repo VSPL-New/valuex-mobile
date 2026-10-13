@@ -35,7 +35,7 @@ jobs:
   quality:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
@@ -71,14 +71,14 @@ jobs:
   store-compliance:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Store compliance (static)
         run: tool/check_store_compliance.sh ${{ inputs.strict_store_checks && '--strict' || '' }}
 
   android-build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
@@ -114,7 +114,7 @@ jobs:
     if: always() && (github.event_name != 'pull_request' || needs.changes.outputs.ios == 'true')
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
