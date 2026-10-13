@@ -271,5 +271,7 @@
   "profileUpgrade": "प्रीमियम में अपग्रेड करें →",
   "profileStatListings": "लिस्टिंग",
   "profileStatSold": "बिके",
-  "profileStatReviews": "समीक्षाएँ"
+  "profileStatReviews": "समीक्षाएँ",
+  "profileMemberSince": "{date} से जुड़े",
+  "profileMenuBadgeLabel": "{label}, {count} नए"
 }

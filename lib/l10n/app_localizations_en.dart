@@ -875,4 +875,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileStatReviews => 'Reviews';
+
+  @override
+  String profileMemberSince(String date) {
+    return 'Joined $date';
+  }
+
+  @override
+  String profileMenuBadgeLabel(String label, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count new',
+      one: '1 new',
+    );
+    return '$label, $_temp0';
+  }
 }

@@ -1,5 +1,6 @@
 import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/gradients.dart';
 import '../../../../core/theme/spacing.dart';
@@ -116,6 +117,14 @@ class ProfileHeader extends StatelessWidget {
                   ),
                   if (profile.mobile != null)
                     Text(profile.mobile!, style: AppTextStyles.bodySecondary),
+                  if (profile.memberSince != null)
+                    Text(
+                      l10n.profileMemberSince(
+                        DateFormat.yMMM(Localizations.localeOf(context).toString())
+                            .format(profile.memberSince!),
+                      ),
+                      style: AppTextStyles.hint,
+                    ),
                   const SizedBox(height: AppSpacing.sm),
                   Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,

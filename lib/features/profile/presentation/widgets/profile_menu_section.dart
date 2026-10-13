@@ -2,13 +2,22 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class ProfileMenuItem {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
 
-  const ProfileMenuItem({required this.icon, required this.label, required this.onTap});
+  /// Items that need attention; no badge when zero.
+  final int badge;
+
+  const ProfileMenuItem({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.badge = 0,
+  });
 }
 
 const _cardShadow = [
@@ -67,7 +76,9 @@ class _MenuRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: item.label,
+      label: item.badge > 0
+          ? AppLocalizations.of(context).profileMenuBadgeLabel(item.label, item.badge)
+          : item.label,
       excludeSemantics: true,
       onTap: item.onTap,
       child: InkWell(
@@ -95,8 +106,42 @@ class _MenuRow extends StatelessWidget {
                     style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w500),
                   ),
                 ),
+                if (item.badge > 0) ...[
+                  _CountBadge(count: item.badge),
+                  const SizedBox(width: AppSpacing.sm),
+                ],
                 const Icon(Icons.chevron_right, size: 20, color: AppColors.brandMutedText),
               ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Count pill; the number is capped at 99+ on screen, the screen reader hears the real count.
+class _CountBadge extends StatelessWidget {
+  final int count;
+
+  const _CountBadge({required this.count});
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppColors.brandPrimary,
+        borderRadius: BorderRadius.circular(AppRadius.xl * 2),
+      ),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minWidth: 24, minHeight: 24),
+        child: Center(
+          widthFactor: 1,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+            child: Text(
+              count > 99 ? '99+' : '$count',
+              style: AppTextStyles.caption.copyWith(color: AppColors.brandOnPrimary),
             ),
           ),
         ),

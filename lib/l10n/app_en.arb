@@ -372,5 +372,24 @@
   "profileUpgrade": "Upgrade to Premium →",
   "profileStatListings": "Listings",
   "profileStatSold": "Sold",
-  "profileStatReviews": "Reviews"
+  "profileStatReviews": "Reviews",
+  "profileMemberSince": "Joined {date}",
+  "@profileMemberSince": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "profileMenuBadgeLabel": "{label}, {count, plural, =1{1 new} other{{count} new}}",
+  "@profileMenuBadgeLabel": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
