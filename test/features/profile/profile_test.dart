@@ -19,6 +19,7 @@ import 'package:valuex_mobile/features/auth/presentation/providers/session_state
 import 'package:valuex_mobile/features/auth/presentation/widgets/avatar_image.dart';
 import 'package:valuex_mobile/features/profile/data/mock_profile_summary.dart';
 import 'package:valuex_mobile/features/profile/data/profile_repository.dart';
+import 'package:valuex_mobile/features/profile/domain/profile_menu_badges.dart';
 import 'package:valuex_mobile/features/profile/domain/profile_summary.dart';
 import 'package:valuex_mobile/features/profile/presentation/profile_details_screen.dart';
 import 'package:valuex_mobile/features/profile/presentation/profile_screen.dart';
@@ -59,12 +60,19 @@ void main() {
     late FakeSecureStorage storage;
 
     setUp(() {
-      adapter = FakeHttpAdapter((request) async => request.path == '/avatars'
-          ? FakeHttpAdapter.ok({
-              'avatarIds': ['avatar-02'],
-              'defaultAvatarId': 'avatar-02'
-            })
-          : FakeHttpAdapter.ok(_json));
+      adapter = FakeHttpAdapter((request) async => switch (request.path) {
+            '/avatars' => FakeHttpAdapter.ok({
+                'avatarIds': ['avatar-02'],
+                'defaultAvatarId': 'avatar-02'
+              }),
+            '/users/me/menu-summary' => FakeHttpAdapter.ok({
+                'avatarId': 'avatar-02',
+                'aadhaarVerified': true,
+                'memberSince': '2026-08-07T12:00:00Z',
+                'badges': {'MY_ORDERS': 3, 'OFFERS': 0, 'SAVED_ITEMS': 'x'},
+              }),
+            _ => FakeHttpAdapter.ok(_json),
+          });
       storage = FakeSecureStorage(accessToken: 'access', refreshToken: 'refresh');
       final client = ApiClient(
         storage,
@@ -111,6 +119,20 @@ void main() {
       expect(adapter.requests.last.data, {'avatarId': 'avatar-02'});
     });
 
+    test('menu badges come from GET /users/me/menu-summary and keep only positive counts',
+        () async {
+      final badges = await repository.menuBadges();
+      expect(adapter.requests.single.path, '/users/me/menu-summary');
+      expect(badges.count(ProfileMenuKeys.myOrders), 3);
+      expect(badges.count('OFFERS'), 0);
+      expect(badges.count('SAVED_ITEMS'), 0);
+      expect(badges.count(ProfileMenuKeys.notifications), 0);
+    });
+
+    test('an empty or missing badges map means no badges', () {
+      expect(const ProfileMenuBadges().count(ProfileMenuKeys.myOrders), 0);
+    });
+
     test('missing optional profile fields remain null', () {
       final profile = UserProfileModel.fromJson({'userId': 'x', 'status': 'ACTIVE'}).toEntity();
       expect(profile.aadhaarName, isNull);
@@ -143,10 +165,15 @@ void main() {
     late _MockProfileRepository repository;
     late UserProfile profile;
 
-    Future<void> launch(WidgetTester tester, {bool premium = false}) async {
+    Future<void> launch(
+      WidgetTester tester, {
+      bool premium = false,
+      ProfileMenuBadges badges = const ProfileMenuBadges(),
+    }) async {
       profile = UserProfileModel.fromJson(_json).toEntity();
       repository = _MockProfileRepository();
       when(() => repository.fetch()).thenAnswer((_) async => profile);
+      when(() => repository.menuBadges()).thenAnswer((_) async => badges);
       harness = AppHarness(
         tester,
         extraOverrides: [
@@ -204,6 +231,61 @@ void main() {
       await tester.scrollUntilVisible(find.text('Sign Out'), 200);
       expect(find.text('Sign Out'), findsOneWidget);
       expect(find.textContaining('v0.1.0 · ValueQuo Solutions'), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('menu rows show the counts from the menu summary', (tester) async {
+      final semantics = tester.ensureSemantics();
+      await launch(
+        tester,
+        badges: const ProfileMenuBadges({
+          ProfileMenuKeys.myOrders: 3,
+          ProfileMenuKeys.incomingOrders: 120,
+        }),
+      );
+      await tester.tap(find.text('Profile'));
+      await harness.settle();
+      expect(find.text('3'), findsOneWidget);
+      expect(find.text('99+'), findsOneWidget);
+      expect(find.bySemanticsLabel('My Orders, 3 new'), findsOneWidget);
+      expect(find.bySemanticsLabel('Incoming Orders, 120 new'), findsOneWidget);
+      expect(find.bySemanticsLabel('Saved Items'), findsOneWidget);
+      for (final guideline in [
+        androidTapTargetGuideline,
+        labeledTapTargetGuideline,
+        textContrast
+      ]) {
+        await expectLater(tester, meetsGuideline(guideline));
+      }
+      semantics.dispose();
+      await harness.dispose();
+    });
+
+    testWidgets('a failed menu summary leaves every row usable without badges', (tester) async {
+      await launch(tester);
+      when(() => repository.menuBadges())
+          .thenThrow(const ApiError(type: ApiErrorType.network, message: 'offline'));
+      await tester.tap(find.text('Profile'));
+      await harness.settle();
+      expect(find.text('Abhay Kumar'), findsOneWidget);
+      await tester.tap(find.text('My Orders'));
+      await harness.settle();
+      expect(find.text('This is coming soon'), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('pull down refreshes the badges', (tester) async {
+      await showProfile(tester);
+      verify(() => repository.menuBadges()).called(1);
+      await tester.fling(find.byType(SingleChildScrollView), const Offset(0, 400), 1000);
+      await harness.settle();
+      verify(() => repository.menuBadges()).called(1);
+      await harness.dispose();
+    });
+
+    testWidgets('header shows the joined month', (tester) async {
+      await showProfile(tester);
+      expect(find.text('Joined Aug 2026'), findsOneWidget);
       await harness.dispose();
     });
 

@@ -875,4 +875,14 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get profileStatReviews => 'समीक्षाएँ';
+
+  @override
+  String profileMemberSince(String date) {
+    return '$date से जुड़े';
+  }
+
+  @override
+  String profileMenuBadgeLabel(String label, int count) {
+    return '$label, $count नए';
+  }
 }

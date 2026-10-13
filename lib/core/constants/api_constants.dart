@@ -17,6 +17,7 @@ class ApiConstants {
   static const String refreshToken = '/auth/refresh';
   static const String logout = '/auth/logout';
   static const String currentUser = '/users/me';
+  static const String profileMenuSummary = '/users/me/menu-summary';
 
   static const Duration connectTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
