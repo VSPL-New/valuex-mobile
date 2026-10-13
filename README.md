@@ -91,6 +91,20 @@ Swagger UI (dev profile): `http://localhost:8080/swagger-ui.html`.
 
 Android note: cleartext HTTP is allowed in debug and profile builds only (needed for `10.0.2.2`). Release builds must use HTTPS. iOS allows local-network HTTP through `NSAllowsLocalNetworking`.
 
+## Profile Hub (US-103)
+
+The Profile tab is the account menu. It reads `GET /users/me/menu-summary` on every visit (and on
+pull down) and shows a count pill on each row whose key is in the response `badges` map:
+My Orders `MY_ORDERS`, Saved Items `SAVED_ITEMS`, Payment History `TRANSACTIONS`, Incoming Orders
+`INCOMING_ORDERS`, My Listings `MY_LISTINGS`, Payout Details `PAYOUTS`, Notifications
+`NOTIFICATIONS`, Dispute Center `DISPUTES`, Help & Support `SUPPORT_TICKETS` (keys from LLD Sprint 1
+section 8.3). The backend returns a key only once its story ships, so today no row has a badge. A
+missing key or a failed request shows no badge and never blocks the rows. Counts above 99 show as
+99+, and the screen reader hears the real number ("My Orders, 3 new"). The header also shows the
+joined month. Rows whose screens are not built answer with the "coming soon" message and are never
+hidden; Sign Out is covered under Account Logout (US-104). Push-driven badge refresh is not built
+yet (no push in the app), so badges refresh on visit and on pull down only.
+
 ## Profile Management (US-003)
 
 Home's Profile tab opens `/profile` for signed-in users; guests are routed to Sign In.
@@ -114,7 +128,7 @@ avatar. Failed edits retain the draft, and leaving an edited profile asks before
 
 The backend only validates city format, not Indian geography. Ratings and viewing another user's
 profile are deferred backend capabilities. Security settings remain
-US-103/US-105 work. The existing avatar illustrations are placeholders pending final artwork.
+US-105 work. The existing avatar illustrations are placeholders pending final artwork.
 Backend profile PATCH validation also differs from registration for Unicode combining marks;
 server rejections are displayed rather than treated as successful saves.
 

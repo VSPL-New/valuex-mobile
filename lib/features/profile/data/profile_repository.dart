@@ -4,6 +4,7 @@ import '../../../core/network/api_client.dart';
 import '../../../core/utils/provider_retry.dart';
 import '../../auth/data/models/auth_models.dart';
 import '../../auth/domain/entities/user_profile.dart';
+import '../domain/profile_menu_badges.dart';
 
 class ProfileAvatarCatalog {
   final List<String> ids;
@@ -43,6 +44,18 @@ class ProfileRepository {
   Future<ProfileAvatarCatalog> avatars() =>
       client.get('/avatars', parse: ProfileAvatarCatalog.fromJson);
 
+  Future<ProfileMenuBadges> menuBadges() =>
+      client.get(ApiConstants.profileMenuSummary, parse: _parseBadges);
+
+  static ProfileMenuBadges _parseBadges(Object? json) {
+    final badges = (json as Map<String, dynamic>)['badges'];
+    if (badges is! Map<String, dynamic>) return const ProfileMenuBadges();
+    return ProfileMenuBadges({
+      for (final entry in badges.entries)
+        if (entry.value is int && (entry.value as int) > 0) entry.key: entry.value as int,
+    });
+  }
+
   Future<UserProfile> selectAvatar(String id) async => (await client.put(
         '${ApiConstants.currentUser}/avatar',
         data: {'avatarId': id},
@@ -57,5 +70,11 @@ final profileRepositoryProvider = Provider<ProfileRepository>(
 
 final userProfileProvider = FutureProvider.autoDispose<UserProfile>(
   (ref) => ref.watch(profileRepositoryProvider).fetch(),
+  retry: noAutoRetry,
+);
+
+/// Fresh on every visit to the Profile page; a failure only means the rows show no badge.
+final profileMenuBadgesProvider = FutureProvider.autoDispose<ProfileMenuBadges>(
+  (ref) => ref.watch(profileRepositoryProvider).menuBadges(),
   retry: noAutoRetry,
 );
