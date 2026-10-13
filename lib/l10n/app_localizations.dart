@@ -1958,6 +1958,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This is already your email address. Enter a different address.'**
   String get securitySameEmail;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsUnreadCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{You\'re all caught up} =1{1 unread} other{{count} unread}}'**
+  String notificationsUnreadCount(int count);
+
+  /// No description provided for @notificationsMarkAllRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all read'**
+  String get notificationsMarkAllRead;
+
+  /// No description provided for @notificationsMarkAllFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to mark all as read. Try again'**
+  String get notificationsMarkAllFailed;
+
+  /// No description provided for @notificationsTabAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get notificationsTabAll;
+
+  /// No description provided for @notificationsTabAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get notificationsTabAccount;
+
+  /// No description provided for @notificationsTabOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders'**
+  String get notificationsTabOrders;
+
+  /// No description provided for @notificationsTabMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get notificationsTabMessages;
+
+  /// No description provided for @notificationsTabListings.
+  ///
+  /// In en, this message translates to:
+  /// **'Listings'**
+  String get notificationsTabListings;
+
+  /// No description provided for @notificationsTabOthers.
+  ///
+  /// In en, this message translates to:
+  /// **'Others'**
+  String get notificationsTabOthers;
+
+  /// No description provided for @notificationsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications yet'**
+  String get notificationsEmptyTitle;
+
+  /// No description provided for @notificationsEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Updates about your account will appear here'**
+  String get notificationsEmptyBody;
+
+  /// No description provided for @notificationsLoadMoreFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load more notifications'**
+  String get notificationsLoadMoreFailed;
+
+  /// No description provided for @notificationUnread.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get notificationUnread;
+
+  /// No description provided for @notificationJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get notificationJustNow;
+
+  /// No description provided for @notificationMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 minute ago} other{{count} minutes ago}}'**
+  String notificationMinutesAgo(int count);
+
+  /// No description provided for @notificationHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 hour ago} other{{count} hours ago}}'**
+  String notificationHoursAgo(int count);
+
+  /// No description provided for @notificationDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 day ago} other{{count} days ago}}'**
+  String notificationDaysAgo(int count);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

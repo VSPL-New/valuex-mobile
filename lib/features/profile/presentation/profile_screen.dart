@@ -15,6 +15,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../auth/domain/entities/logout_outcome.dart';
 import '../../auth/presentation/auth_error_messages.dart';
 import '../../home/presentation/main_nav.dart';
+import '../../notifications/presentation/providers/notifications_providers.dart';
 import '../data/mock_profile_summary.dart';
 import '../data/profile_repository.dart';
 import '../domain/profile_menu_badges.dart';
@@ -90,6 +91,9 @@ class ProfileScreen extends ConsumerWidget {
     final profile = loaded.value;
     final summary = ref.watch(profileSummaryProvider);
     final badges = ref.watch(profileMenuBadgesProvider).value ?? const ProfileMenuBadges();
+    // The backend sends no NOTIFICATIONS badge, so the row uses the unread count itself.
+    final unreadNotifications =
+        ref.watch(unreadNotificationsProvider).value ?? badges.count(ProfileMenuKeys.notifications);
 
     ProfileMenuItem item(IconData icon, String label, [String? badgeKey, VoidCallback? onTap]) =>
         ProfileMenuItem(
@@ -170,8 +174,12 @@ class ProfileScreen extends ConsumerWidget {
                         items: [
                           item(Icons.lock_outline, l10n.profileAccountSecurity, null,
                               () => context.push(RouteNames.accountSecurity)),
-                          item(Icons.notifications_none, l10n.profileNotifications,
-                              ProfileMenuKeys.notifications),
+                          ProfileMenuItem(
+                            icon: Icons.notifications_none,
+                            label: l10n.profileNotifications,
+                            badge: unreadNotifications,
+                            onTap: () => context.push(RouteNames.notifications),
+                          ),
                           item(Icons.language, l10n.profileLanguage),
                           item(Icons.shield_outlined, l10n.profileDisputeCenter,
                               ProfileMenuKeys.disputes),

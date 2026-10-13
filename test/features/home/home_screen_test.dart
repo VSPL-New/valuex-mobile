@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:valuex_mobile/core/constants/storage_keys.dart';
 import 'package:valuex_mobile/core/routing/route_names.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/home/domain/entities/home_location.dart';
 import 'package:valuex_mobile/features/home/domain/services/location_service.dart';
+import 'package:valuex_mobile/features/notifications/data/notifications_repository.dart';
 
 import '../../helpers/app_harness.dart';
 import '../../helpers/fonts.dart';
+
+class _MockNotifications extends Mock implements NotificationsRepository {}
 
 void main() {
   setUpAll(loadBrandFonts);
@@ -26,7 +30,12 @@ void main() {
     LocationAccess access = LocationAccess.granted,
     LocationAccess afterRequest = LocationAccess.granted,
   }) async {
-    final harness = AppHarness(tester);
+    final notifications = _MockNotifications();
+    when(notifications.unreadCount).thenAnswer((_) async => 3);
+    final harness = AppHarness(
+      tester,
+      extraOverrides: [notificationsRepositoryProvider.overrideWithValue(notifications)],
+    );
     harness.signedInAs(AccountStatus.active, aadhaarVerified: aadhaarVerified);
     harness.locationService
       ..state = access

@@ -444,6 +444,44 @@
         "lastSyncedAt": "2026-10-09T15:09:36Z",
         "status": "in-sync"
       }
+    },
+    {
+      "figma": {
+        "fileKey": "tzrpUwfrR0SYeyKkv1p0co",
+        "nodeId": "0:1",
+        "nodeName": "Figma Make: src/app/components/NotificationsScreen.tsx"
+      },
+      "local": {
+        "components": [
+          {
+            "path": "lib/features/notifications/presentation/notifications_screen.dart",
+            "tier": "page"
+          },
+          {
+            "path": "lib/features/notifications/presentation/widgets/notification_card.dart",
+            "tier": "molecule"
+          },
+          {
+            "path": "lib/features/notifications/presentation/widgets/notification_tabs.dart",
+            "tier": "molecule"
+          },
+          {
+            "path": "lib/features/notifications/presentation/notification_presentation.dart",
+            "tier": "atom"
+          }
+        ],
+        "tokens": [
+          "lib/core/theme/colors.dart",
+          "lib/core/theme/text_styles.dart",
+          "lib/core/theme/spacing.dart"
+        ],
+        "stories": []
+      },
+      "sync": {
+        "contentHash": "n/a: Figma Make source file, no node hash available",
+        "lastSyncedAt": "2026-10-13T00:00:00Z",
+        "status": "in-sync"
+      }
     }
   ]
 }

@@ -32,6 +32,7 @@ const Map<String, Set<RegistrationStep>> _gatedRoutes = {
   RouteNames.accountSecurity: _profileSteps,
   RouteNames.changeMobile: _profileSteps,
   RouteNames.changeEmail: _profileSteps,
+  RouteNames.notifications: _profileSteps,
   RouteNames.categories: {RegistrationStep.home},
 };
 
@@ -41,6 +42,7 @@ const Set<String> _signedInOnlyRoutes = {
   RouteNames.accountSecurity,
   RouteNames.changeMobile,
   RouteNames.changeEmail,
+  RouteNames.notifications,
 };
 
 const Set<String> _aadhaarRoutes = {RouteNames.signupAadhaar, RouteNames.devAadhaarOtp};
