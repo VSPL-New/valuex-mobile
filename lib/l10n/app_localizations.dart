@@ -1682,6 +1682,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reviews'**
   String get profileStatReviews;
+
+  /// No description provided for @profileMemberSince.
+  ///
+  /// In en, this message translates to:
+  /// **'Joined {date}'**
+  String profileMemberSince(String date);
+
+  /// No description provided for @profileMenuBadgeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{label}, {count, plural, =1{1 new} other{{count} new}}'**
+  String profileMenuBadgeLabel(String label, int count);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
