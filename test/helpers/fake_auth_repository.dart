@@ -3,6 +3,7 @@ import 'package:valuex_mobile/features/auth/domain/entities/aadhaar_transaction.
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/auth_session.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/google_sign_in_result.dart';
+import 'package:valuex_mobile/features/auth/domain/entities/logout_outcome.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/otp_sent.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/signup_details.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/user_profile.dart';
@@ -57,6 +58,16 @@ class FakeAuthRepository implements AuthRepository {
     _lastKnown = status ?? _lastKnown;
     status = null;
   }
+
+  @override
+  Future<LogoutOutcome> logout() async {
+    calls.add('logout');
+    await clearSession();
+    return LogoutOutcome.revoked;
+  }
+
+  @override
+  Future<void> revokePendingSession() async {}
 
   @override
   Future<UserProfile> fetchProfile() async {

@@ -836,6 +836,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSignOut => 'Sign Out';
 
   @override
+  String get logoutConfirmMessage => 'Are you sure you want to log out?';
+
+  @override
+  String get logoutQueued =>
+      'Logged out on this device. We will finish signing you out on our servers when you are back online';
+
+  @override
   String get profileIncomingOrders => 'Incoming Orders';
 
   @override

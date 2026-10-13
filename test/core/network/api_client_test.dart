@@ -337,4 +337,32 @@ void main() {
       expect(adapter.count('/auth/refresh'), 0);
     });
   });
+
+  group('explicit bearer token', () {
+    test('is sent instead of the stored token', () async {
+      final storage = FakeSecureStorage(accessToken: 'stored', refreshToken: 'refresh-1');
+      final adapter = FakeHttpAdapter((_) async => FakeHttpAdapter.ok({'ok': true}));
+      final client = _client(storage, adapter);
+
+      await client.post<Object?>('/auth/logout', bearerToken: 'pending');
+
+      expect(adapter.requests.single.headers['Authorization'], 'Bearer pending');
+    });
+
+    test('a 401 is final and does not refresh the stored session', () async {
+      final storage = FakeSecureStorage(accessToken: 'stored', refreshToken: 'refresh-1');
+      final adapter = FakeHttpAdapter(
+        (_) async => FakeHttpAdapter.error(401, 'UNAUTHORIZED', 'revoked'),
+      );
+      final client = _client(storage, adapter);
+
+      final error = await _expectError(
+        client.post<Object?>('/auth/logout', bearerToken: 'pending'),
+      );
+
+      expect(error.type, ApiErrorType.unauthorized);
+      expect(adapter.count('/auth/refresh'), 0);
+      expect(storage.refreshToken, 'refresh-1');
+    });
+  });
 }

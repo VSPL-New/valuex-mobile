@@ -45,6 +45,11 @@ class AuthRemoteDataSource {
     );
   }
 
+  /// Ends the session of the stored access token, or of [bearerToken] when given.
+  Future<void> logout({String? bearerToken}) {
+    return _client.post<void>(ApiConstants.logout, bearerToken: bearerToken);
+  }
+
   Future<GoogleSignInModel> signInWithGoogle(String idToken) {
     return _client.post(
       ApiConstants.googleSignIn,

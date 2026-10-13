@@ -44,6 +44,19 @@ class SecureStorageService {
     return await _storage.read(key: StorageKeys.userId);
   }
 
+  // Access token of a logged-out session whose server logout still has to be sent.
+  Future<void> savePendingLogoutToken(String token) async {
+    await _storage.write(key: StorageKeys.pendingLogoutToken, value: token);
+  }
+
+  Future<String?> getPendingLogoutToken() async {
+    return await _storage.read(key: StorageKeys.pendingLogoutToken);
+  }
+
+  Future<void> clearPendingLogoutToken() async {
+    await _storage.delete(key: StorageKeys.pendingLogoutToken);
+  }
+
   Future<void> clearSession() async {
     await _storage.delete(key: StorageKeys.accessToken);
     await _storage.delete(key: StorageKeys.refreshToken);

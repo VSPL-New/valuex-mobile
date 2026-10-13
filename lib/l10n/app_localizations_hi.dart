@@ -835,6 +835,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get profileSignOut => 'साइन आउट';
 
   @override
+  String get logoutConfirmMessage => 'क्या आप वाकई लॉग आउट करना चाहते हैं?';
+
+  @override
+  String get logoutQueued =>
+      'इस डिवाइस से लॉग आउट हो गया। इंटरनेट लौटने पर हम हमारे सर्वर पर भी आपको साइन आउट कर देंगे';
+
+  @override
   String get profileIncomingOrders => 'आने वाले ऑर्डर';
 
   @override

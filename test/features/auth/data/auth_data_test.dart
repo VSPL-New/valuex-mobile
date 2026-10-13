@@ -2,12 +2,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/config/app_config.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
+import 'package:valuex_mobile/core/network/api_error.dart';
 import 'package:valuex_mobile/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:valuex_mobile/features/auth/data/models/auth_models.dart';
 import 'package:valuex_mobile/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/gender.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/google_sign_in_result.dart';
+import 'package:valuex_mobile/features/auth/domain/entities/logout_outcome.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/signup_details.dart';
 
 import '../../../helpers/fake_http_adapter.dart';
@@ -128,6 +130,21 @@ void main() {
         adapter: adapter,
       );
       dataSource = AuthRemoteDataSource(client);
+    });
+
+    test('logout posts without a body, with the stored bearer token', () async {
+      await dataSource.logout();
+
+      final request = adapter.requests.single;
+      expect(request.path, '/auth/logout');
+      expect(request.data, isNull);
+      expect(request.headers['Authorization'], 'Bearer access-1');
+    });
+
+    test('logout can revoke a given access token instead', () async {
+      await dataSource.logout(bearerToken: 'pending-1');
+
+      expect(adapter.requests.single.headers['Authorization'], 'Bearer pending-1');
     });
 
     test('initiate sends only the mobile number and no bearer token', () async {
@@ -276,6 +293,115 @@ void main() {
       remote = MockAuthRemoteDataSource();
       storage = FakeSecureStorage();
       repository = AuthRepositoryImpl(remote, storage);
+    });
+
+    group('logout', () {
+      const offline = ApiError(type: ApiErrorType.network, message: 'offline');
+
+      setUp(() {
+        storage
+          ..accessToken = 'access-1'
+          ..refreshToken = 'refresh-1'
+          ..userId = 'user-1';
+      });
+
+      test('clears the stored session once the server confirmed', () async {
+        when(() => remote.logout()).thenAnswer((_) async {});
+
+        final outcome = await repository.logout();
+
+        expect(outcome, LogoutOutcome.revoked);
+        expect(storage.accessToken, isNull);
+        expect(storage.refreshToken, isNull);
+        expect(storage.userId, isNull);
+        expect(storage.pendingLogoutToken, isNull);
+      });
+
+      test('queues the revocation and still signs out when offline', () async {
+        when(() => remote.logout()).thenThrow(offline);
+
+        final outcome = await repository.logout();
+
+        expect(outcome, LogoutOutcome.queued);
+        expect(storage.pendingLogoutToken, 'access-1');
+        expect(storage.accessToken, isNull);
+        expect(storage.refreshToken, isNull);
+      });
+
+      test('queues the revocation after a server error', () async {
+        when(() => remote.logout()).thenThrow(
+          const ApiError(type: ApiErrorType.server, message: 'down', statusCode: 503),
+        );
+
+        expect(await repository.logout(), LogoutOutcome.queued);
+      });
+
+      test('has nothing to queue when the session had no access token', () async {
+        storage.accessToken = null;
+        when(() => remote.logout()).thenThrow(offline);
+
+        final outcome = await repository.logout();
+
+        expect(outcome, LogoutOutcome.revoked);
+        expect(storage.pendingLogoutToken, isNull);
+        expect(storage.refreshToken, isNull);
+      });
+
+      test('treats an expired session as already logged out', () async {
+        when(() => remote.logout()).thenThrow(const ApiError.sessionExpired());
+
+        final outcome = await repository.logout();
+
+        expect(outcome, LogoutOutcome.revoked);
+        expect(storage.pendingLogoutToken, isNull);
+        expect(storage.refreshToken, isNull);
+      });
+
+      test('revokePendingSession does nothing without a queued token', () async {
+        await repository.revokePendingSession();
+
+        verifyNever(() => remote.logout(bearerToken: any(named: 'bearerToken')));
+      });
+
+      test('revokePendingSession revokes the queued token and forgets it', () async {
+        storage.pendingLogoutToken = 'pending-1';
+        when(() => remote.logout(bearerToken: 'pending-1')).thenAnswer((_) async {});
+
+        await repository.revokePendingSession();
+
+        verify(() => remote.logout(bearerToken: 'pending-1')).called(1);
+        expect(storage.pendingLogoutToken, isNull);
+      });
+
+      test('revokePendingSession keeps the token while still offline', () async {
+        storage.pendingLogoutToken = 'pending-1';
+        when(() => remote.logout(bearerToken: 'pending-1')).thenThrow(offline);
+
+        await repository.revokePendingSession();
+
+        expect(storage.pendingLogoutToken, 'pending-1');
+      });
+
+      test('revokePendingSession drops a token the server no longer accepts', () async {
+        storage.pendingLogoutToken = 'pending-1';
+        when(() => remote.logout(bearerToken: 'pending-1')).thenThrow(
+          const ApiError(type: ApiErrorType.unauthorized, message: 'revoked', statusCode: 401),
+        );
+
+        await repository.revokePendingSession();
+
+        expect(storage.pendingLogoutToken, isNull);
+      });
+
+      test('revokePendingSession leaves the signed-in session alone', () async {
+        storage.pendingLogoutToken = 'pending-1';
+        when(() => remote.logout(bearerToken: 'pending-1')).thenAnswer((_) async {});
+
+        await repository.revokePendingSession();
+
+        expect(storage.accessToken, 'access-1');
+        expect(storage.refreshToken, 'refresh-1');
+      });
     });
 
     test('verifying the mobile OTP stores the issued session', () async {

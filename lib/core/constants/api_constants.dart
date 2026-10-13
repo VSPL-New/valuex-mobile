@@ -15,6 +15,7 @@ class ApiConstants {
   static const String aadhaarInitiate = '/auth/aadhaar/initiate';
   static const String aadhaarVerify = '/auth/aadhaar/verify';
   static const String refreshToken = '/auth/refresh';
+  static const String logout = '/auth/logout';
   static const String currentUser = '/users/me';
 
   static const Duration connectTimeout = Duration(seconds: 30);

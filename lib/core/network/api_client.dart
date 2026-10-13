@@ -81,14 +81,20 @@ class ApiClient {
     );
   }
 
+  /// [bearerToken] sends that token instead of the stored one, without a refresh on 401.
   Future<T> post<T>(
     String path, {
     Object? data,
     bool authenticated = true,
+    String? bearerToken,
     T Function(Object? data)? parse,
   }) {
     return _send(
-      () => dio.post<dynamic>(path, data: data, options: _options(authenticated)),
+      () => dio.post<dynamic>(
+        path,
+        data: data,
+        options: _options(authenticated && bearerToken == null, bearerToken: bearerToken),
+      ),
       parse,
     );
   }
@@ -129,8 +135,11 @@ class ApiClient {
     );
   }
 
-  Options _options(bool authenticated) {
-    return Options(extra: {ApiRequestFlags.authenticated: authenticated});
+  Options _options(bool authenticated, {String? bearerToken}) {
+    return Options(
+      extra: {ApiRequestFlags.authenticated: authenticated},
+      headers: bearerToken == null ? null : {'Authorization': 'Bearer $bearerToken'},
+    );
   }
 
   Future<T> _send<T>(
