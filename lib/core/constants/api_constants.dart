@@ -18,6 +18,13 @@ class ApiConstants {
   static const String logout = '/auth/logout';
   static const String currentUser = '/users/me';
   static const String profileMenuSummary = '/users/me/menu-summary';
+  static const String accountSecurity = '/users/me/account-security';
+  static const String mobileChangeInitiate = '/users/me/mobile/change/initiate';
+  static const String mobileChangeVerify = '/users/me/mobile/change/verify';
+  static const String emailChangeInitiate = '/users/me/email/change/initiate';
+  static const String emailChangeVerify = '/users/me/email/change/verify';
+  static const String sessions = '/users/me/sessions';
+  static const String revokeOtherSessions = '/users/me/sessions/revoke-others';
 
   static const Duration connectTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);

@@ -9,6 +9,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../auth_error_messages.dart';
 import '../providers/otp_verification_controller.dart';
 import 'auth_form_scaffold.dart';
+import 'otp_resend_row.dart';
 
 /// OTP step used for both the mobile and the email code.
 class OtpVerificationView extends ConsumerWidget {
@@ -80,7 +81,14 @@ class OtpVerificationView extends ConsumerWidget {
         else
           Text(l10n.otpExpiresIn(_formatTime(state.secondsUntilExpiry)), style: AppTextStyles.hint),
         const SizedBox(height: AppSpacing.md),
-        _ResendRow(state: state, onResend: controller.resend),
+        OtpResendRow(
+          sendCount: state.sendCount,
+          maxSends: OtpVerificationController.maxSends,
+          secondsUntilResend: state.secondsUntilResend,
+          canResend: state.canResend,
+          isResending: state.isResending,
+          onResend: controller.resend,
+        ),
       ],
       bottom: Column(
         children: [
@@ -100,40 +108,6 @@ class OtpVerificationView extends ConsumerWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ResendRow extends StatelessWidget {
-  final OtpVerificationState state;
-  final VoidCallback onResend;
-
-  const _ResendRow({required this.state, required this.onResend});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-
-    if (state.sendCount >= OtpVerificationController.maxSends && state.secondsUntilResend <= 0) {
-      return Text(l10n.otpResendLimit, style: AppTextStyles.hint);
-    }
-    if (!state.canResend) {
-      return Text(
-        state.isResending ? l10n.otpResend : l10n.otpResendIn(state.secondsUntilResend),
-        style: AppTextStyles.hint,
-      );
-    }
-    return TextButton(
-      onPressed: onResend,
-      style: TextButton.styleFrom(
-        minimumSize: const Size(AppSizes.minTouchTarget, AppSizes.minTouchTarget),
-        padding: EdgeInsets.zero,
-        alignment: Alignment.centerLeft,
-      ),
-      child: Text(
-        l10n.otpResend,
-        style: AppTextStyles.link,
       ),
     );
   }

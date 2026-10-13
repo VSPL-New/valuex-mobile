@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/config/app_config.dart';
+import 'package:valuex_mobile/features/account_security/presentation/account_security_screen.dart';
 import 'package:valuex_mobile/core/constants/storage_keys.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
@@ -398,6 +399,20 @@ void main() {
         expect(await prefs.getString(StorageKeys.homeLocation), isNull);
         await harness.dispose();
       });
+    });
+
+    testWidgets('Account Security opens its own page instead of the coming soon message',
+        (tester) async {
+      await showProfile(tester);
+      await tester.scrollUntilVisible(find.text('Account Security'), 200);
+      await tester.tap(find.text('Account Security'));
+      await harness.settle();
+      expect(find.byType(AccountSecurityScreen), findsOneWidget);
+      expect(find.text('This is coming soon'), findsNothing);
+      await tester.tap(find.byTooltip('Back'));
+      await harness.settle();
+      expect(find.byType(ProfileScreen), findsOneWidget);
+      await harness.dispose();
     });
 
     testWidgets('Home tab leaves the profile page', (tester) async {

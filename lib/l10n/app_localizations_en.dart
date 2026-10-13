@@ -898,4 +898,145 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$label, $_temp0';
   }
+
+  @override
+  String get profileAccountSecurity => 'Account Security';
+
+  @override
+  String get securityTitle => 'Account Security';
+
+  @override
+  String get securitySectionSignIn => 'Sign-in details';
+
+  @override
+  String get securityMobileLabel => 'Mobile number';
+
+  @override
+  String get securityEmailLabel => 'Email';
+
+  @override
+  String get securityChange => 'Change';
+
+  @override
+  String get securityChangeMobileA11y => 'Change mobile number';
+
+  @override
+  String get securityChangeEmailA11y => 'Change email';
+
+  @override
+  String get securityAadhaarLabel => 'Aadhaar verification';
+
+  @override
+  String get securityAadhaarVerified => 'Verified';
+
+  @override
+  String get securityAadhaarPending => 'Not verified yet';
+
+  @override
+  String get securityAadhaarHint => 'Required before your first buy or sell';
+
+  @override
+  String get securityAadhaarVerifyNow => 'Verify now';
+
+  @override
+  String get securitySessionsTitle => 'Active sessions';
+
+  @override
+  String get securitySessionsHint => 'Devices signed in to your account';
+
+  @override
+  String get securityThisDevice => 'This device';
+
+  @override
+  String get securityUnknownDevice => 'Unknown device';
+
+  @override
+  String securityLastActive(String date) {
+    return 'Last active $date';
+  }
+
+  @override
+  String get securitySessionsLoadFailed => 'Unable to load your sessions';
+
+  @override
+  String get securityOnlyThisDevice => 'This is the only device signed in';
+
+  @override
+  String get securityLogoutOthers => 'Log out of all other devices';
+
+  @override
+  String get securityLogoutOthersTitle => 'Log out of other devices?';
+
+  @override
+  String get securityLogoutOthersMessage =>
+      'Every other device will be signed out. This device stays signed in.';
+
+  @override
+  String get securityLogoutOthersConfirm => 'Log out';
+
+  @override
+  String securityLogoutOthersDone(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Logged out of $count other devices',
+      one: 'Logged out of 1 other device',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get securityNoOtherSessions => 'No other active sessions found';
+
+  @override
+  String get securityDeleteAccount => 'Delete My Account';
+
+  @override
+  String get securityChangeMobileTitle => 'Change mobile number';
+
+  @override
+  String get securityChangeMobileSubtitle =>
+      'Enter your new number. We will send a code to confirm it.';
+
+  @override
+  String get securityChangeEmailTitle => 'Change email';
+
+  @override
+  String get securityChangeEmailSubtitle =>
+      'Enter your new email address. We will send a code to confirm it.';
+
+  @override
+  String get securityNewMobileLabel => 'New mobile number';
+
+  @override
+  String get securityNewEmailLabel => 'New email address';
+
+  @override
+  String get securitySendCode => 'Send code';
+
+  @override
+  String get securityMobileStaysActive =>
+      'Your current number stays active until you confirm the new one.';
+
+  @override
+  String get securityEmailStaysActive =>
+      'Your current email stays active until you confirm the new one.';
+
+  @override
+  String get securityConfirmMobileTitle => 'Confirm new number';
+
+  @override
+  String get securityConfirmEmailTitle => 'Confirm new email';
+
+  @override
+  String get securityMobileUpdated => 'Mobile number updated';
+
+  @override
+  String get securityEmailUpdated => 'Email updated';
+
+  @override
+  String get securitySameMobile => 'This is already your mobile number. Enter a different number.';
+
+  @override
+  String get securitySameEmail => 'This is already your email address. Enter a different address.';
 }

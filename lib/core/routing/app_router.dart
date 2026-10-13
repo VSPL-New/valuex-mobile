@@ -21,6 +21,9 @@ import '../../features/auth/presentation/screens/verify_email_otp_screen.dart';
 import '../../features/auth/presentation/screens/verify_mobile_otp_screen.dart';
 import '../../features/home/presentation/category_selection_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
+import '../../features/account_security/domain/account_security.dart';
+import '../../features/account_security/presentation/account_security_screen.dart';
+import '../../features/account_security/presentation/change_contact_screen.dart';
 import '../../features/profile/presentation/profile_details_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import 'route_guard.dart';
@@ -49,6 +52,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: 'details',
             name: 'profileDetails',
             builder: (context, state) => const ProfileDetailsScreen(),
+          ),
+          GoRoute(
+            path: 'security',
+            name: 'accountSecurity',
+            builder: (context, state) => const AccountSecurityScreen(),
+            routes: [
+              GoRoute(
+                path: 'mobile',
+                name: 'changeMobile',
+                builder: (context, state) => const ChangeContactScreen(kind: ContactKind.mobile),
+              ),
+              GoRoute(
+                path: 'email',
+                name: 'changeEmail',
+                builder: (context, state) => const ChangeContactScreen(kind: ContactKind.email),
+              ),
+            ],
           ),
         ],
       ),

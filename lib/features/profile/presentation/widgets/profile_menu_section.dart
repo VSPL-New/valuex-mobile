@@ -20,7 +20,7 @@ class ProfileMenuItem {
   });
 }
 
-const _cardShadow = [
+const profileCardShadow = [
   BoxShadow(color: Color(0x0F2D6BFF), blurRadius: 10, offset: Offset(0, 2)),
   BoxShadow(color: Color(0x0F000000), blurRadius: 3, offset: Offset(0, 1)),
 ];
@@ -48,7 +48,7 @@ class ProfileMenuSection extends StatelessWidget {
             color: AppColors.brandSurface,
             borderRadius: BorderRadius.circular(AppRadius.xl),
             border: Border.all(color: AppColors.brandBorder),
-            boxShadow: _cardShadow,
+            boxShadow: profileCardShadow,
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(AppRadius.xl),
@@ -154,8 +154,14 @@ class _CountBadge extends StatelessWidget {
 class ProfileSignOutTile extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
+  final IconData icon;
 
-  const ProfileSignOutTile({super.key, required this.label, required this.onTap});
+  const ProfileSignOutTile({
+    super.key,
+    required this.label,
+    required this.onTap,
+    this.icon = Icons.logout,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -185,9 +191,9 @@ class ProfileSignOutTile extends StatelessWidget {
                       color: AppColors.brandError.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(AppRadius.lg),
                     ),
-                    child: const SizedBox.square(
+                    child: SizedBox.square(
                       dimension: 36,
-                      child: Icon(Icons.logout, size: 18, color: AppColors.brandError),
+                      child: Icon(icon, size: 18, color: AppColors.brandError),
                     ),
                   ),
                   const SizedBox(width: AppSpacing.md),

@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import '../config/app_config.dart';
 import '../constants/api_constants.dart';
+import '../constants/app_constants.dart';
 import '../security/secure_storage_service.dart';
 import 'api_error.dart';
 import 'api_error_mapper.dart';
@@ -38,7 +40,13 @@ class ApiClient {
       baseUrl: config.apiBaseUrl,
       connectTimeout: ApiConstants.connectTimeout,
       receiveTimeout: ApiConstants.receiveTimeout,
-      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        // Names this device in the active-sessions list; browsers do not allow the header.
+        if (!kIsWeb)
+          'User-Agent': 'JustQlic/${AppConstants.appVersion} (${defaultTargetPlatform.name})',
+      },
     );
 
     // The refresh call must not pass through the interceptor that triggers it.

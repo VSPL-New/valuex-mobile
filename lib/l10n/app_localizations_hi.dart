@@ -885,4 +885,144 @@ class AppLocalizationsHi extends AppLocalizations {
   String profileMenuBadgeLabel(String label, int count) {
     return '$label, $count नए';
   }
+
+  @override
+  String get profileAccountSecurity => 'खाता सुरक्षा';
+
+  @override
+  String get securityTitle => 'खाता सुरक्षा';
+
+  @override
+  String get securitySectionSignIn => 'साइन-इन विवरण';
+
+  @override
+  String get securityMobileLabel => 'मोबाइल नंबर';
+
+  @override
+  String get securityEmailLabel => 'ईमेल';
+
+  @override
+  String get securityChange => 'बदलें';
+
+  @override
+  String get securityChangeMobileA11y => 'मोबाइल नंबर बदलें';
+
+  @override
+  String get securityChangeEmailA11y => 'ईमेल बदलें';
+
+  @override
+  String get securityAadhaarLabel => 'आधार सत्यापन';
+
+  @override
+  String get securityAadhaarVerified => 'सत्यापित';
+
+  @override
+  String get securityAadhaarPending => 'अभी सत्यापित नहीं';
+
+  @override
+  String get securityAadhaarHint => 'पहली खरीद या बिक्री से पहले ज़रूरी';
+
+  @override
+  String get securityAadhaarVerifyNow => 'अभी सत्यापित करें';
+
+  @override
+  String get securitySessionsTitle => 'सक्रिय सत्र';
+
+  @override
+  String get securitySessionsHint => 'आपके खाते में साइन इन किए गए डिवाइस';
+
+  @override
+  String get securityThisDevice => 'यह डिवाइस';
+
+  @override
+  String get securityUnknownDevice => 'अज्ञात डिवाइस';
+
+  @override
+  String securityLastActive(String date) {
+    return 'आखिरी बार सक्रिय: $date';
+  }
+
+  @override
+  String get securitySessionsLoadFailed => 'आपके सत्र लोड नहीं हो सके';
+
+  @override
+  String get securityOnlyThisDevice => 'केवल यही डिवाइस साइन इन है';
+
+  @override
+  String get securityLogoutOthers => 'अन्य सभी डिवाइस से लॉग आउट करें';
+
+  @override
+  String get securityLogoutOthersTitle => 'अन्य डिवाइस से लॉग आउट करें?';
+
+  @override
+  String get securityLogoutOthersMessage =>
+      'अन्य सभी डिवाइस साइन आउट हो जाएँगे। यह डिवाइस साइन इन रहेगा।';
+
+  @override
+  String get securityLogoutOthersConfirm => 'लॉग आउट';
+
+  @override
+  String securityLogoutOthersDone(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count अन्य डिवाइस से लॉग आउट हो गया',
+      one: '1 अन्य डिवाइस से लॉग आउट हो गया',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get securityNoOtherSessions => 'कोई अन्य सक्रिय सत्र नहीं मिला';
+
+  @override
+  String get securityDeleteAccount => 'मेरा खाता हटाएँ';
+
+  @override
+  String get securityChangeMobileTitle => 'मोबाइल नंबर बदलें';
+
+  @override
+  String get securityChangeMobileSubtitle =>
+      'अपना नया नंबर दर्ज करें। पुष्टि के लिए हम एक कोड भेजेंगे।';
+
+  @override
+  String get securityChangeEmailTitle => 'ईमेल बदलें';
+
+  @override
+  String get securityChangeEmailSubtitle =>
+      'अपना नया ईमेल पता दर्ज करें। पुष्टि के लिए हम एक कोड भेजेंगे।';
+
+  @override
+  String get securityNewMobileLabel => 'नया मोबाइल नंबर';
+
+  @override
+  String get securityNewEmailLabel => 'नया ईमेल पता';
+
+  @override
+  String get securitySendCode => 'कोड भेजें';
+
+  @override
+  String get securityMobileStaysActive =>
+      'नए नंबर की पुष्टि होने तक आपका मौजूदा नंबर सक्रिय रहेगा।';
+
+  @override
+  String get securityEmailStaysActive => 'नए ईमेल की पुष्टि होने तक आपका मौजूदा ईमेल सक्रिय रहेगा।';
+
+  @override
+  String get securityConfirmMobileTitle => 'नए नंबर की पुष्टि करें';
+
+  @override
+  String get securityConfirmEmailTitle => 'नए ईमेल की पुष्टि करें';
+
+  @override
+  String get securityMobileUpdated => 'मोबाइल नंबर अपडेट हो गया';
+
+  @override
+  String get securityEmailUpdated => 'ईमेल अपडेट हो गया';
+
+  @override
+  String get securitySameMobile => 'यह पहले से आपका मोबाइल नंबर है। कोई दूसरा नंबर दर्ज करें।';
+
+  @override
+  String get securitySameEmail => 'यह पहले से आपका ईमेल पता है। कोई दूसरा पता दर्ज करें।';
 }

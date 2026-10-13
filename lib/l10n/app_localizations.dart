@@ -1706,6 +1706,258 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{label}, {count, plural, =1{1 new} other{{count} new}}'**
   String profileMenuBadgeLabel(String label, int count);
+
+  /// No description provided for @profileAccountSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Security'**
+  String get profileAccountSecurity;
+
+  /// No description provided for @securityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Security'**
+  String get securityTitle;
+
+  /// No description provided for @securitySectionSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign-in details'**
+  String get securitySectionSignIn;
+
+  /// No description provided for @securityMobileLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number'**
+  String get securityMobileLabel;
+
+  /// No description provided for @securityEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get securityEmailLabel;
+
+  /// No description provided for @securityChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get securityChange;
+
+  /// No description provided for @securityChangeMobileA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Change mobile number'**
+  String get securityChangeMobileA11y;
+
+  /// No description provided for @securityChangeEmailA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Change email'**
+  String get securityChangeEmailA11y;
+
+  /// No description provided for @securityAadhaarLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Aadhaar verification'**
+  String get securityAadhaarLabel;
+
+  /// No description provided for @securityAadhaarVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get securityAadhaarVerified;
+
+  /// No description provided for @securityAadhaarPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Not verified yet'**
+  String get securityAadhaarPending;
+
+  /// No description provided for @securityAadhaarHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Required before your first buy or sell'**
+  String get securityAadhaarHint;
+
+  /// No description provided for @securityAadhaarVerifyNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify now'**
+  String get securityAadhaarVerifyNow;
+
+  /// No description provided for @securitySessionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Active sessions'**
+  String get securitySessionsTitle;
+
+  /// No description provided for @securitySessionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Devices signed in to your account'**
+  String get securitySessionsHint;
+
+  /// No description provided for @securityThisDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'This device'**
+  String get securityThisDevice;
+
+  /// No description provided for @securityUnknownDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown device'**
+  String get securityUnknownDevice;
+
+  /// No description provided for @securityLastActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Last active {date}'**
+  String securityLastActive(String date);
+
+  /// No description provided for @securitySessionsLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load your sessions'**
+  String get securitySessionsLoadFailed;
+
+  /// No description provided for @securityOnlyThisDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'This is the only device signed in'**
+  String get securityOnlyThisDevice;
+
+  /// No description provided for @securityLogoutOthers.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out of all other devices'**
+  String get securityLogoutOthers;
+
+  /// No description provided for @securityLogoutOthersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out of other devices?'**
+  String get securityLogoutOthersTitle;
+
+  /// No description provided for @securityLogoutOthersMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Every other device will be signed out. This device stays signed in.'**
+  String get securityLogoutOthersMessage;
+
+  /// No description provided for @securityLogoutOthersConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get securityLogoutOthersConfirm;
+
+  /// No description provided for @securityLogoutOthersDone.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Logged out of 1 other device} other{Logged out of {count} other devices}}'**
+  String securityLogoutOthersDone(int count);
+
+  /// No description provided for @securityNoOtherSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'No other active sessions found'**
+  String get securityNoOtherSessions;
+
+  /// No description provided for @securityDeleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete My Account'**
+  String get securityDeleteAccount;
+
+  /// No description provided for @securityChangeMobileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change mobile number'**
+  String get securityChangeMobileTitle;
+
+  /// No description provided for @securityChangeMobileSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your new number. We will send a code to confirm it.'**
+  String get securityChangeMobileSubtitle;
+
+  /// No description provided for @securityChangeEmailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change email'**
+  String get securityChangeEmailTitle;
+
+  /// No description provided for @securityChangeEmailSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your new email address. We will send a code to confirm it.'**
+  String get securityChangeEmailSubtitle;
+
+  /// No description provided for @securityNewMobileLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New mobile number'**
+  String get securityNewMobileLabel;
+
+  /// No description provided for @securityNewEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New email address'**
+  String get securityNewEmailLabel;
+
+  /// No description provided for @securitySendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Send code'**
+  String get securitySendCode;
+
+  /// No description provided for @securityMobileStaysActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current number stays active until you confirm the new one.'**
+  String get securityMobileStaysActive;
+
+  /// No description provided for @securityEmailStaysActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current email stays active until you confirm the new one.'**
+  String get securityEmailStaysActive;
+
+  /// No description provided for @securityConfirmMobileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm new number'**
+  String get securityConfirmMobileTitle;
+
+  /// No description provided for @securityConfirmEmailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm new email'**
+  String get securityConfirmEmailTitle;
+
+  /// No description provided for @securityMobileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number updated'**
+  String get securityMobileUpdated;
+
+  /// No description provided for @securityEmailUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Email updated'**
+  String get securityEmailUpdated;
+
+  /// No description provided for @securitySameMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'This is already your mobile number. Enter a different number.'**
+  String get securitySameMobile;
+
+  /// No description provided for @securitySameEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'This is already your email address. Enter a different address.'**
+  String get securitySameEmail;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
