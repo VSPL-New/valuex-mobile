@@ -174,8 +174,13 @@ void main() {
     });
   });
 
-  group('Account Security routes', () {
-    const routes = [RouteNames.accountSecurity, RouteNames.changeMobile, RouteNames.changeEmail];
+  group('Account Security and Notifications routes', () {
+    const routes = [
+      RouteNames.accountSecurity,
+      RouteNames.changeMobile,
+      RouteNames.changeEmail,
+      RouteNames.notifications,
+    ];
 
     test('signed-out users are sent to Sign In', () {
       for (final route in routes) {

@@ -10,6 +10,7 @@ import 'api_error.dart';
 import 'api_error_mapper.dart';
 import 'api_interceptor.dart';
 import 'api_log_interceptor.dart';
+import 'api_page.dart';
 import 'api_response.dart';
 import 'session_event.dart';
 import 'token_refresher.dart';
@@ -89,6 +90,32 @@ class ApiClient {
     );
   }
 
+  /// A paged list (`PagedResponse`): [parseItem] reads each element of `data`.
+  Future<ApiPage<T>> getPage<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    required T Function(Map<String, dynamic> json) parseItem,
+  }) async {
+    final (data, response) = await _sendWithResponse<Object?>(
+      () => dio.get<dynamic>(path, queryParameters: queryParameters, options: _options(true)),
+      null,
+    );
+    final metadata = (response.data as Map<String, dynamic>)['metadata'];
+    if (data is! List<dynamic> || metadata is! Map<String, dynamic>) {
+      throw ApiError(
+        type: ApiErrorType.server,
+        message: 'Unexpected response',
+        statusCode: response.statusCode,
+      );
+    }
+    return ApiPage<T>(
+      items: [for (final item in data) parseItem(item as Map<String, dynamic>)],
+      page: metadata['page'] as int? ?? 0,
+      totalPages: metadata['totalPages'] as int? ?? 1,
+      headers: response.headers,
+    );
+  }
+
   /// [bearerToken] sends that token instead of the stored one, without a refresh on 401.
   Future<T> post<T>(
     String path, {
@@ -153,6 +180,12 @@ class ApiClient {
   Future<T> _send<T>(
     Future<Response<dynamic>> Function() call,
     T Function(Object? data)? parse,
+  ) async =>
+      (await _sendWithResponse(call, parse)).$1;
+
+  Future<(T, Response<dynamic>)> _sendWithResponse<T>(
+    Future<Response<dynamic>> Function() call,
+    T Function(Object? data)? parse,
   ) async {
     final Response<dynamic> response;
     try {
@@ -171,7 +204,7 @@ class ApiClient {
           statusCode: response.statusCode,
         );
       }
-      return envelope.data as T;
+      return (envelope.data as T, response);
     } on TypeError {
       throw ApiError(
         type: ApiErrorType.server,

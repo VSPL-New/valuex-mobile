@@ -104,5 +104,5 @@ class MockHomeRepository implements HomeRepository {
       ];
 
   @override
-  Future<HomeBadges> badges() async => const HomeBadges(cartItems: 2, unreadNotifications: 3);
+  Future<HomeBadges> badges() async => const HomeBadges(cartItems: 2);
 }

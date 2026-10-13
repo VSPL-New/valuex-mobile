@@ -1039,4 +1039,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get securitySameEmail => 'This is already your email address. Enter a different address.';
+
+  @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String notificationsUnreadCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count unread',
+      one: '1 unread',
+      zero: 'You\'re all caught up',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notificationsMarkAllRead => 'Mark all read';
+
+  @override
+  String get notificationsMarkAllFailed => 'Unable to mark all as read. Try again';
+
+  @override
+  String get notificationsTabAll => 'All';
+
+  @override
+  String get notificationsTabAccount => 'Account';
+
+  @override
+  String get notificationsTabOrders => 'Orders';
+
+  @override
+  String get notificationsTabMessages => 'Messages';
+
+  @override
+  String get notificationsTabListings => 'Listings';
+
+  @override
+  String get notificationsTabOthers => 'Others';
+
+  @override
+  String get notificationsEmptyTitle => 'No notifications yet';
+
+  @override
+  String get notificationsEmptyBody => 'Updates about your account will appear here';
+
+  @override
+  String get notificationsLoadMoreFailed => 'Unable to load more notifications';
+
+  @override
+  String get notificationUnread => 'Unread';
+
+  @override
+  String get notificationJustNow => 'Just now';
+
+  @override
+  String notificationMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minutes ago',
+      one: '1 minute ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notificationHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hours ago',
+      one: '1 hour ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notificationDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days ago',
+      one: '1 day ago',
+    );
+    return '$_temp0';
+  }
 }

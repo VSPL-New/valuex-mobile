@@ -207,6 +207,32 @@ that belongs to another account, a wrong code and an expired code; sign in on a 
 simulator, check both appear, then log out of other devices and confirm the second one is signed
 out on its next action.
 
+## Notifications (US-077)
+
+The bell on Home and Profile > Account > Notifications open the notification history
+(`/notifications`, signed-in users only). It reads `GET /notifications?page&size=20` (newest first;
+the unread count comes in the `X-Unread-Notifications` response header) and shows:
+
+- **Cards:** an icon, the title and text the backend sent, and how long ago. Unread ones have a
+  tinted background, a bar on the left, a dot and are announced as "Unread". Tapping one marks it
+  read (`PATCH /notifications/{id}/read`, undone if it fails) and opens its screen from `deepLink`:
+  `/profile` switches to the Profile tab, `/profile/account-security` opens Account Security, any
+  other link (for example `/support`) says "coming soon" until that screen exists.
+- **Tabs:** All plus one tab per category that has notifications (Account, Orders, Messages,
+  Listings, Others); the row is hidden when there is only one category. The category comes from the
+  `eventType` prefix (`ACCOUNT_`/`AADHAAR_` account, `ORDER_`/`PAYMENT_`/`SHIPMENT_`/`REFUND_`... orders,
+  `MESSAGE_`/`CHAT_`/`OFFER_` messages, `LISTING_` listings); anything unknown is Others. Tabs are
+  worked out from the pages loaded so far.
+- **Mark all read:** `PATCH /notifications/read-all`; shown only while something is unread.
+- **Loading:** pull to refresh, the next page loads when the list nears its end (or does not fill
+  the screen), with a retry line when a page fails.
+- **Unread count:** `unreadNotificationsProvider` feeds the Home bell and the Profile row (the
+  backend sends no `NOTIFICATIONS` badge). It is fetched with one `size=1` request and kept in step by
+  the page, so returning to Home needs no second request.
+
+Notification text is shown as the backend sends it (English). Push, notification preferences and
+quiet hours are not built (US-087); the backend sends only account events today.
+
 ## Project structure
 
 ```

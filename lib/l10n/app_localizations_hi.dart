@@ -1025,4 +1025,91 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get securitySameEmail => 'यह पहले से आपका ईमेल पता है। कोई दूसरा पता दर्ज करें।';
+
+  @override
+  String get notificationsTitle => 'सूचनाएँ';
+
+  @override
+  String notificationsUnreadCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count अपठित',
+      one: '1 अपठित',
+      zero: 'सब कुछ देख लिया गया है',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notificationsMarkAllRead => 'सभी को पढ़ा हुआ करें';
+
+  @override
+  String get notificationsMarkAllFailed => 'सभी को पढ़ा हुआ नहीं किया जा सका। फिर से कोशिश करें';
+
+  @override
+  String get notificationsTabAll => 'सभी';
+
+  @override
+  String get notificationsTabAccount => 'खाता';
+
+  @override
+  String get notificationsTabOrders => 'ऑर्डर';
+
+  @override
+  String get notificationsTabMessages => 'संदेश';
+
+  @override
+  String get notificationsTabListings => 'लिस्टिंग';
+
+  @override
+  String get notificationsTabOthers => 'अन्य';
+
+  @override
+  String get notificationsEmptyTitle => 'अभी कोई सूचना नहीं';
+
+  @override
+  String get notificationsEmptyBody => 'आपके खाते से जुड़े अपडेट यहाँ दिखेंगे';
+
+  @override
+  String get notificationsLoadMoreFailed => 'और सूचनाएँ लोड नहीं हो सकीं';
+
+  @override
+  String get notificationUnread => 'अपठित';
+
+  @override
+  String get notificationJustNow => 'अभी-अभी';
+
+  @override
+  String notificationMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count मिनट पहले',
+      one: '1 मिनट पहले',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notificationHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count घंटे पहले',
+      one: '1 घंटा पहले',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notificationDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count दिन पहले',
+      one: '1 दिन पहले',
+    );
+    return '$_temp0';
+  }
 }

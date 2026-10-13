@@ -10,6 +10,7 @@ import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/brand_bottom_nav.dart';
 import '../../../core/widgets/field_error.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../notifications/presentation/providers/notifications_providers.dart';
 import '../domain/entities/home_badges.dart';
 import '../domain/entities/listing.dart';
 import 'main_nav.dart';
@@ -32,6 +33,7 @@ class HomeScreen extends ConsumerWidget {
       ..invalidate(promosProvider)
       ..invalidate(categoriesProvider)
       ..invalidate(homeBadgesProvider)
+      ..invalidate(unreadNotificationsProvider)
       ..invalidate(featuredListingsProvider);
     try {
       await ref.read(featuredListingsProvider.future);
@@ -45,7 +47,11 @@ class HomeScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final locationAsync = ref.watch(homeLocationControllerProvider);
     final location = locationAsync.value;
-    final badges = ref.watch(homeBadgesProvider).value ?? const HomeBadges();
+    final cart = ref.watch(homeBadgesProvider).value ?? const HomeBadges();
+    final badges = HomeBadges(
+      cartItems: cart.cartItems,
+      unreadNotifications: ref.watch(unreadNotificationsProvider).value ?? 0,
+    );
     final promos = ref.watch(promosProvider).value ?? const [];
     final categories = ref.watch(categoriesProvider);
     final listings = ref.watch(featuredListingsProvider);
@@ -74,7 +80,7 @@ class HomeScreen extends ConsumerWidget {
                 badges: badges,
                 onLocation: () => showLocationSheet(context),
                 onCart: () => showComingSoon(context),
-                onNotifications: () => showComingSoon(context),
+                onNotifications: () => context.push(RouteNames.notifications),
                 onSearch: () => showComingSoon(context),
                 onPhotoSearch: () => showComingSoon(context),
               ),

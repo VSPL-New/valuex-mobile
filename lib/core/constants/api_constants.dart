@@ -25,6 +25,10 @@ class ApiConstants {
   static const String emailChangeVerify = '/users/me/email/change/verify';
   static const String sessions = '/users/me/sessions';
   static const String revokeOtherSessions = '/users/me/sessions/revoke-others';
+  static const String notifications = '/notifications';
+  static const String notificationsReadAll = '/notifications/read-all';
+
+  static String notificationRead(String id) => '/notifications/$id/read';
 
   static const Duration connectTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
