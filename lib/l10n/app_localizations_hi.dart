@@ -1112,4 +1112,106 @@ class AppLocalizationsHi extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get sellAddPhotosTitle => 'फ़ोटो जोड़ें';
+
+  @override
+  String get sellAddPhotosSubtitle => 'साफ़ फ़ोटो से सामान जल्दी बिकता है (कम से कम 1, अधिकतम 10)';
+
+  @override
+  String sellPhotoCount(int count) {
+    return '$count/10 फ़ोटो जोड़ी गईं';
+  }
+
+  @override
+  String get sellAiTitle => 'काम AI को करने दें';
+
+  @override
+  String get sellAiBody =>
+      'कुछ साफ़ फ़ोटो लें और हमारा AI सामान पहचानेगा, श्रेणी सुझाएगा, उसकी स्थिति बताएगा और सबसे अच्छी बिक्री कीमत का अनुमान लगाएगा।';
+
+  @override
+  String get sellEmptyTitle => 'फ़ोटो लें या अपलोड करें';
+
+  @override
+  String get sellEmptyBody => 'AI आपकी फ़ोटो से सामान की जानकारी अपने-आप भर देगा';
+
+  @override
+  String get sellAddPhotos => 'फ़ोटो जोड़ें';
+
+  @override
+  String get sellAddPhotoTile => 'जोड़ें';
+
+  @override
+  String get sellTipsTitle => 'अच्छे नतीजों के लिए फ़ोटो सुझाव';
+
+  @override
+  String get sellTipLighting => 'साफ़ और अच्छी रोशनी में फ़ोटो लें';
+
+  @override
+  String get sellTipAngles => 'अलग-अलग कोणों से फ़ोटो लें';
+
+  @override
+  String get sellTipDetails => 'ज़रूरी हिस्सों की नज़दीकी फ़ोटो लें (जैसे किनारे, खरोंच)';
+
+  @override
+  String get sellTipAccessories => 'सभी एक्सेसरीज़ शामिल करें (यदि हों)';
+
+  @override
+  String get sellSubmitToAi => 'AI को भेजें';
+
+  @override
+  String get sellSubmitted => 'फ़ोटो सहेज ली गईं। AI सुझाव जल्द आ रहे हैं।';
+
+  @override
+  String get sellMainPhoto => 'मुख्य';
+
+  @override
+  String sellPhotoLabel(int index) {
+    return 'फ़ोटो $index';
+  }
+
+  @override
+  String sellRemovePhoto(int index) {
+    return 'फ़ोटो $index हटाएँ';
+  }
+
+  @override
+  String sellRetryPhoto(int index) {
+    return 'फ़ोटो $index फिर से भेजें';
+  }
+
+  @override
+  String get sellPhotoUploading => 'अपलोड हो रही है';
+
+  @override
+  String get sellPhotoFailed => 'विफल';
+
+  @override
+  String get sellTakePhoto => 'फ़ोटो लें';
+
+  @override
+  String get sellChooseFromGallery => 'गैलरी से चुनें';
+
+  @override
+  String get sellErrorMaxPhotos => 'अधिकतम 10 फ़ोटो की अनुमति है';
+
+  @override
+  String get sellErrorInvalidPhoto => 'फ़ोटो की गुणवत्ता बहुत कम है या फ़ॉर्मेट अमान्य है';
+
+  @override
+  String get sellErrorPhotoTooLarge => 'फ़ोटो 10MB सीमा से बड़ी है';
+
+  @override
+  String get sellErrorUploadFailed => 'फ़ोटो अपलोड नहीं हुई। अपना कनेक्शन जाँचें';
+
+  @override
+  String get sellErrorCameraDenied => 'फ़ोटो लेने के लिए कैमरा की अनुमति ज़रूरी है';
+
+  @override
+  String get sellErrorGalleryDenied => 'फ़ोटो चुनने के लिए गैलरी की अनुमति ज़रूरी है';
+
+  @override
+  String get sellErrorNotActive => 'केवल सक्रिय खाते ही लिस्टिंग बना सकते हैं';
 }
