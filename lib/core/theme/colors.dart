@@ -23,6 +23,7 @@ class AppColors {
 
   /// Blue for text links; `brandPrimary` is 4.2:1 on the page, this is 5.3:1.
   static const Color brandLink = Color(0xFF1F5AE6);
+  static const Color brandInstruction = Color(0xFF135CFF);
 
   // Lines and status
   static const Color brandBorder = Color(0x1F2D6BFF);

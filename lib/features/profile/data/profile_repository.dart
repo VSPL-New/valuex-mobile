@@ -29,13 +29,10 @@ class ProfileRepository {
   Future<UserProfile> fetch() async =>
       (await client.get(ApiConstants.currentUser, parse: UserProfileModel.fromJson)).toEntity();
 
-  Future<UserProfile> update({String? displayName, String? city}) async {
+  Future<UserProfile> update({required String displayName}) async {
     final model = await client.patch(
       ApiConstants.currentUser,
-      data: {
-        if (displayName != null) 'displayName': displayName,
-        if (city != null) 'city': city,
-      },
+      data: {'displayName': displayName},
       parse: UserProfileModel.fromJson,
     );
     return model.toEntity();

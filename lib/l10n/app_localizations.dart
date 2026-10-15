@@ -678,7 +678,7 @@ abstract class AppLocalizations {
   /// No description provided for @signupGenderLabel.
   ///
   /// In en, this message translates to:
-  /// **'GENDER'**
+  /// **'GENDER (OPTIONAL)'**
   String get signupGenderLabel;
 
   /// No description provided for @genderMale.
@@ -698,24 +698,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Others'**
   String get genderOthers;
-
-  /// No description provided for @signupDobLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'DATE OF BIRTH'**
-  String get signupDobLabel;
-
-  /// No description provided for @signupDobHint.
-  ///
-  /// In en, this message translates to:
-  /// **'DD/MM/YYYY'**
-  String get signupDobHint;
-
-  /// No description provided for @signupDobPick.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose date of birth'**
-  String get signupDobPick;
 
   /// No description provided for @signupEmailLabel.
   ///
@@ -752,42 +734,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select your state'**
   String get signupStateSheetTitle;
-
-  /// No description provided for @signupCityLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'CITY'**
-  String get signupCityLabel;
-
-  /// No description provided for @signupCityHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Your city'**
-  String get signupCityHint;
-
-  /// No description provided for @signupAddressLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'ADDRESS'**
-  String get signupAddressLabel;
-
-  /// No description provided for @signupAddressHint.
-  ///
-  /// In en, this message translates to:
-  /// **'House number, street, area'**
-  String get signupAddressHint;
-
-  /// No description provided for @signupPincodeLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'PINCODE'**
-  String get signupPincodeLabel;
-
-  /// No description provided for @signupPincodeHint.
-  ///
-  /// In en, this message translates to:
-  /// **'6-digit pincode'**
-  String get signupPincodeHint;
 
   /// No description provided for @signupTermsPrefix.
   ///
@@ -885,18 +831,6 @@ abstract class AppLocalizations {
   /// **'Your account requires recovery. Please contact support'**
   String get authErrorAccountRecovery;
 
-  /// No description provided for @signupErrorGender.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose one option'**
-  String get signupErrorGender;
-
-  /// No description provided for @signupErrorState.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose your state'**
-  String get signupErrorState;
-
   /// No description provided for @signupErrorTerms.
   ///
   /// In en, this message translates to:
@@ -909,47 +843,11 @@ abstract class AppLocalizations {
   /// **'Enter 3 to 50 letters'**
   String get signupErrorName;
 
-  /// No description provided for @signupErrorCity.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter 2 to 100 letters'**
-  String get signupErrorCity;
-
-  /// No description provided for @signupErrorAddress.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter 10 to 255 characters'**
-  String get signupErrorAddress;
-
-  /// No description provided for @signupErrorPincode.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter a valid 6-digit pincode'**
-  String get signupErrorPincode;
-
-  /// No description provided for @signupErrorDobFormat.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter a valid date as DD/MM/YYYY'**
-  String get signupErrorDobFormat;
-
-  /// No description provided for @signupErrorDobFuture.
-  ///
-  /// In en, this message translates to:
-  /// **'Date of birth cannot be in the future'**
-  String get signupErrorDobFuture;
-
   /// No description provided for @authErrorInvalidAddressState.
   ///
   /// In en, this message translates to:
   /// **'Please choose a valid state'**
   String get authErrorInvalidAddressState;
-
-  /// No description provided for @authErrorInvalidDob.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid date of birth'**
-  String get authErrorInvalidDob;
 
   /// No description provided for @authErrorTermsNotAccepted.
   ///
@@ -1218,7 +1116,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeNoListings.
   ///
   /// In en, this message translates to:
-  /// **'No items near you yet. Try another address'**
+  /// **'No items near you yet. Try another location'**
   String get homeNoListings;
 
   /// No description provided for @homeCategoriesFailed.
@@ -1236,20 +1134,20 @@ abstract class AppLocalizations {
   /// No description provided for @homeLocationPromptBody.
   ///
   /// In en, this message translates to:
-  /// **'Allow location access to see items near you, or enter your address.'**
+  /// **'Use your current location or one of your saved locations to see items near you.'**
   String get homeLocationPromptBody;
 
   /// No description provided for @homeUseMyLocation.
   ///
   /// In en, this message translates to:
-  /// **'Use my location'**
+  /// **'Use my current location'**
   String get homeUseMyLocation;
 
-  /// No description provided for @homeEnterAddress.
+  /// No description provided for @homeUseSavedLocation.
   ///
   /// In en, this message translates to:
-  /// **'Enter address'**
-  String get homeEnterAddress;
+  /// **'Use my saved location'**
+  String get homeUseSavedLocation;
 
   /// No description provided for @homeOpenSettings.
   ///
@@ -1260,19 +1158,19 @@ abstract class AppLocalizations {
   /// No description provided for @homeLocationDenied.
   ///
   /// In en, this message translates to:
-  /// **'Location access is off. Enter your address to see items near you'**
+  /// **'Location access is off. Use a saved location to see items near you'**
   String get homeLocationDenied;
 
   /// No description provided for @homeLocationUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'Unable to detect your location. Enter your address instead'**
+  /// **'Unable to detect your location. Use a saved location instead'**
   String get homeLocationUnavailable;
 
   /// No description provided for @homeLocationServiceOff.
   ///
   /// In en, this message translates to:
-  /// **'Location is turned off on this device. Turn it on or enter your address'**
+  /// **'Location is turned off on this device. Turn it on or use a saved location'**
   String get homeLocationServiceOff;
 
   /// No description provided for @homeLocationSheetTitle.
@@ -1281,59 +1179,35 @@ abstract class AppLocalizations {
   /// **'Choose your location'**
   String get homeLocationSheetTitle;
 
-  /// No description provided for @homeAreaLabel.
+  /// No description provided for @homeSavedLocationTitle.
   ///
   /// In en, this message translates to:
-  /// **'AREA (OPTIONAL)'**
-  String get homeAreaLabel;
+  /// **'Choose a saved location'**
+  String get homeSavedLocationTitle;
 
-  /// No description provided for @homeAreaHint.
+  /// No description provided for @homeSavedLocationEmpty.
   ///
   /// In en, this message translates to:
-  /// **'For example, Andheri East'**
-  String get homeAreaHint;
+  /// **'You have no saved locations yet. An address is saved when you buy or sell an item.'**
+  String get homeSavedLocationEmpty;
 
-  /// No description provided for @homeCityLabel.
+  /// No description provided for @homeSavedLocationFailed.
   ///
   /// In en, this message translates to:
-  /// **'CITY'**
-  String get homeCityLabel;
+  /// **'Unable to load your saved locations. Try again'**
+  String get homeSavedLocationFailed;
 
-  /// No description provided for @homeCityHint.
+  /// No description provided for @homeSavedLocationUnnamed.
   ///
   /// In en, this message translates to:
-  /// **'Your city'**
-  String get homeCityHint;
-
-  /// No description provided for @homeSaveLocation.
-  ///
-  /// In en, this message translates to:
-  /// **'Save location'**
-  String get homeSaveLocation;
-
-  /// No description provided for @homeCityError.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter a valid city'**
-  String get homeCityError;
-
-  /// No description provided for @homeStateError.
-  ///
-  /// In en, this message translates to:
-  /// **'Select your state'**
-  String get homeStateError;
+  /// **'Saved address'**
+  String get homeSavedLocationUnnamed;
 
   /// No description provided for @homeFeatureComingSoon.
   ///
   /// In en, this message translates to:
   /// **'This is coming soon'**
   String get homeFeatureComingSoon;
-
-  /// No description provided for @homeSellAadhaarRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Please complete Aadhaar verification to proceed'**
-  String get homeSellAadhaarRequired;
 
   /// No description provided for @categoriesTitle.
   ///
@@ -1449,12 +1323,6 @@ abstract class AppLocalizations {
   /// **'Display name'**
   String get profileName;
 
-  /// No description provided for @profileCity.
-  ///
-  /// In en, this message translates to:
-  /// **'City'**
-  String get profileCity;
-
   /// No description provided for @profileMobile.
   ///
   /// In en, this message translates to:
@@ -1508,30 +1376,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Gender'**
   String get profileGender;
-
-  /// No description provided for @profileDob.
-  ///
-  /// In en, this message translates to:
-  /// **'Date of birth'**
-  String get profileDob;
-
-  /// No description provided for @profileState.
-  ///
-  /// In en, this message translates to:
-  /// **'State'**
-  String get profileState;
-
-  /// No description provided for @profileAddress.
-  ///
-  /// In en, this message translates to:
-  /// **'Address'**
-  String get profileAddress;
-
-  /// No description provided for @profilePincode.
-  ///
-  /// In en, this message translates to:
-  /// **'Pincode'**
-  String get profilePincode;
 
   /// No description provided for @profileCatalogEmpty.
   ///
@@ -1712,6 +1556,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Account Security'**
   String get profileAccountSecurity;
+
+  /// No description provided for @profileMyAddresses.
+  ///
+  /// In en, this message translates to:
+  /// **'My Addresses'**
+  String get profileMyAddresses;
 
   /// No description provided for @securityTitle.
   ///
@@ -2066,6 +1916,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 day ago} other{{count} days ago}}'**
   String notificationDaysAgo(int count);
+
+  /// No description provided for @addressSearchLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search your address'**
+  String get addressSearchLabel;
+
+  /// No description provided for @addressSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Type your street, area or landmark'**
+  String get addressSearchHint;
+
+  /// No description provided for @addressSearchSearching.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching…'**
+  String get addressSearchSearching;
+
+  /// No description provided for @addressSearchNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching address found. Enter it below'**
+  String get addressSearchNoResults;
+
+  /// No description provided for @addressSearchUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Address search is unavailable. Enter your address below'**
+  String get addressSearchUnavailable;
+
+  /// No description provided for @addressSearchPoweredBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Powered by Google'**
+  String get addressSearchPoweredBy;
+
+  /// No description provided for @addressLandmarkLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'House or flat number, landmark (optional)'**
+  String get addressLandmarkLabel;
+
+  /// No description provided for @addressLandmarkHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Flat 4, near the metro station'**
+  String get addressLandmarkHint;
+
+  /// No description provided for @addressCheckChecking.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking your address…'**
+  String get addressCheckChecking;
+
+  /// No description provided for @addressCheckVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Address verified'**
+  String get addressCheckVerified;
+
+  /// No description provided for @addressCheckNotVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'We could not verify this address. Please check and try again'**
+  String get addressCheckNotVerified;
+
+  /// No description provided for @addressCheckMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'The pincode does not match the selected city or state'**
+  String get addressCheckMismatch;
+
+  /// No description provided for @addressCheckInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a complete address'**
+  String get addressCheckInvalid;
+
+  /// No description provided for @addressCheckUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Address verification is unavailable right now. You can still continue'**
+  String get addressCheckUnavailable;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

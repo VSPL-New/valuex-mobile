@@ -48,7 +48,7 @@ void main() {
       final handle = tester.ensureSemantics();
       final harness = await openSignup(tester);
 
-      for (final label in ['FULL NAME', 'CITY', 'ADDRESS', 'PINCODE', 'DATE OF BIRTH']) {
+      for (final label in ['FULL NAME']) {
         expect(find.bySemanticsLabel(RegExp(label, caseSensitive: false)), findsWidgets,
             reason: label);
       }

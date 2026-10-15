@@ -25,6 +25,7 @@ void main() {
     'link text on the page': (AppColors.brandLink, AppColors.brandBackground),
     'link text on white': (AppColors.brandLink, AppColors.brandSurface),
     'link text on the input fill': (AppColors.brandLink, AppColors.brandSurfaceTint),
+    'instruction text on the page': (AppColors.brandInstruction, AppColors.brandBackground),
     'error text on the page': (AppColors.brandError, AppColors.brandBackground),
     'error text on white': (AppColors.brandError, AppColors.brandSurface),
     'error text on the input fill': (AppColors.brandError, AppColors.brandSurfaceTint),

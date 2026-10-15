@@ -93,6 +93,7 @@ void main() {
       await openAadhaar(tester);
       expect(_enabled(tester, 'Verify Aadhaar'), isTrue);
 
+      await tester.ensureVisible(find.byType(TextField));
       await tester.enterText(find.byType(TextField), '12341234');
       await tester.pump();
       await tester.ensureVisible(_verifyAadhaarButton);
@@ -278,6 +279,8 @@ void main() {
       aadhaarFlow: 'thirdparty',
       googleSignIn: 'native',
       googleServerClientId: 'web-client-id',
+      addressSearch: 'google',
+      googlePlacesApiKey: 'places-key',
     );
 
     testWidgets('hides number entry and offers only Skip for now', (tester) async {

@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:valuex_mobile/core/constants/storage_keys.dart';
 import 'package:valuex_mobile/core/storage/preferences_service.dart';
+import 'package:valuex_mobile/features/address/domain/saved_address.dart';
 import 'package:valuex_mobile/features/home/domain/entities/home_location.dart';
 import 'package:valuex_mobile/features/home/domain/services/location_service.dart';
 import 'package:valuex_mobile/features/home/presentation/providers/home_providers.dart';
@@ -11,7 +12,16 @@ import '../../helpers/fake_location_service.dart';
 
 void main() {
   const mumbai = HomeLocation(area: 'Andheri (East)', city: 'Mumbai', state: 'Maharashtra');
-  const pune = HomeLocation(city: 'Pune', state: 'Maharashtra');
+  const pune = HomeLocation(city: 'Pune', state: 'Maharashtra', pincode: '411014');
+  const puneHome = SavedAddress(
+    id: 'a-1',
+    label: 'Home',
+    address: '12 FC Road, Shivajinagar',
+    landmark: 'Flat 4',
+    city: 'Pune',
+    state: 'Maharashtra',
+    pincode: '411014',
+  );
 
   ProviderContainer containerWith(FakeLocationService service) {
     final container = ProviderContainer(
@@ -32,6 +42,7 @@ void main() {
 
     test('survives being saved and read back', () {
       expect(HomeLocation.tryParse(mumbai.toJson()), mumbai);
+      expect(HomeLocation.tryParse(pune.toJson()), pune);
     });
 
     test('ignores damaged or empty saved data', () {
@@ -51,7 +62,7 @@ void main() {
       expect((state as LocationKnown).location, mumbai);
     });
 
-    test('prefers an address the user chose over the device', () async {
+    test('prefers a saved address the user chose over the device', () async {
       SharedPreferences.setMockInitialValues({StorageKeys.homeLocation: pune.toJson()});
       final container = containerWith(FakeLocationService());
 
@@ -105,12 +116,15 @@ void main() {
       expect(service.requests, 1);
     });
 
-    test('saving an address keeps it, and using the device forgets it', () async {
+    test('choosing a saved address keeps its city on the device, and using the device forgets it',
+        () async {
       final container = containerWith(FakeLocationService());
       await container.read(homeLocationControllerProvider.future);
       final controller = container.read(homeLocationControllerProvider.notifier);
 
-      await controller.useAddress(pune);
+      await controller.useSavedAddress(puneHome);
+      expect(
+          (container.read(homeLocationControllerProvider).value as LocationKnown).location, pune);
       expect(
         HomeLocation.tryParse(
           await container.read(preferencesServiceProvider).getString(StorageKeys.homeLocation),

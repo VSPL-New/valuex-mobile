@@ -9,7 +9,6 @@ import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart'
 import 'package:valuex_mobile/features/auth/domain/entities/otp_sent.dart';
 import 'package:valuex_mobile/features/auth/presentation/widgets/avatar_image.dart';
 import 'package:valuex_mobile/features/auth/presentation/widgets/gender_selector.dart';
-import 'package:valuex_mobile/features/auth/presentation/widgets/state_picker_field.dart';
 
 import 'helpers/app_harness.dart';
 import 'helpers/fonts.dart';
@@ -117,8 +116,6 @@ void main() {
 
       for (final finder in [
         find.byType(GenderSelector),
-        find.byType(StatePickerField),
-        find.byTooltip('Choose date of birth'),
         find.byType(Switch),
       ]) {
         await tester.ensureVisible(finder);
@@ -126,8 +123,6 @@ void main() {
         final size = tester.getSize(finder.first);
         expect(size.height, greaterThanOrEqualTo(AppSizes.minTouchTarget), reason: '$finder');
       }
-      expect(tester.getSize(find.byTooltip('Choose date of birth')).width,
-          greaterThanOrEqualTo(AppSizes.minTouchTarget));
       expect(
         tester.getSize(find.byType(AvatarImage)).shortestSide,
         greaterThanOrEqualTo(AppSizes.minTouchTarget),

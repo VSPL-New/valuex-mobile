@@ -83,7 +83,6 @@ class ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final city = profile.city;
     final rating = summary.rating.toStringAsFixed(1);
 
     return Column(
@@ -148,10 +147,6 @@ class ProfileHeader extends StatelessWidget {
                         l10n.profileTransactions(summary.transactions),
                         style: AppTextStyles.hint,
                       ),
-                      if (city != null && city.isNotEmpty) ...[
-                        const _Dot(),
-                        Text(city, style: AppTextStyles.hint),
-                      ],
                     ],
                   ),
                 ],

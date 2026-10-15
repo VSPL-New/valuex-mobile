@@ -5,7 +5,6 @@ import '../../../../core/routing/route_names.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../../../core/widgets/brand_gradient_button.dart';
-import '../../../../core/widgets/brand_logo.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../providers/session_controller.dart';
 
@@ -28,8 +27,6 @@ class AccountBlockedScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const BrandLogo(height: 32),
-                    const SizedBox(height: AppSpacing.xl),
                     Semantics(
                       header: true,
                       child: Text(l10n.accountBlockedTitle, style: AppTextStyles.heading2),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
+import 'package:valuex_mobile/core/theme/colors.dart';
 import 'package:valuex_mobile/core/widgets/brand_gradient_button.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/auth_session.dart';
@@ -14,7 +15,6 @@ import 'package:valuex_mobile/features/auth/presentation/screens/signup_profile_
 import 'package:valuex_mobile/features/auth/presentation/screens/terms_screen.dart';
 import 'package:valuex_mobile/features/auth/presentation/widgets/avatar_image.dart';
 import 'package:valuex_mobile/features/auth/presentation/widgets/gender_selector.dart';
-import 'package:valuex_mobile/features/auth/presentation/widgets/state_picker_field.dart';
 import 'package:valuex_mobile/features/home/presentation/home_screen.dart';
 
 import '../../../helpers/app_harness.dart';
@@ -49,14 +49,12 @@ BrandGradientButton _submit(WidgetTester tester) {
   return tester.widget<BrandGradientButton>(find.widgetWithText(BrandGradientButton, 'Submit'));
 }
 
-ApiError _businessError(String code) {
-  return ApiError(type: ApiErrorType.business, message: 'x', code: code, statusCode: 400);
-}
-
 void main() {
   late AppHarness harness;
 
-  setUpAll(() => registerFallbackValue(_FakeSignupDetails()));
+  setUpAll(() {
+    registerFallbackValue(_FakeSignupDetails());
+  });
 
   Future<void> openSignup(WidgetTester tester) async {
     harness = AppHarness(tester)..signedInAs(AccountStatus.signupPending);
@@ -72,24 +70,18 @@ void main() {
     await harness.settle();
   }
 
-  Future<void> fillEverything(WidgetTester tester, {Gender gender = Gender.female}) async {
+  Future<void> fillEverything(WidgetTester tester, {Gender? gender = Gender.female}) async {
     await _enter(tester, 'Your full name', 'Asha Verma');
-    await _tapVisible(
-      tester,
-      find.text(switch (gender) {
-        Gender.male => 'Male',
-        Gender.female => 'Female',
-        Gender.others => 'Others',
-      }),
-    );
-    await _enter(tester, 'DD/MM/YYYY', '17051995');
-    await _tapVisible(tester, find.byType(StatePickerField));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Assam'));
-    await tester.pumpAndSettle();
-    await _enter(tester, 'Your city', 'Guwahati');
-    await _enter(tester, 'House number, street, area', '12 GS Road, Dispur');
-    await _enter(tester, '6-digit pincode', '781005');
+    if (gender != null) {
+      await _tapVisible(
+        tester,
+        find.text(switch (gender) {
+          Gender.male => 'Male',
+          Gender.female => 'Female',
+          Gender.others => 'Others',
+        }),
+      );
+    }
     await openTermsAndClose(tester);
     await _tapVisible(tester, find.byType(Switch));
   }
@@ -107,7 +99,17 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('Submit with nothing filled in shows every message and sends nothing', (
+    testWidgets('does not ask for an address or a date of birth', (tester) async {
+      await openSignup(tester);
+
+      for (final label in ['ADDRESS', 'CITY', 'STATE', 'PINCODE', 'DATE OF BIRTH']) {
+        expect(find.text(label, skipOffstage: false), findsNothing, reason: label);
+      }
+      expect(find.text('GENDER (OPTIONAL)'), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('Submit with nothing filled in shows the messages and sends nothing', (
       tester,
     ) async {
       await openSignup(tester);
@@ -118,12 +120,6 @@ void main() {
 
       for (final message in [
         'Enter 3 to 50 letters',
-        'Choose one option',
-        'Enter a valid date as DD/MM/YYYY',
-        'Choose your state',
-        'Enter 2 to 100 letters',
-        'Enter 10 to 255 characters',
-        'Enter a valid 6-digit pincode',
         'Open the Terms and Conditions first to turn this on',
       ]) {
         await tester.ensureVisible(find.text(message, skipOffstage: false));
@@ -194,87 +190,39 @@ void main() {
     });
   });
 
-  group('gender and date of birth', () {
-    testWidgets('gender offers Male, Female and Others and keeps one selected', (tester) async {
+  group('gender', () {
+    testWidgets('offers Male, Female and Others, with none selected at first', (tester) async {
       await openSignup(tester);
 
-      expect(
-        tester.widget<GenderSelector>(find.byType(GenderSelector)).value,
-        isNull,
-      );
+      expect(tester.widget<GenderSelector>(find.byType(GenderSelector)).value, isNull);
       await _tapVisible(tester, find.text('Others'));
 
       expect(tester.widget<GenderSelector>(find.byType(GenderSelector)).value, Gender.others);
       await harness.dispose();
     });
 
-    testWidgets('typing digits formats the date as DD/MM/YYYY', (tester) async {
+    testWidgets('choosing the selected option again clears it and the neutral avatar returns', (
+      tester,
+    ) async {
       await openSignup(tester);
 
-      await _enter(tester, 'DD/MM/YYYY', '17051995');
+      await _tapVisible(tester, find.text('Female'));
+      expect(tester.widget<AvatarImage>(find.byType(AvatarImage)).avatarId, 'avatar-05');
+      await _tapVisible(tester, find.text('Female'));
 
-      expect(find.text('17/05/1995'), findsOneWidget);
-      await harness.dispose();
-    });
-
-    testWidgets('a future date shows an error', (tester) async {
-      await openSignup(tester);
-      final next = DateTime.now().add(const Duration(days: 3));
-      String two(int v) => v.toString().padLeft(2, '0');
-
-      await _enter(tester, 'DD/MM/YYYY', '${two(next.day)}${two(next.month)}${next.year}');
-
-      expect(find.text('Date of birth cannot be in the future'), findsOneWidget);
-      await harness.dispose();
-    });
-
-    testWidgets('a date that does not exist shows an error', (tester) async {
-      await openSignup(tester);
-
-      await _enter(tester, 'DD/MM/YYYY', '31022000');
-
-      expect(find.text('Enter a valid date as DD/MM/YYYY'), findsOneWidget);
-      await harness.dispose();
-    });
-
-    testWidgets('the calendar fills in the date field', (tester) async {
-      await openSignup(tester);
-      final now = DateTime.now();
-      String two(int v) => v.toString().padLeft(2, '0');
-      final expected = '${two(now.day)}/${two(now.month)}/${now.year - 25}';
-
-      await _tapVisible(tester, find.byTooltip('Choose date of birth'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('OK'));
-      await tester.pumpAndSettle();
-
-      expect(find.text(expected), findsOneWidget);
+      expect(tester.widget<GenderSelector>(find.byType(GenderSelector)).value, isNull);
+      expect(tester.widget<AvatarImage>(find.byType(AvatarImage)).avatarId, 'avatar-09');
       await harness.dispose();
     });
   });
 
-  group('field validation', () {
-    testWidgets('shows a message for a bad name, city, address and pincode', (tester) async {
+  group('name validation', () {
+    testWidgets('shows a message for a bad name', (tester) async {
       await openSignup(tester);
 
       await _enter(tester, 'Your full name', 'A1');
-      await _enter(tester, 'Your city', 'C1');
-      await _enter(tester, 'House number, street, area', 'short');
-      await _enter(tester, '6-digit pincode', '012345');
 
       expect(find.text('Enter 3 to 50 letters'), findsOneWidget);
-      expect(find.text('Enter 2 to 100 letters'), findsOneWidget);
-      expect(find.text('Enter 10 to 255 characters'), findsOneWidget);
-      expect(find.text('Enter a valid 6-digit pincode'), findsOneWidget);
-      await harness.dispose();
-    });
-
-    testWidgets('the pincode field takes six digits only', (tester) async {
-      await openSignup(tester);
-
-      await _enter(tester, '6-digit pincode', '78a1005999');
-
-      expect(find.text('781005'), findsOneWidget);
       await harness.dispose();
     });
 
@@ -288,22 +236,33 @@ void main() {
     });
   });
 
-  group('state picker', () {
-    testWidgets('lists the states and shows the chosen one', (tester) async {
+  group('terms', () {
+    testWidgets('the locked hint uses the instruction colour and blinks when the toggle is tapped',
+        (
+      tester,
+    ) async {
       await openSignup(tester);
+      const hint = 'Open the Terms and Conditions first to turn this on';
+      await tester.ensureVisible(find.byType(Switch));
+      await tester.pump();
 
-      await _tapVisible(tester, find.byType(StatePickerField));
-      await tester.pumpAndSettle();
-      expect(find.text('Select your state'), findsWidgets);
-      await tester.tap(find.text('Assam'));
-      await tester.pumpAndSettle();
+      expect(tester.widget<Text>(find.text(hint)).style?.color, AppColors.brandInstruction);
+      double opacity() => tester
+          .widget<Opacity>(find.ancestor(of: find.text(hint), matching: find.byType(Opacity)).first)
+          .opacity;
+      expect(opacity(), 1);
 
-      expect(find.text('Assam'), findsOneWidget);
+      await tester.tap(find.byType(Switch));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 150));
+      expect(opacity(), lessThan(1));
+
+      await tester.pump(const Duration(seconds: 1));
+      expect(opacity(), 1);
+      expect(tester.widget<Switch>(find.byType(Switch)).value, isFalse);
       await harness.dispose();
     });
-  });
 
-  group('terms', () {
     testWidgets('the toggle is locked until the Terms and Conditions were opened and closed', (
       tester,
     ) async {
@@ -349,17 +308,30 @@ void main() {
           as SignupDetails;
       expect(details.displayName, 'Asha Verma');
       expect(details.gender, Gender.female);
-      expect(details.dateOfBirth, DateTime(1995, 5, 17));
-      expect(details.state, 'Assam');
-      expect(details.city, 'Guwahati');
-      expect(details.address, '12 GS Road, Dispur');
-      expect(details.pincode, '781005');
       expect(details.avatarId, 'avatar-05');
       expect(details.termsAccepted, isTrue);
       expect(details.consentGiven, isTrue);
       expect(details.termsVersion, 'template-0');
       final session = harness.container.read(sessionControllerProvider).value as Authenticated;
       expect(session.status, AccountStatus.active);
+      expect(find.byType(HomeScreen), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('a user who leaves gender empty can sign up with the neutral avatar', (
+      tester,
+    ) async {
+      await openSignup(tester);
+      when(() => harness.repository.completeSignup(any())).thenAnswer((_) async => _activeResult);
+
+      await fillEverything(tester, gender: null);
+      await _tapVisible(tester, find.widgetWithText(BrandGradientButton, 'Submit'));
+      await harness.settle();
+
+      final details = verify(() => harness.repository.completeSignup(captureAny())).captured.single
+          as SignupDetails;
+      expect(details.gender, isNull);
+      expect(details.avatarId, 'avatar-09');
       expect(find.byType(HomeScreen), findsOneWidget);
       await harness.dispose();
     });
@@ -379,22 +351,6 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('a rejected state shows the server message and keeps the form', (tester) async {
-      await openSignup(tester);
-      when(
-        () => harness.repository.completeSignup(any()),
-      ).thenThrow(_businessError('ERROR_INVALID_ADDRESS_STATE'));
-      await fillEverything(tester);
-
-      await _tapVisible(tester, find.widgetWithText(BrandGradientButton, 'Submit'));
-      await harness.settle();
-
-      expect(find.text('Please choose a valid state'), findsOneWidget);
-      expect(find.byType(SnackBar), findsNothing);
-      expect(find.byType(SignupProfileScreen), findsOneWidget);
-      await harness.dispose();
-    });
-
     testWidgets('a network failure shows the connection message', (tester) async {
       await openSignup(tester);
       when(() => harness.repository.completeSignup(any())).thenThrow(
@@ -407,25 +363,6 @@ void main() {
 
       expect(find.text('Unable to connect — Retry'), findsWidgets);
       expect(find.byType(SignupProfileScreen), findsOneWidget);
-      await harness.dispose();
-    });
-
-    testWidgets('a person born today can sign up because there is no minimum age', (tester) async {
-      await openSignup(tester);
-      when(() => harness.repository.completeSignup(any())).thenAnswer((_) async => _activeResult);
-      await fillEverything(tester, gender: Gender.others);
-      final now = DateTime.now();
-      String two(int v) => v.toString().padLeft(2, '0');
-      await _enter(tester, 'DD/MM/YYYY', '${two(now.day)}${two(now.month)}${now.year}');
-
-      await _tapVisible(tester, find.widgetWithText(BrandGradientButton, 'Submit'));
-      await harness.settle();
-
-      final details = verify(() => harness.repository.completeSignup(captureAny())).captured.single
-          as SignupDetails;
-      expect(details.gender, Gender.others);
-      expect(details.avatarId, 'avatar-09');
-      expect(details.dateOfBirth, DateTime(now.year, now.month, now.day));
       await harness.dispose();
     });
   });

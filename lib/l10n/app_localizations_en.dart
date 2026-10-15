@@ -323,7 +323,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signupNameHint => 'Your full name';
 
   @override
-  String get signupGenderLabel => 'GENDER';
+  String get signupGenderLabel => 'GENDER (OPTIONAL)';
 
   @override
   String get genderMale => 'Male';
@@ -333,15 +333,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get genderOthers => 'Others';
-
-  @override
-  String get signupDobLabel => 'DATE OF BIRTH';
-
-  @override
-  String get signupDobHint => 'DD/MM/YYYY';
-
-  @override
-  String get signupDobPick => 'Choose date of birth';
 
   @override
   String get signupEmailLabel => 'EMAIL';
@@ -360,24 +351,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signupStateSheetTitle => 'Select your state';
-
-  @override
-  String get signupCityLabel => 'CITY';
-
-  @override
-  String get signupCityHint => 'Your city';
-
-  @override
-  String get signupAddressLabel => 'ADDRESS';
-
-  @override
-  String get signupAddressHint => 'House number, street, area';
-
-  @override
-  String get signupPincodeLabel => 'PINCODE';
-
-  @override
-  String get signupPincodeHint => '6-digit pincode';
 
   @override
   String get signupTermsPrefix => 'I agree to the ';
@@ -430,37 +403,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authErrorAccountRecovery => 'Your account requires recovery. Please contact support';
 
   @override
-  String get signupErrorGender => 'Choose one option';
-
-  @override
-  String get signupErrorState => 'Choose your state';
-
-  @override
   String get signupErrorTerms => 'Accept the Terms and Conditions to continue';
 
   @override
   String get signupErrorName => 'Enter 3 to 50 letters';
 
   @override
-  String get signupErrorCity => 'Enter 2 to 100 letters';
-
-  @override
-  String get signupErrorAddress => 'Enter 10 to 255 characters';
-
-  @override
-  String get signupErrorPincode => 'Enter a valid 6-digit pincode';
-
-  @override
-  String get signupErrorDobFormat => 'Enter a valid date as DD/MM/YYYY';
-
-  @override
-  String get signupErrorDobFuture => 'Date of birth cannot be in the future';
-
-  @override
   String get authErrorInvalidAddressState => 'Please choose a valid state';
-
-  @override
-  String get authErrorInvalidDob => 'Please enter a valid date of birth';
 
   @override
   String get authErrorTermsNotAccepted => 'Please accept the terms and conditions to continue';
@@ -619,7 +568,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeLoadFailed => 'Unable to load Home. Pull down or tap Retry';
 
   @override
-  String get homeNoListings => 'No items near you yet. Try another address';
+  String get homeNoListings => 'No items near you yet. Try another location';
 
   @override
   String get homeCategoriesFailed => 'Unable to load categories. Try again';
@@ -629,58 +578,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeLocationPromptBody =>
-      'Allow location access to see items near you, or enter your address.';
+      'Use your current location or one of your saved locations to see items near you.';
 
   @override
-  String get homeUseMyLocation => 'Use my location';
+  String get homeUseMyLocation => 'Use my current location';
 
   @override
-  String get homeEnterAddress => 'Enter address';
+  String get homeUseSavedLocation => 'Use my saved location';
 
   @override
   String get homeOpenSettings => 'Open settings';
 
   @override
   String get homeLocationDenied =>
-      'Location access is off. Enter your address to see items near you';
+      'Location access is off. Use a saved location to see items near you';
 
   @override
   String get homeLocationUnavailable =>
-      'Unable to detect your location. Enter your address instead';
+      'Unable to detect your location. Use a saved location instead';
 
   @override
   String get homeLocationServiceOff =>
-      'Location is turned off on this device. Turn it on or enter your address';
+      'Location is turned off on this device. Turn it on or use a saved location';
 
   @override
   String get homeLocationSheetTitle => 'Choose your location';
 
   @override
-  String get homeAreaLabel => 'AREA (OPTIONAL)';
+  String get homeSavedLocationTitle => 'Choose a saved location';
 
   @override
-  String get homeAreaHint => 'For example, Andheri East';
+  String get homeSavedLocationEmpty =>
+      'You have no saved locations yet. An address is saved when you buy or sell an item.';
 
   @override
-  String get homeCityLabel => 'CITY';
+  String get homeSavedLocationFailed => 'Unable to load your saved locations. Try again';
 
   @override
-  String get homeCityHint => 'Your city';
-
-  @override
-  String get homeSaveLocation => 'Save location';
-
-  @override
-  String get homeCityError => 'Enter a valid city';
-
-  @override
-  String get homeStateError => 'Select your state';
+  String get homeSavedLocationUnnamed => 'Saved address';
 
   @override
   String get homeFeatureComingSoon => 'This is coming soon';
-
-  @override
-  String get homeSellAadhaarRequired => 'Please complete Aadhaar verification to proceed';
 
   @override
   String get categoriesTitle => 'All categories';
@@ -746,9 +684,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileName => 'Display name';
 
   @override
-  String get profileCity => 'City';
-
-  @override
   String get profileMobile => 'Mobile number';
 
   @override
@@ -774,18 +709,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileGender => 'Gender';
-
-  @override
-  String get profileDob => 'Date of birth';
-
-  @override
-  String get profileState => 'State';
-
-  @override
-  String get profileAddress => 'Address';
-
-  @override
-  String get profilePincode => 'Pincode';
 
   @override
   String get profileCatalogEmpty => 'No avatars are available. Please try again later';
@@ -901,6 +824,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileAccountSecurity => 'Account Security';
+
+  @override
+  String get profileMyAddresses => 'My Addresses';
 
   @override
   String get securityTitle => 'Account Security';
@@ -1126,4 +1052,48 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get addressSearchLabel => 'Search your address';
+
+  @override
+  String get addressSearchHint => 'Type your street, area or landmark';
+
+  @override
+  String get addressSearchSearching => 'Searching…';
+
+  @override
+  String get addressSearchNoResults => 'No matching address found. Enter it below';
+
+  @override
+  String get addressSearchUnavailable => 'Address search is unavailable. Enter your address below';
+
+  @override
+  String get addressSearchPoweredBy => 'Powered by Google';
+
+  @override
+  String get addressLandmarkLabel => 'House or flat number, landmark (optional)';
+
+  @override
+  String get addressLandmarkHint => 'Flat 4, near the metro station';
+
+  @override
+  String get addressCheckChecking => 'Checking your address…';
+
+  @override
+  String get addressCheckVerified => 'Address verified';
+
+  @override
+  String get addressCheckNotVerified =>
+      'We could not verify this address. Please check and try again';
+
+  @override
+  String get addressCheckMismatch => 'The pincode does not match the selected city or state';
+
+  @override
+  String get addressCheckInvalid => 'Please enter a complete address';
+
+  @override
+  String get addressCheckUnavailable =>
+      'Address verification is unavailable right now. You can still continue';
 }

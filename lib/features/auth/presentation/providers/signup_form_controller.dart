@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/network/api_error.dart';
@@ -14,17 +12,14 @@ import 'session_controller.dart';
 
 part 'signup_form_controller.g.dart';
 
-enum SignupFieldError { name, gender, dobFormat, dobFuture, state, city, address, pincode, terms }
+enum SignupFieldError { name, terms }
 
 class SignupFormState {
   final String? chosenAvatarId;
   final String displayName;
+
+  /// Optional: null until the user picks one, and again after they tap the chosen option.
   final Gender? gender;
-  final String dobText;
-  final String? state;
-  final String city;
-  final String address;
-  final String pincode;
   final bool termsViewed;
   final bool termsAccepted;
   final bool isSubmitting;
@@ -37,11 +32,6 @@ class SignupFormState {
     this.chosenAvatarId,
     this.displayName = '',
     this.gender,
-    this.dobText = '',
-    this.state,
-    this.city = '',
-    this.address = '',
-    this.pincode = '',
     this.termsViewed = false,
     this.termsAccepted = false,
     this.isSubmitting = false,
@@ -51,66 +41,19 @@ class SignupFormState {
 
   String get avatarId => chosenAvatarId ?? AvatarCatalog.defaultFor(gender);
 
-  DateTime? get dateOfBirth => Validators.parseDateOfBirth(dobText);
-
   /// A field shows its error once the user typed something invalid, or after Submit was tapped.
   SignupFieldError? get nameError =>
       (displayName.isNotEmpty || showValidation) && !Validators.isValidName(displayName)
           ? SignupFieldError.name
           : null;
 
-  SignupFieldError? get genderError =>
-      showValidation && gender == null ? SignupFieldError.gender : null;
-
-  SignupFieldError? get stateError =>
-      showValidation && state == null ? SignupFieldError.state : null;
-
-  SignupFieldError? get cityError =>
-      (city.isNotEmpty || showValidation) && !Validators.isValidCity(city)
-          ? SignupFieldError.city
-          : null;
-
-  SignupFieldError? get addressError =>
-      (address.isNotEmpty || showValidation) && !Validators.isValidAddress(address)
-          ? SignupFieldError.address
-          : null;
-
-  SignupFieldError? get pincodeError =>
-      (pincode.isNotEmpty || showValidation) && !Validators.isValidPincode(pincode)
-          ? SignupFieldError.pincode
-          : null;
-
-  SignupFieldError? get dobError {
-    if (dobText.length >= 10) {
-      if (Validators.isFutureDate(dobText)) return SignupFieldError.dobFuture;
-      return dateOfBirth == null ? SignupFieldError.dobFormat : null;
-    }
-    return showValidation ? SignupFieldError.dobFormat : null;
-  }
-
   SignupFieldError? get termsError =>
       showValidation && !termsAccepted ? SignupFieldError.terms : null;
 
   /// The first field with an error, in screen order.
-  SignupFieldError? get firstError =>
-      nameError ??
-      genderError ??
-      dobError ??
-      stateError ??
-      cityError ??
-      addressError ??
-      pincodeError ??
-      termsError;
+  SignupFieldError? get firstError => nameError ?? termsError;
 
-  bool get isValid =>
-      Validators.isValidName(displayName) &&
-      gender != null &&
-      dateOfBirth != null &&
-      state != null &&
-      Validators.isValidCity(city) &&
-      Validators.isValidAddress(address) &&
-      Validators.isValidPincode(pincode) &&
-      termsAccepted;
+  bool get isValid => Validators.isValidName(displayName) && termsAccepted;
 
   bool get canSubmit => isValid && !isSubmitting;
 
@@ -118,11 +61,7 @@ class SignupFormState {
     String? chosenAvatarId,
     String? displayName,
     Gender? gender,
-    String? dobText,
-    String? state,
-    String? city,
-    String? address,
-    String? pincode,
+    bool clearGender = false,
     bool? termsViewed,
     bool? termsAccepted,
     bool? isSubmitting,
@@ -133,12 +72,7 @@ class SignupFormState {
     return SignupFormState(
       chosenAvatarId: chosenAvatarId ?? this.chosenAvatarId,
       displayName: displayName ?? this.displayName,
-      gender: gender ?? this.gender,
-      dobText: dobText ?? this.dobText,
-      state: state ?? this.state,
-      city: city ?? this.city,
-      address: address ?? this.address,
-      pincode: pincode ?? this.pincode,
+      gender: clearGender ? null : (gender ?? this.gender),
       termsViewed: termsViewed ?? this.termsViewed,
       termsAccepted: termsAccepted ?? this.termsAccepted,
       isSubmitting: isSubmitting ?? this.isSubmitting,
@@ -159,20 +93,9 @@ class SignupForm extends _$SignupForm {
 
   void setDisplayName(String value) => state = state.copyWith(displayName: value);
 
-  void setGender(Gender value) => state = state.copyWith(gender: value);
-
-  void setDobText(String value) => state = state.copyWith(dobText: value);
-
-  void setDateOfBirth(DateTime date) =>
-      state = state.copyWith(dobText: Validators.formatDate(date));
-
-  void setState(String value) => state = state.copyWith(state: value);
-
-  void setCity(String value) => state = state.copyWith(city: value);
-
-  void setAddress(String value) => state = state.copyWith(address: value);
-
-  void setPincode(String value) => state = state.copyWith(pincode: value);
+  /// Choosing the selected option again clears it, since gender is optional.
+  void setGender(Gender value) => state =
+      state.gender == value ? state.copyWith(clearGender: true) : state.copyWith(gender: value);
 
   void chooseAvatar(String avatarId) => state = state.copyWith(chosenAvatarId: avatarId);
 
@@ -187,8 +110,7 @@ class SignupForm extends _$SignupForm {
   /// Returns true when registration completed and the session now shows the new status.
   Future<bool> submit() async {
     final current = state;
-    final dateOfBirth = current.dateOfBirth;
-    if (!current.canSubmit || dateOfBirth == null) return false;
+    if (!current.canSubmit) return false;
 
     final repository = ref.read(authRepositoryProvider);
     final session = ref.read(sessionControllerProvider.notifier);
@@ -197,12 +119,7 @@ class SignupForm extends _$SignupForm {
       final result = await repository.completeSignup(
         SignupDetails(
           displayName: current.displayName.trim(),
-          gender: current.gender!,
-          dateOfBirth: dateOfBirth,
-          state: current.state!,
-          city: current.city.trim(),
-          address: current.address.trim(),
-          pincode: current.pincode,
+          gender: current.gender,
           avatarId: current.avatarId,
           termsAccepted: current.termsAccepted,
           consentGiven: current.termsAccepted,
@@ -211,9 +128,7 @@ class SignupForm extends _$SignupForm {
       );
       session.signedIn(result);
     } on ApiError catch (error) {
-      if (ref.mounted) {
-        state = state.copyWith(isSubmitting: false, error: error);
-      }
+      if (ref.mounted) state = state.copyWith(isSubmitting: false, error: error);
       return false;
     }
     if (ref.mounted) {

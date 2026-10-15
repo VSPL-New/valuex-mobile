@@ -19,8 +19,6 @@ String authErrorMessage(AppLocalizations l10n, Object error) {
     'ERROR_USER_NOT_FOUND' => l10n.authErrorUserNotFound,
     'ERROR_MOBILE_NOT_REGISTERED' => l10n.authErrorMobileNotRegistered,
     'ERROR_ACCOUNT_SUSPENDED' => l10n.authErrorAccountSuspended,
-    'ERROR_INVALID_ADDRESS_STATE' => l10n.authErrorInvalidAddressState,
-    'ERROR_INVALID_DATE_OF_BIRTH' => l10n.authErrorInvalidDob,
     'ERROR_TERMS_NOT_ACCEPTED' => l10n.authErrorTermsNotAccepted,
     'ERROR_CONSENT_REQUIRED' => l10n.authErrorConsentRequired,
     'ERROR_INVALID_AVATAR' => l10n.authErrorInvalidAvatar,

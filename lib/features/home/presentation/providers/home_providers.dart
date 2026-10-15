@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../core/constants/storage_keys.dart';
 import '../../../../core/storage/preferences_service.dart';
+import '../../../address/domain/saved_address.dart';
 import '../../data/device_location_service.dart';
 import '../../data/mock_home_repository.dart';
 import '../../domain/entities/home_badges.dart';
@@ -64,8 +65,9 @@ class LocationNeeded extends HomeLocationState {
   const LocationNeeded(this.reason);
 }
 
-/// The place Home measures "near you" from: an address the user chose, otherwise the device
-/// location when permission is given.
+/// The place Home measures "near you" from: one of the user's saved addresses, otherwise the
+/// device location when permission is given. The place is only used to find listings; it is kept
+/// on the device and never saved as an address.
 @Riverpod(keepAlive: true)
 class HomeLocationController extends _$HomeLocationController {
   @override
@@ -102,8 +104,10 @@ class HomeLocationController extends _$HomeLocationController {
     state = AsyncData(result);
   }
 
-  /// Uses an address the user typed; it is kept until they pick another place.
-  Future<void> useAddress(HomeLocation location) async {
+  /// Uses the city of a saved address; it is kept until the user picks another place.
+  Future<void> useSavedAddress(SavedAddress address) async {
+    final location =
+        HomeLocation(city: address.city, state: address.state, pincode: address.pincode);
     await ref
         .read(preferencesServiceProvider)
         .setString(StorageKeys.homeLocation, location.toJson());

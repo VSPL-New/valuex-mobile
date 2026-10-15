@@ -15,8 +15,8 @@ import '../../auth/presentation/widgets/avatar_image.dart';
 import '../../auth/presentation/widgets/avatar_picker_sheet.dart';
 import '../data/profile_repository.dart';
 
-/// Personal details behind the Profile page: read-only identity data plus editing of name,
-/// city and avatar.
+/// Personal details behind the Profile page: read-only identity data plus editing of name
+/// and avatar.
 class ProfileDetailsScreen extends ConsumerStatefulWidget {
   const ProfileDetailsScreen({super.key});
 
@@ -26,7 +26,6 @@ class ProfileDetailsScreen extends ConsumerStatefulWidget {
 
 class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
   final _name = TextEditingController();
-  final _city = TextEditingController();
   final _form = GlobalKey<FormState>();
   UserProfile? _updated;
   bool _editing = false;
@@ -36,12 +35,10 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
   @override
   void dispose() {
     _name.dispose();
-    _city.dispose();
     super.dispose();
   }
 
-  bool _dirty(UserProfile profile) =>
-      _name.text.trim() != (profile.displayName ?? '') || _city.text.trim() != (profile.city ?? '');
+  bool _dirty(UserProfile profile) => _name.text.trim() != (profile.displayName ?? '');
 
   Future<bool> _discard(UserProfile? profile) async {
     if (!_editing || profile == null || !_dirty(profile)) return true;
@@ -72,7 +69,6 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
 
   void _edit(UserProfile profile) {
     _name.text = profile.displayName ?? '';
-    _city.text = profile.city ?? '';
     setState(() {
       _editing = true;
       _error = null;
@@ -87,9 +83,7 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
     });
     try {
       final result = await ref.read(profileRepositoryProvider).update(
-            displayName:
-                _name.text.trim() == (profile.displayName ?? '') ? null : _name.text.trim(),
-            city: _city.text.trim() == (profile.city ?? '') ? null : _city.text.trim(),
+            displayName: _name.text.trim(),
           );
       if (!mounted) return;
       setState(() {
@@ -242,20 +236,6 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                                         : l10n.signupErrorName,
                                 onChanged: (_) => setState(() => _error = null),
                               ),
-                              const SizedBox(height: AppSpacing.md),
-                              TextFormField(
-                                controller: _city,
-                                enabled: !_busy,
-                                decoration: InputDecoration(
-                                  labelText: l10n.profileCity,
-                                  errorMaxLines: 3,
-                                ),
-                                validator: (value) => value?.trim() == (profile.city ?? '') ||
-                                        Validators.isValidCity(value ?? '')
-                                    ? null
-                                    : l10n.signupErrorCity,
-                                onChanged: (_) => setState(() => _error = null),
-                              ),
                               const SizedBox(height: AppSpacing.lg),
                               AppButton(
                                 label: l10n.profileSave,
@@ -266,10 +246,8 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                             ],
                           ),
                         )
-                      else ...[
+                      else
                         _detail(l10n.profileName, profile.displayName),
-                        _detail(l10n.profileCity, profile.city),
-                      ],
                       _detail(l10n.profileMobile, profile.mobile),
                       _detail(l10n.profileEmail, profile.email),
                       if (profile.aadhaarVerified)
@@ -282,10 +260,6 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                             'OTHERS' => l10n.avatarGroupNeutral,
                             _ => null,
                           }),
-                      _detail(l10n.profileDob, _date(profile.dateOfBirth)),
-                      _detail(l10n.profileState, profile.state),
-                      _detail(l10n.profileAddress, profile.address),
-                      _detail(l10n.profilePincode, profile.pincode),
                       _detail(
                         l10n.profileJoined,
                         profile.memberSince == null

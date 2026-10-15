@@ -29,14 +29,6 @@ void onMainNavSelected(
       context.go(RouteNames.profile);
     case BottomNavItem.sell:
       final session = ref.read(sessionControllerProvider).value;
-      if (session is Authenticated && !session.aadhaarVerified) {
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context).homeSellAadhaarRequired)),
-          );
-        return;
-      }
       if (session is! Authenticated) {
         context.go(RouteNames.createAccount);
         return;
