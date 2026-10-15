@@ -618,6 +618,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get homeSavedLocationUnnamed => 'सहेजा हुआ पता';
 
   @override
+  String get homeSavedLocationConfirm => 'यह पता इस्तेमाल करें';
+
+  @override
   String get homeFeatureComingSoon => 'यह जल्द आ रहा है';
 
   @override

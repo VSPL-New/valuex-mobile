@@ -185,6 +185,7 @@
   "homeSavedLocationEmpty": "आपकी कोई लोकेशन अभी सहेजी नहीं गई है। सामान खरीदने या बेचने पर आपका पता सहेजा जाता है।",
   "homeSavedLocationFailed": "आपकी सहेजी हुई लोकेशन लोड नहीं हो सकीं। फिर से कोशिश करें",
   "homeSavedLocationUnnamed": "सहेजा हुआ पता",
+  "homeSavedLocationConfirm": "यह पता इस्तेमाल करें",
   "homeFeatureComingSoon": "यह जल्द आ रहा है",
   "homeSellAadhaarRequired": "आगे बढ़ने के लिए कृपया आधार सत्यापन पूरा करें",
   "categoriesTitle": "सभी श्रेणियाँ",

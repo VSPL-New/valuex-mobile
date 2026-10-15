@@ -258,6 +258,7 @@
   "homeSavedLocationEmpty": "You have no saved locations yet. An address is saved when you buy or sell an item.",
   "homeSavedLocationFailed": "Unable to load your saved locations. Try again",
   "homeSavedLocationUnnamed": "Saved address",
+  "homeSavedLocationConfirm": "Use this address",
   "homeFeatureComingSoon": "This is coming soon",
   "homeSellAadhaarRequired": "Please complete Aadhaar verification to proceed",
   "categoriesTitle": "All categories",
