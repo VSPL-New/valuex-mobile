@@ -25,6 +25,7 @@ import '../../features/account_security/domain/account_security.dart';
 import '../../features/account_security/presentation/account_security_screen.dart';
 import '../../features/account_security/presentation/change_contact_screen.dart';
 import '../../features/notifications/presentation/notifications_screen.dart';
+import '../../features/listing/presentation/create_listing_screen.dart';
 import '../../features/profile/presentation/profile_details_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import 'route_guard.dart';
@@ -168,6 +169,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: RouteNames.notifications,
         name: 'notifications',
         builder: (context, state) => const NotificationsScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.sell,
+        name: 'sell',
+        builder: (context, state) => const CreateListingScreen(),
       ),
     ],
   );

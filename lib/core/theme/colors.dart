@@ -34,6 +34,15 @@ class AppColors {
   static const Color brandDivider = Color(0xFFDCE4E8);
   static const Color brandError = Color(0xFFC81E1E);
 
+  /// Success marks (tick badges); 3:1 against white.
+  static const Color brandSuccess = Color(0xFF16A34A);
+
+  // Sell flow (Figma: Create Listing, AI intro card)
+  static const Color sellAiCardStart = Color(0xFFEDE9FF);
+  static const Color sellAiCardEnd = Color(0xFFFBEAFF);
+  static const Color sellSparkle = Color(0xFFF59E0B);
+  static const Color sellAddTile = Color(0x142D6BFF);
+
   // Onboarding only (Figma: Just Qlic)
   static const Color onboardingSkipBackground = Color(0xFFE9E9FF);
   static const Color onboardingSkipText = Color(0xFF4A4AE0);
