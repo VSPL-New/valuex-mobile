@@ -37,17 +37,12 @@ const _json = {
   'status': 'ACTIVE',
   'aadhaarVerified': true,
   'displayName': 'Abhay Kumar',
-  'city': 'Pune',
   'mobile': '90XXXX0010',
   'email': 'a***@gmail.com',
   'avatarId': 'avatar-02',
   'aadhaarName': 'Verified Person',
   'memberSince': '2026-08-07T12:00:00Z',
   'gender': 'MALE',
-  'dateOfBirth': '1990-01-02',
-  'state': 'Maharashtra',
-  'address': 'Example Road 123',
-  'pincode': '411001',
 };
 
 class _MockProfileRepository extends Mock implements ProfileRepository {}
@@ -89,13 +84,10 @@ void main() {
       expect(profile.mobile, '90XXXX0010');
       expect(profile.aadhaarName, 'Verified Person');
       expect(profile.memberSince, DateTime.utc(2026, 8, 7, 12));
-      expect(profile.dateOfBirth, '1990-01-02');
-      expect(profile.address, 'Example Road 123');
-      expect(profile.state, 'Maharashtra');
-      expect(profile.pincode, '411001');
+      expect(profile.gender, 'MALE');
     });
 
-    test('PATCH sends only changed fields and leaves tokens untouched', () async {
+    test('PATCH sends only the display name and leaves tokens untouched', () async {
       await repository.update(displayName: 'New Name');
       final request = adapter.requests.single;
       expect(request.method, 'PATCH');
@@ -104,11 +96,6 @@ void main() {
       expect(request.headers['Authorization'], 'Bearer access');
       expect(storage.accessToken, 'access');
       expect(storage.refreshToken, 'refresh');
-    });
-
-    test('city-only update does not include identity or name', () async {
-      await repository.update(city: 'Mumbai');
-      expect(adapter.requests.single.data, {'city': 'Mumbai'});
     });
 
     test('catalog comes from backend and avatar uses PUT', () async {
@@ -211,7 +198,6 @@ void main() {
       await showProfile(tester);
       expect(find.text('Abhay Kumar'), findsOneWidget);
       expect(find.text('90XXXX0010'), findsOneWidget);
-      expect(find.text('Pune'), findsOneWidget);
       expect(find.text('32 transactions'), findsOneWidget);
       expect(find.text('4.8'), findsNWidgets(2));
       for (final label in ['Listings', 'Sold', 'Reviews']) {
@@ -415,6 +401,16 @@ void main() {
       await harness.dispose();
     });
 
+    testWidgets('My Addresses is listed under Account and answers with the coming soon message',
+        (tester) async {
+      await showProfile(tester);
+      await tester.scrollUntilVisible(find.text('My Addresses'), 200);
+      await tester.tap(find.text('My Addresses'));
+      await tester.pump();
+      expect(find.text('This is coming soon'), findsOneWidget);
+      await harness.dispose();
+    });
+
     testWidgets('Home tab leaves the profile page', (tester) async {
       await showProfile(tester);
       await tester.tap(find.text('Home'));
@@ -456,8 +452,7 @@ void main() {
       await harness.settle();
       await tester.tap(find.text('Save changes'));
       await harness.settle();
-      verifyNever(() =>
-          repository.update(displayName: any(named: 'displayName'), city: any(named: 'city')));
+      verifyNever(() => repository.update(displayName: any(named: 'displayName')));
       await harness.dispose();
     });
 
@@ -542,7 +537,7 @@ void main() {
 
     testWidgets('edit saves only a changed name and shows server response', (tester) async {
       await showDetails(tester);
-      when(() => repository.update(displayName: 'New Name', city: null)).thenAnswer((_) async {
+      when(() => repository.update(displayName: 'New Name')).thenAnswer((_) async {
         profile = UserProfileModel.fromJson({..._json, 'displayName': 'New Name'}).toEntity();
         return profile;
       });
@@ -552,7 +547,7 @@ void main() {
       await tester.pump();
       await tester.tap(find.text('Save changes'));
       await harness.settle();
-      verify(() => repository.update(displayName: 'New Name', city: null)).called(1);
+      verify(() => repository.update(displayName: 'New Name')).called(1);
       expect(find.text('New Name'), findsOneWidget);
       expect(find.text('Profile updated'), findsOneWidget);
       await harness.dispose();
@@ -567,14 +562,13 @@ void main() {
       await tester.tap(find.text('Save changes'));
       await harness.settle();
       expect(find.text('Enter 3 to 50 letters'), findsOneWidget);
-      verifyNever(() =>
-          repository.update(displayName: any(named: 'displayName'), city: any(named: 'city')));
+      verifyNever(() => repository.update(displayName: any(named: 'displayName')));
       await harness.dispose();
     });
 
     testWidgets('failed save keeps draft and allows retry', (tester) async {
       await showDetails(tester);
-      when(() => repository.update(displayName: 'New Name', city: null)).thenThrow(
+      when(() => repository.update(displayName: 'New Name')).thenThrow(
         const ApiError(type: ApiErrorType.network, message: 'offline'),
       );
       await tester.tap(find.byTooltip('Edit profile'));
@@ -585,7 +579,7 @@ void main() {
       await harness.settle();
       expect(tester.widget<TextFormField>(find.byType(TextFormField).first).controller!.text,
           'New Name');
-      expect(find.byType(TextFormField), findsNWidgets(2));
+      expect(find.byType(TextFormField), findsOneWidget);
       await harness.dispose();
     });
 
@@ -600,7 +594,7 @@ void main() {
       expect(find.text('Discard changes?'), findsOneWidget);
       await tester.tap(find.text('Keep editing'));
       await harness.settle();
-      expect(find.byType(TextFormField), findsNWidgets(2));
+      expect(find.byType(TextFormField), findsOneWidget);
       await harness.dispose();
     });
 

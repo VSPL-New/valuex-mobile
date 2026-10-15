@@ -2,21 +2,19 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
-import '../../../../core/widgets/field_error.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/gender.dart';
 
-/// Three choices in a row: Male, Female, Others. Exposed as one radio group.
+/// Three optional choices in a row: Male, Female, Others. Exposed as one radio group; choosing
+/// the selected one again is handled by the caller.
 class GenderSelector extends StatelessWidget {
   final Gender? value;
   final ValueChanged<Gender> onChanged;
-  final String? errorText;
 
   const GenderSelector({
     super.key,
     required this.value,
     required this.onChanged,
-    this.errorText,
   });
 
   @override
@@ -28,7 +26,6 @@ class GenderSelector extends StatelessWidget {
       Gender.others: l10n.genderOthers,
     };
 
-    final errorText = this.errorText;
     // Three chips in a row no longer fit at large text; stack them instead of breaking words.
     final stacked = MediaQuery.textScalerOf(context).scale(16) > 16 * 1.25;
     return Semantics(
@@ -42,7 +39,6 @@ class GenderSelector extends StatelessWidget {
               _GenderChip(
                 label: labels[gender]!,
                 selected: gender == value,
-                hasError: errorText != null,
                 onTap: () => onChanged(gender),
               ),
             ]
@@ -55,17 +51,12 @@ class GenderSelector extends StatelessWidget {
                     child: _GenderChip(
                       label: labels[gender]!,
                       selected: gender == value,
-                      hasError: errorText != null,
                       onTap: () => onChanged(gender),
                     ),
                   ),
                 ],
               ],
             ),
-          if (errorText != null) ...[
-            const SizedBox(height: AppSpacing.sm),
-            FieldError(text: errorText),
-          ],
         ],
       ),
     );
@@ -75,13 +66,11 @@ class GenderSelector extends StatelessWidget {
 class _GenderChip extends StatelessWidget {
   final String label;
   final bool selected;
-  final bool hasError;
   final VoidCallback onTap;
 
   const _GenderChip({
     required this.label,
     required this.selected,
-    required this.hasError,
     required this.onTap,
   });
 
@@ -108,12 +97,8 @@ class _GenderChip extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: radius,
               border: Border.all(
-                color: selected
-                    ? AppColors.brandPrimary
-                    : hasError
-                        ? AppColors.brandError
-                        : AppColors.brandControlBorder,
-                width: selected || hasError ? 2 : 1,
+                color: selected ? AppColors.brandPrimary : AppColors.brandControlBorder,
+                width: selected ? 2 : 1,
               ),
             ),
             child: Text(

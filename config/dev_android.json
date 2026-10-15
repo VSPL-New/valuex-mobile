@@ -2,5 +2,6 @@
   "ENV": "dev",
   "API_BASE_URL": "http://10.0.2.2:8080/api/v1",
   "AADHAAR_FLOW": "sandbox",
-  "GOOGLE_SIGN_IN": "mock"
+  "GOOGLE_SIGN_IN": "mock",
+  "ADDRESS_SEARCH": "mock"
 }

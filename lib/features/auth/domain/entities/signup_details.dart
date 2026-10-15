@@ -3,12 +3,9 @@ import 'gender.dart';
 /// What the Sign Up form submits to complete registration.
 class SignupDetails {
   final String displayName;
-  final Gender gender;
-  final DateTime dateOfBirth;
-  final String state;
-  final String city;
-  final String address;
-  final String pincode;
+
+  /// Optional; the backend stores nothing when it is null.
+  final Gender? gender;
   final String avatarId;
   final bool termsAccepted;
   final bool consentGiven;
@@ -16,12 +13,7 @@ class SignupDetails {
 
   const SignupDetails({
     required this.displayName,
-    required this.gender,
-    required this.dateOfBirth,
-    required this.state,
-    required this.city,
-    required this.address,
-    required this.pincode,
+    this.gender,
     required this.avatarId,
     required this.termsAccepted,
     required this.consentGiven,

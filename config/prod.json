@@ -4,5 +4,7 @@
   "AADHAAR_FLOW": "thirdparty",
   "GOOGLE_SIGN_IN": "native",
   "GOOGLE_SERVER_CLIENT_ID": "replace-before-use.invalid",
-  "GOOGLE_IOS_CLIENT_ID": "replace-before-use.invalid"
+  "GOOGLE_IOS_CLIENT_ID": "replace-before-use.invalid",
+  "ADDRESS_SEARCH": "google",
+  "GOOGLE_PLACES_API_KEY": "replace-before-use.invalid"
 }

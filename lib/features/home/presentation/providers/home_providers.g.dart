@@ -228,18 +228,21 @@ final class FeaturedListingsProvider
 
 String _$featuredListingsHash() => r'96315245719bc121925bf7836cc195478be804d6';
 
-/// The place Home measures "near you" from: an address the user chose, otherwise the device
-/// location when permission is given.
+/// The place Home measures "near you" from: one of the user's saved addresses, otherwise the
+/// device location when permission is given. The place is only used to find listings; it is kept
+/// on the device and never saved as an address.
 
 @ProviderFor(HomeLocationController)
 const homeLocationControllerProvider = HomeLocationControllerProvider._();
 
-/// The place Home measures "near you" from: an address the user chose, otherwise the device
-/// location when permission is given.
+/// The place Home measures "near you" from: one of the user's saved addresses, otherwise the
+/// device location when permission is given. The place is only used to find listings; it is kept
+/// on the device and never saved as an address.
 final class HomeLocationControllerProvider
     extends $AsyncNotifierProvider<HomeLocationController, HomeLocationState> {
-  /// The place Home measures "near you" from: an address the user chose, otherwise the device
-  /// location when permission is given.
+  /// The place Home measures "near you" from: one of the user's saved addresses, otherwise the
+  /// device location when permission is given. The place is only used to find listings; it is kept
+  /// on the device and never saved as an address.
   const HomeLocationControllerProvider._()
       : super(
           from: null,
@@ -259,10 +262,11 @@ final class HomeLocationControllerProvider
   HomeLocationController create() => HomeLocationController();
 }
 
-String _$homeLocationControllerHash() => r'0e848525a52551a56d2a7ead379251fe804dd8be';
+String _$homeLocationControllerHash() => r'c931ef2a5688e438c5b60630b4e7a3a43731eaf2';
 
-/// The place Home measures "near you" from: an address the user chose, otherwise the device
-/// location when permission is given.
+/// The place Home measures "near you" from: one of the user's saved addresses, otherwise the
+/// device location when permission is given. The place is only used to find listings; it is kept
+/// on the device and never saved as an address.
 
 abstract class _$HomeLocationController extends $AsyncNotifier<HomeLocationState> {
   FutureOr<HomeLocationState> build();

@@ -239,16 +239,11 @@ void main() {
       expect(adapter.requests[1].path, '/auth/aadhaar/verify');
     });
 
-    test('complete sign up posts the profile with an ISO date of birth', () async {
+    test('complete sign up posts the profile', () async {
       await dataSource.completeSignup(
-        SignupDetails(
+        const SignupDetails(
           displayName: 'Asha Verma',
           gender: Gender.female,
-          dateOfBirth: DateTime(1995, 5, 7),
-          state: 'Assam',
-          city: 'Guwahati',
-          address: '12 GS Road, Dispur',
-          pincode: '781005',
           avatarId: 'avatar-05',
           termsAccepted: true,
           consentGiven: true,
@@ -262,16 +257,27 @@ void main() {
       expect(request.data, {
         'displayName': 'Asha Verma',
         'gender': 'FEMALE',
-        'dateOfBirth': '1995-05-07',
-        'state': 'Assam',
-        'city': 'Guwahati',
-        'address': '12 GS Road, Dispur',
-        'pincode': '781005',
         'avatarId': 'avatar-05',
         'termsAccepted': true,
         'consentGiven': true,
         'termsVersion': 'template-0',
       });
+    });
+
+    test('complete sign up leaves the gender out when none was chosen', () async {
+      await dataSource.completeSignup(
+        const SignupDetails(
+          displayName: 'Asha Verma',
+          avatarId: 'avatar-09',
+          termsAccepted: true,
+          consentGiven: true,
+          termsVersion: 'template-0',
+        ),
+      );
+
+      final body = adapter.requests.single.data as Map<String, dynamic>;
+      expect(body.containsKey('gender'), isFalse);
+      expect(body.containsKey('dateOfBirth'), isFalse);
     });
 
     test('skip Aadhaar and profile use their endpoints', () async {
@@ -518,14 +524,9 @@ void main() {
     });
 
     test('completing sign up stores the activated session', () async {
-      final details = SignupDetails(
+      const details = SignupDetails(
         displayName: 'Asha Verma',
         gender: Gender.female,
-        dateOfBirth: DateTime(1995, 5, 17),
-        state: 'Assam',
-        city: 'Guwahati',
-        address: '12 GS Road, Dispur',
-        pincode: '781005',
         avatarId: 'avatar-05',
         termsAccepted: true,
         consentGiven: true,

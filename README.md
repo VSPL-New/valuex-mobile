@@ -62,7 +62,7 @@ flutter run -d <device-id> --dart-define-from-file=config/dev_ios.json       # i
 | `config/staging.json` | staging | placeholder host, replace before use |
 | `config/prod.json` | production | placeholder host, replace before use |
 
-Keys: `ENV` (`dev`, `staging`, `prod`), `API_BASE_URL` (https outside dev), `AADHAAR_FLOW` (`sandbox` or `thirdparty`; `sandbox` is rejected in prod), `GOOGLE_SIGN_IN` (`mock` or `native`; `mock` is rejected in prod and is the default), `GOOGLE_SERVER_CLIENT_ID` (required for `native`) and `GOOGLE_IOS_CLIENT_ID` (optional). The files hold public values only, never secrets. The same flag works for `flutter build`. VS Code launch entries are in `.vscode/launch.json`.
+Keys: `ENV` (`dev`, `staging`, `prod`), `API_BASE_URL` (https outside dev), `AADHAAR_FLOW` (`sandbox` or `thirdparty`; `sandbox` is rejected in prod), `GOOGLE_SIGN_IN` (`mock` or `native`; `mock` is rejected in prod and is the default), `GOOGLE_SERVER_CLIENT_ID` (required for `native`) and `GOOGLE_IOS_CLIENT_ID` (optional), `ADDRESS_SEARCH` (`mock` or `google`; `mock` is the default and is rejected in prod) and `GOOGLE_PLACES_API_KEY` (required for `google`). The files hold public values only, never secrets. The same flag works for `flutter build`. VS Code launch entries are in `.vscode/launch.json`.
 
 Hot reload: `r`, hot restart: `R`, quit: `q`.
 
@@ -109,7 +109,7 @@ yet (no push in the app), so badges refresh on visit and on pull down only.
 
 Home's Profile tab opens `/profile` for signed-in users; guests are routed to Sign In.
 The page follows the Figma Make `ProfileScreen`: a header (avatar, name with a verified mark,
-masked mobile, rating, transactions, city, edit button), the plan badge or Upgrade to Premium
+masked mobile, rating, transactions, edit button), the plan badge or Upgrade to Premium
 invite, the Listings/Sold/Reviews tiles, the Buying, Selling and Account menus, Sign Out and the
 main navigation. Menu rows and Upgrade are not built yet and answer with a passing
 "coming soon" message. Rating, transactions, listings, sold and plan come from
@@ -118,15 +118,19 @@ mock values from Figma Make. Replace that provider with real data when the ratin
 listing and subscription stories are built.
 
 The edit button opens `/profile/details`, which reads `GET /users/me`, shows the server's masked
-mobile/email and joined date, and keeps verified Aadhaar name and other identity/address fields
-read-only. Edit profile sends only changed display-name/city fields with `PATCH /users/me`.
+mobile/email and joined date, and keeps the verified Aadhaar name read-only. The profile has no
+city, state, address, pincode or date of birth (design change 2026-10-15). Edit profile changes
+only the name and avatar; `PATCH /users/me` sends only `displayName`.
+
+Profile > Account has a "My Addresses" row that only shows the passing "coming soon" message for
+now (US-113).
 
 Change avatar reads `GET /avatars`, displays only the returned catalog IDs using the existing
 bundled avatar renderer, and requires confirmation before `PUT /users/me/avatar`. A removed
 avatar remains displayed until another is selected; a rejected selection preserves the current
 avatar. Failed edits retain the draft, and leaving an edited profile asks before discarding changes.
 
-The backend only validates city format, not Indian geography. Ratings and viewing another user's
+The backend only validates the display name on `PATCH`. Ratings and viewing another user's
 profile are deferred backend capabilities. Security settings are
 covered under Account Security (US-105). The existing avatar illustrations are placeholders pending final artwork.
 Backend profile PATCH validation also differs from registration for Unicode combining marks;
@@ -135,7 +139,7 @@ server rejections are displayed rather than treated as successful saves.
 Verification: `flutter test test/features/profile/profile_test.dart` covers repository payloads,
 navigation, retry, partial edits, avatar confirmation/rejection, accessibility and large-text layout.
 For manual testing, use an existing authenticated account, open Profile, edit one field, save,
-reopen and confirm persistence. Cancel a changed draft, try invalid names/cities, and test avatars
+reopen and confirm persistence. Cancel a changed draft, try invalid names, and test avatars
 with a modified server catalog. Do not reset the simulator Keychain to switch test users; use the
 debug-only `CLEAR_LOCAL_SESSION` launch flag.
 
@@ -156,7 +160,7 @@ The device is always signed out, even if the call fails:
   (valid for 1 h at most) stays on the device.
 - **Expired session (401):** treated as already logged out.
 
-Logout also clears the saved Home address and any unfinished sign-up state so the next person
+Logout also clears the saved Home location and any unfinished sign-up state so the next person
 on a shared device does not see them (`LogoutAction`). The "session expired" notice is
 suppressed during a deliberate logout.
 
@@ -232,6 +236,39 @@ the unread count comes in the `X-Unread-Notifications` response header) and show
 
 Notification text is shown as the backend sends it (English). Push, notification preferences and
 quiet hours are not built (US-087); the backend sends only account events today.
+
+## Address entry and verification (US-108)
+
+Design change 2026-10-15: Sign Up and Home no longer enter or verify an address. Sign Up collects
+only the avatar, name, optional gender, terms and consent. The address search field, verification
+status and state picker (`lib/features/address`) are kept for reuse when an address is saved at
+checkout (US-020) and when posting an item (US-004); nothing saves an address yet.
+
+The **Search your address** field starts after 3 characters and a 300 ms pause, lists up to 5
+suggestions restricted to India, and picking one fills the fields below it, which stay editable.
+The address, landmark, city, state and pincode are checked with `POST /addresses/verify` 700 ms
+after the user stops editing, and the status shows under the address: checking, verified, refused
+(with the reason) or "can't check right now". Editing a field drops the chosen place, so `placeId`
+is sent only while the fields are exactly what the suggestion filled in.
+
+- **Home location (US-111):** the location header opens a sheet with exactly two options, "Use my
+  current location" and "Use my saved location". There is no address entry, Places search or
+  verification on Home. "Use my saved location" opens a pop-up (`saved_location_dialog.dart`)
+  listing the saved addresses (name and full address) from `GET /users/me/addresses`; picking one
+  uses only its city, state and pincode to find listings near it. With no saved address the pop-up
+  says an address is saved when the user buys or sells. The chosen place is kept on the device
+  only, never saved as an address or sent to the server.
+- **Search modes:** `ADDRESS_SEARCH=mock` (default; a small built-in list of Indian addresses, needs
+  no key, rejected in prod) or `google` (Places API (New) called directly from the app; needs
+  `GOOGLE_PLACES_API_KEY`). Restrict the key to the Places API and to the app: the app sends
+  `X-Ios-Bundle-Identifier` on iOS and `X-Android-Package` plus `X-Android-Cert` (set
+  `GOOGLE_PLACES_ANDROID_CERT` to the signing certificate SHA-1) on Android. With `google` the
+  suggestion list shows "Powered by Google"; confirm the attribution rules before release.
+- **Manual entry always works:** when the search fails or finds nothing the field says so and the
+  form below is used as before.
+- **Try it with the sandbox backend:** an address line containing `unverified` is refused, one
+  containing `unavailable` simulates a provider outage, and a pincode that does not fit the state's
+  postal zone is refused.
 
 ## Project structure
 

@@ -21,7 +21,6 @@ import 'package:valuex_mobile/features/auth/presentation/screens/signup_mobile_s
 import 'package:valuex_mobile/features/auth/presentation/screens/signup_profile_screen.dart';
 import 'package:valuex_mobile/features/auth/presentation/screens/verify_email_otp_screen.dart';
 import 'package:valuex_mobile/features/auth/presentation/screens/verify_mobile_otp_screen.dart';
-import 'package:valuex_mobile/features/auth/presentation/widgets/state_picker_field.dart';
 import 'package:valuex_mobile/features/home/presentation/home_screen.dart';
 import 'package:valuex_mobile/features/onboarding/presentation/onboarding_screen.dart';
 
@@ -123,14 +122,6 @@ void main() {
     expect(find.byType(SignupProfileScreen), findsOneWidget);
     await type('Your full name', 'Asha Verma');
     await press(find.text('Female'));
-    await type('DD/MM/YYYY', '17051995');
-    await press(find.byType(StatePickerField));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Assam'));
-    await tester.pumpAndSettle();
-    await type('Your city', 'Guwahati');
-    await type('House number, street, area', '12 GS Road, Dispur');
-    await type('6-digit pincode', '781005');
     await press(find.text('Terms and Conditions'));
     await _settle(tester);
     await tester.tap(find.byTooltip('Close'));

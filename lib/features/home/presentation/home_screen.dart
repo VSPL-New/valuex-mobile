@@ -21,6 +21,7 @@ import 'widgets/listing_card.dart';
 import 'widgets/location_prompt.dart';
 import 'widgets/location_sheet.dart';
 import 'widgets/promo_carousel.dart';
+import 'widgets/saved_location_dialog.dart';
 import 'widgets/section_header.dart';
 
 /// Home: location, search, promo, categories and featured deals near the user.
@@ -94,7 +95,7 @@ class HomeScreen extends ConsumerWidget {
                       need: needed.reason,
                       onUseLocation: controller.useDeviceLocation,
                       onOpenSettings: controller.openSettings,
-                      onEnterAddress: () => showLocationSheet(context),
+                      onUseSaved: () => showSavedLocationDialog(context),
                     ),
                     const SizedBox(height: AppSpacing.md),
                   ],

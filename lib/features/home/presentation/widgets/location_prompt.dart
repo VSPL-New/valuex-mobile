@@ -13,14 +13,14 @@ class LocationPrompt extends StatelessWidget {
   final LocationNeed need;
   final VoidCallback onUseLocation;
   final VoidCallback onOpenSettings;
-  final VoidCallback onEnterAddress;
+  final VoidCallback onUseSaved;
 
   const LocationPrompt({
     super.key,
     required this.need,
     required this.onUseLocation,
     required this.onOpenSettings,
-    required this.onEnterAddress,
+    required this.onUseSaved,
   });
 
   @override
@@ -58,7 +58,7 @@ class LocationPrompt extends StatelessWidget {
               onPressed: needsSettings ? onOpenSettings : onUseLocation,
             ),
             const SizedBox(height: AppSpacing.sm),
-            SingleToneButton(label: l10n.homeEnterAddress, onPressed: onEnterAddress),
+            SingleToneButton(label: l10n.homeUseSavedLocation, onPressed: onUseSaved),
           ],
         ),
       ),

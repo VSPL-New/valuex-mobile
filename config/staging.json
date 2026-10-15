@@ -2,5 +2,7 @@
   "ENV": "staging",
   "API_BASE_URL": "https://staging-api.example.invalid/api/v1",
   "AADHAAR_FLOW": "sandbox",
-  "GOOGLE_SIGN_IN": "mock"
+  "GOOGLE_SIGN_IN": "mock",
+  "ADDRESS_SEARCH": "google",
+  "GOOGLE_PLACES_API_KEY": "replace-before-use.invalid"
 }

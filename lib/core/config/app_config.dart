@@ -8,6 +8,9 @@ enum AadhaarFlow { sandbox, thirdParty }
 /// `native` shows the real Google account chooser.
 enum GoogleSignInMode { mock, native }
 
+/// `mock` suggests made-up Indian addresses without a key; `google` calls Google Places.
+enum AddressSearchMode { mock, google }
+
 class AppConfigException implements Exception {
   final String message;
 
@@ -30,6 +33,14 @@ class AppConfig {
   /// OAuth iOS client ID; empty when it is supplied through Info.plist instead.
   final String googleIosClientId;
 
+  final AddressSearchMode addressSearch;
+
+  /// Google Places API key, restricted per platform in Google Cloud; empty for the mock search.
+  final String googlePlacesApiKey;
+
+  /// SHA-1 of the Android signing certificate, sent so an Android-restricted key accepts the call.
+  final String googlePlacesAndroidCert;
+
   const AppConfig._({
     required this.env,
     required this.apiBaseUrl,
@@ -37,6 +48,9 @@ class AppConfig {
     required this.googleSignIn,
     required this.googleServerClientId,
     required this.googleIosClientId,
+    required this.addressSearch,
+    required this.googlePlacesApiKey,
+    required this.googlePlacesAndroidCert,
   });
 
   factory AppConfig.fromEnvironment() {
@@ -47,6 +61,9 @@ class AppConfig {
       googleSignIn: const String.fromEnvironment('GOOGLE_SIGN_IN', defaultValue: 'mock'),
       googleServerClientId: const String.fromEnvironment('GOOGLE_SERVER_CLIENT_ID'),
       googleIosClientId: const String.fromEnvironment('GOOGLE_IOS_CLIENT_ID'),
+      addressSearch: const String.fromEnvironment('ADDRESS_SEARCH', defaultValue: 'mock'),
+      googlePlacesApiKey: const String.fromEnvironment('GOOGLE_PLACES_API_KEY'),
+      googlePlacesAndroidCert: const String.fromEnvironment('GOOGLE_PLACES_ANDROID_CERT'),
     );
   }
 
@@ -57,6 +74,9 @@ class AppConfig {
     String googleSignIn = 'mock',
     String googleServerClientId = '',
     String googleIosClientId = '',
+    String addressSearch = 'mock',
+    String googlePlacesApiKey = '',
+    String googlePlacesAndroidCert = '',
   }) {
     final parsedEnv = switch (env) {
       'dev' => AppEnv.dev,
@@ -84,6 +104,14 @@ class AppConfig {
         ),
     };
 
+    final parsedSearch = switch (addressSearch) {
+      'mock' => AddressSearchMode.mock,
+      'google' => AddressSearchMode.google,
+      _ => throw AppConfigException(
+          'ADDRESS_SEARCH must be mock or google (got "$addressSearch")',
+        ),
+    };
+
     final uri = Uri.tryParse(apiBaseUrl);
     if (uri == null || !uri.hasAuthority || uri.host.isEmpty) {
       throw const AppConfigException('API_BASE_URL is missing or invalid');
@@ -96,6 +124,13 @@ class AppConfig {
     }
     if (parsedEnv == AppEnv.prod && parsedGoogle == GoogleSignInMode.mock) {
       throw const AppConfigException('The mock Google sign-in is not allowed in prod');
+    }
+    if (parsedEnv == AppEnv.prod && parsedSearch == AddressSearchMode.mock) {
+      throw const AppConfigException('The mock address search is not allowed in prod');
+    }
+    if (parsedSearch == AddressSearchMode.google && googlePlacesApiKey.isEmpty) {
+      throw const AppConfigException(
+          'GOOGLE_PLACES_API_KEY is required for the Google address search');
     }
     if (parsedGoogle == GoogleSignInMode.native && googleServerClientId.isEmpty) {
       throw const AppConfigException(
@@ -110,6 +145,9 @@ class AppConfig {
       googleSignIn: parsedGoogle,
       googleServerClientId: googleServerClientId,
       googleIosClientId: googleIosClientId,
+      addressSearch: parsedSearch,
+      googlePlacesApiKey: googlePlacesApiKey,
+      googlePlacesAndroidCert: googlePlacesAndroidCert,
     );
   }
 
@@ -118,6 +156,8 @@ class AppConfig {
   bool get useAadhaarSandbox => aadhaarFlow == AadhaarFlow.sandbox;
 
   bool get useMockGoogleSignIn => googleSignIn == GoogleSignInMode.mock;
+
+  bool get useMockAddressSearch => addressSearch == AddressSearchMode.mock;
 }
 
 final appConfigProvider = Provider<AppConfig>(

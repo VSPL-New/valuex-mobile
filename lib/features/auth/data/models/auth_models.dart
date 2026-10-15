@@ -112,14 +112,9 @@ class UserProfileModel {
   final String? email;
   final String? displayName;
   final String? avatarId;
-  final String? city;
   final String? aadhaarName;
   final DateTime? memberSince;
   final String? gender;
-  final String? dateOfBirth;
-  final String? state;
-  final String? address;
-  final String? pincode;
 
   const UserProfileModel({
     required this.userId,
@@ -129,14 +124,9 @@ class UserProfileModel {
     this.email,
     this.displayName,
     this.avatarId,
-    this.city,
     this.aadhaarName,
     this.memberSince,
     this.gender,
-    this.dateOfBirth,
-    this.state,
-    this.address,
-    this.pincode,
   });
 
   factory UserProfileModel.fromJson(Object? json) {
@@ -149,14 +139,9 @@ class UserProfileModel {
       email: map['email'] as String?,
       displayName: map['displayName'] as String?,
       avatarId: map['avatarId'] as String?,
-      city: map['city'] as String?,
       aadhaarName: map['aadhaarName'] as String?,
       memberSince: DateTime.tryParse(map['memberSince'] as String? ?? ''),
       gender: map['gender'] as String?,
-      dateOfBirth: map['dateOfBirth'] as String?,
-      state: map['state'] as String?,
-      address: map['address'] as String?,
-      pincode: map['pincode'] as String?,
     );
   }
 
@@ -169,14 +154,9 @@ class UserProfileModel {
       email: email,
       displayName: displayName,
       avatarId: avatarId,
-      city: city,
       aadhaarName: aadhaarName,
       memberSince: memberSince,
       gender: gender,
-      dateOfBirth: dateOfBirth,
-      state: state,
-      address: address,
-      pincode: pincode,
     );
   }
 }

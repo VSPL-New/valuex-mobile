@@ -1,6 +1,6 @@
 # US-001 Mobile Implementation Plan — User Registration (v3)
 
-**Status:** v3.1, your answers of 2026-10-05 incorporated (section 11). **Implementation progress:** phases 1 to 8 implemented (foundation, auth data and domain, session and resume routing, mobile and email OTP, Aadhaar with screenshot protection, Sign Up, tests). Open: native review of Hindi strings, design review of the new components, real-device and iOS checks, final avatar artwork. One decision is still open (third-party Aadhaar provider) and does not block implementation.
+**Status:** v3.2 (design change 2026-10-15, see D21: Sign Up no longer collects an address or date of birth, and gender is optional; v3.1 text below is kept for history and marked superseded where it changed). v3.1, your answers of 2026-10-05 incorporated (section 11). **Implementation progress:** phases 1 to 8 implemented (foundation, auth data and domain, session and resume routing, mobile and email OTP, Aadhaar with screenshot protection, Sign Up, tests). Open: native review of Hindi strings, design review of the new components, real-device and iOS checks, final avatar artwork. One decision is still open (third-party Aadhaar provider) and does not block implementation.
 **Governing rule:** `Documents/CODING_STANDARDS.md` (§1 all repos, §3 Flutter). The two exceptions recorded in v2 (localization, screenshot protection) are **rejected**; this plan follows the standards.
 **Branch:** `feature/us-001-user-registration-mobile` (from `main`)
 **Related:** `Documents/user-stories.md` (US-001, US-108), `Documents/LLD/Sprint-1-Identity-User-Management-LLD.md`, `Documents/US-001-Testing-Guide.md`, `docs/Flutter-Design-System.md`.
@@ -11,7 +11,7 @@
 
 | # | Decision | Effect |
 |---|---|---|
-| D1 | "Create your profile" (Figma `3:330`) **is the Sign Up screen**, and it is the **last** step of registration (after mobile, email and Aadhaar). | One form captures profile, address and terms. Backend must store the new fields (section 6). |
+| D1 | "Create your profile" (Figma `3:330`) **is the Sign Up screen**, and it is the **last** step of registration (after mobile, email and Aadhaar). | One form captures profile, address and terms (address superseded by D21). Backend must store the new fields (section 6). |
 | D2 | **Do not change the mobile number page.** Terms and consent are collected on Sign Up. The "Terms and Conditions" link opens a T&C page; the acceptance toggle is **disabled until the user has opened and closed that page**. A template T&C page is built now; legal text comes later. | Backend stops requiring terms and consent at `register/initiate` (BR-2). |
 | D3 | Remove "Skip for now" from the email page; it must **look consistent with the mobile number page**. | Email entry mirrors `SignupMobileScreen`. |
 | D4 | **Separate OTP screens for mobile and email.** Aadhaar verification will be done by a **third party**; the Aadhaar OTP screen is **development only** until that integration exists, and is **visibly marked** as such. | `VerifyMobileOtpScreen`, `VerifyEmailOtpScreen`; `AadhaarDevOtpScreen` (section 4, screen 6). |
@@ -23,14 +23,15 @@
 | D10 | **Design conflicts:** use our brand tokens; review with you before any deviation. New components with no Figma design (gender selector, date-of-birth field, avatar picker) are proposed in the theme styling and **approved by you after a screenshot** (design system section 6.1). | Section 5. |
 | D11 | **New account state `SIGNUP_PENDING`** (renamed from `PROFILE_PENDING`). **I implement the backend changes** in a separate branch and PR in `valuex-backend`. | Section 6. |
 | D12 | **One toggle** covers terms and data-processing consent. | `register/complete` sets both from it. |
-| D13 | Sign Up adds **Gender** (Male, Female, Others), **Date of Birth** (typed or picked from a calendar) and **Pincode**. The avatar can be changed from a **set of avatars**; a **default avatar depends on gender**. | Section 4 screen 7; BR-1, BR-3, BR-6. |
-| D14 | **Address** gets its own story: **US-108** (Google Places Autocomplete plus a backend address verification API), now in `user-stories.md` and Sprint 1 of `Sprint-plan.md`. Sign Up uses **manual** State, City, Address and Pincode until US-108 ships. | Section 2. |
+| D13 | **Superseded by D21 (Gender optional; Date of Birth and Pincode removed).** Sign Up adds **Gender** (Male, Female, Others), **Date of Birth** (typed or picked from a calendar) and **Pincode**. The avatar can be changed from a **set of avatars**; a **default avatar depends on gender**. | Section 4 screen 7; BR-1, BR-3, BR-6. |
+| D14 | **Superseded by D21.** **Address** gets its own story: **US-108** (Google Places Autocomplete plus a backend address verification API), now in `user-stories.md` and Sprint 1 of `Sprint-plan.md`. Sign Up uses **manual** State, City, Address and Pincode until US-108 ships. | Section 2. |
 | D15 | **Hindi:** I draft the strings; a **native speaker reviews** them before release. | Section 7.5 |
 | D16 | **Screenshot protection:** use a maintained plugin (`screen_protector`), recommended approach A. | Section 7.6 |
 | D17 | **SSL pinning, root/jailbreak detection and device ID are not part of this story.** No mobile security story existed, so **US-109 (Mobile App Security Hardening)** is created and planned in Sprint 1 (5 points, proposed). | Section 7.6 |
-| D18 | **No minimum age** for date of birth; only a valid, non-future date. | Section 4, BR-3 |
+| D18 | **Superseded by D21 (no date of birth).** **No minimum age** for date of birth; only a valid, non-future date. | Section 4, BR-3 |
 | D19 | **Avatars:** US-003 owns the avatar catalog and picker. Sign Up uses the existing 12-id catalog with a **male-looking default, a female-looking default and a neutral default** (for Others). | Section 4, BR-6 |
 | D20 | **US-108 is 3 story points.** `integration_test` is approved. **US-001 story amendments are approved and applied** in `user-stories.md`. The third-party Aadhaar provider is **not yet decided**. | Sections 6, 7.7, 11 |
+| D21 | **Design change 2026-10-15.** Sign Up **no longer collects state, city, address, landmark, pincode or date of birth**, and **gender is optional** (tap the selected option again to clear it). The form is: avatar, name, optional gender, read-only verified email and phone, terms toggle. `register/complete` now takes `{ displayName, gender?, avatarId?, termsAccepted, consentGiven, termsVersion }`. With no gender, `users.gender` stays NULL and the neutral default avatar (`avatar-09`) is used. Flyway **V12** drops `users.date_of_birth`, `address`, `city`, `state` and `pincode` (V9 and V11 are not edited). Addresses are saved later, at home-delivery checkout (US-020) and when a seller posts an item (US-004); managing them is US-113. The address search, verification and state picker stay in `features/address` for that reuse. | Supersedes D13 (date of birth, pincode, required gender), D14 and D18; section 4 screen 7; BR-1, BR-3, BR-5 |
 
 Aadhaar note text (verbatim from you):
 > You can ‘Skip for now’ but Aadhaar Verification is must before any transactions (Buy/Sell/Contact seller/buyer). So, before your first transaction, you must complete this one time Aadhaar Verification.
@@ -39,7 +40,7 @@ Aadhaar note text (verbatim from you):
 
 ## 2. Scope
 
-**In scope (mobile):** mobile number (existing, unchanged), mobile OTP, email entry, email OTP, Aadhaar (skip, or verify via the dev screen), Sign Up form (avatar, name, gender, date of birth, address, terms), T&C template page, session storage and resume, environment config, localization (English and Hindi), screenshot protection on Aadhaar screens, token refresh on 401, error handling, unit, widget and integration tests.
+**In scope (mobile):** mobile number (existing, unchanged), mobile OTP, email entry, email OTP, Aadhaar (skip, or verify via the dev screen), Sign Up form (avatar, name, optional gender, terms; **v3.1 also had date of birth and address, removed by D21**), T&C template page, session storage and resume, environment config, localization (English and Hindi), screenshot protection on Aadhaar screens, token refresh on 401, error handling, unit, widget and integration tests.
 
 **In scope (backend, separate PR):** section 6.
 
@@ -119,11 +120,13 @@ Source: **Make** = Figma Make app, **Figma** = design file. Every screen follows
 
 ### Screen 7: Sign Up fields (top to bottom)
 
+> **Superseded 2026-10-15 (D21):** the live form has only Avatar, Name, optional Gender (tap the selected option again to clear it), read-only Email and Phone, and the Terms toggle. The Date of Birth, State, City, Address and Pincode rows below are removed; the Gender row is optional. The default avatar is the neutral `avatar-09` until a gender is chosen. The table is kept as history.
+
 | Field | Control | Rules |
 |---|---|---|
 | Avatar | Circular avatar with an **edit icon**; tap opens a bottom sheet grid of avatars, tap one to select | Default depends on gender (neutral until gender is chosen; changes with gender while the user has not picked one manually). Any avatar can be chosen regardless of gender. |
 | Name | Text field | 3 to 50 letters, spaces and `. ' -` |
-| Gender | **New component**: three chips Male, Female, Others in a radio group | Required. Sent as `MALE`, `FEMALE`, `OTHERS`. |
+| Gender | **New component**: three chips Male, Female, Others in a radio group | Required (superseded by D21: optional; tap the selected chip again to clear). Sent as `MALE`, `FEMALE`, `OTHERS`, or omitted. |
 | Date of Birth | **New component**: text field with the format `DD/MM/YYYY` (digits only, slashes inserted automatically) and a **calendar icon** that opens `showDatePicker` | Required. Real date, not in the future, **no minimum age**. Sent as ISO `yyyy-MM-dd`. The picker follows the app language. |
 | Email, Phone | Read-only, verified, masked | From `GET /users/me` |
 | State | Picker row, static list of Indian states and union territories | Required |
@@ -134,9 +137,9 @@ Source: **Make** = Figma Make app, **Figma** = design file. Every screen follows
 | Submit | `BrandGradientButton` | Enabled only with all fields valid and the toggle on |
 | Footer | "Already have an account? Sign In" | Opens Sign In (US-106) and carries a valid entered number; originally a "Coming soon" snackbar |
 
-`termsVersion` is a constant ("template-0" until legal text exists). Address entry is manual; US-108 replaces it with Places search and verification.
+`termsVersion` is a constant ("template-0" until legal text exists). Address entry was manual here (superseded: Sign Up has no address; the US-108 search and verification are reused at checkout and listing).
 
-Shared widgets to build: `OtpInput`, resend timer, OTP screen template (screens 2 and 4), consent checkbox row, `GenderSelector`, `DateOfBirthField`, `AvatarPickerSheet`, state picker, field error text.
+Shared widgets to build: `OtpInput`, resend timer, OTP screen template (screens 2 and 4), consent checkbox row, `GenderSelector` (optional), ~~`DateOfBirthField`~~ (removed by D21), `AvatarPickerSheet`, state picker (kept for reuse, no longer on Sign Up), field error text.
 
 **Avatars:** the backend catalog has 12 ids (`avatar-01` to `avatar-12`) and one default (`avatar-01`). Proposed grouping (BR-6): `avatar-01` to `avatar-04` male-looking, `avatar-05` to `avatar-08` female-looking, `avatar-09` to `avatar-12` neutral. Defaults: Male `avatar-01`, Female `avatar-05`, Others `avatar-09`. Any avatar can be picked regardless of gender. Existing users keep their stored id. The app bundles the images under `assets/avatars/`; until final artwork exists (US-003), the app draws **placeholder avatars** (a male-looking face icon, a female-looking face icon and a neutral person icon on brand-tinted circles) under the same stable ids, so swapping in artwork later changes no code. You review the placeholders in a screenshot.
 
@@ -157,8 +160,8 @@ Every row is applied as **A: use the document token**. You review screenshots af
 | C7 | Sign Up | Header | solid `#5B61F6` band, white page, field shadows, 60 px uppercase SUBMIT, toggle image | `brandBackground` page, Poppins heading, theme inputs, `BrandGradientButton` "Submit", themed `Switch` |
 | C8 | OTP frames (Figma) | Verify button | gradient, 60 px, uppercase | `BrandGradientButton` |
 | C9 | Make email screen | "Skip for now" | link | removed (D3) |
-| C10 | Sign Up | State, City, Address "select" rows | select rows with arrows | State: picker row; City: text field; Address: multi-line field, theme input style |
-| C11 | Sign Up | Gender, Date of Birth, Pincode, avatar picker | **not in Figma** | New components built from theme tokens only (selected chip: `brandPrimary` border on `brandSurfaceTint`; unselected: theme input border). Screenshot review before they are kept. |
+| C10 | Sign Up | State, City, Address "select" rows | select rows with arrows | Superseded by D21 (removed from Sign Up). Was: State picker row; City text field; Address multi-line field, theme input style |
+| C11 | Sign Up | Gender, Date of Birth, Pincode, avatar picker | **not in Figma** | New components built from theme tokens only (selected chip: `brandPrimary` border on `brandSurfaceTint`; unselected: theme input border). Screenshot review before they are kept. Date of Birth and Pincode removed by D21; Gender is optional. |
 | C12 | Hindi text | DM Sans has no Devanagari glyphs | n/a | Font fallback needed: see 7.5. A new font family is a design-system change and needs your approval. |
 
 ---
@@ -169,16 +172,16 @@ Branch name proposal: `feature/us-001-signup-profile-backend`, created from `mai
 
 | # | Change | Why |
 |---|---|---|
-| BR-1 | Flyway migration **V9**: add nullable columns to `users`: `state`, `address` (255), `pincode` (6), `gender` (`MALE`, `FEMALE`, `OTHERS`), `date_of_birth` (date), `terms_version`. Nullable so existing rows migrate safely (standards 2.7). | D1, D13 |
+| BR-1 | **Superseded in part by D21 / Flyway V12** (V9 is unchanged; V12 drops `date_of_birth`, `address`, `city`, `state`, `pincode` from `users`). Flyway migration **V9**: add nullable columns to `users`: `state`, `address` (255), `pincode` (6), `gender` (`MALE`, `FEMALE`, `OTHERS`), `date_of_birth` (date), `terms_version`. Nullable so existing rows migrate safely (standards 2.7). | D1, D13 |
 | BR-2 | `POST /register/initiate`: stop requiring `termsAccepted` and `consentGiven` (optional, ignored). Keep mobile validation and rate limit. | D2: the mobile page cannot send terms, so **step 1 does not work until this lands**. |
-| BR-3 | New `POST /register/complete` (JWT, status `SIGNUP_PENDING`): `{ displayName, gender, dateOfBirth, state, city, address, pincode, avatarId?, termsAccepted, consentGiven, termsVersion }`. Validates (state in the supported list, pincode `^[1-9][0-9]{5}$`, address 10 to 255, avatar in the catalog, otherwise the default for the gender), stores everything with `termsAcceptedAt`, `consentGivenAt`, `termsVersion`, moves the account to `ACTIVE`, publishes `AccountCreatedEvent`, returns `AuthResponse` with fresh tokens. Reuses `ERROR_TERMS_NOT_ACCEPTED`, `ERROR_CONSENT_REQUIRED`, `ERROR_INVALID_STATE`; adds validation errors for the new fields. | D1, D2, D12, D13 |
+| BR-3 | **Superseded by D21:** the body is now `{ displayName, gender?, avatarId?, termsAccepted, consentGiven, termsVersion }`; `gender` is optional (NULL and the neutral default avatar when omitted) and no address or date of birth is sent or stored. Original: New `POST /register/complete` (JWT, status `SIGNUP_PENDING`): `{ displayName, gender, dateOfBirth, state, city, address, pincode, avatarId?, termsAccepted, consentGiven, termsVersion }`. Validates (state in the supported list, pincode `^[1-9][0-9]{5}$`, address 10 to 255, avatar in the catalog, otherwise the default for the gender), stores everything with `termsAcceptedAt`, `consentGivenAt`, `termsVersion`, moves the account to `ACTIVE`, publishes `AccountCreatedEvent`, returns `AuthResponse` with fresh tokens. Reuses `ERROR_TERMS_NOT_ACCEPTED`, `ERROR_CONSENT_REQUIRED`, `ERROR_INVALID_STATE`; adds validation errors for the new fields. | D1, D2, D12, D13 |
 | BR-4 | State machine: add **`SIGNUP_PENDING`**. `skip-aadhaar` and a successful `aadhaar/verify` move `IDENTITY_VERIFICATION_PENDING` to `SIGNUP_PENDING`; `register/complete` moves it to `ACTIVE`. `AadhaarVerifiedEvent` still fires at verify. Aadhaar initiate and verify keep working for `SIGNUP_PENDING` and for `ACTIVE && !aadhaarVerified`. `POST /refresh` and the JWT filter must accept `SIGNUP_PENDING`. Update the login eligibility (US-106) and the access-control table (US-088). | D11 |
-| BR-5 | `GET /users/me` (additive): return `gender`, `dateOfBirth`, `state`, `address`, `pincode`, `email`, `mobile` (masked). Confirm it works for tokens in `EMAIL_VERIFICATION_PENDING`, `IDENTITY_VERIFICATION_PENDING` and `SIGNUP_PENDING`. DOB and address are never logged. | D6, D13 |
+| BR-5 | **Superseded in part by D21:** `GET /users/me` no longer returns `dateOfBirth`, `state`, `city`, `address` or `pincode`; it returns `gender` (null when not given). `GET /users/me` (additive): return `gender`, `dateOfBirth`, `state`, `address`, `pincode`, `email`, `mobile` (masked). Confirm it works for tokens in `EMAIL_VERIFICATION_PENDING`, `IDENTITY_VERIFICATION_PENDING` and `SIGNUP_PENDING`. DOB and address are never logged. | D6, D13 |
 | BR-6 | Avatars (additive): group the existing ids as `MALE` (`avatar-01` to `04`), `FEMALE` (`05` to `08`), `NEUTRAL` (`09` to `12`) in `application.yml`, and add a default id per gender (`avatar-01`, `avatar-05`, `avatar-09`). `GET /avatars` returns the groups and the defaults; existing ids stay valid. | D13, D19 |
 | BR-7 | Tests (unit, controller, state machine, migration), Swagger, `Sprint-1-Identity-User-Management-LLD.md`, `US-001-Testing-Guide.md`. | Docs in step with code |
 | BR-8 (later) | Third-party Aadhaar (the current contract is OTP-based) and US-108 address verification API. | D4, D14 |
 
-**US-001 story text:** the amendments you approved (terms and consent at Sign Up, `SIGNUP_PENDING` in the flow, the Sign Up step with gender, date of birth, address and pincode, the Aadhaar note) are **applied** in `Documents/user-stories.md`, together with the resume criteria, the new US-108 and US-109, and the Sprint 1 rows. These Documents changes are uncommitted on the branch `chore/coding-standards-use-main`.
+**US-001 story text:** the amendments you approved (terms and consent at Sign Up, `SIGNUP_PENDING` in the flow, the Sign Up step with gender, date of birth, address and pincode (reduced by D21 on 2026-10-15), the Aadhaar note) are **applied** in `Documents/user-stories.md`, together with the resume criteria, the new US-108 and US-109, and the Sprint 1 rows. These Documents changes are uncommitted on the branch `chore/coding-standards-use-main`.
 
 ---
 
@@ -247,7 +250,7 @@ config/dev_local.json     (git-ignored: physical device with your machine's LAN 
 
 Screenshot protection: `screen_protector` covers Android `FLAG_SECURE` and the iOS capture and app-switcher cases in one API. iOS cannot fully block screenshots; it can hide content in the app switcher and during screen recording. A `ScreenProtectionService` in `core/security` wraps the plugin and is enabled on route enter, disabled on exit, so the plugin can be replaced later without touching screens.
 
-Consent timestamp is generated on the device when the box is ticked and sent as `consentToken` (ISO-8601). Date of birth and address are never logged or sent to analytics.
+Consent timestamp is generated on the device when the box is ticked and sent as `consentToken` (ISO-8601). No date of birth or address is collected at Sign Up (D21); addresses entered later are never logged or sent to analytics.
 
 ### 7.7 Dependencies
 | Package | Type | Why | Approval |
@@ -258,7 +261,7 @@ Consent timestamp is generated on the device when the box is ticked and sent as 
 | `screen_protector` | plugin | Standards 3.7, Aadhaar screens | approved (D16); exact version pinned when added |
 
 ### 7.8 Accessibility
-Semantic labels on every control, **minimum 44×44 dp touch targets** (standards 3.4; the design system uses 48), no fixed-height text, AA contrast with the approved tokens; failing existing colours are not copied. The gender chips are a radio group with semantics; the date field is usable by typing alone and by the calendar.
+Semantic labels on every control, **minimum 44×44 dp touch targets** (standards 3.4; the design system uses 48), no fixed-height text, AA contrast with the approved tokens; failing existing colours are not copied. The gender chips are a radio group with semantics.
 
 ### 7.9 Commits and PR (standards 1.2, 1.3)
 Conventional Commits, summary at most 72 characters, scope `auth`, `core`, `l10n`..., footer `Refs: US-001`; `dart format` before each commit; PR body has What, Why, How to test; no commit without your instruction.
@@ -279,7 +282,7 @@ Each phase ends with `flutter analyze` clean, tests passing, screenshots on the 
 | 4 | Screens 1 (logic refactor only), 2 and 3, `OtpInput` and timers | 2, **BR-2** | Mobile and email entry work against the dev backend |
 | 5 | Screen 4 (email OTP) | 4 | Status reaches `IDENTITY_VERIFICATION_PENDING` |
 | 6 | Screens 5 and 6 (Aadhaar, dev OTP screen with marker, skip, gate re-entry), screenshot protection | 5, **BR-4** | Skip and sandbox verify both reach `SIGNUP_PENDING`; protection verified on both platforms |
-| 7 | Screens 7 and 8 (Sign Up with avatar, gender, date of birth, address, terms logic) | 6, **BR-1, BR-3, BR-6** | Submit moves the account to `ACTIVE`; Home placeholder reached |
+| 7 | Screens 7 and 8 (Sign Up with avatar, optional gender, terms logic; date of birth and address removed by D21) | 6, **BR-1, BR-3, BR-6** | Submit moves the account to `ACTIVE`; Home placeholder reached |
 | 8 | Hindi review fixes, hardening: edge-case matrix, accessibility, widget tests for all screens in both locales, **integration test for registration**, coverage at least 70%, README, design-system log | 7 | CI checks pass; manual QA checklist signed off |
 
 Phases 1 to 3 can start before the backend changes; phases 4 and later need them.
@@ -288,9 +291,9 @@ Phases 1 to 3 can start before the backend changes; phases 4 and later need them
 
 ## 9. Test plan (standards 3.9)
 
-**Unit (`mocktail`):** envelope parsing; every error code mapping; refresh-once (single call, retry, failure path); repositories; `RegistrationController` transitions; resume routing for each status; OTP timers and resend limits; validators (mobile, email, name, city, address, pincode, date of birth including age boundaries, Aadhaar); date formatter; terms toggle logic; default-avatar-by-gender logic; consent token; `AppConfig`.
+**Unit (`mocktail`):** envelope parsing; every error code mapping; refresh-once (single call, retry, failure path); repositories; `RegistrationController` transitions; resume routing for each status; OTP timers and resend limits; validators (mobile, email, name, Aadhaar; the city, address, pincode and date of birth validators were removed from Sign Up by D21); terms toggle logic; default-avatar-by-gender logic; consent token; `AppConfig`.
 
-**Widget (English and Hindi):** each screen's happy path and key errors; OTP paste, backspace, auto-advance; Skip for now; terms toggle disabled until the T&C page has been closed; read-only email and phone; gender selection and default avatar change; typed and calendar date entry; avatar picker; screenshot protection enabled on Aadhaar routes and disabled on leaving; dev screen banner present.
+**Widget (English and Hindi):** each screen's happy path and key errors; OTP paste, backspace, auto-advance; Skip for now; terms toggle disabled until the T&C page has been closed; read-only email and phone; gender selection (optional, tap again to clear) and default avatar change; avatar picker; screenshot protection enabled on Aadhaar routes and disabled on leaving; dev screen banner present.
 
 **Integration (`integration_test`):** the full registration flow with a fake repository layer (mobile, OTPs, Aadhaar skip, Sign Up, Home) and a resume scenario for each status.
 
@@ -314,7 +317,7 @@ Phases 1 to 3 can start before the backend changes; phases 4 and later need them
 - The dev Aadhaar OTP screen must not leak into production configs (`AADHAAR_FLOW` gate); the third-party provider will need a backend change (BR-8).
 - Hindi strings need native review; a missing Devanagari font would degrade Hindi rendering.
 - Placeholder avatars are not final artwork.
-- Collecting date of birth and a full address adds personal data: it must be covered by the privacy policy before production.
+- Collecting date of birth and a full address adds personal data: it must be covered by the privacy policy before production. (Superseded by D21: Sign Up no longer collects them; addresses are collected later at checkout and listing and still need privacy-policy coverage.)
 - Real SMS, email and Aadhaar providers are not in dev; timers and expiry must be rechecked once enabled.
 - `flutter_secure_storage` does not yet support Swift Package Manager (build warning only).
 
@@ -343,12 +346,12 @@ Phases 1 to 3 can start before the backend changes; phases 4 and later need them
 ## 12. Definition of done
 
 - All screens implemented to the design system; deviations (if any) approved and logged.
-- Registration works end to end against the dev backend on Android and iOS: Aadhaar skip and verify, Sign Up with all fields, Home placeholder, resume after restart at every step.
+- Registration works end to end against the dev backend on Android and iOS: Aadhaar skip and verify, Sign Up (avatar, name, optional gender, terms), Home placeholder, resume after restart at every step.
 - Screenshot protection works on Aadhaar screens; the dev Aadhaar screen is marked and gated.
 - All user-facing text is in ARB for English and Hindi; no hardcoded strings.
 - Token refresh once on 401 works; session-expired UI shown after refresh failure.
 - Every error code in Appendix A has a tested, user-friendly message.
-- No OTP, Aadhaar number, DOB, address or token in logs; environment switching documented and working.
+- No OTP, Aadhaar number or token in logs; environment switching documented and working.
 - `dart format`, `flutter analyze` and `flutter test` pass; integration test passes; coverage at least 70%.
 - README, `docs/Flutter-Design-System.md` and this plan updated; PR follows standards 1.2 and 1.3.
 

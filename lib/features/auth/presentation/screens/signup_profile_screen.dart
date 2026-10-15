@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,9 +19,7 @@ import '../providers/signup_form_controller.dart';
 import '../widgets/auth_form_scaffold.dart';
 import '../widgets/avatar_image.dart';
 import '../widgets/avatar_picker_sheet.dart';
-import '../widgets/date_of_birth_field.dart';
 import '../widgets/gender_selector.dart';
-import '../widgets/state_picker_field.dart';
 
 /// Registration step 7 ("Create your profile"): the last step before the account is active.
 class SignupProfileScreen extends ConsumerStatefulWidget {
@@ -37,13 +37,6 @@ class _SignupProfileScreenState extends ConsumerState<SignupProfileScreen> {
   String? _fieldError(AppLocalizations l10n, SignupFieldError? error, {bool termsViewed = true}) {
     return switch (error) {
       SignupFieldError.name => l10n.signupErrorName,
-      SignupFieldError.gender => l10n.signupErrorGender,
-      SignupFieldError.state => l10n.signupErrorState,
-      SignupFieldError.city => l10n.signupErrorCity,
-      SignupFieldError.address => l10n.signupErrorAddress,
-      SignupFieldError.pincode => l10n.signupErrorPincode,
-      SignupFieldError.dobFormat => l10n.signupErrorDobFormat,
-      SignupFieldError.dobFuture => l10n.signupErrorDobFuture,
       SignupFieldError.terms => termsViewed ? l10n.signupErrorTerms : l10n.signupTermsHint,
       null => null,
     };
@@ -58,18 +51,6 @@ class _SignupProfileScreenState extends ConsumerState<SignupProfileScreen> {
             duration: motionDuration(target, const Duration(milliseconds: 200)));
       }
     });
-  }
-
-  Future<void> _pickDate(SignupFormState form) async {
-    final now = DateTime.now();
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: form.dateOfBirth ?? DateTime(now.year - 25, now.month, now.day),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(now.year, now.month, now.day),
-      helpText: AppLocalizations.of(context).signupDobPick,
-    );
-    if (picked != null) ref.read(signupFormProvider.notifier).setDateOfBirth(picked);
   }
 
   Future<void> _openTerms() async {
@@ -87,11 +68,12 @@ class _SignupProfileScreenState extends ConsumerState<SignupProfileScreen> {
     if (!ref.read(signupFormProvider).isValid) {
       controller.showValidation();
       final first = ref.read(signupFormProvider).firstError;
-      _scrollTo(_keys[first == SignupFieldError.dobFuture ? SignupFieldError.dobFormat : first]);
+      _scrollTo(_keys[first]);
       return;
     }
     final done = await controller.submit();
-    if (!done) _scrollTo(_formErrorKey);
+    if (done) return;
+    _scrollTo(_formErrorKey);
   }
 
   @override
@@ -106,6 +88,7 @@ class _SignupProfileScreenState extends ConsumerState<SignupProfileScreen> {
       onBack: () => context.go(RouteNames.createAccount),
       title: l10n.signupProfileTitle,
       subtitle: l10n.signupProfileSubtitle,
+      centeredHeader: true,
       content: [
         Center(
           child: Semantics(
@@ -160,25 +143,10 @@ class _SignupProfileScreenState extends ConsumerState<SignupProfileScreen> {
           ),
         ),
         _Labeled(
-          key: _keys[SignupFieldError.gender],
           label: l10n.signupGenderLabel,
           child: GenderSelector(
             value: form.gender,
             onChanged: controller.setGender,
-            errorText: _fieldError(l10n, form.genderError),
-          ),
-        ),
-        _Labeled(
-          key: _keys[SignupFieldError.dobFormat],
-          label: l10n.signupDobLabel,
-          child: DateOfBirthField(
-            text: form.dobText,
-            hint: l10n.signupDobHint,
-            pickTooltip: l10n.signupDobPick,
-            semanticLabel: l10n.signupDobLabel,
-            errorText: _fieldError(l10n, form.dobError),
-            onChanged: controller.setDobText,
-            onPickDate: () => _pickDate(form),
           ),
         ),
         _Labeled(
@@ -195,64 +163,6 @@ class _SignupProfileScreenState extends ConsumerState<SignupProfileScreen> {
             value: profile.value?.mobile,
             profile: profile,
             onRetry: () => ref.invalidate(currentUserProfileProvider),
-          ),
-        ),
-        _Labeled(
-          key: _keys[SignupFieldError.state],
-          label: l10n.signupStateLabel,
-          child: StatePickerField(
-            value: form.state,
-            onChanged: controller.setState,
-            errorText: _fieldError(l10n, form.stateError),
-          ),
-        ),
-        _Labeled(
-          key: _keys[SignupFieldError.city],
-          label: l10n.signupCityLabel,
-          labelsChild: true,
-          child: TextField(
-            textCapitalization: TextCapitalization.words,
-            textInputAction: TextInputAction.next,
-            inputFormatters: [LengthLimitingTextInputFormatter(100)],
-            onChanged: controller.setCity,
-            style: AppTextStyles.input,
-            cursorColor: AppColors.brandPrimary,
-            decoration: _decoration(l10n.signupCityHint, _fieldError(l10n, form.cityError)),
-          ),
-        ),
-        _Labeled(
-          key: _keys[SignupFieldError.address],
-          label: l10n.signupAddressLabel,
-          labelsChild: true,
-          child: TextField(
-            minLines: 3,
-            maxLines: 5,
-            keyboardType: TextInputType.multiline,
-            textCapitalization: TextCapitalization.sentences,
-            autofillHints: const [AutofillHints.fullStreetAddress],
-            inputFormatters: [LengthLimitingTextInputFormatter(255)],
-            onChanged: controller.setAddress,
-            style: AppTextStyles.input,
-            cursorColor: AppColors.brandPrimary,
-            decoration: _decoration(l10n.signupAddressHint, _fieldError(l10n, form.addressError)),
-          ),
-        ),
-        _Labeled(
-          key: _keys[SignupFieldError.pincode],
-          label: l10n.signupPincodeLabel,
-          labelsChild: true,
-          child: TextField(
-            keyboardType: TextInputType.number,
-            textInputAction: TextInputAction.done,
-            autofillHints: const [AutofillHints.postalCode],
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(6),
-            ],
-            onChanged: controller.setPincode,
-            style: AppTextStyles.input,
-            cursorColor: AppColors.brandPrimary,
-            decoration: _decoration(l10n.signupPincodeHint, _fieldError(l10n, form.pincodeError)),
           ),
         ),
         KeyedSubtree(
@@ -369,7 +279,7 @@ class _ReadOnlyField extends StatelessWidget {
   }
 }
 
-class _TermsRow extends StatelessWidget {
+class _TermsRow extends StatefulWidget {
   final bool viewed;
   final bool accepted;
   final String? errorText;
@@ -385,9 +295,32 @@ class _TermsRow extends StatelessWidget {
   });
 
   @override
+  State<_TermsRow> createState() => _TermsRowState();
+}
+
+class _TermsRowState extends State<_TermsRow> with SingleTickerProviderStateMixin {
+  late final AnimationController _blink = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 900),
+  );
+
+  @override
+  void dispose() {
+    _blink.dispose();
+    super.dispose();
+  }
+
+  /// A tap on the locked toggle points at the instruction; no flashing when motion is reduced.
+  void _pointAtInstruction() {
+    if (MediaQuery.disableAnimationsOf(context)) return;
+    _blink.forward(from: 0);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final errorText = this.errorText;
+    final viewed = widget.viewed;
+    final errorText = widget.errorText;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -397,16 +330,20 @@ class _TermsRow extends StatelessWidget {
           children: [
             Semantics(
               label: '${l10n.signupTermsPrefix}${l10n.signupTermsLink}${l10n.signupTermsSuffix}',
-              child: Switch(
-                value: accepted,
-                onChanged: viewed ? onChanged : null,
-                activeThumbColor: AppColors.brandOnPrimary,
-                activeTrackColor: AppColors.brandPrimary,
-                inactiveThumbColor: AppColors.brandControlBorder,
-                trackOutlineColor: WidgetStateProperty.resolveWith(
-                  (states) => states.contains(WidgetState.selected)
-                      ? Colors.transparent
-                      : AppColors.brandControlBorder,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: viewed ? null : _pointAtInstruction,
+                child: Switch(
+                  value: widget.accepted,
+                  onChanged: viewed ? widget.onChanged : null,
+                  activeThumbColor: AppColors.brandOnPrimary,
+                  activeTrackColor: AppColors.brandPrimary,
+                  inactiveThumbColor: AppColors.brandControlBorder,
+                  trackOutlineColor: WidgetStateProperty.resolveWith(
+                    (states) => states.contains(WidgetState.selected)
+                        ? Colors.transparent
+                        : AppColors.brandControlBorder,
+                  ),
                 ),
               ),
             ),
@@ -423,7 +360,7 @@ class _TermsRow extends StatelessWidget {
                         alignment: PlaceholderAlignment.baseline,
                         baseline: TextBaseline.alphabetic,
                         child: InkWell(
-                          onTap: onOpenTerms,
+                          onTap: widget.onOpenTerms,
                           child: Text(
                             l10n.signupTermsLink,
                             style: AppTextStyles.bodySecondary.copyWith(
@@ -445,15 +382,41 @@ class _TermsRow extends StatelessWidget {
         if (errorText != null)
           Padding(
             padding: const EdgeInsets.only(top: AppSpacing.xs),
-            child: FieldError(text: errorText),
+            child: _Blinking(animation: _blink, child: FieldError(text: errorText)),
           )
         else if (!viewed)
           Padding(
             padding: const EdgeInsets.only(top: AppSpacing.xs),
-            child: Text(l10n.signupTermsHint, style: AppTextStyles.hint),
+            child: _Blinking(
+              animation: _blink,
+              child: Text(
+                l10n.signupTermsHint,
+                style: AppTextStyles.hint.copyWith(color: AppColors.brandInstruction),
+              ),
+            ),
           ),
         const SizedBox(height: AppSpacing.md),
       ],
+    );
+  }
+}
+
+/// Fades [child] out and back in three times as [animation] runs from 0 to 1.
+class _Blinking extends StatelessWidget {
+  final Animation<double> animation;
+  final Widget child;
+
+  const _Blinking({required this.animation, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: animation,
+      child: child,
+      builder: (context, child) => Opacity(
+        opacity: 0.25 + 0.75 * (math.cos(animation.value * 6 * math.pi) + 1) / 2,
+        child: child,
+      ),
     );
   }
 }

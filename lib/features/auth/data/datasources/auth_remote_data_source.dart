@@ -130,12 +130,7 @@ class AuthRemoteDataSource {
       ApiConstants.registerComplete,
       data: {
         'displayName': details.displayName,
-        'gender': details.gender.apiValue,
-        'dateOfBirth': _isoDate(details.dateOfBirth),
-        'state': details.state,
-        'city': details.city,
-        'address': details.address,
-        'pincode': details.pincode,
+        if (details.gender != null) 'gender': details.gender!.apiValue,
         'avatarId': details.avatarId,
         'termsAccepted': details.termsAccepted,
         'consentGiven': details.consentGiven,
@@ -143,11 +138,6 @@ class AuthRemoteDataSource {
       },
       parse: AuthResponseModel.fromJson,
     );
-  }
-
-  static String _isoDate(DateTime date) {
-    String two(int value) => value.toString().padLeft(2, '0');
-    return '${date.year.toString().padLeft(4, '0')}-${two(date.month)}-${two(date.day)}';
   }
 
   Future<UserProfileModel> fetchProfile() {

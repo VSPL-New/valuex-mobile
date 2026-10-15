@@ -322,7 +322,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get signupNameHint => 'आपका पूरा नाम';
 
   @override
-  String get signupGenderLabel => 'लिंग';
+  String get signupGenderLabel => 'लिंग (वैकल्पिक)';
 
   @override
   String get genderMale => 'पुरुष';
@@ -332,15 +332,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get genderOthers => 'अन्य';
-
-  @override
-  String get signupDobLabel => 'जन्म तिथि';
-
-  @override
-  String get signupDobHint => 'दिन/माह/वर्ष';
-
-  @override
-  String get signupDobPick => 'जन्म तिथि चुनें';
 
   @override
   String get signupEmailLabel => 'ईमेल';
@@ -359,24 +350,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get signupStateSheetTitle => 'अपना राज्य चुनें';
-
-  @override
-  String get signupCityLabel => 'शहर';
-
-  @override
-  String get signupCityHint => 'आपका शहर';
-
-  @override
-  String get signupAddressLabel => 'पता';
-
-  @override
-  String get signupAddressHint => 'मकान नंबर, गली, इलाका';
-
-  @override
-  String get signupPincodeLabel => 'पिनकोड';
-
-  @override
-  String get signupPincodeHint => '6 अंकों का पिनकोड';
 
   @override
   String get signupTermsPrefix => 'मैं ';
@@ -430,37 +403,13 @@ class AppLocalizationsHi extends AppLocalizations {
       'आपके खाते को पुनर्प्राप्ति की आवश्यकता है। कृपया सपोर्ट से संपर्क करें';
 
   @override
-  String get signupErrorGender => 'एक विकल्प चुनें';
-
-  @override
-  String get signupErrorState => 'अपना राज्य चुनें';
-
-  @override
   String get signupErrorTerms => 'आगे बढ़ने के लिए नियम और शर्तें स्वीकार करें';
 
   @override
   String get signupErrorName => '3 से 50 अक्षर दर्ज करें';
 
   @override
-  String get signupErrorCity => '2 से 100 अक्षर दर्ज करें';
-
-  @override
-  String get signupErrorAddress => '10 से 255 अक्षर दर्ज करें';
-
-  @override
-  String get signupErrorPincode => '6 अंकों का सही पिनकोड दर्ज करें';
-
-  @override
-  String get signupErrorDobFormat => 'दिन/माह/वर्ष में सही तारीख दर्ज करें';
-
-  @override
-  String get signupErrorDobFuture => 'जन्म तिथि भविष्य की नहीं हो सकती';
-
-  @override
   String get authErrorInvalidAddressState => 'कृपया सही राज्य चुनें';
-
-  @override
-  String get authErrorInvalidDob => 'कृपया सही जन्म तिथि दर्ज करें';
 
   @override
   String get authErrorTermsNotAccepted => 'आगे बढ़ने के लिए कृपया नियम और शर्तें स्वीकार करें';
@@ -619,7 +568,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get homeLoadFailed => 'होम लोड नहीं हो सका। नीचे खींचें या पुनः प्रयास दबाएँ';
 
   @override
-  String get homeNoListings => 'आपके पास अभी कोई सामान नहीं है। कोई दूसरा पता आज़माएँ';
+  String get homeNoListings => 'आपके पास अभी कोई सामान नहीं है। कोई दूसरी लोकेशन आज़माएँ';
 
   @override
   String get homeCategoriesFailed => 'श्रेणियाँ लोड नहीं हो सकीं। फिर से कोशिश करें';
@@ -629,51 +578,44 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get homeLocationPromptBody =>
-      'अपने पास का सामान देखने के लिए लोकेशन की अनुमति दें, या अपना पता दर्ज करें।';
+      'अपने पास का सामान देखने के लिए अपनी मौजूदा लोकेशन या सहेजी हुई लोकेशन इस्तेमाल करें।';
 
   @override
-  String get homeUseMyLocation => 'मेरी लोकेशन इस्तेमाल करें';
+  String get homeUseMyLocation => 'मेरी मौजूदा लोकेशन इस्तेमाल करें';
 
   @override
-  String get homeEnterAddress => 'पता दर्ज करें';
+  String get homeUseSavedLocation => 'मेरी सहेजी हुई लोकेशन इस्तेमाल करें';
 
   @override
   String get homeOpenSettings => 'सेटिंग्स खोलें';
 
   @override
   String get homeLocationDenied =>
-      'लोकेशन की अनुमति बंद है। अपने पास का सामान देखने के लिए अपना पता दर्ज करें';
+      'लोकेशन की अनुमति बंद है। अपने पास का सामान देखने के लिए सहेजी हुई लोकेशन इस्तेमाल करें';
 
   @override
-  String get homeLocationUnavailable => 'आपकी लोकेशन पता नहीं चल सकी। इसके बजाय अपना पता दर्ज करें';
+  String get homeLocationUnavailable =>
+      'आपकी लोकेशन पता नहीं चल सकी। इसके बजाय सहेजी हुई लोकेशन इस्तेमाल करें';
 
   @override
   String get homeLocationServiceOff =>
-      'इस डिवाइस पर लोकेशन बंद है। इसे चालू करें या अपना पता दर्ज करें';
+      'इस डिवाइस पर लोकेशन बंद है। इसे चालू करें या सहेजी हुई लोकेशन इस्तेमाल करें';
 
   @override
   String get homeLocationSheetTitle => 'अपना स्थान चुनें';
 
   @override
-  String get homeAreaLabel => 'इलाका (वैकल्पिक)';
+  String get homeSavedLocationTitle => 'सहेजी हुई लोकेशन चुनें';
 
   @override
-  String get homeAreaHint => 'उदाहरण: अंधेरी ईस्ट';
+  String get homeSavedLocationEmpty =>
+      'आपकी कोई लोकेशन अभी सहेजी नहीं गई है। सामान खरीदने या बेचने पर आपका पता सहेजा जाता है।';
 
   @override
-  String get homeCityLabel => 'शहर';
+  String get homeSavedLocationFailed => 'आपकी सहेजी हुई लोकेशन लोड नहीं हो सकीं। फिर से कोशिश करें';
 
   @override
-  String get homeCityHint => 'आपका शहर';
-
-  @override
-  String get homeSaveLocation => 'स्थान सहेजें';
-
-  @override
-  String get homeCityError => 'सही शहर दर्ज करें';
-
-  @override
-  String get homeStateError => 'अपना राज्य चुनें';
+  String get homeSavedLocationUnnamed => 'सहेजा हुआ पता';
 
   @override
   String get homeFeatureComingSoon => 'यह जल्द आ रहा है';
@@ -745,9 +687,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get profileName => 'प्रदर्शित नाम';
 
   @override
-  String get profileCity => 'शहर';
-
-  @override
   String get profileMobile => 'मोबाइल नंबर';
 
   @override
@@ -773,18 +712,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get profileGender => 'लिंग';
-
-  @override
-  String get profileDob => 'जन्म तिथि';
-
-  @override
-  String get profileState => 'राज्य';
-
-  @override
-  String get profileAddress => 'पता';
-
-  @override
-  String get profilePincode => 'पिनकोड';
 
   @override
   String get profileCatalogEmpty => 'कोई अवतार उपलब्ध नहीं है। कृपया बाद में दोबारा प्रयास करें';
@@ -888,6 +815,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get profileAccountSecurity => 'खाता सुरक्षा';
+
+  @override
+  String get profileMyAddresses => 'मेरे पते';
 
   @override
   String get securityTitle => 'खाता सुरक्षा';
@@ -1112,6 +1042,50 @@ class AppLocalizationsHi extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get addressSearchLabel => 'अपना पता खोजें';
+
+  @override
+  String get addressSearchHint => 'अपनी गली, इलाका या लैंडमार्क लिखें';
+
+  @override
+  String get addressSearchSearching => 'खोज रहे हैं…';
+
+  @override
+  String get addressSearchNoResults => 'कोई मिलता-जुलता पता नहीं मिला। नीचे खुद लिखें';
+
+  @override
+  String get addressSearchUnavailable => 'पता खोज अभी उपलब्ध नहीं है। अपना पता नीचे लिखें';
+
+  @override
+  String get addressSearchPoweredBy => 'Google द्वारा संचालित';
+
+  @override
+  String get addressLandmarkLabel => 'मकान या फ़्लैट नंबर, लैंडमार्क (वैकल्पिक)';
+
+  @override
+  String get addressLandmarkHint => 'फ़्लैट 4, मेट्रो स्टेशन के पास';
+
+  @override
+  String get addressCheckChecking => 'आपका पता जाँच रहे हैं…';
+
+  @override
+  String get addressCheckVerified => 'पता सत्यापित';
+
+  @override
+  String get addressCheckNotVerified =>
+      'हम इस पते को सत्यापित नहीं कर सके। कृपया जाँचकर फिर कोशिश करें';
+
+  @override
+  String get addressCheckMismatch => 'पिनकोड चुने गए शहर या राज्य से मेल नहीं खाता';
+
+  @override
+  String get addressCheckInvalid => 'कृपया पूरा पता दर्ज करें';
+
+  @override
+  String get addressCheckUnavailable =>
+      'पता सत्यापन अभी उपलब्ध नहीं है। आप फिर भी आगे बढ़ सकते हैं';
 
   @override
   String get sellAddPhotosTitle => 'फ़ोटो जोड़ें';

@@ -23,9 +23,13 @@ void main() {
         aadhaarFlow: 'thirdparty',
         googleSignIn: 'native',
         googleServerClientId: 'web-client-id',
+        addressSearch: 'google',
+        googlePlacesApiKey: 'places-key',
       );
 
       expect(config.isProd, isTrue);
+      expect(config.addressSearch, AddressSearchMode.google);
+      expect(config.googlePlacesApiKey, 'places-key');
       expect(config.aadhaarFlow, AadhaarFlow.thirdParty);
       expect(config.googleSignIn, GoogleSignInMode.native);
       expect(config.googleServerClientId, 'web-client-id');
@@ -48,6 +52,54 @@ void main() {
           apiBaseUrl: 'http://localhost:8080/api/v1',
           aadhaarFlow: 'sandbox',
           googleSignIn: 'fake',
+        ),
+        throwsA(isA<AppConfigException>()),
+      );
+    });
+
+    test('uses the mock address search unless told otherwise', () {
+      final config = AppConfig.parse(
+        env: 'dev',
+        apiBaseUrl: 'http://localhost:8080/api/v1',
+        aadhaarFlow: 'sandbox',
+      );
+
+      expect(config.addressSearch, AddressSearchMode.mock);
+      expect(config.useMockAddressSearch, isTrue);
+    });
+
+    test('rejects an unknown address search mode', () {
+      expect(
+        () => AppConfig.parse(
+          env: 'dev',
+          apiBaseUrl: 'http://localhost:8080/api/v1',
+          aadhaarFlow: 'sandbox',
+          addressSearch: 'bing',
+        ),
+        throwsA(isA<AppConfigException>()),
+      );
+    });
+
+    test('the Google address search needs an API key', () {
+      expect(
+        () => AppConfig.parse(
+          env: 'dev',
+          apiBaseUrl: 'http://localhost:8080/api/v1',
+          aadhaarFlow: 'sandbox',
+          addressSearch: 'google',
+        ),
+        throwsA(isA<AppConfigException>()),
+      );
+    });
+
+    test('rejects the mock address search in prod', () {
+      expect(
+        () => AppConfig.parse(
+          env: 'prod',
+          apiBaseUrl: 'https://api.example.com/api/v1',
+          aadhaarFlow: 'thirdparty',
+          googleSignIn: 'native',
+          googleServerClientId: 'web-client-id',
         ),
         throwsA(isA<AppConfigException>()),
       );
