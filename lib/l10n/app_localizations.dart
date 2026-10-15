@@ -1203,6 +1203,12 @@ abstract class AppLocalizations {
   /// **'Saved address'**
   String get homeSavedLocationUnnamed;
 
+  /// No description provided for @homeSavedLocationConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this address'**
+  String get homeSavedLocationConfirm;
+
   /// No description provided for @homeFeatureComingSoon.
   ///
   /// In en, this message translates to:

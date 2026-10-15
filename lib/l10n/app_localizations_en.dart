@@ -618,6 +618,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeSavedLocationUnnamed => 'Saved address';
 
   @override
+  String get homeSavedLocationConfirm => 'Use this address';
+
+  @override
   String get homeFeatureComingSoon => 'This is coming soon';
 
   @override

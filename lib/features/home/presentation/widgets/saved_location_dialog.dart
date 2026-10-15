@@ -8,8 +8,8 @@ import '../../../address/domain/saved_address.dart';
 import '../../../address/presentation/providers/address_providers.dart';
 import '../providers/home_providers.dart';
 
-/// Asks the user to pick one of their saved addresses (name and full address) as the place to
-/// look for listings near.
+/// Lists the user's saved addresses (name and full address) as radio options; the chosen one
+/// becomes the place to look for listings near.
 Future<void> showSavedLocationDialog(BuildContext context) {
   return showDialog<void>(
     context: context,
@@ -17,13 +17,31 @@ Future<void> showSavedLocationDialog(BuildContext context) {
   );
 }
 
-class _SavedLocationDialog extends ConsumerWidget {
+class _SavedLocationDialog extends ConsumerStatefulWidget {
   const _SavedLocationDialog();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_SavedLocationDialog> createState() => _SavedLocationDialogState();
+}
+
+class _SavedLocationDialogState extends ConsumerState<_SavedLocationDialog> {
+  String? _selectedId;
+
+  /// The user's pick, else their default address, else the first one.
+  SavedAddress? _selected(List<SavedAddress> addresses) {
+    if (addresses.isEmpty) return null;
+    return addresses.firstWhere(
+      (a) => a.id == _selectedId,
+      orElse: () => addresses.firstWhere((a) => a.isDefault, orElse: () => addresses.first),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final saved = ref.watch(savedAddressesProvider);
+    final addresses = saved.value ?? const <SavedAddress>[];
+    final selected = _selected(addresses);
 
     return AlertDialog(
       title: Semantics(header: true, child: Text(l10n.homeSavedLocationTitle)),
@@ -47,22 +65,18 @@ class _SavedLocationDialog extends ConsumerWidget {
               ),
             ],
           ),
-          data: (addresses) {
-            if (addresses.isEmpty) {
+          data: (list) {
+            if (list.isEmpty) {
               return Text(l10n.homeSavedLocationEmpty, style: AppTextStyles.body);
             }
-            return ListView.separated(
-              shrinkWrap: true,
-              itemCount: addresses.length,
-              separatorBuilder: (context, index) => const Divider(height: 1),
-              itemBuilder: (context, index) => _AddressTile(
-                address: addresses[index],
-                onTap: () {
-                  ref
-                      .read(homeLocationControllerProvider.notifier)
-                      .useSavedAddress(addresses[index]);
-                  Navigator.of(context).pop();
-                },
+            return RadioGroup<String>(
+              groupValue: selected?.id,
+              onChanged: (id) => setState(() => _selectedId = id),
+              child: ListView.separated(
+                shrinkWrap: true,
+                itemCount: list.length,
+                separatorBuilder: (context, index) => const Divider(height: 1),
+                itemBuilder: (context, index) => _AddressTile(address: list[index]),
               ),
             );
           },
@@ -73,6 +87,14 @@ class _SavedLocationDialog extends ConsumerWidget {
           onPressed: () => Navigator.of(context).pop(),
           child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
         ),
+        if (selected != null)
+          FilledButton(
+            onPressed: () {
+              ref.read(homeLocationControllerProvider.notifier).useSavedAddress(selected);
+              Navigator.of(context).pop();
+            },
+            child: Text(l10n.homeSavedLocationConfirm),
+          ),
       ],
     );
   }
@@ -80,32 +102,20 @@ class _SavedLocationDialog extends ConsumerWidget {
 
 class _AddressTile extends StatelessWidget {
   final SavedAddress address;
-  final VoidCallback onTap;
 
-  const _AddressTile({required this.address, required this.onTap});
+  const _AddressTile({required this.address});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final name = address.label ?? l10n.homeSavedLocationUnnamed;
-    return Semantics(
-      button: true,
-      label: '$name, ${address.fullAddress}',
-      excludeSemantics: true,
-      onTap: onTap,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(name, style: AppTextStyles.cardTitle),
-              const SizedBox(height: AppSpacing.xs),
-              Text(address.fullAddress, style: AppTextStyles.bodySecondary),
-            ],
-          ),
-        ),
+    return RadioListTile<String>(
+      value: address.id,
+      contentPadding: EdgeInsets.zero,
+      title: Text(name, style: AppTextStyles.cardTitle),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: AppSpacing.xs),
+        child: Text(address.fullAddress, style: AppTextStyles.bodySecondary),
       ),
     );
   }
