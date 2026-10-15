@@ -32,6 +32,14 @@ class ApiConstants {
 
   static String notificationRead(String id) => '/notifications/$id/read';
 
+  static const String listings = '/listings';
+  static const String mediaUploads = '/media/uploads';
+
+  static String mediaComplete(String mediaId) => '/media/$mediaId/complete';
+  static String listingImages(String listingId) => '/listings/$listingId/images';
+  static String listingImage(String listingId, String imageId) =>
+      '/listings/$listingId/images/$imageId';
+
   static const Duration connectTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
 }

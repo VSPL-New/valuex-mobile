@@ -8,6 +8,7 @@ import 'package:valuex_mobile/features/address/domain/saved_address.dart';
 import 'package:valuex_mobile/features/address/presentation/providers/address_providers.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/home/domain/entities/home_location.dart';
+import 'package:valuex_mobile/features/listing/presentation/create_listing_screen.dart';
 import 'package:valuex_mobile/features/home/domain/services/location_service.dart';
 import 'package:valuex_mobile/features/notifications/data/notifications_repository.dart';
 
@@ -292,10 +293,10 @@ void main() {
       final harness = await openHome(tester, aadhaarVerified: false);
 
       await tester.tap(find.text('Sell'));
-      await tester.pump();
+      await harness.settle();
 
       expect(find.text('Please complete Aadhaar verification to proceed'), findsNothing);
-      expect(find.text('This is coming soon'), findsOneWidget);
+      expect(find.byType(CreateListingScreen), findsOneWidget);
       await harness.dispose();
     });
 

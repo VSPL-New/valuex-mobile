@@ -221,4 +221,14 @@ class AppTextStyles {
     fontWeight: FontWeight.w600,
     color: AppColors.brandOnPrimary,
   );
+
+  /// Caption under a photo-tip tile.
+  static const TextStyle tipCaption = TextStyle(
+    fontFamily: AppFonts.body,
+    fontFamilyFallback: AppFonts.bodyFallback,
+    fontSize: 12,
+    height: 16 / 12,
+    fontWeight: FontWeight.w500,
+    color: AppColors.brandForeground,
+  );
 }

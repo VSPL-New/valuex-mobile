@@ -1209,6 +1209,12 @@ abstract class AppLocalizations {
   /// **'This is coming soon'**
   String get homeFeatureComingSoon;
 
+  /// No description provided for @homeSellAadhaarRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please complete Aadhaar verification to proceed'**
+  String get homeSellAadhaarRequired;
+
   /// No description provided for @categoriesTitle.
   ///
   /// In en, this message translates to:
@@ -2000,6 +2006,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Address verification is unavailable right now. You can still continue'**
   String get addressCheckUnavailable;
+
+  /// No description provided for @sellAddPhotosTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Photos'**
+  String get sellAddPhotosTitle;
+
+  /// No description provided for @sellAddPhotosSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear photos sell faster (min 1, max 10)'**
+  String get sellAddPhotosSubtitle;
+
+  /// No description provided for @sellPhotoCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}/10 photos added'**
+  String sellPhotoCount(int count);
+
+  /// No description provided for @sellAiTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Let AI do the work for you'**
+  String get sellAiTitle;
+
+  /// No description provided for @sellAiBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a few clear photos and our AI will identify the item, suggest a category, describe its condition and estimate the best selling price.'**
+  String get sellAiBody;
+
+  /// No description provided for @sellEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Take or upload photos'**
+  String get sellEmptyTitle;
+
+  /// No description provided for @sellEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'AI will auto-fill item details from your photos'**
+  String get sellEmptyBody;
+
+  /// No description provided for @sellAddPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Photos'**
+  String get sellAddPhotos;
+
+  /// No description provided for @sellAddPhotoTile.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get sellAddPhotoTile;
+
+  /// No description provided for @sellTipsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo tips for best results'**
+  String get sellTipsTitle;
+
+  /// No description provided for @sellTipLighting.
+  ///
+  /// In en, this message translates to:
+  /// **'Take clear, well-lit photos'**
+  String get sellTipLighting;
+
+  /// No description provided for @sellTipAngles.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture from multiple angles'**
+  String get sellTipAngles;
+
+  /// No description provided for @sellTipDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Include close-ups of important details (e.g. edges, scratches)'**
+  String get sellTipDetails;
+
+  /// No description provided for @sellTipAccessories.
+  ///
+  /// In en, this message translates to:
+  /// **'Include all accessories (if available)'**
+  String get sellTipAccessories;
+
+  /// No description provided for @sellSubmitToAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit to AI'**
+  String get sellSubmitToAi;
+
+  /// No description provided for @sellSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos saved. AI suggestions are coming soon.'**
+  String get sellSubmitted;
+
+  /// No description provided for @sellMainPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'MAIN'**
+  String get sellMainPhoto;
+
+  /// No description provided for @sellPhotoLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo {index}'**
+  String sellPhotoLabel(int index);
+
+  /// No description provided for @sellRemovePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove photo {index}'**
+  String sellRemovePhoto(int index);
+
+  /// No description provided for @sellRetryPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry photo {index}'**
+  String sellRetryPhoto(int index);
+
+  /// No description provided for @sellPhotoUploading.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading'**
+  String get sellPhotoUploading;
+
+  /// No description provided for @sellPhotoFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get sellPhotoFailed;
+
+  /// No description provided for @sellTakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get sellTakePhoto;
+
+  /// No description provided for @sellChooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get sellChooseFromGallery;
+
+  /// No description provided for @sellErrorMaxPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum 10 photos allowed'**
+  String get sellErrorMaxPhotos;
+
+  /// No description provided for @sellErrorInvalidPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo quality too low or invalid format'**
+  String get sellErrorInvalidPhoto;
+
+  /// No description provided for @sellErrorPhotoTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo exceeds 10MB limit'**
+  String get sellErrorPhotoTooLarge;
+
+  /// No description provided for @sellErrorUploadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to upload photo. Check your connection'**
+  String get sellErrorUploadFailed;
+
+  /// No description provided for @sellErrorCameraDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access required to capture photos'**
+  String get sellErrorCameraDenied;
+
+  /// No description provided for @sellErrorGalleryDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo library access required to choose photos'**
+  String get sellErrorGalleryDenied;
+
+  /// No description provided for @sellErrorNotActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Only active accounts can create listings'**
+  String get sellErrorNotActive;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

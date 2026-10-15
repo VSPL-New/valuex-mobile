@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +35,7 @@ void onMainNavSelected(
         context.go(RouteNames.createAccount);
         return;
       }
-      showComingSoon(context);
+      unawaited(context.push(RouteNames.sell));
     case BottomNavItem.search || BottomNavItem.chats:
       showComingSoon(context);
   }

@@ -621,6 +621,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeFeatureComingSoon => 'This is coming soon';
 
   @override
+  String get homeSellAadhaarRequired => 'Please complete Aadhaar verification to proceed';
+
+  @override
   String get categoriesTitle => 'All categories';
 
   @override
@@ -1096,4 +1099,106 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get addressCheckUnavailable =>
       'Address verification is unavailable right now. You can still continue';
+
+  @override
+  String get sellAddPhotosTitle => 'Add Photos';
+
+  @override
+  String get sellAddPhotosSubtitle => 'Clear photos sell faster (min 1, max 10)';
+
+  @override
+  String sellPhotoCount(int count) {
+    return '$count/10 photos added';
+  }
+
+  @override
+  String get sellAiTitle => 'Let AI do the work for you';
+
+  @override
+  String get sellAiBody =>
+      'Take a few clear photos and our AI will identify the item, suggest a category, describe its condition and estimate the best selling price.';
+
+  @override
+  String get sellEmptyTitle => 'Take or upload photos';
+
+  @override
+  String get sellEmptyBody => 'AI will auto-fill item details from your photos';
+
+  @override
+  String get sellAddPhotos => 'Add Photos';
+
+  @override
+  String get sellAddPhotoTile => 'Add';
+
+  @override
+  String get sellTipsTitle => 'Photo tips for best results';
+
+  @override
+  String get sellTipLighting => 'Take clear, well-lit photos';
+
+  @override
+  String get sellTipAngles => 'Capture from multiple angles';
+
+  @override
+  String get sellTipDetails => 'Include close-ups of important details (e.g. edges, scratches)';
+
+  @override
+  String get sellTipAccessories => 'Include all accessories (if available)';
+
+  @override
+  String get sellSubmitToAi => 'Submit to AI';
+
+  @override
+  String get sellSubmitted => 'Photos saved. AI suggestions are coming soon.';
+
+  @override
+  String get sellMainPhoto => 'MAIN';
+
+  @override
+  String sellPhotoLabel(int index) {
+    return 'Photo $index';
+  }
+
+  @override
+  String sellRemovePhoto(int index) {
+    return 'Remove photo $index';
+  }
+
+  @override
+  String sellRetryPhoto(int index) {
+    return 'Retry photo $index';
+  }
+
+  @override
+  String get sellPhotoUploading => 'Uploading';
+
+  @override
+  String get sellPhotoFailed => 'Failed';
+
+  @override
+  String get sellTakePhoto => 'Take photo';
+
+  @override
+  String get sellChooseFromGallery => 'Choose from gallery';
+
+  @override
+  String get sellErrorMaxPhotos => 'Maximum 10 photos allowed';
+
+  @override
+  String get sellErrorInvalidPhoto => 'Photo quality too low or invalid format';
+
+  @override
+  String get sellErrorPhotoTooLarge => 'Photo exceeds 10MB limit';
+
+  @override
+  String get sellErrorUploadFailed => 'Failed to upload photo. Check your connection';
+
+  @override
+  String get sellErrorCameraDenied => 'Camera access required to capture photos';
+
+  @override
+  String get sellErrorGalleryDenied => 'Photo library access required to choose photos';
+
+  @override
+  String get sellErrorNotActive => 'Only active accounts can create listings';
 }
