@@ -164,6 +164,36 @@ void main() {
       expect(redirectFor(session: session, location: RouteNames.signupAadhaar), isNull);
       expect(redirectFor(session: session, location: RouteNames.devAadhaarOtp), isNull);
     });
+
+    test('once verified, the Aadhaar screens return to the interrupted journey or Home', () {
+      final verified = _signedIn(AccountStatus.active, aadhaarVerified: true);
+
+      expect(
+        redirectFor(
+          session: verified,
+          location: RouteNames.devAadhaarOtp,
+          afterAadhaar: RouteNames.sell,
+        ),
+        RouteNames.sell,
+      );
+      expect(
+        redirectFor(session: verified, location: RouteNames.signupAadhaar),
+        RouteNames.home,
+      );
+    });
+
+    test('the way back is not used while the account is still unverified', () {
+      final session = _signedIn(AccountStatus.active);
+
+      expect(
+        redirectFor(
+          session: session,
+          location: RouteNames.signupAadhaar,
+          afterAadhaar: RouteNames.sell,
+        ),
+        isNull,
+      );
+    });
   });
 
   group('ungated routes', () {
