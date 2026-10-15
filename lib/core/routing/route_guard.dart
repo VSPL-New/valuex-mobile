@@ -73,6 +73,7 @@ String? redirectFor({
   required AsyncValue<SessionState> session,
   required String location,
   bool aadhaarSandbox = true,
+  String? afterAadhaar,
 }) {
   final state = session.value;
   if (state == null) {
@@ -94,6 +95,10 @@ String? redirectFor({
       return open ? null : RouteNames.createAccount;
     case Authenticated(:final step, :final aadhaarVerified):
       if (allowedSteps.contains(step)) return null;
+      // Verified in the middle of another journey: go back to it instead of Home.
+      if (step == RegistrationStep.home && aadhaarVerified && _aadhaarRoutes.contains(location)) {
+        return afterAadhaar ?? RouteNames.home;
+      }
       // Active users who skipped Aadhaar may open it later.
       final aadhaarLater =
           step == RegistrationStep.home && !aadhaarVerified && _aadhaarRoutes.contains(location);

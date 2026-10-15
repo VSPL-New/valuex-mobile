@@ -11,6 +11,8 @@ import '../../../core/theme/text_styles.dart';
 import '../../../core/widgets/brand_gradient_button.dart';
 import '../../../core/widgets/square_back_button.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../auth/presentation/providers/session_controller.dart';
+import '../../auth/presentation/providers/session_state.dart';
 import '../data/photo_source.dart';
 import 'listing_error_messages.dart';
 import 'providers/create_listing_controller.dart';
@@ -36,11 +38,16 @@ class _CreateListingScreenState extends ConsumerState<CreateListingScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.openCameraOnStart) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) unawaited(_add(PhotoSourceKind.camera));
-      });
-    }
+    // Back from the Aadhaar detour: keep the photos, carry on if the seller is now verified.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (_controller.resumeFromAadhaar()) {
+        final session = ref.read(sessionControllerProvider).value;
+        if (session is Authenticated && session.aadhaarVerified) unawaited(_submit());
+      } else if (widget.openCameraOnStart) {
+        unawaited(_add(PhotoSourceKind.camera));
+      }
+    });
   }
 
   void _notify(ListingNotice? notice) {
@@ -79,10 +86,26 @@ class _CreateListingScreenState extends ConsumerState<CreateListingScreen> {
     if (kind != null) await _add(kind);
   }
 
-  void _submit() {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).sellSubmitted)));
+  Future<void> _submit() async {
+    final result = await _controller.submit();
+    if (!mounted) return;
+    switch (result.outcome) {
+      case SubmitOutcome.submitted:
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).sellSubmitted)));
+      case SubmitOutcome.aadhaarRequired:
+        _controller.holdForAadhaar();
+        context.go(RouteNames.signupAadhaar);
+      case SubmitOutcome.failed:
+        final error = result.error;
+        if (error == null) return;
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(content: Text(listingErrorMessage(AppLocalizations.of(context), error))),
+          );
+    }
   }
 
   @override
@@ -129,7 +152,7 @@ class _CreateListingScreenState extends ConsumerState<CreateListingScreen> {
                     AppSpacing.md, AppSpacing.sm, AppSpacing.md, AppSpacing.md),
                 child: BrandGradientButton(
                   label: l10n.sellSubmitToAi,
-                  onPressed: state.canSubmit ? _submit : null,
+                  onPressed: state.canSubmit ? () => unawaited(_submit()) : null,
                 ),
               ),
             ),

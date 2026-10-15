@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/config/app_config.dart';
+import '../../../../core/routing/post_aadhaar_route.dart';
 import '../../../../core/routing/route_names.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/utils/motion.dart';
@@ -60,11 +61,14 @@ class _AadhaarScreenState extends ConsumerState<AadhaarScreen> {
 
   Future<void> _skip(bool isLaterFlow) async {
     if (isLaterFlow) {
-      context.go(RouteNames.home);
+      context.go(_leaveRoute());
       return;
     }
     await ref.read(aadhaarFormProvider.notifier).skip();
   }
+
+  /// Home, or the journey the seller was in when Aadhaar was asked for.
+  String _leaveRoute() => ref.read(postAadhaarRouteProvider) ?? RouteNames.home;
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +89,7 @@ class _AadhaarScreenState extends ConsumerState<AadhaarScreen> {
 
     return ProtectedScreen(
       child: AuthFormScaffold(
-        onBack: () => context.go(isLaterFlow ? RouteNames.home : RouteNames.createAccount),
+        onBack: () => context.go(isLaterFlow ? _leaveRoute() : RouteNames.createAccount),
         title: l10n.aadhaarTitle,
         subtitle: l10n.aadhaarSubtitle,
         content: [

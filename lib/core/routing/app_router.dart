@@ -29,6 +29,7 @@ import '../../features/listing/presentation/create_listing_screen.dart';
 import '../../features/profile/presentation/profile_details_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import 'route_guard.dart';
+import 'post_aadhaar_route.dart';
 import 'route_names.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -43,6 +44,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       session: ref.read(sessionControllerProvider),
       location: state.matchedLocation,
       aadhaarSandbox: ref.read(appConfigProvider).useAadhaarSandbox,
+      afterAadhaar: ref.read(postAadhaarRouteProvider),
     ),
     routes: [
       GoRoute(
