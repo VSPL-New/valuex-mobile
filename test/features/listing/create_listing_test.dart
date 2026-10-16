@@ -8,14 +8,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
+import 'package:valuex_mobile/core/routing/post_aadhaar_route.dart';
 import 'package:valuex_mobile/core/routing/route_guard.dart';
 import 'package:valuex_mobile/core/routing/route_names.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
+import 'package:valuex_mobile/features/auth/domain/entities/auth_session.dart';
+import 'package:valuex_mobile/features/auth/presentation/providers/session_controller.dart';
 import 'package:valuex_mobile/features/auth/presentation/providers/session_state.dart';
+import 'package:valuex_mobile/features/auth/presentation/screens/aadhaar_screen.dart';
 import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
 import 'package:valuex_mobile/features/listing/data/photo_source.dart';
 import 'package:valuex_mobile/features/listing/domain/listing_photo.dart';
 import 'package:valuex_mobile/features/listing/presentation/listing_error_messages.dart';
+import 'package:valuex_mobile/features/listing/presentation/create_listing_screen.dart';
 import 'package:valuex_mobile/features/listing/presentation/providers/create_listing_controller.dart';
 import 'package:valuex_mobile/features/notifications/data/notifications_repository.dart';
 import 'package:valuex_mobile/l10n/app_localizations_en.dart';
@@ -83,6 +88,7 @@ void _stubHappyUploads(_MockRepository repository) {
       )).thenAnswer((_) async {});
   when(() => repository.attachImage(any(), any())).thenAnswer((_) async => 'image-${image++}');
   when(() => repository.deleteImage(any(), any())).thenAnswer((_) async {});
+  when(() => repository.submitDraft(any())).thenAnswer((_) async {});
 }
 
 void main() {
@@ -333,6 +339,74 @@ void main() {
       expect(state().isBusy, isFalse);
     });
 
+    test('creating a draft is not blocked for a seller who has not verified Aadhaar', () async {
+      source.next = _photos(1);
+
+      final notice = await controller().addPhotos(PhotoSourceKind.camera);
+
+      expect(notice, isNull);
+      expect(state().listingId, 'listing-1');
+    });
+
+    test('submit sends the draft and reports success', () async {
+      source.next = _photos(1);
+      await controller().addPhotos(PhotoSourceKind.camera);
+
+      final result = await controller().submit();
+
+      expect(result.outcome, SubmitOutcome.submitted);
+      verify(() => repository.submitDraft('listing-1')).called(1);
+      expect(state().isBusy, isFalse);
+    });
+
+    test('submit asks for Aadhaar when the server says it is required', () async {
+      source.next = _photos(1);
+      await controller().addPhotos(PhotoSourceKind.camera);
+      when(() => repository.submitDraft(any())).thenThrow(const ApiError(
+        type: ApiErrorType.business,
+        message: 'x',
+        code: 'AADHAAR_VERIFICATION_REQUIRED',
+        statusCode: 403,
+      ));
+
+      final result = await controller().submit();
+
+      expect(result.outcome, SubmitOutcome.aadhaarRequired);
+      expect(state().photos, hasLength(1));
+      expect(state().isBusy, isFalse);
+    });
+
+    test('submit reports any other failure and keeps the photos', () async {
+      source.next = _photos(1);
+      await controller().addPhotos(PhotoSourceKind.camera);
+      when(() => repository.submitDraft(any())).thenThrow(_offline);
+
+      final result = await controller().submit();
+
+      expect(result.outcome, SubmitOutcome.failed);
+      expect(result.error, _offline);
+      expect(state().photos, hasLength(1));
+    });
+
+    test('submit does nothing without a ready photo', () async {
+      final result = await controller().submit();
+
+      expect(result.outcome, SubmitOutcome.failed);
+      verifyNever(() => repository.submitDraft(any()));
+    });
+
+    test('holding for Aadhaar keeps the draft and the way back until the screen resumes', () async {
+      source.next = _photos(1);
+      await controller().addPhotos(PhotoSourceKind.camera);
+
+      controller().holdForAadhaar();
+      expect(container.read(postAadhaarRouteProvider), RouteNames.sell);
+
+      expect(controller().resumeFromAadhaar(), isTrue);
+      expect(container.read(postAadhaarRouteProvider), isNull);
+      expect(controller().resumeFromAadhaar(), isFalse);
+    });
+
     test('marks a failed upload and retries it from the start', () async {
       when(() => repository.uploadBytes(any(), any(), any())).thenThrow(
         const ApiError(type: ApiErrorType.network, message: 'x', code: 'ERROR_PHOTO_UPLOAD_FAILED'),
@@ -436,7 +510,7 @@ void main() {
     late _MockRepository repository;
     late _FakePhotoSource source;
 
-    Future<AppHarness> openSell(WidgetTester tester) async {
+    Future<AppHarness> openSell(WidgetTester tester, {bool aadhaarVerified = true}) async {
       final notifications = _MockNotifications();
       when(notifications.unreadCount).thenAnswer((_) async => 0);
       final harness = AppHarness(tester, extraOverrides: [
@@ -444,7 +518,7 @@ void main() {
         listingRepositoryProvider.overrideWithValue(repository),
         photoSourceProvider.overrideWithValue(source),
       ])
-        ..signedInAs(AccountStatus.active, aadhaarVerified: true);
+        ..signedInAs(AccountStatus.active, aadhaarVerified: aadhaarVerified);
       await harness.launch(location: RouteNames.home);
       await tester.tap(find.text('Sell'));
       await harness.settle();
@@ -485,13 +559,85 @@ void main() {
       expect(find.text('1/10 photos added'), findsOneWidget);
       expect(find.text('MAIN'), findsOneWidget);
       await tester.tap(find.text('Submit to AI'));
-      await tester.pump();
+      await harness.settle();
       expect(find.text('Photos saved. AI suggestions are coming soon.'), findsOneWidget);
 
       await tester.tap(find.bySemanticsLabel('Remove photo 1'));
       await harness.settle();
       expect(find.text('Take or upload photos'), findsOneWidget);
       verify(() => repository.deleteImage('listing-1', 'image-0')).called(1);
+      await harness.dispose();
+    });
+
+    testWidgets('an unverified seller is not blocked until the listing is submitted', (
+      tester,
+    ) async {
+      final harness = await openSell(tester, aadhaarVerified: false);
+      expect(find.byType(CreateListingScreen), findsOneWidget);
+      when(() => repository.submitDraft(any())).thenThrow(const ApiError(
+        type: ApiErrorType.business,
+        message: 'x',
+        code: 'AADHAAR_VERIFICATION_REQUIRED',
+        statusCode: 403,
+      ));
+
+      source.next = _photos(1);
+      await tester.tap(find.widgetWithText(InkWell, 'Add Photos').first);
+      await harness.settle();
+      await tester.tap(find.text('Choose from gallery'));
+      await harness.settle();
+      expect(find.text('1/10 photos added'), findsOneWidget);
+
+      await tester.tap(find.text('Submit to AI'));
+      await harness.settle();
+      expect(find.byType(AadhaarScreen), findsOneWidget);
+
+      await tester.tap(find.text('Not now'));
+      await harness.settle();
+      expect(find.byType(CreateListingScreen), findsOneWidget);
+      expect(find.text('1/10 photos added'), findsOneWidget, reason: 'the photos are kept');
+      await harness.dispose();
+    });
+
+    testWidgets('after verifying Aadhaar the seller returns to the listing and it is submitted', (
+      tester,
+    ) async {
+      final harness = await openSell(tester, aadhaarVerified: false);
+      var verified = false;
+      when(() => repository.submitDraft(any())).thenAnswer((_) async {
+        if (!verified) {
+          throw const ApiError(
+            type: ApiErrorType.business,
+            message: 'x',
+            code: 'AADHAAR_VERIFICATION_REQUIRED',
+            statusCode: 403,
+          );
+        }
+      });
+      source.next = _photos(1);
+      await tester.tap(find.widgetWithText(InkWell, 'Add Photos').first);
+      await harness.settle();
+      await tester.tap(find.text('Choose from gallery'));
+      await harness.settle();
+      await tester.tap(find.text('Submit to AI'));
+      await harness.settle();
+      expect(find.byType(AadhaarScreen), findsOneWidget);
+
+      verified = true;
+      harness.container.read(sessionControllerProvider.notifier).signedIn(
+            const AuthResult(
+              session: AuthSession(accessToken: 'a', refreshToken: 'r', userId: 'user-1'),
+              status: AccountStatus.active,
+              aadhaarVerified: true,
+            ),
+          );
+      await harness.settle();
+      await harness.settle();
+
+      expect(find.byType(CreateListingScreen), findsOneWidget);
+      expect(find.text('1/10 photos added'), findsOneWidget);
+      expect(find.text('Photos saved. AI suggestions are coming soon.'), findsOneWidget);
+      verify(() => repository.submitDraft('listing-1')).called(2);
       await harness.dispose();
     });
 

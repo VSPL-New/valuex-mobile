@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show KeepAliveLink;
 import '../../../../core/network/api_error.dart';
+import '../../../../core/routing/post_aadhaar_route.dart';
+import '../../../../core/routing/route_names.dart';
 import '../../data/listing_repository.dart';
 import '../../data/photo_source.dart';
 import '../../domain/listing_photo.dart';
@@ -23,6 +26,9 @@ class ListingNotice {
 
   const ListingNotice(this.kind, [this.error]);
 }
+
+/// How a submit ended.
+enum SubmitOutcome { submitted, aadhaarRequired, failed }
 
 class CreateListingState {
   final String? listingId;
@@ -53,12 +59,48 @@ class CreateListingState {
 /// device, then uploads it, confirms it and attaches it to the draft.
 class CreateListingController extends Notifier<CreateListingState> {
   int _nextId = 0;
+  KeepAliveLink? _hold;
 
   ListingRepository get _repository => ref.read(listingRepositoryProvider);
   PhotoSource get _source => ref.read(photoSourceProvider);
 
   @override
   CreateListingState build() => const CreateListingState();
+
+  /// The seller is on their way to verify Aadhaar; keep the draft and its photos meanwhile.
+  void holdForAadhaar() {
+    _hold ??= ref.keepAlive();
+    ref.read(postAadhaarRouteProvider.notifier).set(RouteNames.sell);
+  }
+
+  /// True when the screen is opening again after the Aadhaar detour; ends the hold.
+  bool resumeFromAadhaar() {
+    final resuming = _hold != null;
+    _hold?.close();
+    _hold = null;
+    if (resuming) ref.read(postAadhaarRouteProvider.notifier).clear();
+    return resuming;
+  }
+
+  /// Submits the draft. Aadhaar verification is asked for here, not earlier.
+  Future<({SubmitOutcome outcome, Object? error})> submit() async {
+    final listingId = state.listingId;
+    if (!state.canSubmit || listingId == null) {
+      return (outcome: SubmitOutcome.failed, error: null);
+    }
+    state = state.copyWith(isBusy: true);
+    try {
+      await _repository.submitDraft(listingId);
+      return (outcome: SubmitOutcome.submitted, error: null);
+    } on ApiError catch (error) {
+      final outcome = error.code == 'AADHAAR_VERIFICATION_REQUIRED'
+          ? SubmitOutcome.aadhaarRequired
+          : SubmitOutcome.failed;
+      return (outcome: outcome, error: error);
+    } finally {
+      if (ref.mounted) state = state.copyWith(isBusy: false);
+    }
+  }
 
   /// Picks photos and starts their uploads; returns what the user should be told, if anything.
   Future<ListingNotice?> addPhotos(PhotoSourceKind kind) async {

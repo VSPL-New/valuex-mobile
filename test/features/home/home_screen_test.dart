@@ -193,8 +193,12 @@ void main() {
           find.text('Flat 4, 12 FC Road, Shivajinagar, Pune, Maharashtra 411014'), findsOneWidget);
       expect(find.text('Office'), findsOneWidget);
       expect(find.text('Cyber Park, Hinjewadi, Pune, Maharashtra 411057'), findsOneWidget);
+      expect(find.byType(Radio<String>), findsNWidgets(2));
 
       await tester.tap(find.text('Office'));
+      await harness.settle();
+      expect(find.text('Choose a saved location'), findsOneWidget, reason: 'picking only selects');
+      await tester.tap(find.text('Use this address'));
       await harness.settle();
 
       expect(find.text('Choose a saved location'), findsNothing);
@@ -225,6 +229,8 @@ void main() {
       await harness.settle();
       expect(find.text('Choose a saved location'), findsOneWidget);
       await tester.tap(inDialog('Home'));
+      await harness.settle();
+      await tester.tap(find.text('Use this address'));
       await harness.settle();
 
       expect(find.text('Pune, Maharashtra'), findsOneWidget);

@@ -29,6 +29,11 @@ class ListingRepository {
         parse: (json) => (json as Map<String, dynamic>)['listingId'] as String,
       );
 
+  /// Hands the draft over for plan selection; an unverified seller is refused here with
+  /// `AADHAAR_VERIFICATION_REQUIRED`.
+  Future<void> submitDraft(String listingId) =>
+      _client.post<void>(ApiConstants.listingSubmit(listingId));
+
   Future<UploadTicket> requestUpload({
     required String listingId,
     required String fileName,

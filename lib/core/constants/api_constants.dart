@@ -37,6 +37,7 @@ class ApiConstants {
 
   static String mediaComplete(String mediaId) => '/media/$mediaId/complete';
   static String listingImages(String listingId) => '/listings/$listingId/images';
+  static String listingSubmit(String listingId) => '/listings/$listingId/submit';
   static String listingImage(String listingId, String imageId) =>
       '/listings/$listingId/images/$imageId';
 
