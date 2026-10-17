@@ -63,14 +63,16 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
   Future<void> _continue() async {
     final result = await _controller.save();
     if (!mounted) return;
-    final l10n = AppLocalizations.of(context);
-    final message = result.saved
-        ? l10n.itemDetailsSaved
-        : (result.error == null ? null : listingErrorMessage(l10n, result.error));
-    if (message == null) return;
+    if (result.saved) {
+      unawaited(context.push(RouteNames.sellPlan));
+      return;
+    }
+    final error = result.error;
+    if (error == null) return;
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
+      ..showSnackBar(
+          SnackBar(content: Text(listingErrorMessage(AppLocalizations.of(context), error))));
   }
 
   @override

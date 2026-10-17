@@ -9,8 +9,20 @@ class Formatters {
     decimalDigits: 0,
   );
 
+  static final NumberFormat _preciseCurrencyFormat = NumberFormat.currency(
+    locale: 'en_IN',
+    symbol: '₹',
+    decimalDigits: 2,
+  );
+
   static String currency(num amount) {
     return _currencyFormat.format(amount);
+  }
+
+  /// Whole rupees without decimals, otherwise with two (for GST and paise amounts).
+  static String money(num amount) {
+    if (amount == amount.roundToDouble()) return _currencyFormat.format(amount);
+    return _preciseCurrencyFormat.format(amount);
   }
 
   static String phoneMasked(String phone) {

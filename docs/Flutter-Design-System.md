@@ -37,12 +37,12 @@ Global tokens are prefixed `brand`. Screen-specific tokens use the screen name (
 | `brandMutedText` | `#5B6B82` | Secondary text, field labels, helper text, icons beside helper text |
 | `brandPlaceholder` | `#5F6D83` | Placeholder text inside inputs (not for helper text or icons; use `brandMutedText`) |
 | `brandOnPrimary` | `#FFFFFF` | Text on brand fills |
-| `brandPrimary` | `#2D6BFF` | Brand blue, cursor, focus |
+| `brandPrimary` | `#135CFF` | Brand blue, cursor, focus |
 | `brandAccent` | `#C026D3` | Brand magenta |
 | `brandLink` | `#1F5AE6` | Text links (Resend code, Change number). `brandPrimary` is only 4.2:1 on the page, this is 5.3:1 |
 | `brandInstruction` | `#135CFF` | Instruction text that tells the user what to do first (the Sign Up terms hint). Owner-specified; it blinks when the locked control it explains is tapped, and does not blink when the system reduces motion |
-| `brandBorder` | `#2D6BFF` at 12% | Input and card borders |
-| `brandBorderFocused` | `#2D6BFF` at 30% | Decorative only; inputs now focus with a 2 px `brandPrimary` border |
+| `brandBorder` | `#135CFF` at 12% | Input and card borders |
+| `brandBorderFocused` | `#135CFF` at 30% | Decorative only; inputs now focus with a 2 px `brandPrimary` border |
 | `brandOutline` | `#DEDEDE` | Decorative outlines only (no longer used for controls) |
 | `brandControlBorder` | `#76839B` | **Edge of every control that must be seen to be found** (outlined buttons now; inputs, choices and pickers as their screens are reviewed). 3.4–3.8:1 on white, page and input fill |
 | `brandDivider` | `#DCE4E8` | Divider lines |
@@ -52,7 +52,7 @@ Onboarding-only: `onboardingSkipBackground` `#E9E9FF`, `onboardingSkipText` `#4A
 
 ### 2.2 Gradient — `AppGradients.brand` (`gradients.dart`)
 
-**One gradient app-wide:** blue `#2D6BFF` to magenta `#C026D3`, top-left to bottom-right. Use it for every gradient fill (primary buttons, progress bars). Do not add other gradients. The white fade over onboarding illustrations is a transparency fade, not a colour gradient.
+**One gradient app-wide:** blue `#135CFF` to magenta `#C026D3`, top-left to bottom-right. Use it for every gradient fill (primary buttons, progress bars). Do not add other gradients. The white fade over onboarding illustrations is a transparency fade, not a colour gradient.
 
 ### 2.3 Typography — `AppFonts`, `AppTextStyles` (`text_styles.dart`)
 
@@ -392,6 +392,7 @@ Decisions taken so far. Add a row for every approved conflict resolution (sectio
 | 2026-10-15 | Sign Up form and Home location sheet (address design change) | Sign Up asked for date of birth, state, city, address and pincode, and the Home sheet had a typed-address stand-in | Sign Up now has avatar, name, optional gender (tap again to clear), read-only email and phone and the terms switch; `DateOfBirthField` is removed and `StatePickerField` and the address search stay in the shared address component for checkout and listing. The Home sheet has only "Use my current location" and "Use my saved location"; the latter opens a pop-up of saved addresses (name and full address) from `GET /users/me/addresses`. Built from existing tokens only; **screenshots still to be reviewed by the product owner** |
 
 | 2026-10-17 | Sell Item Details (US-114, Figma Make `CreateListingScreen` details and price steps) | Make uses raw Tailwind styling, a free-text location, an AI price card and 5 progress steps | **Design system applies; page look follows Make (read through the Figma MCP, content unchanged).** Small upper-case labels above fields; filled inputs; pill `OptionChip`s at the Make size (about 30 px tall, 14 px text, 12 px side padding) inside a 48 dp tap area, as for the back button (category blue, condition green with the new `brandSuccessText` and `brandSuccessTint` for 4.5:1; selected state also shown by a check and a 2 px edge); Location as a filled field with a pin; price typed at 24 px bold with a `brandLink` rupee sign; blue AI banner and an amber price note (`sellNoteTint`, `sellNoteBorder`); `BrandGradientButton` with a trailing chevron. Categories take at most 3 rows; the rest are behind a last **Others** chip that opens a pop-up (a chosen hidden category moves onto the page). Location stays read-only from Home. No AI price card. **Screenshots still to be reviewed by the product owner**; Hindi needs review |
+| 2026-10-17 | Choose Listing Plan (US-078, Figma Make `ListingPlanScreen.tsx`) | Make shows hard-coded plans with per-plan colours (`#8892B0` fails contrast as text), glow shadows, "Pay ₹X — Continue" and "Secure payment" text | **Design system applies; look follows Make.** `SellStepHeader` (step 3 of 4); `PlanCard` radio cards with an icon tile, name, badge pill, price with the original struck through, check lines and a Selected mark; selected card has a 2 px accent edge and a soft gradient. Accent and icon follow the card position (grey-blue star, magenta bolt, blue crown), never the plan code; prices are `brandForeground` (not the accent) for contrast. `PlanBreakdown` card (original, discount in `brandSuccessText`, GST, total, "Inclusive of GST") is new and is not in Make. The button is **Review Listing** with a chevron; Make's payment wording and "Secure payment" line are left out until US-008. Plans, prices and lines come from the server. **Screenshots still to be reviewed by the product owner**; Hindi needs review |
 
 ### Approved exceptions
 

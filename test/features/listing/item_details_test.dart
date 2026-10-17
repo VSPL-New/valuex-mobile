@@ -12,6 +12,7 @@ import 'package:valuex_mobile/features/home/domain/entities/home_location.dart';
 import 'package:valuex_mobile/features/home/presentation/providers/home_providers.dart';
 import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
 import 'package:valuex_mobile/features/listing/domain/listing_details.dart';
+import 'package:valuex_mobile/features/listing/presentation/listing_plan_screen.dart';
 import 'package:valuex_mobile/features/listing/presentation/providers/item_details_controller.dart';
 import 'package:valuex_mobile/features/listing/presentation/widgets/category_chips.dart';
 import 'package:valuex_mobile/features/listing/presentation/widgets/option_chip.dart';
@@ -99,6 +100,7 @@ void main() {
       when(() => repository.saveDetails(any(), any(), city: any(named: 'city')))
           .thenAnswer((_) async {});
       when(() => repository.sendSuggestionFeedback(any(), any(), any())).thenAnswer((_) async {});
+      when(() => repository.sellerPlans()).thenAnswer((_) async => []);
     });
 
     Future<AppHarness> open(
@@ -164,7 +166,7 @@ void main() {
       await harness.settle();
 
       verify(() => repository.saveDetails('l1', any(), city: 'Pune')).called(1);
-      expect(find.text('Details saved. Choosing a plan is coming soon.'), findsOneWidget);
+      expect(find.byType(ListingPlanScreen), findsOneWidget);
       await harness.dispose();
     });
 
@@ -200,7 +202,7 @@ void main() {
       await tester.tap(find.text('Choose Listing Plan'));
       await harness.settle();
 
-      expect(find.text('Details saved. Choosing a plan is coming soon.'), findsNothing);
+      expect(find.byType(ListingPlanScreen), findsNothing);
       expect(find.byType(SnackBar), findsOneWidget);
       await harness.dispose();
     });

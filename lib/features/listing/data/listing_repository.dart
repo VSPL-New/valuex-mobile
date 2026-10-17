@@ -7,6 +7,7 @@ import '../../../core/network/api_client.dart';
 import '../../../core/network/api_error.dart';
 import '../../../core/network/api_error_mapper.dart';
 import '../domain/listing_details.dart';
+import '../domain/seller_plan.dart';
 
 /// A short-lived URL the photo bytes are sent to, for one media asset.
 class UploadTicket {
@@ -123,6 +124,15 @@ class ListingRepository {
           'price': details.parsedPrice,
           'location': city,
         },
+      );
+
+  /// The listing plans with prices, features and the payment breakdown (US-078).
+  Future<List<SellerPlan>> sellerPlans() => _client.get(
+        ApiConstants.sellerPlans,
+        parse: (json) => [
+          for (final item in json as List<dynamic>)
+            SellerPlan.fromJson(item as Map<String, dynamic>),
+        ],
       );
 
   /// Tells the server what the seller did with each AI suggestion (US-005 contract).
