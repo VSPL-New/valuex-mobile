@@ -2367,11 +2367,143 @@ abstract class AppLocalizations {
   /// **'Enter a valid price'**
   String get itemPriceInvalid;
 
-  /// No description provided for @itemDetailsSaved.
+  /// No description provided for @planScreenSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Details saved. Choosing a plan is coming soon.'**
-  String get itemDetailsSaved;
+  /// **'Boost your visibility and sell faster'**
+  String get planScreenSubtitle;
+
+  /// No description provided for @planValidityDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 day} other{{count} days}}'**
+  String planValidityDays(int count);
+
+  /// No description provided for @planValidityMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 month} other{{count} months}}'**
+  String planValidityMonths(int count);
+
+  /// No description provided for @planValidityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{validity} validity'**
+  String planValidityLabel(String validity);
+
+  /// No description provided for @planSupportAiEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'AI + Email support'**
+  String get planSupportAiEmail;
+
+  /// No description provided for @planSupportAiEmailChat.
+  ///
+  /// In en, this message translates to:
+  /// **'AI + Email + Chat (Human) support'**
+  String get planSupportAiEmailChat;
+
+  /// No description provided for @planSupportAiEmailChatCall.
+  ///
+  /// In en, this message translates to:
+  /// **'AI + Email + Chat + On-call support'**
+  String get planSupportAiEmailChatCall;
+
+  /// No description provided for @planBadgePopular.
+  ///
+  /// In en, this message translates to:
+  /// **'POPULAR'**
+  String get planBadgePopular;
+
+  /// No description provided for @planBadgeBestValue.
+  ///
+  /// In en, this message translates to:
+  /// **'BEST VALUE'**
+  String get planBadgeBestValue;
+
+  /// No description provided for @planSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected'**
+  String get planSelected;
+
+  /// No description provided for @planFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get planFree;
+
+  /// No description provided for @planOriginalPriceSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Original price {price}'**
+  String planOriginalPriceSemantics(String price);
+
+  /// No description provided for @planBreakdownTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment breakdown'**
+  String get planBreakdownTitle;
+
+  /// No description provided for @planBreakdownOriginal.
+  ///
+  /// In en, this message translates to:
+  /// **'Original price'**
+  String get planBreakdownOriginal;
+
+  /// No description provided for @planBreakdownDiscount.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount ({percent}% off)'**
+  String planBreakdownDiscount(int percent);
+
+  /// No description provided for @planBreakdownGstIncluded.
+  ///
+  /// In en, this message translates to:
+  /// **'GST included'**
+  String get planBreakdownGstIncluded;
+
+  /// No description provided for @planBreakdownGstAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'GST ({rate}%)'**
+  String planBreakdownGstAdded(String rate);
+
+  /// No description provided for @planBreakdownTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total to pay'**
+  String get planBreakdownTotal;
+
+  /// No description provided for @planInclusiveOfGst.
+  ///
+  /// In en, this message translates to:
+  /// **'Inclusive of GST'**
+  String get planInclusiveOfGst;
+
+  /// No description provided for @planFreeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'No payment is needed for this plan.'**
+  String get planFreeNote;
+
+  /// No description provided for @planNoPlans.
+  ///
+  /// In en, this message translates to:
+  /// **'No plans are available right now.'**
+  String get planNoPlans;
+
+  /// No description provided for @planReviewListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Listing'**
+  String get planReviewListing;
+
+  /// No description provided for @planReviewSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviewing your listing is coming soon.'**
+  String get planReviewSoon;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -18,16 +18,16 @@ class AppColors {
   static const Color brandOnPrimary = Color(0xFFFFFFFF);
 
   // Brand
-  static const Color brandPrimary = Color(0xFF2D6BFF);
+  static const Color brandPrimary = Color(0xFF135CFF);
   static const Color brandAccent = Color(0xFFC026D3);
 
-  /// Blue for text links; `brandPrimary` is 4.2:1 on the page, this is 5.3:1.
+  /// Blue for text links; `brandPrimary` is 4.9:1 on the page, this is 5.3:1.
   static const Color brandLink = Color(0xFF1F5AE6);
   static const Color brandInstruction = Color(0xFF135CFF);
 
   // Lines and status
-  static const Color brandBorder = Color(0x1F2D6BFF);
-  static const Color brandBorderFocused = Color(0x4D2D6BFF);
+  static const Color brandBorder = Color(0x1F135CFF);
+  static const Color brandBorderFocused = Color(0x4D135CFF);
   static const Color brandOutline = Color(0xFFDEDEDE);
 
   /// Edge of a control that must be seen to be found (3:1 on white, page and input fill).
@@ -42,7 +42,7 @@ class AppColors {
   static const Color sellAiCardStart = Color(0xFFEDE9FF);
   static const Color sellAiCardEnd = Color(0xFFFBEAFF);
   static const Color sellSparkle = Color(0xFFF59E0B);
-  static const Color sellAddTile = Color(0x142D6BFF);
+  static const Color sellAddTile = Color(0x14135CFF);
 
   /// Selected condition chip: green text on a pale green fill (text 4.5:1 or better).
   static const Color brandSuccessText = Color(0xFF166534);

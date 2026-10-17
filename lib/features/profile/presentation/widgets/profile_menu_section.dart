@@ -21,7 +21,7 @@ class ProfileMenuItem {
 }
 
 const profileCardShadow = [
-  BoxShadow(color: Color(0x0F2D6BFF), blurRadius: 10, offset: Offset(0, 2)),
+  BoxShadow(color: Color(0x0F135CFF), blurRadius: 10, offset: Offset(0, 2)),
   BoxShadow(color: Color(0x0F000000), blurRadius: 3, offset: Offset(0, 1)),
 ];
 

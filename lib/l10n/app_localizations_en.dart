@@ -1290,5 +1290,95 @@ class AppLocalizationsEn extends AppLocalizations {
   String get itemPriceInvalid => 'Enter a valid price';
 
   @override
-  String get itemDetailsSaved => 'Details saved. Choosing a plan is coming soon.';
+  String get planScreenSubtitle => 'Boost your visibility and sell faster';
+
+  @override
+  String planValidityDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days',
+      one: '1 day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String planValidityMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count months',
+      one: '1 month',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String planValidityLabel(String validity) {
+    return '$validity validity';
+  }
+
+  @override
+  String get planSupportAiEmail => 'AI + Email support';
+
+  @override
+  String get planSupportAiEmailChat => 'AI + Email + Chat (Human) support';
+
+  @override
+  String get planSupportAiEmailChatCall => 'AI + Email + Chat + On-call support';
+
+  @override
+  String get planBadgePopular => 'POPULAR';
+
+  @override
+  String get planBadgeBestValue => 'BEST VALUE';
+
+  @override
+  String get planSelected => 'Selected';
+
+  @override
+  String get planFree => 'Free';
+
+  @override
+  String planOriginalPriceSemantics(String price) {
+    return 'Original price $price';
+  }
+
+  @override
+  String get planBreakdownTitle => 'Payment breakdown';
+
+  @override
+  String get planBreakdownOriginal => 'Original price';
+
+  @override
+  String planBreakdownDiscount(int percent) {
+    return 'Discount ($percent% off)';
+  }
+
+  @override
+  String get planBreakdownGstIncluded => 'GST included';
+
+  @override
+  String planBreakdownGstAdded(String rate) {
+    return 'GST ($rate%)';
+  }
+
+  @override
+  String get planBreakdownTotal => 'Total to pay';
+
+  @override
+  String get planInclusiveOfGst => 'Inclusive of GST';
+
+  @override
+  String get planFreeNote => 'No payment is needed for this plan.';
+
+  @override
+  String get planNoPlans => 'No plans are available right now.';
+
+  @override
+  String get planReviewListing => 'Review Listing';
+
+  @override
+  String get planReviewSoon => 'Reviewing your listing is coming soon.';
 }

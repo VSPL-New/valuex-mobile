@@ -27,4 +27,5 @@ class RouteNames {
   static const String notifications = '/notifications';
   static const String sell = '/sell';
   static const String sellDetails = '/sell/details';
+  static const String sellPlan = '/sell/plan';
 }

@@ -1278,5 +1278,95 @@ class AppLocalizationsHi extends AppLocalizations {
   String get itemPriceInvalid => 'सही कीमत लिखें';
 
   @override
-  String get itemDetailsSaved => 'विवरण सहेज लिया गया। प्लान चुनना जल्द आ रहा है।';
+  String get planScreenSubtitle => 'अपनी दृश्यता बढ़ाएँ और तेज़ी से बेचें';
+
+  @override
+  String planValidityDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count दिन',
+      one: '1 दिन',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String planValidityMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count महीने',
+      one: '1 महीना',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String planValidityLabel(String validity) {
+    return '$validity की वैधता';
+  }
+
+  @override
+  String get planSupportAiEmail => 'AI + ईमेल सहायता';
+
+  @override
+  String get planSupportAiEmailChat => 'AI + ईमेल + चैट (मानव) सहायता';
+
+  @override
+  String get planSupportAiEmailChatCall => 'AI + ईमेल + चैट + कॉल पर सहायता';
+
+  @override
+  String get planBadgePopular => 'लोकप्रिय';
+
+  @override
+  String get planBadgeBestValue => 'सबसे बढ़िया मूल्य';
+
+  @override
+  String get planSelected => 'चुना गया';
+
+  @override
+  String get planFree => 'मुफ़्त';
+
+  @override
+  String planOriginalPriceSemantics(String price) {
+    return 'मूल कीमत $price';
+  }
+
+  @override
+  String get planBreakdownTitle => 'भुगतान का विवरण';
+
+  @override
+  String get planBreakdownOriginal => 'मूल कीमत';
+
+  @override
+  String planBreakdownDiscount(int percent) {
+    return 'छूट ($percent% कम)';
+  }
+
+  @override
+  String get planBreakdownGstIncluded => 'GST शामिल';
+
+  @override
+  String planBreakdownGstAdded(String rate) {
+    return 'GST ($rate%)';
+  }
+
+  @override
+  String get planBreakdownTotal => 'कुल भुगतान';
+
+  @override
+  String get planInclusiveOfGst => 'GST सहित';
+
+  @override
+  String get planFreeNote => 'इस प्लान के लिए भुगतान की ज़रूरत नहीं है।';
+
+  @override
+  String get planNoPlans => 'अभी कोई प्लान उपलब्ध नहीं है।';
+
+  @override
+  String get planReviewListing => 'लिस्टिंग की समीक्षा करें';
+
+  @override
+  String get planReviewSoon => 'लिस्टिंग की समीक्षा जल्द आ रही है।';
 }

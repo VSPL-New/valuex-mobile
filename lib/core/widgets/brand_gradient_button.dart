@@ -34,7 +34,7 @@ class BrandGradientButton extends StatelessWidget {
           borderRadius: radius,
           boxShadow: enabled
               ? const [
-                  BoxShadow(color: Color(0x592D6BFF), blurRadius: 24),
+                  BoxShadow(color: Color(0x59135CFF), blurRadius: 24),
                 ]
               : null,
         ),
