@@ -1,11 +1,12 @@
 import 'dart:typed_data';
 
-/// Rules from US-004: JPG/PNG/HEIC, at most 10 MB and at least 480x480, up to 10 photos.
+/// Rules from US-004 (minimum raised to 2 by US-114): JPG/PNG/HEIC, at most 10 MB and at least
+/// 480x480, 2 to 10 photos.
 class ListingPhotoRules {
   ListingPhotoRules._();
 
   static const int maxPhotos = 10;
-  static const int minPhotos = 1;
+  static const int minPhotos = 2;
   static const int maxBytes = 10 * 1024 * 1024;
   static const int minSide = 480;
 }

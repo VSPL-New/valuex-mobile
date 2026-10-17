@@ -44,6 +44,14 @@ class AppColors {
   static const Color sellSparkle = Color(0xFFF59E0B);
   static const Color sellAddTile = Color(0x142D6BFF);
 
+  /// Selected condition chip: green text on a pale green fill (text 4.5:1 or better).
+  static const Color brandSuccessText = Color(0xFF166534);
+  static const Color brandSuccessTint = Color(0xFFE8F6ED);
+
+  /// Price note card: pale amber fill and border (Figma Make).
+  static const Color sellNoteTint = Color(0xFFFEF7EB);
+  static const Color sellNoteBorder = Color(0x33F59E0B);
+
   // Onboarding only (Figma: Just Qlic)
   static const Color onboardingSkipBackground = Color(0xFFE9E9FF);
   static const Color onboardingSkipText = Color(0xFF4A4AE0);

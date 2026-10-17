@@ -12,11 +12,15 @@ class BrandGradientButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool isLoading;
 
+  /// Decorative arrow or icon after the label.
+  final IconData? trailingIcon;
+
   const BrandGradientButton({
     super.key,
     required this.label,
     required this.onPressed,
     this.isLoading = false,
+    this.trailingIcon,
   });
 
   @override
@@ -67,7 +71,22 @@ class BrandGradientButton extends StatelessWidget {
                               ),
                             ),
                           )
-                        : Text(label, textAlign: TextAlign.center, style: AppTextStyles.button),
+                        : trailingIcon == null
+                            ? Text(label, textAlign: TextAlign.center, style: AppTextStyles.button)
+                            : Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Flexible(
+                                    child: Text(label,
+                                        textAlign: TextAlign.center, style: AppTextStyles.button),
+                                  ),
+                                  const SizedBox(width: AppSpacing.xs),
+                                  ExcludeSemantics(
+                                    child: Icon(trailingIcon,
+                                        size: 20, color: AppColors.brandOnPrimary),
+                                  ),
+                                ],
+                              ),
                   ),
                 ),
               ),

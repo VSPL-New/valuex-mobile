@@ -26,6 +26,8 @@ import '../../features/account_security/presentation/account_security_screen.dar
 import '../../features/account_security/presentation/change_contact_screen.dart';
 import '../../features/notifications/presentation/notifications_screen.dart';
 import '../../features/listing/presentation/create_listing_screen.dart';
+import '../../features/listing/presentation/item_details_screen.dart';
+import '../../features/listing/presentation/providers/item_details_controller.dart';
 import '../../features/profile/presentation/profile_details_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import 'route_guard.dart';
@@ -176,6 +178,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: RouteNames.sell,
         name: 'sell',
         builder: (context, state) => const CreateListingScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.sellDetails,
+        name: 'sellDetails',
+        // The photo step passes the draft (and any AI suggestion) as `extra`.
+        redirect: (context, state) => state.extra is ItemDetailsArgs ? null : RouteNames.sell,
+        builder: (context, state) => ItemDetailsScreen(args: state.extra! as ItemDetailsArgs),
       ),
     ],
   );

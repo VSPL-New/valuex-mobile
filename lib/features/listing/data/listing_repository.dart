@@ -6,6 +6,7 @@ import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/api_error.dart';
 import '../../../core/network/api_error_mapper.dart';
+import '../domain/listing_details.dart';
 
 /// A short-lived URL the photo bytes are sent to, for one media asset.
 class UploadTicket {
@@ -109,6 +110,31 @@ class ListingRepository {
 
   Future<void> deleteImage(String listingId, String imageId) =>
       _client.delete<void>(ApiConstants.listingImage(listingId, imageId));
+
+  /// Saves the item details of a draft (US-114). Only the city is sent as the location.
+  Future<void> saveDetails(String listingId, ListingDetailsDraft details, {String? city}) =>
+      _client.patch<void>(
+        ApiConstants.listing(listingId),
+        data: {
+          'title': details.title.trim(),
+          'categorySlug': details.categorySlug,
+          'condition': details.condition?.apiValue,
+          'description': details.description.trim(),
+          'price': details.parsedPrice,
+          'location': city,
+        },
+      );
+
+  /// Tells the server what the seller did with each AI suggestion (US-005 contract).
+  Future<void> sendSuggestionFeedback(
+    String listingId,
+    String suggestionId,
+    List<SuggestionFeedback> feedback,
+  ) =>
+      _client.patch<void>(
+        ApiConstants.listingAiFeedback(listingId, suggestionId),
+        data: {'fields': [for (final item in feedback) item.toJson()]},
+      );
 }
 
 /// Plain client for signed storage URLs: no base URL, no bearer token, no envelope.

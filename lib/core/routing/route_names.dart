@@ -26,4 +26,5 @@ class RouteNames {
   static const String categories = '/home/categories';
   static const String notifications = '/notifications';
   static const String sell = '/sell';
+  static const String sellDetails = '/sell/details';
 }

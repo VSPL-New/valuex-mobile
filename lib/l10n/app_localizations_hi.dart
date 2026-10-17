@@ -1139,9 +1139,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get sellSubmitToAi => 'AI को भेजें';
 
   @override
-  String get sellSubmitted => 'फ़ोटो सहेज ली गईं। AI सुझाव जल्द आ रहे हैं।';
-
-  @override
   String get sellMainPhoto => 'मुख्य';
 
   @override
@@ -1191,4 +1188,95 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get sellErrorNotActive => 'केवल सक्रिय खाते ही लिस्टिंग बना सकते हैं';
+
+  @override
+  String get sellMinPhotosHint => 'आगे बढ़ने के लिए कम से कम 2 फ़ोटो जोड़ें';
+
+  @override
+  String get sellErrorMinPhotos => 'कम से कम 2 फ़ोटो ज़रूरी हैं';
+
+  @override
+  String get sellErrorNotEditable => 'इस लिस्टिंग में अब बदलाव नहीं किया जा सकता';
+
+  @override
+  String get itemDetailsTitle => 'वस्तु का विवरण';
+
+  @override
+  String get itemDetailsSubtitleManual => 'विवरण भरें';
+
+  @override
+  String get itemDetailsAiBanner => 'AI ने ये आपकी फ़ोटो से भरे हैं। ज़रूरत हो तो देखकर बदलें।';
+
+  @override
+  String get itemTitleLabel => 'शीर्षक';
+
+  @override
+  String get itemTitleHint => 'जैसे iPhone 13 128GB';
+
+  @override
+  String get itemCategoryLabel => 'श्रेणी';
+
+  @override
+  String get itemCategoryOthers => 'अन्य';
+
+  @override
+  String get itemConditionLabel => 'स्थिति';
+
+  @override
+  String get itemConditionNew => 'बिल्कुल नया';
+
+  @override
+  String get itemConditionLikeNew => 'नए जैसा';
+
+  @override
+  String get itemConditionGood => 'अच्छा';
+
+  @override
+  String get itemConditionFair => 'ठीक-ठाक';
+
+  @override
+  String get itemConditionPoor => 'खराब';
+
+  @override
+  String get itemDescriptionLabel => 'विवरण';
+
+  @override
+  String get itemDescriptionHint => 'उम्र, इस्तेमाल कैसे हुआ, साथ में क्या-क्या है';
+
+  @override
+  String get itemLocationLabel => 'स्थान';
+
+  @override
+  String get itemLocationChange => 'स्थान बदलें';
+
+  @override
+  String get itemPriceLabel => 'कीमत';
+
+  @override
+  String get itemPriceNote =>
+      'खरीदार मोलभाव कर सकते हैं। आप किसी भी ऑफ़र को स्वीकार, काउंटर या अस्वीकार कर सकते हैं।';
+
+  @override
+  String get itemChooseListingPlan => 'लिस्टिंग प्लान चुनें';
+
+  @override
+  String get itemFillMissing => 'आगे बढ़ने के लिए ज़रूरी जानकारी भरें';
+
+  @override
+  String get itemTitleRequired => 'अपनी वस्तु का शीर्षक लिखें';
+
+  @override
+  String get itemCategoryRequired => 'श्रेणी चुनें';
+
+  @override
+  String get itemConditionRequired => 'वस्तु की स्थिति चुनें';
+
+  @override
+  String get itemDescriptionRequired => 'अपनी वस्तु का विवरण लिखें';
+
+  @override
+  String get itemPriceInvalid => 'सही कीमत लिखें';
+
+  @override
+  String get itemDetailsSaved => 'विवरण सहेज लिया गया। प्लान चुनना जल्द आ रहा है।';
 }
