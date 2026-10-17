@@ -108,8 +108,7 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                 _Hint(show: hints.contains(DetailsField.title), text: l10n.itemTitleRequired),
                 const SizedBox(height: AppSpacing.md),
                 _Section(label: l10n.itemCategoryLabel, child: _CategoryChips(args: widget.args)),
-                _Hint(
-                    show: hints.contains(DetailsField.category), text: l10n.itemCategoryRequired),
+                _Hint(show: hints.contains(DetailsField.category), text: l10n.itemCategoryRequired),
                 const SizedBox(height: AppSpacing.md),
                 _Section(
                   label: l10n.itemConditionLabel,
@@ -128,8 +127,7 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                   ),
                 ),
                 _Hint(
-                    show: hints.contains(DetailsField.condition),
-                    text: l10n.itemConditionRequired),
+                    show: hints.contains(DetailsField.condition), text: l10n.itemConditionRequired),
                 const SizedBox(height: AppSpacing.md),
                 _Section(
                   label: l10n.itemDescriptionLabel,

@@ -133,7 +133,9 @@ class ListingRepository {
   ) =>
       _client.patch<void>(
         ApiConstants.listingAiFeedback(listingId, suggestionId),
-        data: {'fields': [for (final item in feedback) item.toJson()]},
+        data: {
+          'fields': [for (final item in feedback) item.toJson()]
+        },
       );
 }
 

@@ -175,8 +175,7 @@ void main() {
       );
       expect(find.text('AI filled these from your photos. Review and edit as needed.'),
           findsOneWidget);
-      expect(find.text('Fill in the details'), findsNothing,
-          reason: 'the AI notice replaces it');
+      expect(find.text('Fill in the details'), findsNothing, reason: 'the AI notice replaces it');
       expect(find.text('Headphones'), findsOneWidget);
       expect(find.text('Over-ear'), findsOneWidget);
 

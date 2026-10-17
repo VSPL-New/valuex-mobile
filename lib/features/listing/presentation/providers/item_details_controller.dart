@@ -13,7 +13,9 @@ class ItemDetailsArgs {
 
   @override
   bool operator ==(Object other) =>
-      other is ItemDetailsArgs && other.listingId == listingId && other.suggestion?.id == suggestion?.id;
+      other is ItemDetailsArgs &&
+      other.listingId == listingId &&
+      other.suggestion?.id == suggestion?.id;
 
   @override
   int get hashCode => Object.hash(listingId, suggestion?.id);
