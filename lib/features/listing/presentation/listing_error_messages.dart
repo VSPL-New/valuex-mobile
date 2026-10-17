@@ -10,6 +10,13 @@ String? listingCodeMessage(AppLocalizations l10n, String? code) {
     'ERROR_INVALID_PHOTO' => l10n.sellErrorInvalidPhoto,
     'ERROR_PHOTO_UPLOAD_FAILED' => l10n.sellErrorUploadFailed,
     'ACCOUNT_NOT_ACTIVE' => l10n.sellErrorNotActive,
+    'ERROR_MIN_PHOTOS_REQUIRED' => l10n.sellErrorMinPhotos,
+    'ERROR_LISTING_NOT_EDITABLE' => l10n.sellErrorNotEditable,
+    'ERROR_TITLE_REQUIRED' => l10n.itemTitleRequired,
+    'ERROR_CATEGORY_REQUIRED' => l10n.itemCategoryRequired,
+    'ERROR_CONDITION_REQUIRED' => l10n.itemConditionRequired,
+    'ERROR_DESCRIPTION_REQUIRED' => l10n.itemDescriptionRequired,
+    'ERROR_PRICE_INVALID' => l10n.itemPriceInvalid,
     'AADHAAR_VERIFICATION_REQUIRED' => l10n.homeSellAadhaarRequired,
     _ => null,
   };

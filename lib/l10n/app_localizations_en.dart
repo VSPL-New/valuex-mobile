@@ -1152,9 +1152,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sellSubmitToAi => 'Submit to AI';
 
   @override
-  String get sellSubmitted => 'Photos saved. AI suggestions are coming soon.';
-
-  @override
   String get sellMainPhoto => 'MAIN';
 
   @override
@@ -1204,4 +1201,94 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sellErrorNotActive => 'Only active accounts can create listings';
+
+  @override
+  String get sellMinPhotosHint => 'Add at least 2 photos to continue';
+
+  @override
+  String get sellErrorMinPhotos => 'At least 2 photos required';
+
+  @override
+  String get sellErrorNotEditable => 'This listing can no longer be edited';
+
+  @override
+  String get itemDetailsTitle => 'Item Details';
+
+  @override
+  String get itemDetailsSubtitleManual => 'Fill in the details';
+
+  @override
+  String get itemDetailsAiBanner => 'AI filled these from your photos. Review and edit as needed.';
+
+  @override
+  String get itemTitleLabel => 'Title';
+
+  @override
+  String get itemTitleHint => 'e.g. iPhone 13 128GB';
+
+  @override
+  String get itemCategoryLabel => 'Category';
+
+  @override
+  String get itemCategoryOthers => 'Others';
+
+  @override
+  String get itemConditionLabel => 'Condition';
+
+  @override
+  String get itemConditionNew => 'Brand New';
+
+  @override
+  String get itemConditionLikeNew => 'Like New';
+
+  @override
+  String get itemConditionGood => 'Good';
+
+  @override
+  String get itemConditionFair => 'Fair';
+
+  @override
+  String get itemConditionPoor => 'Poor';
+
+  @override
+  String get itemDescriptionLabel => 'Description';
+
+  @override
+  String get itemDescriptionHint => 'Age, how it was used, accessories included';
+
+  @override
+  String get itemLocationLabel => 'Location';
+
+  @override
+  String get itemLocationChange => 'Change location';
+
+  @override
+  String get itemPriceLabel => 'Price';
+
+  @override
+  String get itemPriceNote => 'Buyers can negotiate. You can accept, counter, or reject any offer.';
+
+  @override
+  String get itemChooseListingPlan => 'Choose Listing Plan';
+
+  @override
+  String get itemFillMissing => 'Fill in the required fields to continue';
+
+  @override
+  String get itemTitleRequired => 'Enter a title for your item';
+
+  @override
+  String get itemCategoryRequired => 'Choose a category';
+
+  @override
+  String get itemConditionRequired => 'Choose the condition of your item';
+
+  @override
+  String get itemDescriptionRequired => 'Describe your item';
+
+  @override
+  String get itemPriceInvalid => 'Enter a valid price';
+
+  @override
+  String get itemDetailsSaved => 'Details saved. Choosing a plan is coming soon.';
 }

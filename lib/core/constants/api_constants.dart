@@ -35,6 +35,9 @@ class ApiConstants {
   static const String listings = '/listings';
   static const String mediaUploads = '/media/uploads';
 
+  static String listing(String listingId) => '/listings/$listingId';
+  static String listingAiFeedback(String listingId, String suggestionId) =>
+      '/listings/$listingId/ai-suggestions/$suggestionId/feedback';
   static String mediaComplete(String mediaId) => '/media/$mediaId/complete';
   static String listingImages(String listingId) => '/listings/$listingId/images';
   static String listingSubmit(String listingId) => '/listings/$listingId/submit';

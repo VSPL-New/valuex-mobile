@@ -35,10 +35,12 @@ const Map<String, Set<RegistrationStep>> _gatedRoutes = {
   RouteNames.notifications: _profileSteps,
   RouteNames.categories: {RegistrationStep.home},
   RouteNames.sell: {RegistrationStep.home},
+  RouteNames.sellDetails: {RegistrationStep.home},
 };
 
 const Set<String> _signedInOnlyRoutes = {
   RouteNames.sell,
+  RouteNames.sellDetails,
   RouteNames.profile,
   RouteNames.profileDetails,
   RouteNames.accountSecurity,

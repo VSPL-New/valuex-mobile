@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
@@ -21,6 +21,8 @@ import 'package:valuex_mobile/features/listing/data/photo_source.dart';
 import 'package:valuex_mobile/features/listing/domain/listing_photo.dart';
 import 'package:valuex_mobile/features/listing/presentation/listing_error_messages.dart';
 import 'package:valuex_mobile/features/listing/presentation/create_listing_screen.dart';
+import 'package:valuex_mobile/features/listing/presentation/item_details_screen.dart';
+import 'package:valuex_mobile/core/widgets/square_back_button.dart';
 import 'package:valuex_mobile/features/listing/presentation/providers/create_listing_controller.dart';
 import 'package:valuex_mobile/features/notifications/data/notifications_repository.dart';
 import 'package:valuex_mobile/l10n/app_localizations_en.dart';
@@ -349,7 +351,7 @@ void main() {
     });
 
     test('submit sends the draft and reports success', () async {
-      source.next = _photos(1);
+      source.next = _photos(2);
       await controller().addPhotos(PhotoSourceKind.camera);
 
       final result = await controller().submit();
@@ -360,7 +362,7 @@ void main() {
     });
 
     test('submit asks for Aadhaar when the server says it is required', () async {
-      source.next = _photos(1);
+      source.next = _photos(2);
       await controller().addPhotos(PhotoSourceKind.camera);
       when(() => repository.submitDraft(any())).thenThrow(const ApiError(
         type: ApiErrorType.business,
@@ -372,12 +374,12 @@ void main() {
       final result = await controller().submit();
 
       expect(result.outcome, SubmitOutcome.aadhaarRequired);
-      expect(state().photos, hasLength(1));
+      expect(state().photos, hasLength(2));
       expect(state().isBusy, isFalse);
     });
 
     test('submit reports any other failure and keeps the photos', () async {
-      source.next = _photos(1);
+      source.next = _photos(2);
       await controller().addPhotos(PhotoSourceKind.camera);
       when(() => repository.submitDraft(any())).thenThrow(_offline);
 
@@ -385,7 +387,7 @@ void main() {
 
       expect(result.outcome, SubmitOutcome.failed);
       expect(result.error, _offline);
-      expect(state().photos, hasLength(1));
+      expect(state().photos, hasLength(2));
     });
 
     test('submit does nothing without a ready photo', () async {
@@ -411,10 +413,10 @@ void main() {
       when(() => repository.uploadBytes(any(), any(), any())).thenThrow(
         const ApiError(type: ApiErrorType.network, message: 'x', code: 'ERROR_PHOTO_UPLOAD_FAILED'),
       );
-      source.next = _photos(1);
+      source.next = _photos(2);
       await controller().addPhotos(PhotoSourceKind.camera);
 
-      final failed = state().photos.single;
+      final failed = state().photos.first;
       expect(failed.status, PhotoStatus.failed);
       expect(failed.errorCode, 'ERROR_PHOTO_UPLOAD_FAILED');
       expect(failed.canRetry, isTrue);
@@ -422,8 +424,10 @@ void main() {
 
       when(() => repository.uploadBytes(any(), any(), any())).thenAnswer((_) async {});
       await controller().retry(failed.localId);
+      expect(state().canSubmit, isFalse, reason: 'one photo is still failed');
+      await controller().retry(state().photos.last.localId);
 
-      expect(state().photos.single.status, PhotoStatus.ready);
+      expect(state().photos.map((p) => p.status), [PhotoStatus.ready, PhotoStatus.ready]);
       expect(state().canSubmit, isTrue);
     });
 
@@ -542,11 +546,11 @@ void main() {
       expect(find.text('Take clear, well-lit photos'), findsOneWidget);
       expect(find.text('Include all accessories (if available)'), findsOneWidget);
       expect(find.text('Submit to AI'), findsOneWidget);
-      expect(find.text('Add at least 2 photos'), findsNothing);
+      expect(find.text('Add at least 2 photos to continue'), findsOneWidget);
       await harness.dispose();
     });
 
-    testWidgets('adding a photo from the gallery fills the grid and enables Submit to AI',
+    testWidgets('adding photos from the gallery fills the grid and Submit to AI opens Item Details',
         (tester) async {
       final harness = await openSell(tester);
 
@@ -555,16 +559,32 @@ void main() {
       await harness.settle();
       await tester.tap(find.text('Choose from gallery'));
       await harness.settle();
-
       expect(find.text('1/10 photos added'), findsOneWidget);
-      expect(find.text('MAIN'), findsOneWidget);
+      expect(find.text('Add at least 2 photos to continue'), findsOneWidget);
       await tester.tap(find.text('Submit to AI'));
       await harness.settle();
-      expect(find.text('Photos saved. AI suggestions are coming soon.'), findsOneWidget);
+      verifyNever(() => repository.submitDraft(any()));
 
+      source.next = _photos(1);
+      await tester.tap(find.widgetWithText(InkWell, 'Add').first);
+      await harness.settle();
+      await tester.tap(find.text('Choose from gallery'));
+      await harness.settle();
+
+      expect(find.text('2/10 photos added'), findsOneWidget);
+      expect(find.text('MAIN'), findsOneWidget);
+      expect(find.text('Add at least 2 photos to continue'), findsNothing);
+      await tester.tap(find.text('Submit to AI'));
+      await harness.settle();
+      expect(find.byType(ItemDetailsScreen), findsOneWidget);
+      expect(find.text('Fill in the details'), findsOneWidget);
+
+      await tester.tap(find.byType(SquareBackButton));
+      await harness.settle();
       await tester.tap(find.bySemanticsLabel('Remove photo 1'));
       await harness.settle();
-      expect(find.text('Take or upload photos'), findsOneWidget);
+      expect(find.text('1/10 photos added'), findsOneWidget);
+      expect(find.text('Add at least 2 photos to continue'), findsOneWidget);
       verify(() => repository.deleteImage('listing-1', 'image-0')).called(1);
       await harness.dispose();
     });
@@ -581,12 +601,12 @@ void main() {
         statusCode: 403,
       ));
 
-      source.next = _photos(1);
+      source.next = _photos(2);
       await tester.tap(find.widgetWithText(InkWell, 'Add Photos').first);
       await harness.settle();
       await tester.tap(find.text('Choose from gallery'));
       await harness.settle();
-      expect(find.text('1/10 photos added'), findsOneWidget);
+      expect(find.text('2/10 photos added'), findsOneWidget);
 
       await tester.tap(find.text('Submit to AI'));
       await harness.settle();
@@ -595,7 +615,7 @@ void main() {
       await tester.tap(find.text('Not now'));
       await harness.settle();
       expect(find.byType(CreateListingScreen), findsOneWidget);
-      expect(find.text('1/10 photos added'), findsOneWidget, reason: 'the photos are kept');
+      expect(find.text('2/10 photos added'), findsOneWidget, reason: 'the photos are kept');
       await harness.dispose();
     });
 
@@ -614,7 +634,7 @@ void main() {
           );
         }
       });
-      source.next = _photos(1);
+      source.next = _photos(2);
       await tester.tap(find.widgetWithText(InkWell, 'Add Photos').first);
       await harness.settle();
       await tester.tap(find.text('Choose from gallery'));
@@ -634,9 +654,9 @@ void main() {
       await harness.settle();
       await harness.settle();
 
-      expect(find.byType(CreateListingScreen), findsOneWidget);
-      expect(find.text('1/10 photos added'), findsOneWidget);
-      expect(find.text('Photos saved. AI suggestions are coming soon.'), findsOneWidget);
+      expect(find.byType(CreateListingScreen, skipOffstage: false), findsOneWidget);
+      expect(find.text('2/10 photos added', skipOffstage: false), findsOneWidget);
+      expect(find.byType(ItemDetailsScreen), findsOneWidget);
       verify(() => repository.submitDraft('listing-1')).called(2);
       await harness.dispose();
     });

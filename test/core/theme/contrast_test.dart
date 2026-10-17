@@ -31,6 +31,12 @@ void main() {
     'error text on the input fill': (AppColors.brandError, AppColors.brandSurfaceTint),
     'card price on white': (AppColors.brandLink, AppColors.brandSurface),
     'condition chip on its tint': (AppColors.brandForeground, AppColors.brandSurfaceTint),
+    'selected chip text on its blue tint': (AppColors.brandLink, AppColors.brandSurfaceTint),
+    'selected condition text on its green tint': (
+      AppColors.brandSuccessText,
+      AppColors.brandSuccessTint,
+    ),
+    'price note text on the amber card': (AppColors.brandMutedText, AppColors.sellNoteTint),
     'Boosted badge': (AppColors.brandOnPrimary, AppColors.brandAccent),
     'promo text on the dark card': (AppColors.brandOnPrimary, AppColors.brandForeground),
     'active tab label on white': (AppColors.brandLink, AppColors.brandSurface),

@@ -2103,12 +2103,6 @@ abstract class AppLocalizations {
   /// **'Submit to AI'**
   String get sellSubmitToAi;
 
-  /// No description provided for @sellSubmitted.
-  ///
-  /// In en, this message translates to:
-  /// **'Photos saved. AI suggestions are coming soon.'**
-  String get sellSubmitted;
-
   /// No description provided for @sellMainPhoto.
   ///
   /// In en, this message translates to:
@@ -2198,6 +2192,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Only active accounts can create listings'**
   String get sellErrorNotActive;
+
+  /// No description provided for @sellMinPhotosHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least 2 photos to continue'**
+  String get sellMinPhotosHint;
+
+  /// No description provided for @sellErrorMinPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 2 photos required'**
+  String get sellErrorMinPhotos;
+
+  /// No description provided for @sellErrorNotEditable.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing can no longer be edited'**
+  String get sellErrorNotEditable;
+
+  /// No description provided for @itemDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Item Details'**
+  String get itemDetailsTitle;
+
+  /// No description provided for @itemDetailsSubtitleManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in the details'**
+  String get itemDetailsSubtitleManual;
+
+  /// No description provided for @itemDetailsAiBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'AI filled these from your photos. Review and edit as needed.'**
+  String get itemDetailsAiBanner;
+
+  /// No description provided for @itemTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get itemTitleLabel;
+
+  /// No description provided for @itemTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. iPhone 13 128GB'**
+  String get itemTitleHint;
+
+  /// No description provided for @itemCategoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get itemCategoryLabel;
+
+  /// No description provided for @itemCategoryOthers.
+  ///
+  /// In en, this message translates to:
+  /// **'Others'**
+  String get itemCategoryOthers;
+
+  /// No description provided for @itemConditionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Condition'**
+  String get itemConditionLabel;
+
+  /// No description provided for @itemConditionNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Brand New'**
+  String get itemConditionNew;
+
+  /// No description provided for @itemConditionLikeNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Like New'**
+  String get itemConditionLikeNew;
+
+  /// No description provided for @itemConditionGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get itemConditionGood;
+
+  /// No description provided for @itemConditionFair.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair'**
+  String get itemConditionFair;
+
+  /// No description provided for @itemConditionPoor.
+  ///
+  /// In en, this message translates to:
+  /// **'Poor'**
+  String get itemConditionPoor;
+
+  /// No description provided for @itemDescriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get itemDescriptionLabel;
+
+  /// No description provided for @itemDescriptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Age, how it was used, accessories included'**
+  String get itemDescriptionHint;
+
+  /// No description provided for @itemLocationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get itemLocationLabel;
+
+  /// No description provided for @itemLocationChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change location'**
+  String get itemLocationChange;
+
+  /// No description provided for @itemPriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get itemPriceLabel;
+
+  /// No description provided for @itemPriceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Buyers can negotiate. You can accept, counter, or reject any offer.'**
+  String get itemPriceNote;
+
+  /// No description provided for @itemChooseListingPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Listing Plan'**
+  String get itemChooseListingPlan;
+
+  /// No description provided for @itemFillMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in the required fields to continue'**
+  String get itemFillMissing;
+
+  /// No description provided for @itemTitleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a title for your item'**
+  String get itemTitleRequired;
+
+  /// No description provided for @itemCategoryRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a category'**
+  String get itemCategoryRequired;
+
+  /// No description provided for @itemConditionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the condition of your item'**
+  String get itemConditionRequired;
+
+  /// No description provided for @itemDescriptionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe your item'**
+  String get itemDescriptionRequired;
+
+  /// No description provided for @itemPriceInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid price'**
+  String get itemPriceInvalid;
+
+  /// No description provided for @itemDetailsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Details saved. Choosing a plan is coming soon.'**
+  String get itemDetailsSaved;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
