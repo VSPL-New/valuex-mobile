@@ -49,7 +49,7 @@ class BrandBottomNav extends StatelessWidget {
         decoration: const BoxDecoration(
           color: AppColors.brandSurface,
           border: Border(top: BorderSide(color: AppColors.brandBorder)),
-          boxShadow: [BoxShadow(color: Color(0x0F2D6BFF), blurRadius: 20, offset: Offset(0, -4))],
+          boxShadow: [BoxShadow(color: Color(0x0F135CFF), blurRadius: 20, offset: Offset(0, -4))],
         ),
         child: SafeArea(
           top: false,
@@ -196,7 +196,7 @@ class _SellTab extends StatelessWidget {
                 border:
                     Border.all(color: AppColors.brandOnPrimary.withValues(alpha: 0.3), width: 2),
                 boxShadow: const [
-                  BoxShadow(color: Color(0x662D6BFF), blurRadius: 10, offset: Offset(0, 4)),
+                  BoxShadow(color: Color(0x66135CFF), blurRadius: 10, offset: Offset(0, 4)),
                 ],
               ),
               child: Center(child: SvgPicture.asset(AppAssets.navSellIcon, width: 22, height: 22)),
