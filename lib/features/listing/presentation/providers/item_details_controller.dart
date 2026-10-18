@@ -29,14 +29,32 @@ class ItemDetailsState {
   final bool aiFilled;
   final bool isSaving;
 
+  /// What AI suggested, as first shown; null when AI did not fill the page.
+  final ListingDetailsDraft? suggested;
+
   const ItemDetailsState({
     this.draft = const ListingDetailsDraft(),
     this.touched = const {},
     this.aiFilled = false,
     this.isSaving = false,
+    this.suggested,
   });
 
   bool get canContinue => draft.isValid && !isSaving;
+
+  /// True while a field still holds exactly what AI suggested for it; editing it clears this.
+  bool isAiGenerated(DetailsField field) {
+    final ai = suggested;
+    if (ai == null) return false;
+    return switch (field) {
+      DetailsField.title => ai.title.isNotEmpty && draft.title.trim() == ai.title.trim(),
+      DetailsField.category => ai.categorySlug != null && draft.categorySlug == ai.categorySlug,
+      DetailsField.condition => ai.condition != null && draft.condition == ai.condition,
+      DetailsField.description =>
+        ai.description.isNotEmpty && draft.description.trim() == ai.description.trim(),
+      DetailsField.price => false,
+    };
+  }
 
   /// Invalid fields the seller has already worked on.
   List<DetailsField> get visibleHints => [
@@ -54,6 +72,7 @@ class ItemDetailsState {
       touched: touched ?? this.touched,
       aiFilled: aiFilled,
       isSaving: isSaving ?? this.isSaving,
+      suggested: suggested,
     );
   }
 }
@@ -73,6 +92,7 @@ class ItemDetailsController extends Notifier<ItemDetailsState> {
     return ItemDetailsState(
       draft: suggestion?.asDraft ?? const ListingDetailsDraft(),
       aiFilled: suggestion != null,
+      suggested: suggestion?.asDraft,
     );
   }
 

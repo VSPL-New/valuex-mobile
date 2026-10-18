@@ -464,7 +464,7 @@
   "addressCheckInvalid": "Please enter a complete address",
   "addressCheckUnavailable": "Address verification is unavailable right now. You can still continue",
   "sellAddPhotosTitle": "Add Photos",
-  "sellAddPhotosSubtitle": "Clear photos sell faster (min 1, max 10)",
+  "sellAddPhotosSubtitle": "Clear photos sell faster (min 2, max 10)",
   "sellPhotoCount": "{count}/10 photos added",
   "@sellPhotoCount": {"placeholders": {"count": {"type": "int"}}},
   "sellAiTitle": "Let AI do the work for you",
@@ -554,5 +554,7 @@
   "planFreeNote": "No payment is needed for this plan.",
   "planNoPlans": "No plans are available right now.",
   "planReviewListing": "Review Listing",
-  "planReviewSoon": "Reviewing your listing is coming soon."
+  "planReviewSoon": "Reviewing your listing is coming soon.",
+  "sellYourPhotos": "Your photos",
+  "itemAiGenerated": "AI generated"
 }

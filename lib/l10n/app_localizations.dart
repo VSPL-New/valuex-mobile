@@ -2022,7 +2022,7 @@ abstract class AppLocalizations {
   /// No description provided for @sellAddPhotosSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Clear photos sell faster (min 1, max 10)'**
+  /// **'Clear photos sell faster (min 2, max 10)'**
   String get sellAddPhotosSubtitle;
 
   /// No description provided for @sellPhotoCount.
@@ -2504,6 +2504,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reviewing your listing is coming soon.'**
   String get planReviewSoon;
+
+  /// No description provided for @sellYourPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Your photos'**
+  String get sellYourPhotos;
+
+  /// No description provided for @itemAiGenerated.
+  ///
+  /// In en, this message translates to:
+  /// **'AI generated'**
+  String get itemAiGenerated;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

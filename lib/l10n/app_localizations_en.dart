@@ -1107,7 +1107,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sellAddPhotosTitle => 'Add Photos';
 
   @override
-  String get sellAddPhotosSubtitle => 'Clear photos sell faster (min 1, max 10)';
+  String get sellAddPhotosSubtitle => 'Clear photos sell faster (min 2, max 10)';
 
   @override
   String sellPhotoCount(int count) {
@@ -1381,4 +1381,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get planReviewSoon => 'Reviewing your listing is coming soon.';
+
+  @override
+  String get sellYourPhotos => 'Your photos';
+
+  @override
+  String get itemAiGenerated => 'AI generated';
 }
