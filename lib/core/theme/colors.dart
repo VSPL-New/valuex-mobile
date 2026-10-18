@@ -52,6 +52,11 @@ class AppColors {
   static const Color sellNoteTint = Color(0xFFFEF7EB);
   static const Color sellNoteBorder = Color(0x33F59E0B);
 
+  /// Selected plan card glow by plan position (Figma Make: grey-blue 20%, magenta 25%, blue 30%).
+  static const Color sellPlanGlowBasic = Color(0x338892B0);
+  static const Color sellPlanGlowBoosted = Color(0x40C026D3);
+  static const Color sellPlanGlowPriority = Color(0x4D135CFF);
+
   // Onboarding only (Figma: Just Qlic)
   static const Color onboardingSkipBackground = Color(0xFFE9E9FF);
   static const Color onboardingSkipText = Color(0xFF4A4AE0);

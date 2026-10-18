@@ -35,7 +35,10 @@ class PlanBreakdown extends StatelessWidget {
             if (plan.isFree) ...[
               _Row(label: l10n.planBreakdownTotal, value: l10n.planFree, strong: true),
               const SizedBox(height: AppSpacing.xs),
-              Text(l10n.planFreeNote, style: AppTextStyles.hint),
+              Text(
+                l10n.planFreeNote,
+                style: AppTextStyles.hint.copyWith(color: AppColors.brandForeground),
+              ),
             ] else ...[
               if (plan.hasDiscount && plan.originalPrice != null)
                 _Row(
@@ -64,7 +67,10 @@ class PlanBreakdown extends StatelessWidget {
               if (plan.priceIncludesGst && plan.gstAmount > 0)
                 Padding(
                   padding: const EdgeInsets.only(top: AppSpacing.xs),
-                  child: Text(l10n.planInclusiveOfGst, style: AppTextStyles.hint),
+                  child: Text(
+                    l10n.planInclusiveOfGst,
+                    style: AppTextStyles.hint.copyWith(color: AppColors.brandForeground),
+                  ),
                 ),
             ],
           ],
@@ -86,7 +92,8 @@ class _Row extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labelStyle = strong ? AppTextStyles.cardTitle : AppTextStyles.bodySecondary;
+    final labelStyle = (strong ? AppTextStyles.cardTitle : AppTextStyles.bodySecondary)
+        .copyWith(color: AppColors.brandForeground);
     final valueStyle = (strong ? AppTextStyles.cardPrice : AppTextStyles.body).copyWith(
       color: valueColor ?? AppColors.brandForeground,
       fontWeight: FontWeight.w700,

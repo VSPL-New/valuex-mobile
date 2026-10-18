@@ -12,12 +12,19 @@ class _PlanLook {
   final IconData icon;
   final Color accent;
 
-  const _PlanLook(this.icon, this.accent);
+  /// Selected card glow, as in Figma Make (a different strength for each plan).
+  final Color glow;
+
+  const _PlanLook(this.icon, this.accent, this.glow);
 
   static const List<_PlanLook> all = [
-    _PlanLook(Icons.star_outline_rounded, AppColors.brandMutedText),
-    _PlanLook(Icons.bolt_rounded, AppColors.brandAccent),
-    _PlanLook(Icons.workspace_premium_outlined, AppColors.brandPrimary),
+    _PlanLook(Icons.star_outline_rounded, AppColors.brandMutedText, AppColors.sellPlanGlowBasic),
+    _PlanLook(Icons.bolt_rounded, AppColors.brandAccent, AppColors.sellPlanGlowBoosted),
+    _PlanLook(
+      Icons.workspace_premium_outlined,
+      AppColors.brandPrimary,
+      AppColors.sellPlanGlowPriority,
+    ),
   ];
 }
 
@@ -52,26 +59,24 @@ class PlanCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: radius,
             color: AppColors.brandSurface,
-            gradient: selected
-                ? LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [look.accent.withValues(alpha: 0.14), AppColors.brandSurface],
-                  )
-                : null,
             border: Border.all(
-              color: selected ? look.accent : AppColors.brandControlBorder,
+              color: selected ? look.accent : AppColors.brandBorder,
               width: selected ? 2 : 1,
             ),
-            boxShadow: selected
-                ? [BoxShadow(color: look.accent.withValues(alpha: 0.2), blurRadius: 20)]
-                : null,
+            boxShadow: [
+              if (selected)
+                BoxShadow(color: look.glow, blurRadius: 20)
+              else
+                const BoxShadow(color: Color(0x14135CFF), blurRadius: 10, offset: Offset(0, 2)),
+            ],
           ),
           child: Material(
             color: Colors.transparent,
             child: InkWell(
               borderRadius: radius,
               onTap: onTap,
+              splashFactory: NoSplash.splashFactory,
+              overlayColor: const WidgetStatePropertyAll(Colors.transparent),
               child: Padding(
                 padding: const EdgeInsets.all(AppSpacing.md),
                 child: Column(
@@ -95,14 +100,11 @@ class PlanCard extends StatelessWidget {
     );
   }
 
-  /// The catalog features, then the validity, then the support level (when it is a known one).
+  /// The catalog features, then the support level (when it is a known one); the validity is
+  /// shown under the plan name.
   List<String> _lines(AppLocalizations l10n) {
     final support = planSupportLabel(l10n, plan.supportLevel);
-    return [
-      ...plan.features,
-      l10n.planValidityLabel(planValidityText(l10n, plan.validityDays)),
-      if (support != null) support,
-    ];
+    return [...plan.features, if (support != null) support];
   }
 }
 
@@ -168,14 +170,23 @@ class _Header extends StatelessWidget {
         ),
         const SizedBox(width: AppSpacing.sm),
         Expanded(
-          child: Wrap(
-            spacing: AppSpacing.sm,
-            runSpacing: AppSpacing.xs,
-            crossAxisAlignment: WrapCrossAlignment.center,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(plan.name, style: AppTextStyles.cardTitle),
-              if (plan.badge != null)
-                _Badge(text: planBadgeText(l10n, plan.badge!), color: look.accent),
+              Wrap(
+                spacing: AppSpacing.sm,
+                runSpacing: AppSpacing.xs,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Text(plan.name, style: AppTextStyles.cardTitle),
+                  if (plan.badge != null)
+                    _Badge(text: planBadgeText(l10n, plan.badge!), color: look.accent),
+                ],
+              ),
+              Text(
+                l10n.planValidityLabel(planValidityText(l10n, plan.validityDays)),
+                style: AppTextStyles.hint.copyWith(color: AppColors.brandForeground),
+              ),
             ],
           ),
         ),
@@ -225,7 +236,10 @@ class _Price extends StatelessWidget {
       children: [
         Text(
           plan.isFree ? l10n.planFree : Formatters.money(plan.price),
-          style: AppTextStyles.cardPrice.copyWith(color: AppColors.brandForeground),
+          style: AppTextStyles.cardPrice.copyWith(
+            color: AppColors.brandForeground,
+            fontWeight: FontWeight.w800,
+          ),
         ),
         if (plan.hasDiscount && original != null)
           Semantics(
@@ -233,7 +247,10 @@ class _Price extends StatelessWidget {
             excludeSemantics: true,
             child: Text(
               Formatters.money(original),
-              style: AppTextStyles.hint.copyWith(decoration: TextDecoration.lineThrough),
+              style: AppTextStyles.hint.copyWith(
+                color: AppColors.brandForeground,
+                decoration: TextDecoration.lineThrough,
+              ),
             ),
           ),
       ],
@@ -257,7 +274,12 @@ class _FeatureLine extends StatelessWidget {
           child: ExcludeSemantics(child: Icon(Icons.check_rounded, size: 16, color: color)),
         ),
         const SizedBox(width: AppSpacing.sm),
-        Expanded(child: Text(text, style: AppTextStyles.bodySecondary)),
+        Expanded(
+          child: Text(
+            text,
+            style: AppTextStyles.bodySecondary.copyWith(color: AppColors.brandForeground),
+          ),
+        ),
       ],
     );
   }
