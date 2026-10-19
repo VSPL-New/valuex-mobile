@@ -3,6 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/config/app_config.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
+import 'package:valuex_mobile/core/otp/otp_provider.dart';
 import 'package:valuex_mobile/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:valuex_mobile/features/auth/data/models/auth_models.dart';
 import 'package:valuex_mobile/features/auth/data/repositories/auth_repository_impl.dart';
@@ -164,6 +165,63 @@ void main() {
       expect(request.path, '/auth/register/verify-mobile');
       expect(request.data, {'mobile': '9876543210', 'otp': '123456'});
       expect(request.headers.containsKey('Authorization'), isFalse);
+    });
+
+    test(
+        'with MSG91 the number goes to MSG91 after the backend accepts it and the proof is its token',
+        () async {
+      final calls = <String>[];
+      final msg91 = Msg91OtpProvider(
+        widgetId: 'widget-1',
+        authToken: 'token-1',
+        sendOtp: (body) async {
+          calls.add('send ${body['identifier']}');
+          return {'type': 'success', 'message': 'req-1'};
+        },
+        verifyOtp: (body) async {
+          calls.add('verify ${body['otp']}');
+          return {'type': 'success', 'message': 'jwt-1'};
+        },
+      );
+      final source = AuthRemoteDataSource(
+        ApiClient(
+          FakeSecureStorage(accessToken: 'access-1', refreshToken: 'refresh-1'),
+          _config,
+          adapter: adapter,
+        ),
+        msg91,
+      );
+
+      await source.initiateRegistration('9876543210');
+      await source.verifyMobileOtp(mobile: '9876543210', otp: '123456');
+
+      expect(adapter.requests[0].data, {'mobile': '9876543210'});
+      expect(adapter.requests[1].data, {'mobile': '9876543210', 'accessToken': 'jwt-1'});
+      expect(calls, ['send 919876543210', 'verify 123456']);
+    });
+
+    test('with MSG91 a rejected code never reaches the backend', () async {
+      final msg91 = Msg91OtpProvider(
+        widgetId: 'widget-1',
+        authToken: 'token-1',
+        sendOtp: (_) async => {'type': 'success', 'message': 'req-1'},
+        verifyOtp: (_) async => {'type': 'error', 'message': 'otp not match'},
+      );
+      final source = AuthRemoteDataSource(
+        ApiClient(
+          FakeSecureStorage(accessToken: 'access-1', refreshToken: 'refresh-1'),
+          _config,
+          adapter: adapter,
+        ),
+        msg91,
+      );
+      await source.initiateLogin('9876543210');
+
+      await expectLater(
+        source.verifyLogin(mobile: '9876543210', otp: '000000'),
+        throwsA(isA<ApiError>().having((e) => e.code, 'code', 'ERROR_INVALID_OTP')),
+      );
+      expect(adapter.requests.map((r) => r.path), ['/auth/login/initiate']);
     });
 
     test('sign in sends the number and verifies the code without a bearer token', () async {

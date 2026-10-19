@@ -48,7 +48,7 @@ final class AuthRemoteDataSourceProvider
   }
 }
 
-String _$authRemoteDataSourceHash() => r'bf0f2078e4f67bb78a1f7186e89245e870f5013c';
+String _$authRemoteDataSourceHash() => r'bd3dd57e0bb5e9b0f986870f2ba42619c3314f7a';
 
 @ProviderFor(authRepository)
 const authRepositoryProvider = AuthRepositoryProvider._();

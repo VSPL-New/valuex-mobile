@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
+import '../../../core/otp/otp_provider.dart';
 import '../../../core/utils/provider_retry.dart';
 import '../../auth/data/models/auth_models.dart';
 import '../../auth/domain/entities/otp_sent.dart';
@@ -8,8 +9,9 @@ import '../domain/account_security.dart';
 
 class AccountSecurityRepository {
   final ApiClient _client;
+  final OtpProvider _otp;
 
-  AccountSecurityRepository(this._client);
+  AccountSecurityRepository(this._client, [this._otp = const BackendOtpProvider()]);
 
   Future<AccountSecurity> summary() => _client.get(ApiConstants.accountSecurity, parse: _summary);
 
@@ -22,15 +24,17 @@ class AccountSecurityRepository {
       data: kind == ContactKind.mobile ? {'newMobile': value} : {'newEmail': value},
       parse: MessageResponseModel.fromJson,
     );
+    await _otp.send(value);
     return model.toOtpSent();
   }
 
-  Future<void> confirmChange(ContactKind kind, String value, String otp) {
+  Future<void> confirmChange(ContactKind kind, String value, String otp) async {
+    final proof = {_otp.credentialKey: await _otp.credential(otp)};
     return _client.post<void>(
       kind == ContactKind.mobile ? ApiConstants.mobileChangeVerify : ApiConstants.emailChangeVerify,
       data: kind == ContactKind.mobile
-          ? {'newMobile': value, 'otp': otp}
-          : {'newEmail': value, 'otp': otp},
+          ? {'newMobile': value, ...proof}
+          : {'newEmail': value, ...proof},
     );
   }
 
@@ -64,7 +68,7 @@ class AccountSecurityRepository {
 }
 
 final accountSecurityRepositoryProvider = Provider<AccountSecurityRepository>(
-  (ref) => AccountSecurityRepository(ref.watch(apiClientProvider)),
+  (ref) => AccountSecurityRepository(ref.watch(apiClientProvider), ref.watch(otpProviderProvider)),
 );
 
 final accountSecurityProvider = FutureProvider.autoDispose<AccountSecurity>(

@@ -11,6 +11,10 @@ enum GoogleSignInMode { mock, native }
 /// `mock` suggests made-up Indian addresses without a key; `google` calls Google Places.
 enum AddressSearchMode { mock, google }
 
+/// `backend` has the ValueX backend send and check OTPs; `msg91` has the app send and verify them
+/// through the MSG91 OTP widget SDK.
+enum OtpMode { backend, msg91 }
+
 class AppConfigException implements Exception {
   final String message;
 
@@ -41,6 +45,12 @@ class AppConfig {
   /// SHA-1 of the Android signing certificate, sent so an Android-restricted key accepts the call.
   final String googlePlacesAndroidCert;
 
+  final OtpMode otpMode;
+
+  /// MSG91 OTP widget id and token; empty unless [otpMode] is msg91.
+  final String msg91WidgetId;
+  final String msg91AuthToken;
+
   const AppConfig._({
     required this.env,
     required this.apiBaseUrl,
@@ -51,6 +61,9 @@ class AppConfig {
     required this.addressSearch,
     required this.googlePlacesApiKey,
     required this.googlePlacesAndroidCert,
+    required this.otpMode,
+    required this.msg91WidgetId,
+    required this.msg91AuthToken,
   });
 
   factory AppConfig.fromEnvironment() {
@@ -64,6 +77,9 @@ class AppConfig {
       addressSearch: const String.fromEnvironment('ADDRESS_SEARCH', defaultValue: 'mock'),
       googlePlacesApiKey: const String.fromEnvironment('GOOGLE_PLACES_API_KEY'),
       googlePlacesAndroidCert: const String.fromEnvironment('GOOGLE_PLACES_ANDROID_CERT'),
+      otpProvider: const String.fromEnvironment('OTP_PROVIDER', defaultValue: 'backend'),
+      msg91WidgetId: const String.fromEnvironment('MSG91_WIDGET_ID'),
+      msg91AuthToken: const String.fromEnvironment('MSG91_AUTH_TOKEN'),
     );
   }
 
@@ -77,6 +93,9 @@ class AppConfig {
     String addressSearch = 'mock',
     String googlePlacesApiKey = '',
     String googlePlacesAndroidCert = '',
+    String otpProvider = 'backend',
+    String msg91WidgetId = '',
+    String msg91AuthToken = '',
   }) {
     final parsedEnv = switch (env) {
       'dev' => AppEnv.dev,
@@ -112,6 +131,12 @@ class AppConfig {
         ),
     };
 
+    final parsedOtp = switch (otpProvider) {
+      'backend' => OtpMode.backend,
+      'msg91' => OtpMode.msg91,
+      _ => throw AppConfigException('OTP_PROVIDER must be backend or msg91 (got "$otpProvider")'),
+    };
+
     final uri = Uri.tryParse(apiBaseUrl);
     if (uri == null || !uri.hasAuthority || uri.host.isEmpty) {
       throw const AppConfigException('API_BASE_URL is missing or invalid');
@@ -136,6 +161,10 @@ class AppConfig {
       throw const AppConfigException(
           'GOOGLE_SERVER_CLIENT_ID is required for native Google sign-in');
     }
+    if (parsedOtp == OtpMode.msg91 && (msg91WidgetId.isEmpty || msg91AuthToken.isEmpty)) {
+      throw const AppConfigException(
+          'MSG91_WIDGET_ID and MSG91_AUTH_TOKEN are required for the msg91 OTP provider');
+    }
 
     return AppConfig._(
       env: parsedEnv,
@@ -148,6 +177,9 @@ class AppConfig {
       addressSearch: parsedSearch,
       googlePlacesApiKey: googlePlacesApiKey,
       googlePlacesAndroidCert: googlePlacesAndroidCert,
+      otpMode: parsedOtp,
+      msg91WidgetId: msg91WidgetId,
+      msg91AuthToken: msg91AuthToken,
     );
   }
 
@@ -158,6 +190,8 @@ class AppConfig {
   bool get useMockGoogleSignIn => googleSignIn == GoogleSignInMode.mock;
 
   bool get useMockAddressSearch => addressSearch == AddressSearchMode.mock;
+
+  bool get useMsg91Otp => otpMode == OtpMode.msg91;
 }
 
 final appConfigProvider = Provider<AppConfig>(
