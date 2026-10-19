@@ -1094,7 +1094,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get sellAddPhotosTitle => 'फ़ोटो जोड़ें';
 
   @override
-  String get sellAddPhotosSubtitle => 'साफ़ फ़ोटो से सामान जल्दी बिकता है (कम से कम 1, अधिकतम 10)';
+  String get sellAddPhotosSubtitle => 'साफ़ फ़ोटो से सामान जल्दी बिकता है (कम से कम 2, अधिकतम 10)';
 
   @override
   String sellPhotoCount(int count) {
@@ -1369,4 +1369,10 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get planReviewSoon => 'लिस्टिंग की समीक्षा जल्द आ रही है।';
+
+  @override
+  String get sellYourPhotos => 'आपकी फ़ोटो';
+
+  @override
+  String get itemAiGenerated => 'AI द्वारा बनाया गया';
 }

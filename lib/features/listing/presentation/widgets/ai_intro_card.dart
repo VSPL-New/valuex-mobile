@@ -3,12 +3,11 @@ import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/gradients.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
+import '../../../../core/widgets/soft_card.dart';
 import '../../../../l10n/app_localizations.dart';
 
 /// "Let AI do the work for you" banner at the top of the photo step.
 class AiIntroCard extends StatelessWidget {
-  static const double _iconBox = 72;
-
   const AiIntroCard({super.key});
 
   @override
@@ -22,37 +21,29 @@ class AiIntroCard extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: [AppColors.sellAiCardStart, AppColors.sellAiCardEnd],
         ),
+        boxShadow: SoftCard.decoration().boxShadow,
       ),
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.md),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ExcludeSemantics(
-              child: SizedBox(
-                width: _iconBox,
-                height: _iconBox,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Positioned.fill(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: AppGradients.brand,
-                          borderRadius: BorderRadius.circular(AppRadius.xl),
-                        ),
-                        child: const Icon(Icons.photo_camera_outlined,
-                            size: 36, color: AppColors.brandOnPrimary),
-                      ),
-                    ),
-                    const Positioned(
-                      right: -6,
-                      bottom: -6,
-                      child: Icon(Icons.auto_awesome, size: 22, color: AppColors.sellSparkle),
-                    ),
-                  ],
+            const Stack(
+              clipBehavior: Clip.none,
+              children: [
+                IconTile(
+                  icon: Icons.photo_camera_outlined,
+                  size: 48,
+                  gradient: AppGradients.brand,
                 ),
-              ),
+                Positioned(
+                  right: -6,
+                  bottom: -6,
+                  child: ExcludeSemantics(
+                    child: Icon(Icons.auto_awesome, size: 20, color: AppColors.sellSparkle),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(width: AppSpacing.md),
             Expanded(
@@ -61,10 +52,13 @@ class AiIntroCard extends StatelessWidget {
                 children: [
                   Semantics(
                     header: true,
-                    child: Text(l10n.sellAiTitle, style: AppTextStyles.sectionTitle),
+                    child: Text(l10n.sellAiTitle, style: AppTextStyles.cardTitle),
                   ),
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(l10n.sellAiBody, style: AppTextStyles.bodySecondary),
+                  const SizedBox(height: 2),
+                  Text(
+                    l10n.sellAiBody,
+                    style: AppTextStyles.bodySecondary.copyWith(color: AppColors.brandForeground),
+                  ),
                 ],
               ),
             ),

@@ -8,6 +8,7 @@ import '../../../core/theme/colors.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/theme/text_styles.dart';
 import '../../../core/widgets/brand_gradient_button.dart';
+import '../../../core/widgets/soft_card.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/presentation/providers/session_controller.dart';
 import '../../auth/presentation/providers/session_state.dart';
@@ -124,9 +125,7 @@ class _CreateListingScreenState extends ConsumerState<CreateListingScreen> {
           SellStepHeader(
             step: 0,
             title: l10n.sellAddPhotosTitle,
-            subtitle: state.photos.isEmpty
-                ? l10n.sellAddPhotosSubtitle
-                : l10n.sellPhotoCount(state.photos.length),
+            subtitle: l10n.sellAddPhotosSubtitle,
             onBack: () => context.canPop() ? context.pop() : context.go(RouteNames.home),
           ),
           Expanded(
@@ -165,7 +164,8 @@ class _CreateListingScreenState extends ConsumerState<CreateListingScreen> {
                   children: [
                     if (state.readyCount < ListingPhotoRules.minPhotos) ...[
                       Text(l10n.sellMinPhotosHint,
-                          style: AppTextStyles.hint, textAlign: TextAlign.center),
+                          style: AppTextStyles.hint.copyWith(color: AppColors.brandForeground),
+                          textAlign: TextAlign.center),
                       const SizedBox(height: AppSpacing.sm),
                     ],
                     BrandGradientButton(
@@ -183,7 +183,7 @@ class _CreateListingScreenState extends ConsumerState<CreateListingScreen> {
   }
 }
 
-/// Dashed call-to-action shown before any photo is chosen.
+/// Soft card call-to-action shown before any photo is chosen.
 class _EmptyPhotos extends StatelessWidget {
   final VoidCallback? onAdd;
 
@@ -192,27 +192,22 @@ class _EmptyPhotos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppColors.sellAddTile,
-        borderRadius: BorderRadius.circular(AppRadius.xl),
-        border: Border.all(color: AppColors.brandBorderFocused, width: 1.5),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.lg),
-        child: Column(
-          children: [
-            const ExcludeSemantics(
-              child: Icon(Icons.file_upload_outlined, size: 36, color: AppColors.brandPrimary),
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            Text(l10n.sellEmptyTitle, style: AppTextStyles.cardTitle, textAlign: TextAlign.center),
-            const SizedBox(height: AppSpacing.xs),
-            Text(l10n.sellEmptyBody, style: AppTextStyles.hint, textAlign: TextAlign.center),
-            const SizedBox(height: AppSpacing.md),
-            BrandGradientButton(label: l10n.sellAddPhotos, onPressed: onAdd),
-          ],
-        ),
+    return SoftCard(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      child: Column(
+        children: [
+          const IconTile(icon: Icons.file_upload_outlined, size: 60),
+          const SizedBox(height: AppSpacing.sm),
+          Text(l10n.sellEmptyTitle, style: AppTextStyles.cardTitle, textAlign: TextAlign.center),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            l10n.sellEmptyBody,
+            style: AppTextStyles.hint.copyWith(color: AppColors.brandForeground),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AppSpacing.md),
+          BrandGradientButton(label: l10n.sellAddPhotos, onPressed: onAdd),
+        ],
       ),
     );
   }

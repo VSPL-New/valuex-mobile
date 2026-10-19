@@ -141,6 +141,7 @@ void main() {
       expect(find.text('Item Details'), findsOneWidget);
       expect(find.text('Fill in the details'), findsOneWidget);
       expect(find.textContaining('AI filled these'), findsNothing);
+      expect(find.text('AI generated'), findsNothing);
       expect(find.text('Baner'), findsOneWidget);
       expect(find.text('Fill in the required fields to continue'), findsOneWidget);
 
@@ -180,6 +181,11 @@ void main() {
       expect(find.text('Fill in the details'), findsNothing, reason: 'the AI notice replaces it');
       expect(find.text('Headphones'), findsOneWidget);
       expect(find.text('Over-ear'), findsOneWidget);
+      expect(find.text('AI generated'), findsNWidgets(4));
+
+      await tester.enterText(find.byType(TextField).at(0), 'Sony Headphones');
+      await harness.settle();
+      expect(find.text('AI generated'), findsNWidgets(3), reason: 'an edited field loses the mark');
 
       await tester.enterText(find.byType(TextField).at(2), '500');
       await harness.settle();
@@ -383,6 +389,41 @@ void main() {
       expect(state.aiFilled, isTrue);
       expect(state.draft.title, 'Headphones');
       expect(state.canContinue, isFalse, reason: 'price is still needed');
+    });
+
+    test('isAiGenerated holds until the seller changes the field', () {
+      const aiArgs = ItemDetailsArgs(listingId: 'l1', suggestion: _suggestion);
+      final container = containerFor(aiArgs);
+      ItemDetailsState read() => container.read(itemDetailsControllerProvider(aiArgs));
+      for (final field in [
+        DetailsField.title,
+        DetailsField.category,
+        DetailsField.condition,
+        DetailsField.description,
+      ]) {
+        expect(read().isAiGenerated(field), isTrue, reason: '$field');
+      }
+      expect(read().isAiGenerated(DetailsField.price), isFalse);
+
+      final controller = container.read(itemDetailsControllerProvider(aiArgs).notifier);
+      controller
+        ..setTitle('Other')
+        ..setCategory('books')
+        ..setCondition(ListingCondition.fair)
+        ..setDescription('Changed');
+      for (final field in [
+        DetailsField.title,
+        DetailsField.category,
+        DetailsField.condition,
+        DetailsField.description,
+      ]) {
+        expect(read().isAiGenerated(field), isFalse, reason: '$field');
+      }
+    });
+
+    test('isAiGenerated is false without an AI suggestion', () {
+      final state = containerFor(args).read(itemDetailsControllerProvider(args));
+      expect(state.isAiGenerated(DetailsField.title), isFalse);
     });
 
     test('shows hints only for fields the seller touched', () {

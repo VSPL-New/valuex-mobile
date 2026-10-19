@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
+import '../../../../core/widgets/soft_card.dart';
 import '../../../../l10n/app_localizations.dart';
 
 /// "Photo tips for best results": four example tiles, each marked as a good practice.
@@ -17,32 +18,25 @@ class PhotoTipsSection extends StatelessWidget {
       (Icons.zoom_in, l10n.sellTipDetails),
       (Icons.headphones_outlined, l10n.sellTipAccessories),
     ];
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppColors.brandSurfaceTint,
-        borderRadius: BorderRadius.circular(AppRadius.xl),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Semantics(
-              header: true,
-              child: Text(l10n.sellTipsTitle, style: AppTextStyles.sectionTitle),
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (var i = 0; i < tips.length; i++) ...[
-                  if (i > 0) const SizedBox(width: AppSpacing.sm),
-                  Expanded(child: _TipTile(icon: tips[i].$1, label: tips[i].$2)),
-                ],
+    return SoftCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Semantics(
+            header: true,
+            child: Text(l10n.sellTipsTitle, style: AppTextStyles.cardTitle),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (var i = 0; i < tips.length; i++) ...[
+                if (i > 0) const SizedBox(width: AppSpacing.sm),
+                Expanded(child: _TipTile(icon: tips[i].$1, label: tips[i].$2)),
               ],
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -72,7 +66,7 @@ class _TipTile extends StatelessWidget {
                 Positioned.fill(
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                      color: AppColors.brandSurface,
+                      color: AppColors.brandPrimary.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(AppRadius.lg),
                     ),
                     child: Icon(icon, size: 32, color: AppColors.brandPrimary),
@@ -91,7 +85,7 @@ class _TipTile extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.xs),
-          Text(label, style: AppTextStyles.tipCaption),
+          Text(label, style: AppTextStyles.tipCaption.copyWith(color: AppColors.brandForeground)),
         ],
       ),
     );

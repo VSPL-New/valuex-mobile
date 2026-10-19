@@ -11,6 +11,7 @@ import '../../../core/theme/text_styles.dart';
 import '../../../core/widgets/app_text_field.dart';
 import '../../../core/widgets/brand_gradient_button.dart';
 import '../../../core/widgets/field_error.dart';
+import '../../../core/widgets/soft_card.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../home/presentation/providers/home_providers.dart';
 import '../../home/presentation/widgets/location_prompt.dart';
@@ -97,76 +98,116 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
             child: ListView(
               padding: const EdgeInsets.all(AppSpacing.md),
               children: [
-                _Section(
-                  label: l10n.itemTitleLabel,
-                  isField: true,
-                  child: AppTextField(
-                    controller: _title,
-                    hint: l10n.itemTitleHint,
-                    maxLength: ListingDetailsRules.maxTitle,
-                    onChanged: _controller.setTitle,
-                  ),
-                ),
-                _Hint(show: hints.contains(DetailsField.title), text: l10n.itemTitleRequired),
-                const SizedBox(height: AppSpacing.md),
-                _Section(label: l10n.itemCategoryLabel, child: _CategoryChips(args: widget.args)),
-                _Hint(show: hints.contains(DetailsField.category), text: l10n.itemCategoryRequired),
-                const SizedBox(height: AppSpacing.md),
-                _Section(
-                  label: l10n.itemConditionLabel,
-                  child: Wrap(
-                    spacing: AppSpacing.sm,
-                    runSpacing: 0,
+                SoftCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      for (final condition in ListingCondition.values)
-                        OptionChip(
-                          label: _conditionLabel(l10n, condition),
-                          selected: draft.condition == condition,
-                          tone: OptionChipTone.success,
-                          onTap: () => _controller.setCondition(condition),
+                      _Section(
+                        label: l10n.itemTitleLabel,
+                        icon: Icons.edit_outlined,
+                        isField: true,
+                        child: AppTextField(
+                          controller: _title,
+                          hint: l10n.itemTitleHint,
+                          maxLength: ListingDetailsRules.maxTitle,
+                          onChanged: _controller.setTitle,
                         ),
+                      ),
+                      _AiMark(show: state.isAiGenerated(DetailsField.title)),
+                      _Hint(show: hints.contains(DetailsField.title), text: l10n.itemTitleRequired),
+                      const SizedBox(height: AppSpacing.md),
+                      _Section(
+                        label: l10n.itemCategoryLabel,
+                        icon: Icons.grid_view_rounded,
+                        child: _CategoryChips(args: widget.args),
+                      ),
+                      _AiMark(show: state.isAiGenerated(DetailsField.category)),
+                      _Hint(
+                          show: hints.contains(DetailsField.category),
+                          text: l10n.itemCategoryRequired),
                     ],
                   ),
                 ),
-                _Hint(
-                    show: hints.contains(DetailsField.condition), text: l10n.itemConditionRequired),
                 const SizedBox(height: AppSpacing.md),
-                _Section(
-                  label: l10n.itemDescriptionLabel,
-                  isField: true,
-                  child: AppTextField(
-                    controller: _description,
-                    hint: l10n.itemDescriptionHint,
-                    maxLines: 4,
-                    maxLength: ListingDetailsRules.maxDescription,
-                    keyboardType: TextInputType.multiline,
-                    onChanged: _controller.setDescription,
+                SoftCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _Section(
+                        label: l10n.itemConditionLabel,
+                        icon: Icons.verified_outlined,
+                        child: Wrap(
+                          spacing: AppSpacing.sm,
+                          runSpacing: 0,
+                          children: [
+                            for (final condition in ListingCondition.values)
+                              OptionChip(
+                                label: _conditionLabel(l10n, condition),
+                                selected: draft.condition == condition,
+                                tone: OptionChipTone.success,
+                                onTap: () => _controller.setCondition(condition),
+                              ),
+                          ],
+                        ),
+                      ),
+                      _AiMark(show: state.isAiGenerated(DetailsField.condition)),
+                      _Hint(
+                          show: hints.contains(DetailsField.condition),
+                          text: l10n.itemConditionRequired),
+                      const SizedBox(height: AppSpacing.md),
+                      _Section(
+                        label: l10n.itemDescriptionLabel,
+                        icon: Icons.notes_rounded,
+                        isField: true,
+                        child: AppTextField(
+                          controller: _description,
+                          hint: l10n.itemDescriptionHint,
+                          maxLines: 4,
+                          maxLength: ListingDetailsRules.maxDescription,
+                          keyboardType: TextInputType.multiline,
+                          onChanged: _controller.setDescription,
+                        ),
+                      ),
+                      _AiMark(show: state.isAiGenerated(DetailsField.description)),
+                      _Hint(
+                          show: hints.contains(DetailsField.description),
+                          text: l10n.itemDescriptionRequired),
+                    ],
                   ),
                 ),
-                _Hint(
-                    show: hints.contains(DetailsField.description),
-                    text: l10n.itemDescriptionRequired),
                 const SizedBox(height: AppSpacing.md),
-                _Section(label: l10n.itemLocationLabel, child: const _LocationRow()),
-                const SizedBox(height: AppSpacing.md),
-                _Section(
-                  label: l10n.itemPriceLabel,
-                  isField: true,
-                  child: AppTextField(
-                    controller: _price,
-                    prefixText: '₹ ',
-                    prefixStyle: _priceStyle.copyWith(color: AppColors.brandLink),
-                    textStyle: _priceStyle,
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.md, vertical: AppSpacing.md),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
-                    onChanged: _controller.setPrice,
+                SoftCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _Section(
+                        label: l10n.itemLocationLabel,
+                        icon: Icons.place_outlined,
+                        child: const _LocationRow(),
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      _Section(
+                        label: l10n.itemPriceLabel,
+                        icon: Icons.currency_rupee_rounded,
+                        isField: true,
+                        child: AppTextField(
+                          controller: _price,
+                          prefixText: '₹ ',
+                          prefixStyle: _priceStyle.copyWith(color: AppColors.brandLink),
+                          textStyle: _priceStyle,
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.md, vertical: AppSpacing.md),
+                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                          inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
+                          onChanged: _controller.setPrice,
+                        ),
+                      ),
+                      _Hint(show: hints.contains(DetailsField.price), text: l10n.itemPriceInvalid),
+                      const SizedBox(height: AppSpacing.sm),
+                      _InfoCard.note(text: l10n.itemPriceNote),
+                    ],
                   ),
                 ),
-                _Hint(show: hints.contains(DetailsField.price), text: l10n.itemPriceInvalid),
-                const SizedBox(height: AppSpacing.sm),
-                _InfoCard.note(text: l10n.itemPriceNote),
               ],
             ),
           ),
@@ -222,28 +263,70 @@ final TextStyle _priceStyle = AppTextStyles.input.copyWith(
   fontWeight: FontWeight.w700,
 );
 
-/// Small upper-case label above a control (Figma Make). Text fields are named for screen readers
-/// by the field itself; other groups use it as a heading.
+/// Upper-case label with a small icon tile above a control (Figma Make labels). Text fields are
+/// named for screen readers by the field itself; other groups use it as a heading.
 class _Section extends StatelessWidget {
   final String label;
+  final IconData icon;
   final Widget child;
   final bool isField;
 
-  const _Section({required this.label, required this.child, this.isField = false});
+  const _Section({
+    required this.label,
+    required this.icon,
+    required this.child,
+    this.isField = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     final text = Text(
       label.toUpperCase(),
-      style: AppTextStyles.label.copyWith(letterSpacing: 0.8),
+      style: AppTextStyles.label.copyWith(color: AppColors.brandForeground, letterSpacing: 0.8),
     );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        isField ? ExcludeSemantics(child: text) : Semantics(header: true, child: text),
+        Row(
+          children: [
+            IconTile(icon: icon, size: 28),
+            const SizedBox(width: AppSpacing.sm),
+            Expanded(
+                child:
+                    isField ? ExcludeSemantics(child: text) : Semantics(header: true, child: text)),
+          ],
+        ),
         const SizedBox(height: AppSpacing.sm),
         isField ? Semantics(label: label, child: child) : child,
       ],
+    );
+  }
+}
+
+/// Sparkle and "AI generated" under a field that still holds what AI suggested; it goes away as
+/// soon as the seller edits that field.
+class _AiMark extends StatelessWidget {
+  final bool show;
+
+  const _AiMark({required this.show});
+
+  @override
+  Widget build(BuildContext context) {
+    if (!show) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpacing.xs),
+      child: Row(
+        children: [
+          const ExcludeSemantics(
+            child: Icon(Icons.auto_awesome, size: 16, color: AppColors.brandLink),
+          ),
+          const SizedBox(width: AppSpacing.xs),
+          Text(
+            AppLocalizations.of(context).itemAiGenerated,
+            style: AppTextStyles.hint.copyWith(color: AppColors.brandForeground),
+          ),
+        ],
+      ),
     );
   }
 }

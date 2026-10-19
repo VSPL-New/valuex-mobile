@@ -559,7 +559,7 @@ void main() {
       await harness.settle();
       await tester.tap(find.text('Choose from gallery'));
       await harness.settle();
-      expect(find.text('1/10 photos added'), findsOneWidget);
+      expect(find.text('1/10'), findsOneWidget);
       expect(find.text('Add at least 2 photos to continue'), findsOneWidget);
       await tester.tap(find.text('Submit to AI'));
       await harness.settle();
@@ -571,7 +571,7 @@ void main() {
       await tester.tap(find.text('Choose from gallery'));
       await harness.settle();
 
-      expect(find.text('2/10 photos added'), findsOneWidget);
+      expect(find.text('2/10'), findsOneWidget);
       expect(find.text('MAIN'), findsOneWidget);
       expect(find.text('Add at least 2 photos to continue'), findsNothing);
       await tester.tap(find.text('Submit to AI'));
@@ -583,7 +583,7 @@ void main() {
       await harness.settle();
       await tester.tap(find.bySemanticsLabel('Remove photo 1'));
       await harness.settle();
-      expect(find.text('1/10 photos added'), findsOneWidget);
+      expect(find.text('1/10'), findsOneWidget);
       expect(find.text('Add at least 2 photos to continue'), findsOneWidget);
       verify(() => repository.deleteImage('listing-1', 'image-0')).called(1);
       await harness.dispose();
@@ -606,7 +606,7 @@ void main() {
       await harness.settle();
       await tester.tap(find.text('Choose from gallery'));
       await harness.settle();
-      expect(find.text('2/10 photos added'), findsOneWidget);
+      expect(find.text('2/10'), findsOneWidget);
 
       await tester.tap(find.text('Submit to AI'));
       await harness.settle();
@@ -615,7 +615,7 @@ void main() {
       await tester.tap(find.text('Not now'));
       await harness.settle();
       expect(find.byType(CreateListingScreen), findsOneWidget);
-      expect(find.text('2/10 photos added'), findsOneWidget, reason: 'the photos are kept');
+      expect(find.text('2/10'), findsOneWidget, reason: 'the photos are kept');
       await harness.dispose();
     });
 
@@ -655,7 +655,7 @@ void main() {
       await harness.settle();
 
       expect(find.byType(CreateListingScreen, skipOffstage: false), findsOneWidget);
-      expect(find.text('2/10 photos added', skipOffstage: false), findsOneWidget);
+      expect(find.text('2/10', skipOffstage: false), findsOneWidget);
       expect(find.byType(ItemDetailsScreen), findsOneWidget);
       verify(() => repository.submitDraft('listing-1')).called(2);
       await harness.dispose();
