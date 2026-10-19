@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../core/config/app_config.dart';
 import '../../../../core/network/api_client.dart';
+import '../../../../core/otp/otp_provider.dart';
 import '../../../../core/security/secure_storage_service.dart';
 import '../../data/datasources/auth_remote_data_source.dart';
 import '../../data/repositories/auth_repository_impl.dart';
@@ -13,7 +14,7 @@ part 'auth_providers.g.dart';
 
 @Riverpod(keepAlive: true)
 AuthRemoteDataSource authRemoteDataSource(Ref ref) {
-  return AuthRemoteDataSource(ref.watch(apiClientProvider));
+  return AuthRemoteDataSource(ref.watch(apiClientProvider), ref.watch(otpProviderProvider));
 }
 
 @Riverpod(keepAlive: true)

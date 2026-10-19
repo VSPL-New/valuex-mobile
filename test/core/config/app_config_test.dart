@@ -45,6 +45,55 @@ void main() {
       expect(config.useMockGoogleSignIn, isTrue);
     });
 
+    test('the backend sends OTPs unless told otherwise', () {
+      final config = AppConfig.parse(
+        env: 'dev',
+        apiBaseUrl: 'http://localhost:8080/api/v1',
+        aadhaarFlow: 'sandbox',
+      );
+
+      expect(config.useMsg91Otp, isFalse);
+    });
+
+    test('parses the MSG91 OTP widget settings', () {
+      final config = AppConfig.parse(
+        env: 'dev',
+        apiBaseUrl: 'http://localhost:8080/api/v1',
+        aadhaarFlow: 'sandbox',
+        otpProvider: 'msg91',
+        msg91WidgetId: 'widget-1',
+        msg91AuthToken: 'token-1',
+      );
+
+      expect(config.useMsg91Otp, isTrue);
+      expect(config.msg91WidgetId, 'widget-1');
+      expect(config.msg91AuthToken, 'token-1');
+    });
+
+    test('the MSG91 OTP provider needs a widget id and token', () {
+      expect(
+        () => AppConfig.parse(
+          env: 'dev',
+          apiBaseUrl: 'http://localhost:8080/api/v1',
+          aadhaarFlow: 'sandbox',
+          otpProvider: 'msg91',
+        ),
+        throwsA(isA<AppConfigException>()),
+      );
+    });
+
+    test('rejects an unknown OTP provider', () {
+      expect(
+        () => AppConfig.parse(
+          env: 'dev',
+          apiBaseUrl: 'http://localhost:8080/api/v1',
+          aadhaarFlow: 'sandbox',
+          otpProvider: 'fake',
+        ),
+        throwsA(isA<AppConfigException>()),
+      );
+    });
+
     test('rejects an unknown Google sign-in mode', () {
       expect(
         () => AppConfig.parse(

@@ -50,3 +50,4 @@ android/build/
 
 # Per-developer config (physical device, LAN IP)
 config/dev_local.json
+config/dev_local.json.android

@@ -1,45 +1,51 @@
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/api_client.dart';
+import '../../../../core/otp/otp_provider.dart';
 import '../../domain/entities/signup_details.dart';
 import '../models/auth_models.dart';
 
 class AuthRemoteDataSource {
   final ApiClient _client;
+  final OtpProvider _otp;
 
-  AuthRemoteDataSource(this._client);
+  AuthRemoteDataSource(this._client, [this._otp = const BackendOtpProvider()]);
 
   // Terms and consent are collected at Sign Up, so they are not sent here.
-  Future<MessageResponseModel> initiateRegistration(String mobile) {
-    return _client.post(
+  Future<MessageResponseModel> initiateRegistration(String mobile) async {
+    final sent = await _client.post(
       ApiConstants.registerInitiate,
       data: {'mobile': mobile},
       authenticated: false,
       parse: MessageResponseModel.fromJson,
     );
+    await _otp.send(mobile);
+    return sent;
   }
 
-  Future<AuthResponseModel> verifyMobileOtp({required String mobile, required String otp}) {
+  Future<AuthResponseModel> verifyMobileOtp({required String mobile, required String otp}) async {
     return _client.post(
       ApiConstants.registerVerifyMobile,
-      data: {'mobile': mobile, 'otp': otp},
+      data: {'mobile': mobile, _otp.credentialKey: await _otp.credential(otp)},
       authenticated: false,
       parse: AuthResponseModel.fromJson,
     );
   }
 
-  Future<MessageResponseModel> initiateLogin(String mobile) {
-    return _client.post(
+  Future<MessageResponseModel> initiateLogin(String mobile) async {
+    final sent = await _client.post(
       ApiConstants.loginInitiate,
       data: {'mobile': mobile},
       authenticated: false,
       parse: MessageResponseModel.fromJson,
     );
+    await _otp.send(mobile);
+    return sent;
   }
 
-  Future<AuthResponseModel> verifyLogin({required String mobile, required String otp}) {
+  Future<AuthResponseModel> verifyLogin({required String mobile, required String otp}) async {
     return _client.post(
       ApiConstants.loginVerifyMobile,
-      data: {'mobile': mobile, 'otp': otp},
+      data: {'mobile': mobile, _otp.credentialKey: await _otp.credential(otp)},
       authenticated: false,
       parse: AuthResponseModel.fromJson,
     );
@@ -62,40 +68,48 @@ class AuthRemoteDataSource {
   Future<MessageResponseModel> initiateGoogleMobile({
     required String socialSessionToken,
     required String mobile,
-  }) {
-    return _client.post(
+  }) async {
+    final sent = await _client.post(
       ApiConstants.googleInitiateMobile,
       data: {'socialSessionToken': socialSessionToken, 'mobile': mobile},
       authenticated: false,
       parse: MessageResponseModel.fromJson,
     );
+    await _otp.send(mobile);
+    return sent;
   }
 
   Future<AuthResponseModel> verifyGoogleMobile({
     required String socialSessionToken,
     required String mobile,
     required String otp,
-  }) {
+  }) async {
     return _client.post(
       ApiConstants.googleVerifyMobile,
-      data: {'socialSessionToken': socialSessionToken, 'mobile': mobile, 'otp': otp},
+      data: {
+        'socialSessionToken': socialSessionToken,
+        'mobile': mobile,
+        _otp.credentialKey: await _otp.credential(otp),
+      },
       authenticated: false,
       parse: AuthResponseModel.fromJson,
     );
   }
 
-  Future<MessageResponseModel> sendEmailOtp(String email) {
-    return _client.post(
+  Future<MessageResponseModel> sendEmailOtp(String email) async {
+    final sent = await _client.post(
       ApiConstants.emailSendOtp,
       data: {'email': email},
       parse: MessageResponseModel.fromJson,
     );
+    await _otp.send(email);
+    return sent;
   }
 
-  Future<void> verifyEmailOtp({required String email, required String otp}) {
-    return _client.post<Object?>(
+  Future<void> verifyEmailOtp({required String email, required String otp}) async {
+    await _client.post<Object?>(
       ApiConstants.emailVerifyOtp,
-      data: {'email': email, 'otp': otp},
+      data: {'email': email, _otp.credentialKey: await _otp.credential(otp)},
     );
   }
 
