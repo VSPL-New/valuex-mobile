@@ -42,6 +42,10 @@ class ApiConstants {
   static String mediaComplete(String mediaId) => '/media/$mediaId/complete';
   static String listingImages(String listingId) => '/listings/$listingId/images';
   static String listingSubmit(String listingId) => '/listings/$listingId/submit';
+  static String listingCategory(String listingId) => '/listings/$listingId/category';
+  static const String categoryChildren = '/categories/children';
+  static const String categorySearch = '/categories/search';
+  static String categoryListingSchema(String code) => '/categories/$code/listing-schema';
   static String listingImage(String listingId, String imageId) =>
       '/listings/$listingId/images/$imageId';
 

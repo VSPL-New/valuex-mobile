@@ -1278,6 +1278,131 @@ class AppLocalizationsHi extends AppLocalizations {
   String get itemPriceInvalid => 'सही कीमत लिखें';
 
   @override
+  String get itemCategoryChoose => 'श्रेणी चुनें';
+
+  @override
+  String get itemCategoryChange => 'बदलें';
+
+  @override
+  String get itemCategoryPickerTitle => 'श्रेणी चुनें';
+
+  @override
+  String get itemCategorySearchHint => 'श्रेणियाँ खोजें';
+
+  @override
+  String get itemCategorySearchMin => 'खोजने के लिए कम से कम 2 अक्षर लिखें';
+
+  @override
+  String get itemCategoryNoResults => 'कोई श्रेणी नहीं मिली';
+
+  @override
+  String get itemCategoryPopular => 'लोकप्रिय';
+
+  @override
+  String get itemCategoryMore => 'और श्रेणियाँ';
+
+  @override
+  String get itemCategoryAll => 'सभी श्रेणियाँ';
+
+  @override
+  String get itemCategoryUnavailable => 'यह श्रेणी उपलब्ध नहीं है। कोई और चुनें।';
+
+  @override
+  String get itemSchemaFailed => 'इस श्रेणी का विवरण लोड नहीं हो सका। फिर से कोशिश करें';
+
+  @override
+  String get itemAboutTitle => 'इस सामान के बारे में';
+
+  @override
+  String get itemMoreDetails => 'और विवरण';
+
+  @override
+  String get itemMoreDetailsHint => 'वैकल्पिक, पर खरीदार जानना पसंद करते हैं';
+
+  @override
+  String get itemConditionNotesLabel => 'स्थिति के नोट्स';
+
+  @override
+  String get itemConditionNotesHint =>
+      'खरोंच, मरम्मत या गायब हिस्से। कुछ नहीं हो तो \"कुछ नहीं\" लिखें।';
+
+  @override
+  String get itemConditionNotesRequired => 'स्थिति बताएँ, या लिखें कि कोई कमी नहीं है';
+
+  @override
+  String get itemNegotiableLabel => 'कीमत पर मोलभाव हो सकता है';
+
+  @override
+  String get itemNegotiableRequired => 'बताएँ कि कीमत पर मोलभाव हो सकता है या नहीं';
+
+  @override
+  String get itemQuantityLabel => 'मात्रा';
+
+  @override
+  String get itemQuantityInvalid => '1 से 1000 के बीच मात्रा लिखें';
+
+  @override
+  String get itemYes => 'हाँ';
+
+  @override
+  String get itemNo => 'नहीं';
+
+  @override
+  String get itemSelect => 'चुनें';
+
+  @override
+  String get itemSelectDate => 'तारीख चुनें';
+
+  @override
+  String get itemSearch => 'खोजें';
+
+  @override
+  String get itemDone => 'हो गया';
+
+  @override
+  String get itemOtherValueHint => 'या अपना लिखें';
+
+  @override
+  String get itemListHint => 'कॉमा से अलग करें';
+
+  @override
+  String get itemDimLength => 'लंबाई (सेमी)';
+
+  @override
+  String get itemDimWidth => 'चौड़ाई (सेमी)';
+
+  @override
+  String get itemDimHeight => 'ऊँचाई (सेमी)';
+
+  @override
+  String get itemAddDetail => 'विवरण जोड़ें';
+
+  @override
+  String get itemDetailName => 'नाम';
+
+  @override
+  String get itemDetailValue => 'मान';
+
+  @override
+  String get itemRemoveDetail => 'विवरण हटाएँ';
+
+  @override
+  String itemFieldRequired(String field) {
+    return '$field आवश्यक है';
+  }
+
+  @override
+  String itemFieldInvalid(String field) {
+    return 'सही $field लिखें';
+  }
+
+  @override
+  String get itemAttributeError => 'आपने जो विवरण भरा है उसे जाँचें और फिर कोशिश करें';
+
+  @override
+  String get planDevBanner => 'US-119 तक प्लान में बदलाव जारी है';
+
+  @override
   String get planScreenSubtitle => 'अपनी दृश्यता बढ़ाएँ और तेज़ी से बेचें';
 
   @override

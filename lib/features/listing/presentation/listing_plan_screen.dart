@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/config/app_config.dart';
 import '../../../core/routing/route_names.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/spacing.dart';
@@ -39,6 +40,7 @@ class ListingPlanScreen extends ConsumerWidget {
             subtitle: l10n.planScreenSubtitle,
             onBack: () => context.canPop() ? context.pop() : context.go(RouteNames.sell),
           ),
+          if (ref.watch(appConfigProvider).env == AppEnv.dev) const _DevRevisionBanner(),
           Expanded(
             child: plans.when(
               loading: () => const LoadingIndicator(),
@@ -86,6 +88,26 @@ class ListingPlanScreen extends ConsumerWidget {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(content: Text(l10n.planReviewSoon)));
+  }
+}
+
+/// Dev builds only: the plans are being redesigned by category (US-119), so what is shown here
+/// is temporary.
+class _DevRevisionBanner extends StatelessWidget {
+  const _DevRevisionBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      color: AppColors.sellNoteTint,
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+      child: Text(
+        AppLocalizations.of(context).planDevBanner,
+        style: AppTextStyles.hint.copyWith(color: AppColors.brandForeground),
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 }
 

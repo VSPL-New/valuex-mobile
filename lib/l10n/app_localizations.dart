@@ -2367,6 +2367,246 @@ abstract class AppLocalizations {
   /// **'Enter a valid price'**
   String get itemPriceInvalid;
 
+  /// No description provided for @itemCategoryChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a category'**
+  String get itemCategoryChoose;
+
+  /// No description provided for @itemCategoryChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get itemCategoryChange;
+
+  /// No description provided for @itemCategoryPickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose category'**
+  String get itemCategoryPickerTitle;
+
+  /// No description provided for @itemCategorySearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search categories'**
+  String get itemCategorySearchHint;
+
+  /// No description provided for @itemCategorySearchMin.
+  ///
+  /// In en, this message translates to:
+  /// **'Type at least 2 letters to search'**
+  String get itemCategorySearchMin;
+
+  /// No description provided for @itemCategoryNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No categories match'**
+  String get itemCategoryNoResults;
+
+  /// No description provided for @itemCategoryPopular.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular'**
+  String get itemCategoryPopular;
+
+  /// No description provided for @itemCategoryMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More categories'**
+  String get itemCategoryMore;
+
+  /// No description provided for @itemCategoryAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All categories'**
+  String get itemCategoryAll;
+
+  /// No description provided for @itemCategoryUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This category is not available. Choose another one.'**
+  String get itemCategoryUnavailable;
+
+  /// No description provided for @itemSchemaFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load the details for this category. Try again'**
+  String get itemSchemaFailed;
+
+  /// No description provided for @itemAboutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About this item'**
+  String get itemAboutTitle;
+
+  /// No description provided for @itemMoreDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'More details'**
+  String get itemMoreDetails;
+
+  /// No description provided for @itemMoreDetailsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional, but buyers like to know'**
+  String get itemMoreDetailsHint;
+
+  /// No description provided for @itemConditionNotesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Condition notes'**
+  String get itemConditionNotesLabel;
+
+  /// No description provided for @itemConditionNotesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Scratches, repairs or missing parts. Write none if there are none.'**
+  String get itemConditionNotesHint;
+
+  /// No description provided for @itemConditionNotesRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the condition, or write that there are none'**
+  String get itemConditionNotesRequired;
+
+  /// No description provided for @itemNegotiableLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Price is negotiable'**
+  String get itemNegotiableLabel;
+
+  /// No description provided for @itemNegotiableRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Say whether the price can be negotiated'**
+  String get itemNegotiableRequired;
+
+  /// No description provided for @itemQuantityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity'**
+  String get itemQuantityLabel;
+
+  /// No description provided for @itemQuantityInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a quantity from 1 to 1000'**
+  String get itemQuantityInvalid;
+
+  /// No description provided for @itemYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get itemYes;
+
+  /// No description provided for @itemNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get itemNo;
+
+  /// No description provided for @itemSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get itemSelect;
+
+  /// No description provided for @itemSelectDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select date'**
+  String get itemSelectDate;
+
+  /// No description provided for @itemSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get itemSearch;
+
+  /// No description provided for @itemDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get itemDone;
+
+  /// No description provided for @itemOtherValueHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Or type your own'**
+  String get itemOtherValueHint;
+
+  /// No description provided for @itemListHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Separate with commas'**
+  String get itemListHint;
+
+  /// No description provided for @itemDimLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Length (cm)'**
+  String get itemDimLength;
+
+  /// No description provided for @itemDimWidth.
+  ///
+  /// In en, this message translates to:
+  /// **'Width (cm)'**
+  String get itemDimWidth;
+
+  /// No description provided for @itemDimHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Height (cm)'**
+  String get itemDimHeight;
+
+  /// No description provided for @itemAddDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Add detail'**
+  String get itemAddDetail;
+
+  /// No description provided for @itemDetailName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get itemDetailName;
+
+  /// No description provided for @itemDetailValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Value'**
+  String get itemDetailValue;
+
+  /// No description provided for @itemRemoveDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove detail'**
+  String get itemRemoveDetail;
+
+  /// No description provided for @itemFieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'{field} is required'**
+  String itemFieldRequired(String field);
+
+  /// No description provided for @itemFieldInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid {field}'**
+  String itemFieldInvalid(String field);
+
+  /// No description provided for @itemAttributeError.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the details you entered and try again'**
+  String get itemAttributeError;
+
+  /// No description provided for @planDevBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan is under revision until US-119'**
+  String get planDevBanner;
+
   /// No description provided for @planScreenSubtitle.
   ///
   /// In en, this message translates to:

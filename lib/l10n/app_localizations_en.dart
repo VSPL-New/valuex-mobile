@@ -1290,6 +1290,131 @@ class AppLocalizationsEn extends AppLocalizations {
   String get itemPriceInvalid => 'Enter a valid price';
 
   @override
+  String get itemCategoryChoose => 'Choose a category';
+
+  @override
+  String get itemCategoryChange => 'Change';
+
+  @override
+  String get itemCategoryPickerTitle => 'Choose category';
+
+  @override
+  String get itemCategorySearchHint => 'Search categories';
+
+  @override
+  String get itemCategorySearchMin => 'Type at least 2 letters to search';
+
+  @override
+  String get itemCategoryNoResults => 'No categories match';
+
+  @override
+  String get itemCategoryPopular => 'Popular';
+
+  @override
+  String get itemCategoryMore => 'More categories';
+
+  @override
+  String get itemCategoryAll => 'All categories';
+
+  @override
+  String get itemCategoryUnavailable => 'This category is not available. Choose another one.';
+
+  @override
+  String get itemSchemaFailed => 'Unable to load the details for this category. Try again';
+
+  @override
+  String get itemAboutTitle => 'About this item';
+
+  @override
+  String get itemMoreDetails => 'More details';
+
+  @override
+  String get itemMoreDetailsHint => 'Optional, but buyers like to know';
+
+  @override
+  String get itemConditionNotesLabel => 'Condition notes';
+
+  @override
+  String get itemConditionNotesHint =>
+      'Scratches, repairs or missing parts. Write none if there are none.';
+
+  @override
+  String get itemConditionNotesRequired => 'Describe the condition, or write that there are none';
+
+  @override
+  String get itemNegotiableLabel => 'Price is negotiable';
+
+  @override
+  String get itemNegotiableRequired => 'Say whether the price can be negotiated';
+
+  @override
+  String get itemQuantityLabel => 'Quantity';
+
+  @override
+  String get itemQuantityInvalid => 'Enter a quantity from 1 to 1000';
+
+  @override
+  String get itemYes => 'Yes';
+
+  @override
+  String get itemNo => 'No';
+
+  @override
+  String get itemSelect => 'Select';
+
+  @override
+  String get itemSelectDate => 'Select date';
+
+  @override
+  String get itemSearch => 'Search';
+
+  @override
+  String get itemDone => 'Done';
+
+  @override
+  String get itemOtherValueHint => 'Or type your own';
+
+  @override
+  String get itemListHint => 'Separate with commas';
+
+  @override
+  String get itemDimLength => 'Length (cm)';
+
+  @override
+  String get itemDimWidth => 'Width (cm)';
+
+  @override
+  String get itemDimHeight => 'Height (cm)';
+
+  @override
+  String get itemAddDetail => 'Add detail';
+
+  @override
+  String get itemDetailName => 'Name';
+
+  @override
+  String get itemDetailValue => 'Value';
+
+  @override
+  String get itemRemoveDetail => 'Remove detail';
+
+  @override
+  String itemFieldRequired(String field) {
+    return '$field is required';
+  }
+
+  @override
+  String itemFieldInvalid(String field) {
+    return 'Enter a valid $field';
+  }
+
+  @override
+  String get itemAttributeError => 'Check the details you entered and try again';
+
+  @override
+  String get planDevBanner => 'Plan is under revision until US-119';
+
+  @override
   String get planScreenSubtitle => 'Boost your visibility and sell faster';
 
   @override
