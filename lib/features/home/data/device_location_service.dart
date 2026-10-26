@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import '../domain/entities/home_location.dart';
@@ -27,12 +29,8 @@ class DeviceLocationService implements LocationService {
   @override
   Future<HomeLocation?> current() async {
     try {
-      final position = await GeolocatorPlatform.instance.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.low,
-          timeLimit: Duration(seconds: 10),
-        ),
-      );
+      final position = await _position();
+      if (position == null) return null;
       final places =
           await Geocoding().placemarkFromCoordinates(position.latitude, position.longitude);
       if (places.isEmpty) return null;
@@ -48,6 +46,20 @@ class DeviceLocationService implements LocationService {
   @override
   Future<void> openSettings() async {
     await GeolocatorPlatform.instance.openAppSettings();
+  }
+
+  /// A fresh fix; when none arrives in time (emulators, weak signal) the last known one.
+  Future<Position?> _position() async {
+    try {
+      return await GeolocatorPlatform.instance.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.low,
+          timeLimit: Duration(seconds: 10),
+        ),
+      );
+    } on TimeoutException {
+      return GeolocatorPlatform.instance.getLastKnownPosition();
+    }
   }
 
   LocationAccess _map(LocationPermission permission) {
