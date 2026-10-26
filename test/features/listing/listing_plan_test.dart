@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:valuex_mobile/core/config/app_config.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
 import 'package:valuex_mobile/core/routing/app_router.dart';
@@ -165,10 +166,10 @@ void main() {
       when(() => repository.sellerPlans()).thenAnswer((_) async => [_basic, _boosted, _priority]);
     });
 
-    Future<AppHarness> open(WidgetTester tester, {double textScale = 1}) async {
+    Future<AppHarness> open(WidgetTester tester, {double textScale = 1, AppConfig? config}) async {
       final notifications = _MockNotifications();
       when(notifications.unreadCount).thenAnswer((_) async => 0);
-      final harness = AppHarness(tester, extraOverrides: [
+      final harness = AppHarness(tester, config: config, extraOverrides: [
         notificationsRepositoryProvider.overrideWithValue(notifications),
         listingRepositoryProvider.overrideWithValue(repository),
       ])
@@ -320,6 +321,28 @@ void main() {
       await harness.settle();
 
       expect(find.text('Reviewing your listing is coming soon.'), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('Dev builds say the plans are under revision until US-119', (tester) async {
+      final harness = await open(tester);
+
+      expect(find.text('Plan is under revision until US-119'), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('other environments do not show the revision banner', (tester) async {
+      final harness = await open(
+        tester,
+        config: AppConfig.parse(
+          env: 'staging',
+          apiBaseUrl: 'https://api.example.com/api/v1',
+          aadhaarFlow: 'sandbox',
+        ),
+      );
+
+      expect(find.byType(ListingPlanScreen), findsOneWidget);
+      expect(find.text('Plan is under revision until US-119'), findsNothing);
       await harness.dispose();
     });
 

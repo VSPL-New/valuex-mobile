@@ -1,3 +1,5 @@
+import 'listing_schema.dart';
+
 /// Item condition values the server accepts (US-114).
 enum ListingCondition {
   brandNew('NEW'),
@@ -18,66 +20,116 @@ enum ListingCondition {
   }
 }
 
-/// Limits from US-114; the server checks the same rules.
+/// Limits from US-114 and US-006; the server checks the same rules.
 class ListingDetailsRules {
   ListingDetailsRules._();
 
   static const int maxTitle = 100;
   static const int maxDescription = 2000;
-  static const int maxPriceRupees = 10000000;
+  static const int maxConditionNotes = 1000;
+  static const int maxPriceRupees = 100000000;
   static const int maxPriceDecimals = 2;
+  static const int minQuantity = 1;
+  static const int maxQuantity = 1000;
 }
 
-/// The required fields of the Item Details page.
-enum DetailsField { title, category, condition, description, price }
+/// The common fields of the Item Details page. Category-specific fields are tracked by key.
+enum DetailsField {
+  title,
+  category,
+  condition,
+  conditionNotes,
+  description,
+  price,
+  negotiable,
+  quantity
+}
 
 /// What the seller has entered so far.
 class ListingDetailsDraft {
   final String title;
-  final String? categorySlug;
+  final String? categoryCode;
   final ListingCondition? condition;
+  final String conditionNotes;
   final String description;
 
   /// As typed, without the rupee sign; parsed when validated.
   final String price;
+  final bool? negotiable;
+
+  /// As typed; goods only.
+  final String quantity;
+
+  /// Category-specific values by attribute key: text, option codes, numbers (as typed), booleans,
+  /// ISO dates, lists and maps.
+  final Map<String, Object?> attributes;
 
   const ListingDetailsDraft({
     this.title = '',
-    this.categorySlug,
+    this.categoryCode,
     this.condition,
+    this.conditionNotes = '',
     this.description = '',
     this.price = '',
+    this.negotiable,
+    this.quantity = '1',
+    this.attributes = const {},
   });
 
   ListingDetailsDraft copyWith({
     String? title,
-    String? categorySlug,
+    String? categoryCode,
     ListingCondition? condition,
+    String? conditionNotes,
     String? description,
     String? price,
+    bool? negotiable,
+    String? quantity,
+    Map<String, Object?>? attributes,
   }) {
     return ListingDetailsDraft(
       title: title ?? this.title,
-      categorySlug: categorySlug ?? this.categorySlug,
+      categoryCode: categoryCode ?? this.categoryCode,
       condition: condition ?? this.condition,
+      conditionNotes: conditionNotes ?? this.conditionNotes,
       description: description ?? this.description,
       price: price ?? this.price,
+      negotiable: negotiable ?? this.negotiable,
+      quantity: quantity ?? this.quantity,
+      attributes: attributes ?? this.attributes,
     );
   }
 
-  /// Fields that are missing or invalid, in page order.
-  List<DetailsField> get invalidFields => [
-        if (title.trim().isEmpty || title.trim().length > ListingDetailsRules.maxTitle)
-          DetailsField.title,
-        if (categorySlug == null || categorySlug!.isEmpty) DetailsField.category,
+  /// Common fields that are missing or invalid, in page order. Without a schema only the fields
+  /// every category has are checked.
+  List<DetailsField> invalidFields(ListingSchema? schema) {
+    final common = schema?.common;
+    return [
+      if (title.trim().isEmpty || title.trim().length > ListingDetailsRules.maxTitle)
+        DetailsField.title,
+      if (categoryCode == null || categoryCode!.isEmpty) DetailsField.category,
+      if (common?.conditionVisible ?? false) ...[
         if (condition == null) DetailsField.condition,
-        if (description.trim().isEmpty ||
-            description.trim().length > ListingDetailsRules.maxDescription)
-          DetailsField.description,
-        if (parsedPrice == null) DetailsField.price,
-      ];
+        if (conditionNotes.trim().isEmpty ||
+            conditionNotes.trim().length > ListingDetailsRules.maxConditionNotes)
+          DetailsField.conditionNotes,
+      ],
+      if (description.trim().isEmpty ||
+          description.trim().length > ListingDetailsRules.maxDescription)
+        DetailsField.description,
+      if (schema != null && !common!.priceDerived && parsedPrice == null) DetailsField.price,
+      if ((common?.negotiableVisible ?? false) && negotiable == null) DetailsField.negotiable,
+      if ((common?.quantityVisible ?? false) && parsedQuantity == null) DetailsField.quantity,
+    ];
+  }
 
-  bool get isValid => invalidFields.isEmpty;
+  /// Category-specific keys that are missing or invalid.
+  List<String> invalidAttributes(ListingSchema? schema) =>
+      schema == null ? const [] : schema.invalidKeys(attributes);
+
+  /// Ready to save: the form for the category is loaded and everything it asks is filled.
+  bool isValid(ListingSchema? schema) =>
+      schema != null && invalidFields(schema).isEmpty && invalidAttributes(schema).isEmpty;
 
   /// The price in rupees, or null when it is empty, not a number, zero, over the limit or has
   /// more than two decimals.
@@ -89,19 +141,60 @@ class ListingDetailsDraft {
     if (value == null || value <= 0 || value > ListingDetailsRules.maxPriceRupees) return null;
     return value;
   }
+
+  int? get parsedQuantity {
+    final value = int.tryParse(quantity.trim());
+    if (value == null ||
+        value < ListingDetailsRules.minQuantity ||
+        value > ListingDetailsRules.maxQuantity) {
+      return null;
+    }
+    return value;
+  }
+
+  /// The values to send: only keys the category asks, numbers as numbers, blanks left out.
+  Map<String, Object?> attributePayload(ListingSchema schema) {
+    final payload = <String, Object?>{};
+    for (final field in schema.fields) {
+      final value = attributes[field.key];
+      if (isBlankValue(value)) continue;
+      payload[field.key] = field.type.isNumber && value is String
+          ? num.parse(value.trim().replaceAll(',', ''))
+          : value is String
+              ? value.trim()
+              : value;
+    }
+    return payload;
+  }
+
+  /// The PATCH body: only what the category's form shows.
+  Map<String, Object?> toJson(ListingSchema schema, {String? city}) {
+    final common = schema.common;
+    return {
+      'title': title.trim(),
+      if (common.conditionVisible) 'condition': condition?.apiValue,
+      if (common.conditionVisible) 'conditionNotes': conditionNotes.trim(),
+      'description': description.trim(),
+      if (!common.priceDerived) 'price': parsedPrice,
+      if (common.negotiableVisible) 'negotiable': negotiable,
+      if (common.quantityVisible) 'quantity': parsedQuantity,
+      'attributes': attributePayload(schema),
+      'location': city,
+    };
+  }
 }
 
 /// A suggestion AI made for the page (US-005). Absent while AI is off, which is the default.
 class AiSuggestion {
   final String id;
-  final String? categorySlug;
+  final String? categoryCode;
   final String? title;
   final ListingCondition? condition;
   final String? description;
 
   const AiSuggestion({
     required this.id,
-    this.categorySlug,
+    this.categoryCode,
     this.title,
     this.condition,
     this.description,
@@ -110,7 +203,7 @@ class AiSuggestion {
   /// The page values before the seller touches anything.
   ListingDetailsDraft get asDraft => ListingDetailsDraft(
         title: _clip(title, ListingDetailsRules.maxTitle),
-        categorySlug: categorySlug,
+        categoryCode: categoryCode,
         condition: condition,
         description: _clip(description, ListingDetailsRules.maxDescription),
       );
@@ -165,7 +258,7 @@ List<SuggestionFeedback> suggestionFeedback(AiSuggestion suggestion, ListingDeta
   }
 
   return [
-    one('CATEGORY', suggestion.categorySlug, current.categorySlug),
+    one('CATEGORY', suggestion.categoryCode, current.categoryCode),
     one('TITLE', suggestion.title, current.title),
     one('CONDITION', suggestion.condition?.apiValue, current.condition?.apiValue),
     one('DESCRIPTION', suggestion.description, current.description),

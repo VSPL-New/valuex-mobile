@@ -17,6 +17,17 @@ String? listingCodeMessage(AppLocalizations l10n, String? code) {
     'ERROR_CONDITION_REQUIRED' => l10n.itemConditionRequired,
     'ERROR_DESCRIPTION_REQUIRED' => l10n.itemDescriptionRequired,
     'ERROR_PRICE_INVALID' => l10n.itemPriceInvalid,
+    'ERROR_CONDITION_NOTES_REQUIRED' => l10n.itemConditionNotesRequired,
+    'ERROR_NEGOTIABLE_REQUIRED' => l10n.itemNegotiableRequired,
+    'ERROR_QUANTITY_INVALID' => l10n.itemQuantityInvalid,
+    'ERROR_ATTRIBUTE_REQUIRED' ||
+    'ERROR_ATTRIBUTE_INVALID' ||
+    'ERROR_ATTRIBUTE_NOT_ALLOWED' =>
+      l10n.itemAttributeError,
+    'CATEGORY_NOT_FOUND' ||
+    'ERROR_CATEGORY_DISABLED' ||
+    'ERROR_CATEGORY_NOT_LEAF' =>
+      l10n.itemCategoryUnavailable,
     'AADHAAR_VERIFICATION_REQUIRED' => l10n.homeSellAadhaarRequired,
     _ => null,
   };

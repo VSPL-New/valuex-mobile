@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/network/api_error.dart';
 import '../../../core/routing/route_names.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/spacing.dart';
@@ -18,15 +19,18 @@ import '../../home/presentation/widgets/location_prompt.dart';
 import '../../home/presentation/widgets/location_sheet.dart';
 import '../../home/presentation/widgets/saved_location_dialog.dart';
 import '../domain/listing_details.dart';
+import '../domain/listing_schema.dart';
+import 'category_picker_screen.dart';
 import 'listing_error_messages.dart';
 import 'providers/item_details_controller.dart';
-import 'widgets/category_chips.dart';
 import 'widgets/option_chip.dart';
+import 'widgets/schema_field_input.dart';
 import 'widgets/sell_step_header.dart';
 
 /// Sell step 2 of 4 (Figma Make: CreateListingScreen, "details" step, with the price block of the
-/// "price" step merged in): title, category, condition, description, location and price. Empty
-/// when AI is off; prefilled and editable when AI filled it (US-114).
+/// "price" step merged in): title and category first, then the form that category asks for
+/// (US-006), location and price. Empty when AI is off; prefilled and editable when AI filled it
+/// (US-114).
 class ItemDetailsScreen extends ConsumerStatefulWidget {
   final ItemDetailsArgs args;
 
@@ -39,7 +43,9 @@ class ItemDetailsScreen extends ConsumerStatefulWidget {
 class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
   late final TextEditingController _title;
   late final TextEditingController _description;
+  late final TextEditingController _conditionNotes;
   late final TextEditingController _price;
+  late final TextEditingController _quantity;
 
   ItemDetailsController get _controller =>
       ref.read(itemDetailsControllerProvider(widget.args).notifier);
@@ -50,15 +56,25 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
     final draft = ref.read(itemDetailsControllerProvider(widget.args)).draft;
     _title = TextEditingController(text: draft.title);
     _description = TextEditingController(text: draft.description);
+    _conditionNotes = TextEditingController(text: draft.conditionNotes);
     _price = TextEditingController(text: draft.price);
+    _quantity = TextEditingController(text: draft.quantity);
   }
 
   @override
   void dispose() {
     _title.dispose();
     _description.dispose();
+    _conditionNotes.dispose();
     _price.dispose();
+    _quantity.dispose();
     super.dispose();
+  }
+
+  Future<void> _chooseCategory() async {
+    final current = ref.read(itemDetailsControllerProvider(widget.args)).draft.categoryCode;
+    final code = await pickCategory(context, selectedCode: current);
+    if (code != null && code != current) await _controller.selectCategory(code);
   }
 
   Future<void> _continue() async {
@@ -81,7 +97,8 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
     final l10n = AppLocalizations.of(context);
     final state = ref.watch(itemDetailsControllerProvider(widget.args));
     final hints = state.visibleHints.toSet();
-    final draft = state.draft;
+    final schema = state.schema;
+    final ready = state.schemaStatus == SchemaStatus.ready && schema != null;
 
     return Scaffold(
       body: Column(
@@ -119,7 +136,7 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                       _Section(
                         label: l10n.itemCategoryLabel,
                         icon: Icons.grid_view_rounded,
-                        child: _CategoryChips(args: widget.args),
+                        child: _CategoryRow(state: state, onTap: _chooseCategory),
                       ),
                       _AiMark(show: state.isAiGenerated(DetailsField.category)),
                       _Hint(
@@ -128,86 +145,20 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: AppSpacing.md),
-                SoftCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _Section(
-                        label: l10n.itemConditionLabel,
-                        icon: Icons.verified_outlined,
-                        child: Wrap(
-                          spacing: AppSpacing.sm,
-                          runSpacing: 0,
-                          children: [
-                            for (final condition in ListingCondition.values)
-                              OptionChip(
-                                label: _conditionLabel(l10n, condition),
-                                selected: draft.condition == condition,
-                                tone: OptionChipTone.success,
-                                onTap: () => _controller.setCondition(condition),
-                              ),
-                          ],
-                        ),
-                      ),
-                      _AiMark(show: state.isAiGenerated(DetailsField.condition)),
-                      _Hint(
-                          show: hints.contains(DetailsField.condition),
-                          text: l10n.itemConditionRequired),
-                      const SizedBox(height: AppSpacing.md),
-                      _Section(
-                        label: l10n.itemDescriptionLabel,
-                        icon: Icons.notes_rounded,
-                        isField: true,
-                        child: AppTextField(
-                          controller: _description,
-                          hint: l10n.itemDescriptionHint,
-                          maxLines: 4,
-                          maxLength: ListingDetailsRules.maxDescription,
-                          keyboardType: TextInputType.multiline,
-                          onChanged: _controller.setDescription,
-                        ),
-                      ),
-                      _AiMark(show: state.isAiGenerated(DetailsField.description)),
-                      _Hint(
-                          show: hints.contains(DetailsField.description),
-                          text: l10n.itemDescriptionRequired),
-                    ],
+                if (state.schemaStatus == SchemaStatus.loading)
+                  Padding(
+                    padding: const EdgeInsets.only(top: AppSpacing.md),
+                    child: Semantics(label: l10n.loading, child: const LinearProgressIndicator()),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.md),
-                SoftCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _Section(
-                        label: l10n.itemLocationLabel,
-                        icon: Icons.place_outlined,
-                        child: const _LocationRow(),
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                      _Section(
-                        label: l10n.itemPriceLabel,
-                        icon: Icons.currency_rupee_rounded,
-                        isField: true,
-                        child: AppTextField(
-                          controller: _price,
-                          prefixText: '₹ ',
-                          prefixStyle: _priceStyle.copyWith(color: AppColors.brandLink),
-                          textStyle: _priceStyle,
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: AppSpacing.md, vertical: AppSpacing.md),
-                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                          inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
-                          onChanged: _controller.setPrice,
-                        ),
-                      ),
-                      _Hint(show: hints.contains(DetailsField.price), text: l10n.itemPriceInvalid),
-                      const SizedBox(height: AppSpacing.sm),
-                      _InfoCard.note(text: l10n.itemPriceNote),
-                    ],
+                if (state.schemaStatus == SchemaStatus.failed)
+                  Padding(
+                    padding: const EdgeInsets.only(top: AppSpacing.md),
+                    child: _SchemaFailed(
+                      error: state.schemaError,
+                      onRetry: () => unawaited(_controller.retryCategory()),
+                    ),
                   ),
-                ),
+                if (ready) ..._form(l10n, state, schema, hints),
               ],
             ),
           ),
@@ -224,7 +175,7 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (!draft.isValid) ...[
+                    if (!state.draft.isValid(schema) || !ready) ...[
                       Text(l10n.itemFillMissing,
                           style: AppTextStyles.hint, textAlign: TextAlign.center),
                       const SizedBox(height: AppSpacing.sm),
@@ -243,6 +194,203 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
         ],
       ),
     );
+  }
+
+  /// Everything below the category once its form is known.
+  List<Widget> _form(
+    AppLocalizations l10n,
+    ItemDetailsState state,
+    ListingSchema schema,
+    Set<DetailsField> hints,
+  ) {
+    final draft = state.draft;
+    final common = schema.common;
+    final attributeHints = state.visibleAttributeHints;
+    final shown = [
+      for (final field in schema.fields)
+        if (!field.isMore && schema.isRequired(field, draft.attributes)) field,
+    ];
+    final optional = [
+      for (final field in schema.fields)
+        if (field.isMore || !schema.isRequired(field, draft.attributes)) field,
+    ];
+
+    Widget attribute(SchemaField field) => _AttributeField(
+          key: ValueKey('${schema.category.code}:${field.key}'),
+          field: field,
+          value: draft.attributes[field.key],
+          required: schema.isRequired(field, draft.attributes),
+          showHint: attributeHints.contains(field.key),
+          onChanged: (value) => _controller.setAttribute(field.key, value),
+        );
+
+    return [
+      const SizedBox(height: AppSpacing.md),
+      SoftCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (common.conditionVisible) ...[
+              _Section(
+                label: l10n.itemConditionLabel,
+                icon: Icons.verified_outlined,
+                child: Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: 0,
+                  children: [
+                    for (final condition in ListingCondition.values)
+                      OptionChip(
+                        label: _conditionLabel(l10n, condition),
+                        selected: draft.condition == condition,
+                        tone: OptionChipTone.success,
+                        onTap: () => _controller.setCondition(condition),
+                      ),
+                  ],
+                ),
+              ),
+              _AiMark(show: state.isAiGenerated(DetailsField.condition)),
+              _Hint(show: hints.contains(DetailsField.condition), text: l10n.itemConditionRequired),
+              const SizedBox(height: AppSpacing.md),
+              _Section(
+                label: l10n.itemConditionNotesLabel,
+                icon: Icons.build_outlined,
+                isField: true,
+                child: AppTextField(
+                  controller: _conditionNotes,
+                  hint: l10n.itemConditionNotesHint,
+                  maxLines: 2,
+                  maxLength: ListingDetailsRules.maxConditionNotes,
+                  keyboardType: TextInputType.multiline,
+                  onChanged: _controller.setConditionNotes,
+                ),
+              ),
+              _Hint(
+                  show: hints.contains(DetailsField.conditionNotes),
+                  text: l10n.itemConditionNotesRequired),
+              const SizedBox(height: AppSpacing.md),
+            ],
+            _Section(
+              label: l10n.itemDescriptionLabel,
+              icon: Icons.notes_rounded,
+              isField: true,
+              child: AppTextField(
+                controller: _description,
+                hint: l10n.itemDescriptionHint,
+                maxLines: 4,
+                maxLength: ListingDetailsRules.maxDescription,
+                keyboardType: TextInputType.multiline,
+                onChanged: _controller.setDescription,
+              ),
+            ),
+            _AiMark(show: state.isAiGenerated(DetailsField.description)),
+            _Hint(
+                show: hints.contains(DetailsField.description), text: l10n.itemDescriptionRequired),
+          ],
+        ),
+      ),
+      if (shown.isNotEmpty) ...[
+        const SizedBox(height: AppSpacing.md),
+        SoftCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Semantics(
+                header: true,
+                child: Text(l10n.itemAboutTitle.toUpperCase(),
+                    style: AppTextStyles.label
+                        .copyWith(color: AppColors.brandForeground, letterSpacing: 0.8)),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              for (final field in shown) attribute(field),
+            ],
+          ),
+        ),
+      ],
+      if (optional.isNotEmpty) ...[
+        const SizedBox(height: AppSpacing.md),
+        SoftCard(
+          child: _Collapsible(
+            title: l10n.itemMoreDetails,
+            subtitle: l10n.itemMoreDetailsHint,
+            children: [for (final field in optional) attribute(field)],
+          ),
+        ),
+      ],
+      const SizedBox(height: AppSpacing.md),
+      SoftCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _Section(
+              label: l10n.itemLocationLabel,
+              icon: Icons.place_outlined,
+              child: const _LocationRow(),
+            ),
+            if (!common.priceDerived) ...[
+              const SizedBox(height: AppSpacing.md),
+              _Section(
+                label: l10n.itemPriceLabel,
+                icon: Icons.currency_rupee_rounded,
+                isField: true,
+                child: AppTextField(
+                  controller: _price,
+                  prefixText: '₹ ',
+                  prefixStyle: _priceStyle.copyWith(color: AppColors.brandLink),
+                  textStyle: _priceStyle,
+                  contentPadding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.md, vertical: AppSpacing.md),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
+                  onChanged: _controller.setPrice,
+                ),
+              ),
+              _Hint(show: hints.contains(DetailsField.price), text: l10n.itemPriceInvalid),
+            ],
+            if (common.negotiableVisible) ...[
+              const SizedBox(height: AppSpacing.md),
+              _Section(
+                label: l10n.itemNegotiableLabel,
+                icon: Icons.handshake_outlined,
+                child: Wrap(
+                  spacing: AppSpacing.sm,
+                  children: [
+                    OptionChip(
+                      label: l10n.itemYes,
+                      selected: draft.negotiable == true,
+                      onTap: () => _controller.setNegotiable(true),
+                    ),
+                    OptionChip(
+                      label: l10n.itemNo,
+                      selected: draft.negotiable == false,
+                      onTap: () => _controller.setNegotiable(false),
+                    ),
+                  ],
+                ),
+              ),
+              _Hint(
+                  show: hints.contains(DetailsField.negotiable), text: l10n.itemNegotiableRequired),
+            ],
+            if (common.quantityVisible) ...[
+              const SizedBox(height: AppSpacing.md),
+              _Section(
+                label: l10n.itemQuantityLabel,
+                icon: Icons.numbers_rounded,
+                isField: true,
+                child: AppTextField(
+                  controller: _quantity,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  onChanged: _controller.setQuantity,
+                ),
+              ),
+              _Hint(show: hints.contains(DetailsField.quantity), text: l10n.itemQuantityInvalid),
+            ],
+            const SizedBox(height: AppSpacing.sm),
+            _InfoCard.note(text: l10n.itemPriceNote),
+          ],
+        ),
+      ),
+    ];
   }
 }
 
@@ -348,7 +496,7 @@ class _Hint extends StatelessWidget {
   }
 }
 
-/// Tinted message card: the blue AI banner or the amber price note.
+/// Tinted message card: the amber price note.
 class _InfoCard extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
@@ -398,39 +546,181 @@ class _InfoCard extends StatelessWidget {
   }
 }
 
-class _CategoryChips extends ConsumerWidget {
-  final ItemDetailsArgs args;
+/// The chosen category with its path and a button to change it, or a button to choose one.
+class _CategoryRow extends StatelessWidget {
+  final ItemDetailsState state;
+  final VoidCallback onTap;
 
-  const _CategoryChips({required this.args});
+  const _CategoryRow({required this.state, required this.onTap});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final categories = ref.watch(categoriesProvider);
-    final selected = ref.watch(itemDetailsControllerProvider(args)).draft.categorySlug;
-    final controller = ref.read(itemDetailsControllerProvider(args).notifier);
-
-    return categories.when(
-      loading: () => Semantics(
-        label: l10n.loading,
-        child: const LinearProgressIndicator(),
+    final category = state.category;
+    if (category == null) {
+      return Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: OutlinedButton.icon(
+          onPressed: onTap,
+          icon: const Icon(Icons.search_rounded),
+          label: Text(l10n.itemCategoryChoose),
+        ),
+      );
+    }
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppColors.brandSurfaceTint,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: AppColors.brandControlBorder),
       ),
-      error: (error, stack) => Column(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.xs),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(category.name, style: AppTextStyles.cardTitle),
+                  if (category.parentsLabel.isNotEmpty)
+                    Text(category.parentsLabel, style: AppTextStyles.hint),
+                ],
+              ),
+            ),
+            TextButton(onPressed: onTap, child: Text(l10n.itemCategoryChange)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A heading that shows or hides the fields below it. Built on a plain gesture rather than an
+/// expansion tile, whose list tile would sit under the card's background.
+class _Collapsible extends StatefulWidget {
+  final String title;
+  final String subtitle;
+  final List<Widget> children;
+
+  const _Collapsible({required this.title, required this.subtitle, required this.children});
+
+  @override
+  State<_Collapsible> createState() => _CollapsibleState();
+}
+
+class _CollapsibleState extends State<_Collapsible> {
+  bool _open = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Semantics(
+          button: true,
+          expanded: _open,
+          label: widget.title,
+          excludeSemantics: true,
+          onTap: () => setState(() => _open = !_open),
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => setState(() => _open = !_open),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: AppSizes.minTouchTarget),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(widget.title, style: AppTextStyles.cardTitle),
+                        Text(widget.subtitle, style: AppTextStyles.hint),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    _open ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+                    color: AppColors.brandForeground,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        if (_open) ...[
+          const SizedBox(height: AppSpacing.sm),
+          ...widget.children,
+        ],
+      ],
+    );
+  }
+}
+
+/// Shown when the form for the chosen category could not be loaded.
+class _SchemaFailed extends StatelessWidget {
+  final Object? error;
+  final VoidCallback onRetry;
+
+  const _SchemaFailed({required this.error, required this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final failure = error;
+    final specific = listingCodeMessage(l10n, failure is ApiError ? failure.code : null);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        FieldError(text: specific ?? l10n.itemSchemaFailed),
+        TextButton(onPressed: onRetry, child: Text(l10n.commonRetry)),
+      ],
+    );
+  }
+}
+
+/// One category-specific question: its label, the input for its type and why it is not valid.
+class _AttributeField extends StatelessWidget {
+  final SchemaField field;
+  final Object? value;
+  final bool required;
+  final bool showHint;
+  final ValueChanged<Object?> onChanged;
+
+  const _AttributeField({
+    super.key,
+    required this.field,
+    required this.value,
+    required this.required,
+    required this.showHint,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final unit = field.unit;
+    final label = unit == null || unit.isEmpty ? field.label : '${field.label} ($unit)';
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.md),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FieldError(text: l10n.homeCategoriesFailed),
-          TextButton(
-            onPressed: () => ref.invalidate(categoriesProvider),
-            child: Text(l10n.commonRetry),
+          Semantics(
+            header: true,
+            child: Text(
+              required ? '$label *' : label,
+              style: AppTextStyles.label.copyWith(color: AppColors.brandForeground),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          SchemaFieldInput(field: field, value: value, onChanged: onChanged),
+          _Hint(
+            show: showHint,
+            text: isBlankValue(value)
+                ? l10n.itemFieldRequired(field.label)
+                : l10n.itemFieldInvalid(field.label),
           ),
         ],
-      ),
-      data: (items) => CategoryChips(
-        categories: items,
-        selectedId: selected,
-        onSelected: controller.setCategory,
-        othersLabel: l10n.itemCategoryOthers,
-        closeLabel: l10n.commonClose,
       ),
     );
   }

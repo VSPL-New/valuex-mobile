@@ -6,7 +6,9 @@ import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/api_error.dart';
 import '../../../core/network/api_error_mapper.dart';
+import '../domain/category.dart';
 import '../domain/listing_details.dart';
+import '../domain/listing_schema.dart';
 import '../domain/seller_plan.dart';
 
 /// A short-lived URL the photo bytes are sent to, for one media asset.
@@ -112,18 +114,54 @@ class ListingRepository {
   Future<void> deleteImage(String listingId, String imageId) =>
       _client.delete<void>(ApiConstants.listingImage(listingId, imageId));
 
-  /// Saves the item details of a draft (US-114). Only the city is sent as the location.
-  Future<void> saveDetails(String listingId, ListingDetailsDraft details, {String? city}) =>
+  /// Saves the item details of a draft (US-114, US-006): the common fields plus the values the
+  /// category asks for. Only the city is sent as the location.
+  Future<void> saveDetails(
+    String listingId,
+    ListingDetailsDraft details,
+    ListingSchema schema, {
+    String? city,
+  }) =>
       _client.patch<void>(
         ApiConstants.listing(listingId),
-        data: {
-          'title': details.title.trim(),
-          'categorySlug': details.categorySlug,
-          'condition': details.condition?.apiValue,
-          'description': details.description.trim(),
-          'price': details.parsedPrice,
-          'location': city,
+        data: details.toJson(schema, city: city),
+      );
+
+  /// Files the draft under an L3 category; values the new category does not use are dropped
+  /// by the server.
+  Future<void> setCategory(String listingId, String categoryCode) => _client.put<void>(
+        ApiConstants.listingCategory(listingId),
+        data: {'categoryCode': categoryCode},
+      );
+
+  /// Enabled child categories; without a parent, the top-level categories.
+  Future<List<CategoryNode>> categoryChildren({String? parentCode, CategoryScope? scope}) =>
+      _client.get(
+        ApiConstants.categoryChildren,
+        queryParameters: {
+          if (parentCode != null) 'parentCode': parentCode,
+          'scope': (scope ?? CategoryScope.all).apiValue,
         },
+        parse: (json) => [
+          for (final item in json as List<dynamic>)
+            CategoryNode.fromJson(item as Map<String, dynamic>),
+        ],
+      );
+
+  /// Leaf categories whose name matches; the server needs at least two characters.
+  Future<List<CategoryRef>> searchCategories(String query) => _client.get(
+        ApiConstants.categorySearch,
+        queryParameters: {'q': query},
+        parse: (json) => [
+          for (final item in json as List<dynamic>)
+            CategoryRef.fromJson(item as Map<String, dynamic>),
+        ],
+      );
+
+  /// The Item Details form for a leaf category.
+  Future<ListingSchema> listingSchema(String categoryCode) => _client.get(
+        ApiConstants.categoryListingSchema(categoryCode),
+        parse: (json) => ListingSchema.fromJson(json as Map<String, dynamic>),
       );
 
   /// The listing plans with prices, features and the payment breakdown (US-078).
