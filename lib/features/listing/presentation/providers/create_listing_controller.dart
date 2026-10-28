@@ -7,6 +7,7 @@ import '../../../../core/routing/post_aadhaar_route.dart';
 import '../../../../core/routing/route_names.dart';
 import '../../data/listing_repository.dart';
 import '../../data/photo_source.dart';
+import '../../domain/listing_details.dart';
 import '../../domain/listing_photo.dart';
 
 /// Something the screen should tell the user once, after an action.
@@ -30,12 +31,38 @@ class ListingNotice {
 /// How a submit ended.
 enum SubmitOutcome { submitted, aadhaarRequired, failed }
 
+/// Why the seller fills the page by hand after a submit (US-005).
+enum AiNotice {
+  /// AI is off, down or its quota is used up.
+  unavailable,
+
+  /// AI answered but could not recognise the item.
+  notRecognised,
+}
+
+/// The result of a submit. After [SubmitOutcome.submitted], [suggestion] is what AI suggested and
+/// [aiNotice] says why there is none. AI never blocks the seller.
+typedef SubmitResult = ({
+  SubmitOutcome outcome,
+  Object? error,
+  AiSuggestion? suggestion,
+  AiNotice? aiNotice,
+});
+
 class CreateListingState {
   final String? listingId;
   final List<ListingPhoto> photos;
   final bool isBusy;
 
-  const CreateListingState({this.listingId, this.photos = const [], this.isBusy = false});
+  /// True while AI looks at the photos after a submit.
+  final bool isAnalysing;
+
+  const CreateListingState({
+    this.listingId,
+    this.photos = const [],
+    this.isBusy = false,
+    this.isAnalysing = false,
+  });
 
   int get remaining => ListingPhotoRules.maxPhotos - photos.length;
   int get readyCount => photos.where((p) => p.status == PhotoStatus.ready).length;
@@ -46,11 +73,17 @@ class CreateListingState {
   bool get canSubmit =>
       listingId != null && readyCount >= ListingPhotoRules.minPhotos && !hasPending && !isBusy;
 
-  CreateListingState copyWith({String? listingId, List<ListingPhoto>? photos, bool? isBusy}) {
+  CreateListingState copyWith({
+    String? listingId,
+    List<ListingPhoto>? photos,
+    bool? isBusy,
+    bool? isAnalysing,
+  }) {
     return CreateListingState(
       listingId: listingId ?? this.listingId,
       photos: photos ?? this.photos,
       isBusy: isBusy ?? this.isBusy,
+      isAnalysing: isAnalysing ?? this.isAnalysing,
     );
   }
 }
@@ -82,25 +115,50 @@ class CreateListingController extends Notifier<CreateListingState> {
     return resuming;
   }
 
-  /// Submits the draft. Aadhaar verification is asked for here, not earlier.
-  Future<({SubmitOutcome outcome, Object? error})> submit() async {
+  /// Submits the draft, then asks AI for suggestions. Aadhaar verification is asked for here, not
+  /// earlier. AI never blocks the seller: when it cannot answer, the result says so.
+  Future<SubmitResult> submit() async {
     final listingId = state.listingId;
     if (!state.canSubmit || listingId == null) {
-      return (outcome: SubmitOutcome.failed, error: null);
+      return _result(SubmitOutcome.failed);
     }
     state = state.copyWith(isBusy: true);
     try {
       await _repository.submitDraft(listingId);
-      return (outcome: SubmitOutcome.submitted, error: null);
+      state = state.copyWith(isAnalysing: true);
+      return await _suggest(listingId);
     } on ApiError catch (error) {
       final outcome = error.code == 'AADHAAR_VERIFICATION_REQUIRED'
           ? SubmitOutcome.aadhaarRequired
           : SubmitOutcome.failed;
-      return (outcome: outcome, error: error);
+      return _result(outcome, error: error);
     } finally {
-      if (ref.mounted) state = state.copyWith(isBusy: false);
+      if (ref.mounted) state = state.copyWith(isBusy: false, isAnalysing: false);
     }
   }
+
+  Future<SubmitResult> _suggest(String listingId) async {
+    try {
+      final suggestion = await _repository.generateAiSuggestions(listingId);
+      if (suggestion == null) {
+        return _result(SubmitOutcome.submitted, aiNotice: AiNotice.unavailable);
+      }
+      if (suggestion.isEmpty) {
+        return _result(SubmitOutcome.submitted, aiNotice: AiNotice.notRecognised);
+      }
+      return _result(SubmitOutcome.submitted, suggestion: suggestion);
+    } on ApiError {
+      return _result(SubmitOutcome.submitted, aiNotice: AiNotice.unavailable);
+    }
+  }
+
+  SubmitResult _result(
+    SubmitOutcome outcome, {
+    Object? error,
+    AiSuggestion? suggestion,
+    AiNotice? aiNotice,
+  }) =>
+      (outcome: outcome, error: error, suggestion: suggestion, aiNotice: aiNotice);
 
   /// Picks photos and starts their uploads; returns what the user should be told, if anything.
   Future<ListingNotice?> addPhotos(PhotoSourceKind kind) async {

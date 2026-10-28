@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'listing_schema.dart';
 
 /// Item condition values the server accepts (US-114).
@@ -190,22 +192,70 @@ class AiSuggestion {
   final String? categoryCode;
   final String? title;
   final ListingCondition? condition;
+  final String? conditionNotes;
   final String? description;
+
+  /// Category-specific values read from the photos, by attribute key, in the shape the form uses.
+  final Map<String, Object?> attributes;
+
+  /// Keys AI was less sure about; the seller is asked to check these.
+  final Set<String> verifyKeys;
 
   const AiSuggestion({
     required this.id,
     this.categoryCode,
     this.title,
     this.condition,
+    this.conditionNotes,
     this.description,
+    this.attributes = const {},
+    this.verifyKeys = const {},
   });
+
+  /// Reads the answer of POST /listings/{id}/ai-suggestions. Null when the answer carries no
+  /// suggestion: AI was not available (`fallback`) or it has no id to report feedback against.
+  static AiSuggestion? fromJson(Map<String, dynamic> json) {
+    final id = json['suggestionId'] as String?;
+    if (id == null || json['fallback'] == true) return null;
+    final categories = json['categorySuggestions'] as List<dynamic>? ?? const [];
+    final attributes = <String, Object?>{};
+    final verify = <String>{};
+    for (final item in json['attributeSuggestions'] as List<dynamic>? ?? const []) {
+      final map = item as Map<String, dynamic>;
+      final key = map['key'] as String?;
+      if (key == null || isBlankValue(map['value'])) continue;
+      attributes[key] = map['value'];
+      if (map['verify'] == true) verify.add(key);
+    }
+    return AiSuggestion(
+      id: id,
+      categoryCode: categories.isEmpty
+          ? null
+          : (categories.first as Map<String, dynamic>)['categoryCode'] as String?,
+      title: json['titleSuggestion'] as String?,
+      condition: ListingCondition.fromApi(json['conditionSuggestion'] as String?),
+      conditionNotes: json['conditionNotesSuggestion'] as String?,
+      description: json['descriptionSuggestion'] as String?,
+      attributes: attributes,
+      verifyKeys: verify,
+    );
+  }
+
+  /// True when AI recognised nothing it could fill in.
+  bool get isEmpty =>
+      categoryCode == null &&
+      (title ?? '').trim().isEmpty &&
+      (description ?? '').trim().isEmpty &&
+      attributes.isEmpty;
 
   /// The page values before the seller touches anything.
   ListingDetailsDraft get asDraft => ListingDetailsDraft(
         title: _clip(title, ListingDetailsRules.maxTitle),
         categoryCode: categoryCode,
         condition: condition,
+        conditionNotes: _clip(conditionNotes, ListingDetailsRules.maxConditionNotes),
         description: _clip(description, ListingDetailsRules.maxDescription),
+        attributes: attributes,
       );
 
   static String _clip(String? text, int max) {
@@ -216,15 +266,18 @@ class AiSuggestion {
 
 enum SuggestionAction { accepted, edited, rejected }
 
-/// What the seller did with one suggested field.
+/// What the seller did with one suggested field; [attributeKey] names the attribute when [field]
+/// is `ATTRIBUTE`.
 class SuggestionFeedback {
   final String field;
+  final String? attributeKey;
   final SuggestionAction action;
   final String? originalValue;
   final String? finalValue;
 
   const SuggestionFeedback({
     required this.field,
+    this.attributeKey,
     required this.action,
     this.originalValue,
     this.finalValue,
@@ -232,6 +285,7 @@ class SuggestionFeedback {
 
   Map<String, dynamic> toJson() => {
         'field': field,
+        if (attributeKey != null) 'attributeKey': attributeKey,
         'action': action.name.toUpperCase(),
         'originalValue': originalValue,
         'finalValue': finalValue,
@@ -241,7 +295,7 @@ class SuggestionFeedback {
 /// Accepted when unchanged, edited when changed, rejected when cleared; fields AI did not
 /// suggest are left out.
 List<SuggestionFeedback> suggestionFeedback(AiSuggestion suggestion, ListingDetailsDraft current) {
-  SuggestionFeedback? one(String field, String? original, String? now) {
+  SuggestionFeedback? one(String field, String? original, String? now, {String? attributeKey}) {
     if (original == null || original.trim().isEmpty) return null;
     final finalValue = (now == null || now.trim().isEmpty) ? null : now.trim();
     final action = finalValue == null
@@ -251,6 +305,7 @@ List<SuggestionFeedback> suggestionFeedback(AiSuggestion suggestion, ListingDeta
             : SuggestionAction.edited;
     return SuggestionFeedback(
       field: field,
+      attributeKey: attributeKey,
       action: action,
       originalValue: original.trim(),
       finalValue: finalValue,
@@ -261,6 +316,19 @@ List<SuggestionFeedback> suggestionFeedback(AiSuggestion suggestion, ListingDeta
     one('CATEGORY', suggestion.categoryCode, current.categoryCode),
     one('TITLE', suggestion.title, current.title),
     one('CONDITION', suggestion.condition?.apiValue, current.condition?.apiValue),
+    one('CONDITION_NOTES', suggestion.conditionNotes, current.conditionNotes),
     one('DESCRIPTION', suggestion.description, current.description),
+    for (final entry in suggestion.attributes.entries)
+      one(
+        'ATTRIBUTE',
+        _asText(entry.value),
+        _asText(current.attributes[entry.key]),
+        attributeKey: entry.key,
+      ),
   ].whereType<SuggestionFeedback>().toList();
+}
+
+String? _asText(Object? value) {
+  if (value == null) return null;
+  return value is String ? value : (value is num || value is bool ? '$value' : jsonEncode(value));
 }

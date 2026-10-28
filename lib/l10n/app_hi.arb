@@ -452,5 +452,9 @@
   "planReviewListing": "लिस्टिंग की समीक्षा करें",
   "planReviewSoon": "लिस्टिंग की समीक्षा जल्द आ रही है।",
   "sellYourPhotos": "आपकी फ़ोटो",
-  "itemAiGenerated": "AI द्वारा बनाया गया"
+  "itemAiGenerated": "AI द्वारा बनाया गया",
+  "itemPleaseVerify": "कृपया जाँच लें",
+  "sellAiAnalysing": "आपकी फ़ोटो का विश्लेषण हो रहा है",
+  "sellAiUnavailable": "AI सेवा अभी उपलब्ध नहीं है या आपका उपयोग कोटा समाप्त हो गया है, कृपया जानकारी स्वयं भरें",
+  "sellAiNotRecognised": "हम आपकी फ़ोटो से वस्तु को पहचान नहीं सके। कृपया जानकारी स्वयं भरें।"
 }

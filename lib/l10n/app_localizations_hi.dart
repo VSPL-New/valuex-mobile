@@ -1500,4 +1500,18 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get itemAiGenerated => 'AI द्वारा बनाया गया';
+
+  @override
+  String get itemPleaseVerify => 'कृपया जाँच लें';
+
+  @override
+  String get sellAiAnalysing => 'आपकी फ़ोटो का विश्लेषण हो रहा है';
+
+  @override
+  String get sellAiUnavailable =>
+      'AI सेवा अभी उपलब्ध नहीं है या आपका उपयोग कोटा समाप्त हो गया है, कृपया जानकारी स्वयं भरें';
+
+  @override
+  String get sellAiNotRecognised =>
+      'हम आपकी फ़ोटो से वस्तु को पहचान नहीं सके। कृपया जानकारी स्वयं भरें।';
 }

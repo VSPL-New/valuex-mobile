@@ -1512,4 +1512,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get itemAiGenerated => 'AI generated';
+
+  @override
+  String get itemPleaseVerify => 'Please verify';
+
+  @override
+  String get sellAiAnalysing => 'Analysing your photos';
+
+  @override
+  String get sellAiUnavailable =>
+      'AI Service is not available at this moment or your usage quota has exhausted, please do manual entry';
+
+  @override
+  String get sellAiNotRecognised =>
+      'We could not recognise the item from your photos. Please fill in the details yourself.';
 }

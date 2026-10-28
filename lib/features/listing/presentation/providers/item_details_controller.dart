@@ -46,6 +46,9 @@ class ItemDetailsState {
   /// What AI suggested, as first shown; null when AI did not fill the page.
   final ListingDetailsDraft? suggested;
 
+  /// Attribute keys AI was less sure about.
+  final Set<String> verifyKeys;
+
   const ItemDetailsState({
     this.draft = const ListingDetailsDraft(),
     this.category,
@@ -57,9 +60,20 @@ class ItemDetailsState {
     this.aiFilled = false,
     this.isSaving = false,
     this.suggested,
+    this.verifyKeys = const {},
   });
 
   bool get canContinue => schemaStatus == SchemaStatus.ready && draft.isValid(schema) && !isSaving;
+
+  /// True while a category-specific value still holds what AI suggested; editing it clears this.
+  bool isAiAttribute(String key) {
+    final ai = suggested;
+    if (ai == null || touchedAttributes.contains(key)) return false;
+    return ai.attributes.containsKey(key) && draft.attributes.containsKey(key);
+  }
+
+  /// An AI-filled value the seller is asked to check, until they edit it.
+  bool needsVerification(String key) => verifyKeys.contains(key) && isAiAttribute(key);
 
   /// True while a field still holds exactly what AI suggested for it; editing it clears this.
   bool isAiGenerated(DetailsField field) {
@@ -69,6 +83,8 @@ class ItemDetailsState {
       DetailsField.title => ai.title.isNotEmpty && draft.title.trim() == ai.title.trim(),
       DetailsField.category => ai.categoryCode != null && draft.categoryCode == ai.categoryCode,
       DetailsField.condition => ai.condition != null && draft.condition == ai.condition,
+      DetailsField.conditionNotes =>
+        ai.conditionNotes.isNotEmpty && draft.conditionNotes.trim() == ai.conditionNotes.trim(),
       DetailsField.description =>
         ai.description.isNotEmpty && draft.description.trim() == ai.description.trim(),
       _ => false,
@@ -107,6 +123,7 @@ class ItemDetailsState {
       aiFilled: aiFilled,
       isSaving: isSaving ?? this.isSaving,
       suggested: suggested,
+      verifyKeys: verifyKeys,
     );
   }
 }
@@ -131,6 +148,7 @@ class ItemDetailsController extends Notifier<ItemDetailsState> {
       draft: suggestion?.asDraft ?? const ListingDetailsDraft(),
       aiFilled: suggestion != null,
       suggested: suggestion?.asDraft,
+      verifyKeys: suggestion?.verifyKeys ?? const {},
     );
   }
 

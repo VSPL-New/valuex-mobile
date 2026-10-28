@@ -117,18 +117,24 @@ class ApiClient {
   }
 
   /// [bearerToken] sends that token instead of the stored one, without a refresh on 401.
+  /// [receiveTimeout] waits longer than the default for this one request.
   Future<T> post<T>(
     String path, {
     Object? data,
     bool authenticated = true,
     String? bearerToken,
+    Duration? receiveTimeout,
     T Function(Object? data)? parse,
   }) {
     return _send(
       () => dio.post<dynamic>(
         path,
         data: data,
-        options: _options(authenticated && bearerToken == null, bearerToken: bearerToken),
+        options: _options(
+          authenticated && bearerToken == null,
+          bearerToken: bearerToken,
+          receiveTimeout: receiveTimeout,
+        ),
       ),
       parse,
     );
@@ -170,10 +176,11 @@ class ApiClient {
     );
   }
 
-  Options _options(bool authenticated, {String? bearerToken}) {
+  Options _options(bool authenticated, {String? bearerToken, Duration? receiveTimeout}) {
     return Options(
       extra: {ApiRequestFlags.authenticated: authenticated},
       headers: bearerToken == null ? null : {'Authorization': 'Bearer $bearerToken'},
+      receiveTimeout: receiveTimeout,
     );
   }
 
