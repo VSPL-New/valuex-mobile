@@ -598,5 +598,9 @@
   "planReviewListing": "Review Listing",
   "planReviewSoon": "Reviewing your listing is coming soon.",
   "sellYourPhotos": "Your photos",
-  "itemAiGenerated": "AI generated"
+  "itemAiGenerated": "AI generated",
+  "itemPleaseVerify": "Please verify",
+  "sellAiAnalysing": "Analysing your photos",
+  "sellAiUnavailable": "AI Service is not available at this moment or your usage quota has exhausted, please do manual entry",
+  "sellAiNotRecognised": "We could not recognise the item from your photos. Please fill in the details yourself."
 }

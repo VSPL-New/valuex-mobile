@@ -91,6 +91,7 @@ void _stubHappyUploads(_MockRepository repository) {
   when(() => repository.attachImage(any(), any())).thenAnswer((_) async => 'image-${image++}');
   when(() => repository.deleteImage(any(), any())).thenAnswer((_) async {});
   when(() => repository.submitDraft(any())).thenAnswer((_) async {});
+  when(() => repository.generateAiSuggestions(any())).thenAnswer((_) async => null);
 }
 
 void main() {

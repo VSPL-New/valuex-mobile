@@ -173,6 +173,15 @@ class ListingRepository {
         ],
       );
 
+  /// Asks AI to suggest the details of a submitted draft (US-005). Null when AI cannot help right
+  /// now (off, down, quota used up): the seller then fills the page by hand. Network and server
+  /// failures are thrown as [ApiError].
+  Future<AiSuggestion?> generateAiSuggestions(String listingId) => _client.post(
+        ApiConstants.listingAiSuggestions(listingId),
+        receiveTimeout: ApiConstants.aiSuggestionTimeout,
+        parse: (json) => AiSuggestion.fromJson(json as Map<String, dynamic>),
+      );
+
   /// Tells the server what the seller did with each AI suggestion (US-005 contract).
   Future<void> sendSuggestionFeedback(
     String listingId,
@@ -182,7 +191,7 @@ class ListingRepository {
       _client.patch<void>(
         ApiConstants.listingAiFeedback(listingId, suggestionId),
         data: {
-          'fields': [for (final item in feedback) item.toJson()]
+          'feedback': [for (final item in feedback) item.toJson()]
         },
       );
 }

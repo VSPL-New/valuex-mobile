@@ -37,6 +37,7 @@ class ApiConstants {
   static const String mediaUploads = '/media/uploads';
 
   static String listing(String listingId) => '/listings/$listingId';
+  static String listingAiSuggestions(String listingId) => '/listings/$listingId/ai-suggestions';
   static String listingAiFeedback(String listingId, String suggestionId) =>
       '/listings/$listingId/ai-suggestions/$suggestionId/feedback';
   static String mediaComplete(String mediaId) => '/media/$mediaId/complete';
@@ -51,4 +52,7 @@ class ApiConstants {
 
   static const Duration connectTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
+
+  /// AI looks at the photos for up to 20 s on the server (US-005).
+  static const Duration aiSuggestionTimeout = Duration(seconds: 25);
 }

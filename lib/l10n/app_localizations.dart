@@ -2756,6 +2756,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'AI generated'**
   String get itemAiGenerated;
+
+  /// No description provided for @itemPleaseVerify.
+  ///
+  /// In en, this message translates to:
+  /// **'Please verify'**
+  String get itemPleaseVerify;
+
+  /// No description provided for @sellAiAnalysing.
+  ///
+  /// In en, this message translates to:
+  /// **'Analysing your photos'**
+  String get sellAiAnalysing;
+
+  /// No description provided for @sellAiUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Service is not available at this moment or your usage quota has exhausted, please do manual entry'**
+  String get sellAiUnavailable;
+
+  /// No description provided for @sellAiNotRecognised.
+  ///
+  /// In en, this message translates to:
+  /// **'We could not recognise the item from your photos. Please fill in the details yourself.'**
+  String get sellAiNotRecognised;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

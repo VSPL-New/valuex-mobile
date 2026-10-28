@@ -88,6 +88,19 @@ class _CreateListingScreenState extends ConsumerState<CreateListingScreen> {
     if (kind != null) await _add(kind);
   }
 
+  /// Tells the seller why the details page starts empty; they carry on by hand.
+  void _notifyAi(AiNotice? notice) {
+    if (notice == null) return;
+    final l10n = AppLocalizations.of(context);
+    final message = switch (notice) {
+      AiNotice.unavailable => l10n.sellAiUnavailable,
+      AiNotice.notRecognised => l10n.sellAiNotRecognised,
+    };
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
+  }
+
   Future<void> _submit() async {
     final result = await _controller.submit();
     if (!mounted) return;
@@ -95,9 +108,10 @@ class _CreateListingScreenState extends ConsumerState<CreateListingScreen> {
       case SubmitOutcome.submitted:
         final listingId = ref.read(createListingControllerProvider).listingId;
         if (listingId != null) {
+          _notifyAi(result.aiNotice);
           unawaited(context.push(
             RouteNames.sellDetails,
-            extra: ItemDetailsArgs(listingId: listingId),
+            extra: ItemDetailsArgs(listingId: listingId, suggestion: result.suggestion),
           ));
         }
       case SubmitOutcome.aadhaarRequired:
@@ -162,7 +176,10 @@ class _CreateListingScreenState extends ConsumerState<CreateListingScreen> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (state.readyCount < ListingPhotoRules.minPhotos) ...[
+                    if (state.isAnalysing) ...[
+                      _Analysing(label: l10n.sellAiAnalysing),
+                      const SizedBox(height: AppSpacing.sm),
+                    ] else if (state.readyCount < ListingPhotoRules.minPhotos) ...[
                       Text(l10n.sellMinPhotosHint,
                           style: AppTextStyles.hint.copyWith(color: AppColors.brandForeground),
                           textAlign: TextAlign.center),
@@ -170,6 +187,7 @@ class _CreateListingScreenState extends ConsumerState<CreateListingScreen> {
                     ],
                     BrandGradientButton(
                       label: l10n.sellSubmitToAi,
+                      isLoading: state.isAnalysing,
                       onPressed: state.canSubmit ? () => unawaited(_submit()) : null,
                     ),
                   ],
@@ -177,6 +195,30 @@ class _CreateListingScreenState extends ConsumerState<CreateListingScreen> {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Shown while AI looks at the photos; announced to screen readers when it appears.
+class _Analysing extends StatelessWidget {
+  final String label;
+
+  const _Analysing({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      liveRegion: true,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const ExcludeSemantics(
+            child: Icon(Icons.auto_awesome, size: 16, color: AppColors.brandLink),
+          ),
+          const SizedBox(width: AppSpacing.xs),
+          Text(label, style: AppTextStyles.hint.copyWith(color: AppColors.brandForeground)),
         ],
       ),
     );

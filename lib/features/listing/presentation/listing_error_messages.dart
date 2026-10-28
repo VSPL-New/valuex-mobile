@@ -29,6 +29,7 @@ String? listingCodeMessage(AppLocalizations l10n, String? code) {
     'ERROR_CATEGORY_NOT_LEAF' =>
       l10n.itemCategoryUnavailable,
     'AADHAAR_VERIFICATION_REQUIRED' => l10n.homeSellAadhaarRequired,
+    'ERROR_AI_SERVICE_UNAVAILABLE' => l10n.sellAiUnavailable,
     _ => null,
   };
 }

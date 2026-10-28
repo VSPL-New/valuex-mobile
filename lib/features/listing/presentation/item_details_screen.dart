@@ -221,6 +221,8 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
           value: draft.attributes[field.key],
           required: schema.isRequired(field, draft.attributes),
           showHint: attributeHints.contains(field.key),
+          aiGenerated: state.isAiAttribute(field.key),
+          verify: state.needsVerification(field.key),
           onChanged: (value) => _controller.setAttribute(field.key, value),
         );
 
@@ -264,6 +266,7 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                   onChanged: _controller.setConditionNotes,
                 ),
               ),
+              _AiMark(show: state.isAiGenerated(DetailsField.conditionNotes)),
               _Hint(
                   show: hints.contains(DetailsField.conditionNotes),
                   text: l10n.itemConditionNotesRequired),
@@ -312,6 +315,7 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
           child: _Collapsible(
             title: l10n.itemMoreDetails,
             subtitle: l10n.itemMoreDetailsHint,
+            initiallyOpen: optional.any((field) => state.isAiAttribute(field.key)),
             children: [for (final field in optional) attribute(field)],
           ),
         ),
@@ -479,6 +483,34 @@ class _AiMark extends StatelessWidget {
   }
 }
 
+/// "Please verify" under an AI value that AI was less sure about; an icon and words, not only
+/// colour, and it goes away once the seller edits the value.
+class _VerifyHint extends StatelessWidget {
+  final bool show;
+
+  const _VerifyHint({required this.show});
+
+  @override
+  Widget build(BuildContext context) {
+    if (!show) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpacing.xs),
+      child: Row(
+        children: [
+          const ExcludeSemantics(
+            child: Icon(Icons.info_outline_rounded, size: 16, color: AppColors.brandForeground),
+          ),
+          const SizedBox(width: AppSpacing.xs),
+          Text(
+            AppLocalizations.of(context).itemPleaseVerify,
+            style: AppTextStyles.hint.copyWith(color: AppColors.brandForeground),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// The reason a field is not valid yet, shown only once the seller has worked on it.
 class _Hint extends StatelessWidget {
   final bool show;
@@ -602,14 +634,22 @@ class _Collapsible extends StatefulWidget {
   final String subtitle;
   final List<Widget> children;
 
-  const _Collapsible({required this.title, required this.subtitle, required this.children});
+  /// Starts open, e.g. when AI filled something inside.
+  final bool initiallyOpen;
+
+  const _Collapsible({
+    required this.title,
+    required this.subtitle,
+    required this.children,
+    this.initiallyOpen = false,
+  });
 
   @override
   State<_Collapsible> createState() => _CollapsibleState();
 }
 
 class _CollapsibleState extends State<_Collapsible> {
-  bool _open = false;
+  late bool _open = widget.initiallyOpen;
 
   @override
   Widget build(BuildContext context) {
@@ -684,6 +724,12 @@ class _AttributeField extends StatelessWidget {
   final Object? value;
   final bool required;
   final bool showHint;
+
+  /// The value still is what AI suggested.
+  final bool aiGenerated;
+
+  /// AI was less sure about this value; the seller is asked to check it.
+  final bool verify;
   final ValueChanged<Object?> onChanged;
 
   const _AttributeField({
@@ -692,6 +738,8 @@ class _AttributeField extends StatelessWidget {
     required this.value,
     required this.required,
     required this.showHint,
+    required this.aiGenerated,
+    required this.verify,
     required this.onChanged,
   });
 
@@ -714,6 +762,8 @@ class _AttributeField extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.xs),
           SchemaFieldInput(field: field, value: value, onChanged: onChanged),
+          _AiMark(show: aiGenerated),
+          _VerifyHint(show: verify),
           _Hint(
             show: showHint,
             text: isBlankValue(value)
