@@ -470,5 +470,15 @@
   "restrictedErrorItem": "इस वस्तु को लिस्ट नहीं किया जा सकता। प्रतिबंधित वस्तुओं की नीति देखें",
   "restrictedErrorSuspended": "नीति उल्लंघन के कारण आपका खाता निलंबित है",
   "restrictedErrorUnderReview": "लिस्टिंग समीक्षा के लिए चिह्नित की गई है। 24 घंटों के भीतर आपको सूचित किया जाएगा",
-  "restrictedErrorAppealDone": "आप इस वस्तु पर पहले ही अपील कर चुके हैं"
+  "restrictedErrorAppealDone": "आप इस वस्तु पर पहले ही अपील कर चुके हैं",
+  "paymentTestTitle": "टेस्ट भुगतान",
+  "paymentTestNote": "यह एक टेस्ट चेकआउट है। कोई पैसा नहीं काटा जाएगा।",
+  "paymentTestAmount": "राशि: {amount}",
+  "paymentTestPay": "भुगतान करें",
+  "paymentTestFail": "विफल करें",
+  "paymentTestCancel": "रद्द करें",
+  "paymentConfirming": "हम आपके भुगतान की पुष्टि कर रहे हैं",
+  "paymentErrorGatewayUnavailable": "इस समय भुगतान उपलब्ध नहीं है, कृपया बाद में पुनः प्रयास करें",
+  "paymentErrorFailed": "आपका भुगतान पूरा नहीं हुआ। आपसे कोई शुल्क नहीं लिया गया।",
+  "paymentErrorTimeout": "हम अभी आपके भुगतान की पुष्टि नहीं कर पाए। हम जाँच करते रहेंगे।"
 }

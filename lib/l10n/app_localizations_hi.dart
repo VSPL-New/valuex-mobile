@@ -1558,4 +1558,38 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get restrictedErrorAppealDone => 'आप इस वस्तु पर पहले ही अपील कर चुके हैं';
+
+  @override
+  String get paymentTestTitle => 'टेस्ट भुगतान';
+
+  @override
+  String get paymentTestNote => 'यह एक टेस्ट चेकआउट है। कोई पैसा नहीं काटा जाएगा।';
+
+  @override
+  String paymentTestAmount(String amount) {
+    return 'राशि: $amount';
+  }
+
+  @override
+  String get paymentTestPay => 'भुगतान करें';
+
+  @override
+  String get paymentTestFail => 'विफल करें';
+
+  @override
+  String get paymentTestCancel => 'रद्द करें';
+
+  @override
+  String get paymentConfirming => 'हम आपके भुगतान की पुष्टि कर रहे हैं';
+
+  @override
+  String get paymentErrorGatewayUnavailable =>
+      'इस समय भुगतान उपलब्ध नहीं है, कृपया बाद में पुनः प्रयास करें';
+
+  @override
+  String get paymentErrorFailed => 'आपका भुगतान पूरा नहीं हुआ। आपसे कोई शुल्क नहीं लिया गया।';
+
+  @override
+  String get paymentErrorTimeout =>
+      'हम अभी आपके भुगतान की पुष्टि नहीं कर पाए। हम जाँच करते रहेंगे।';
 }
