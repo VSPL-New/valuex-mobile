@@ -2864,6 +2864,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You have already appealed this item'**
   String get restrictedErrorAppealDone;
+
+  /// No description provided for @paymentTestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Test payment'**
+  String get paymentTestTitle;
+
+  /// No description provided for @paymentTestNote.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a test checkout. No money is charged.'**
+  String get paymentTestNote;
+
+  /// No description provided for @paymentTestAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount: {amount}'**
+  String paymentTestAmount(String amount);
+
+  /// No description provided for @paymentTestPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay'**
+  String get paymentTestPay;
+
+  /// No description provided for @paymentTestFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Fail'**
+  String get paymentTestFail;
+
+  /// No description provided for @paymentTestCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get paymentTestCancel;
+
+  /// No description provided for @paymentConfirming.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re confirming your payment'**
+  String get paymentConfirming;
+
+  /// No description provided for @paymentErrorGatewayUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments are not available at this moment, please try again later'**
+  String get paymentErrorGatewayUnavailable;
+
+  /// No description provided for @paymentErrorFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Your payment did not go through. You have not been charged.'**
+  String get paymentErrorFailed;
+
+  /// No description provided for @paymentErrorTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'We could not confirm your payment yet. We will keep checking.'**
+  String get paymentErrorTimeout;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

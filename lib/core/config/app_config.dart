@@ -15,6 +15,10 @@ enum AddressSearchMode { mock, google }
 /// through the MSG91 OTP widget SDK.
 enum OtpMode { backend, msg91 }
 
+/// `none` has no checkout (payments are not available yet); `mock` shows the dummy test checkout, which
+/// charges nothing. `mock` is allowed in the dev configs only.
+enum PaymentMode { none, mock }
+
 class AppConfigException implements Exception {
   final String message;
 
@@ -51,6 +55,8 @@ class AppConfig {
   final String msg91WidgetId;
   final String msg91AuthToken;
 
+  final PaymentMode paymentMode;
+
   const AppConfig._({
     required this.env,
     required this.apiBaseUrl,
@@ -64,6 +70,7 @@ class AppConfig {
     required this.otpMode,
     required this.msg91WidgetId,
     required this.msg91AuthToken,
+    required this.paymentMode,
   });
 
   factory AppConfig.fromEnvironment() {
@@ -80,6 +87,7 @@ class AppConfig {
       otpProvider: const String.fromEnvironment('OTP_PROVIDER', defaultValue: 'backend'),
       msg91WidgetId: const String.fromEnvironment('MSG91_WIDGET_ID'),
       msg91AuthToken: const String.fromEnvironment('MSG91_AUTH_TOKEN'),
+      paymentProvider: const String.fromEnvironment('PAYMENT_PROVIDER', defaultValue: 'none'),
     );
   }
 
@@ -96,6 +104,7 @@ class AppConfig {
     String otpProvider = 'backend',
     String msg91WidgetId = '',
     String msg91AuthToken = '',
+    String paymentProvider = 'none',
   }) {
     final parsedEnv = switch (env) {
       'dev' => AppEnv.dev,
@@ -137,6 +146,14 @@ class AppConfig {
       _ => throw AppConfigException('OTP_PROVIDER must be backend or msg91 (got "$otpProvider")'),
     };
 
+    final parsedPayment = switch (paymentProvider) {
+      'none' => PaymentMode.none,
+      'mock' => PaymentMode.mock,
+      _ => throw AppConfigException(
+          'PAYMENT_PROVIDER must be none or mock (got "$paymentProvider")',
+        ),
+    };
+
     final uri = Uri.tryParse(apiBaseUrl);
     if (uri == null || !uri.hasAuthority || uri.host.isEmpty) {
       throw const AppConfigException('API_BASE_URL is missing or invalid');
@@ -146,6 +163,9 @@ class AppConfig {
     }
     if (parsedEnv == AppEnv.prod && parsedFlow == AadhaarFlow.sandbox) {
       throw const AppConfigException('The Aadhaar sandbox flow is not allowed in prod');
+    }
+    if (parsedPayment == PaymentMode.mock && parsedEnv != AppEnv.dev) {
+      throw const AppConfigException('The mock payment checkout is allowed in dev only');
     }
     if (parsedEnv == AppEnv.prod && parsedGoogle == GoogleSignInMode.mock) {
       throw const AppConfigException('The mock Google sign-in is not allowed in prod');
@@ -180,6 +200,7 @@ class AppConfig {
       otpMode: parsedOtp,
       msg91WidgetId: msg91WidgetId,
       msg91AuthToken: msg91AuthToken,
+      paymentMode: parsedPayment,
     );
   }
 
@@ -192,6 +213,8 @@ class AppConfig {
   bool get useMockAddressSearch => addressSearch == AddressSearchMode.mock;
 
   bool get useMsg91Otp => otpMode == OtpMode.msg91;
+
+  bool get useMockPayment => paymentMode == PaymentMode.mock;
 }
 
 final appConfigProvider = Provider<AppConfig>(

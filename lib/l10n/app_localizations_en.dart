@@ -1569,4 +1569,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get restrictedErrorAppealDone => 'You have already appealed this item';
+
+  @override
+  String get paymentTestTitle => 'Test payment';
+
+  @override
+  String get paymentTestNote => 'This is a test checkout. No money is charged.';
+
+  @override
+  String paymentTestAmount(String amount) {
+    return 'Amount: $amount';
+  }
+
+  @override
+  String get paymentTestPay => 'Pay';
+
+  @override
+  String get paymentTestFail => 'Fail';
+
+  @override
+  String get paymentTestCancel => 'Cancel';
+
+  @override
+  String get paymentConfirming => 'We\'re confirming your payment';
+
+  @override
+  String get paymentErrorGatewayUnavailable =>
+      'Payments are not available at this moment, please try again later';
+
+  @override
+  String get paymentErrorFailed => 'Your payment did not go through. You have not been charged.';
+
+  @override
+  String get paymentErrorTimeout => 'We could not confirm your payment yet. We will keep checking.';
 }

@@ -616,5 +616,22 @@
   "restrictedErrorItem": "This item cannot be listed. See prohibited items policy",
   "restrictedErrorSuspended": "Your account is suspended due to policy violations",
   "restrictedErrorUnderReview": "Listing flagged for review. You'll be notified within 24 hours",
-  "restrictedErrorAppealDone": "You have already appealed this item"
+  "restrictedErrorAppealDone": "You have already appealed this item",
+  "paymentTestTitle": "Test payment",
+  "paymentTestNote": "This is a test checkout. No money is charged.",
+  "paymentTestAmount": "Amount: {amount}",
+  "@paymentTestAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentTestPay": "Pay",
+  "paymentTestFail": "Fail",
+  "paymentTestCancel": "Cancel",
+  "paymentConfirming": "We're confirming your payment",
+  "paymentErrorGatewayUnavailable": "Payments are not available at this moment, please try again later",
+  "paymentErrorFailed": "Your payment did not go through. You have not been charged.",
+  "paymentErrorTimeout": "We could not confirm your payment yet. We will keep checking."
 }

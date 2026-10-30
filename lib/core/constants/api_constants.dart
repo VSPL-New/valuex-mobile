@@ -54,6 +54,11 @@ class ApiConstants {
   static String categoryListingSchema(String code) => '/categories/$code/listing-schema';
   static String listingImage(String listingId, String imageId) =>
       '/listings/$listingId/images/$imageId';
+  static String payment(String paymentId) => '/payments/$paymentId';
+  static String paymentCheckoutResult(String paymentId) => '/payments/$paymentId/checkout-result';
+
+  /// Dev only: exists on a backend running the dummy payment gateway.
+  static String paymentSimulate(String paymentId) => '/dev/payments/$paymentId/simulate';
 
   static const Duration connectTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
