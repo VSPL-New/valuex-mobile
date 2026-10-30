@@ -47,7 +47,7 @@ dependencies:
   geocoding: ^5.0.0
   geolocator_platform_interface: ^4.4.0
   geolocator_android: ^5.1.1+1
-  geolocator_apple: ^2.3.14
+  geolocator_apple: ^2.4.3
   google_sign_in: ^7.2.0
   sendotp_flutter_sdk: ^0.0.2
 
