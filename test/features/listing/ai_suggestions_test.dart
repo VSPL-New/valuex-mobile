@@ -20,6 +20,7 @@ import 'package:valuex_mobile/features/listing/domain/category.dart';
 import 'package:valuex_mobile/features/listing/domain/listing_details.dart';
 import 'package:valuex_mobile/features/listing/domain/listing_photo.dart';
 import 'package:valuex_mobile/features/listing/domain/listing_schema.dart';
+import 'package:valuex_mobile/features/listing/domain/restricted_check.dart';
 import 'package:valuex_mobile/features/listing/presentation/item_details_screen.dart';
 import 'package:valuex_mobile/features/listing/presentation/listing_error_messages.dart';
 import 'package:valuex_mobile/features/listing/presentation/providers/create_listing_controller.dart';
@@ -567,6 +568,8 @@ void main() {
           .thenAnswer((_) async {});
       when(() => repository.sendSuggestionFeedback(any(), any(), any())).thenAnswer((_) async {});
       when(() => repository.sellerPlans()).thenAnswer((_) async => []);
+      when(() => repository.checkRestrictedItems(any())).thenAnswer(
+          (_) async => const RestrictedCheck(checkId: 'c1', result: RestrictedResult.safe));
     });
 
     Future<AppHarness> open(WidgetTester tester, AiSuggestion suggestion) async {

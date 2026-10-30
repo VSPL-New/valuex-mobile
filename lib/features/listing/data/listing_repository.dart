@@ -9,6 +9,7 @@ import '../../../core/network/api_error_mapper.dart';
 import '../domain/category.dart';
 import '../domain/listing_details.dart';
 import '../domain/listing_schema.dart';
+import '../domain/restricted_check.dart';
 import '../domain/seller_plan.dart';
 
 /// A short-lived URL the photo bytes are sent to, for one media asset.
@@ -181,6 +182,40 @@ class ListingRepository {
         receiveTimeout: ApiConstants.aiSuggestionTimeout,
         parse: (json) => AiSuggestion.fromJson(json as Map<String, dynamic>),
       );
+
+  /// Checks the draft against the restricted items policy (US-007). A blocked item (400
+  /// `ERROR_RESTRICTED_ITEM`, 403 `ERROR_ACCOUNT_SUSPENDED`) is returned as a result, not thrown,
+  /// because the answer lists the rows behind it; every other failure is thrown as [ApiError].
+  Future<RestrictedCheck> checkRestrictedItems(String listingId) async {
+    try {
+      return await _client.post(
+        ApiConstants.listingRestrictedCheck(listingId),
+        parse: (json) => RestrictedCheck.fromJson(json as Map<String, dynamic>),
+      );
+    } on ApiError catch (error) {
+      final data = error.data;
+      if (_blockedCodes.contains(error.code) && data is Map<String, dynamic>) {
+        return RestrictedCheck.fromJson(data);
+      }
+      rethrow;
+    }
+  }
+
+  /// "Agree & Continue": records the seller's agreement to every row the check showed.
+  Future<void> acceptCompliance(String listingId, String checkId, List<String> policyCodes) =>
+      _client.post<void>(
+        ApiConstants.listingComplianceAcceptance(listingId, checkId),
+        data: {'policyCodes': policyCodes},
+      );
+
+  /// Asks for a human to look at a blocked item again; one appeal per check.
+  Future<void> appealRestricted(String listingId, String checkId, String reason) =>
+      _client.post<void>(
+        ApiConstants.listingRestrictedAppeal(listingId, checkId),
+        data: {'reason': reason},
+      );
+
+  static const _blockedCodes = {'ERROR_RESTRICTED_ITEM', 'ERROR_ACCOUNT_SUSPENDED'};
 
   /// Tells the server what the seller did with each AI suggestion (US-005 contract).
   Future<void> sendSuggestionFeedback(
