@@ -1514,4 +1514,48 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get sellAiNotRecognised =>
       'हम आपकी फ़ोटो से वस्तु को पहचान नहीं सके। कृपया जानकारी स्वयं भरें।';
+
+  @override
+  String get restrictedComplianceTitle => 'आगे बढ़ने से पहले';
+
+  @override
+  String get restrictedBlockedTitle => 'इस वस्तु को लिस्ट नहीं किया जा सकता';
+
+  @override
+  String get restrictedAgreeContinue => 'सहमत हों और आगे बढ़ें';
+
+  @override
+  String get restrictedCancel => 'रद्द करें';
+
+  @override
+  String get restrictedGoBack => 'वापस जाएँ';
+
+  @override
+  String get restrictedAppeal => 'अपील करें';
+
+  @override
+  String get restrictedAppealTitle => 'इस निर्णय पर अपील करें';
+
+  @override
+  String get restrictedAppealHint => 'बताएँ कि यह वस्तु क्यों अनुमत है';
+
+  @override
+  String get restrictedAppealSend => 'अपील भेजें';
+
+  @override
+  String get restrictedAppealSent => 'अपील भेज दी गई है। हम इसकी समीक्षा करेंगे।';
+
+  @override
+  String get restrictedErrorItem =>
+      'इस वस्तु को लिस्ट नहीं किया जा सकता। प्रतिबंधित वस्तुओं की नीति देखें';
+
+  @override
+  String get restrictedErrorSuspended => 'नीति उल्लंघन के कारण आपका खाता निलंबित है';
+
+  @override
+  String get restrictedErrorUnderReview =>
+      'लिस्टिंग समीक्षा के लिए चिह्नित की गई है। 24 घंटों के भीतर आपको सूचित किया जाएगा';
+
+  @override
+  String get restrictedErrorAppealDone => 'आप इस वस्तु पर पहले ही अपील कर चुके हैं';
 }

@@ -2780,6 +2780,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We could not recognise the item from your photos. Please fill in the details yourself.'**
   String get sellAiNotRecognised;
+
+  /// No description provided for @restrictedComplianceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you continue'**
+  String get restrictedComplianceTitle;
+
+  /// No description provided for @restrictedBlockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This item cannot be listed'**
+  String get restrictedBlockedTitle;
+
+  /// No description provided for @restrictedAgreeContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Agree & Continue'**
+  String get restrictedAgreeContinue;
+
+  /// No description provided for @restrictedCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get restrictedCancel;
+
+  /// No description provided for @restrictedGoBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Back'**
+  String get restrictedGoBack;
+
+  /// No description provided for @restrictedAppeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Appeal'**
+  String get restrictedAppeal;
+
+  /// No description provided for @restrictedAppealTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Appeal this decision'**
+  String get restrictedAppealTitle;
+
+  /// No description provided for @restrictedAppealHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us why this item is allowed'**
+  String get restrictedAppealHint;
+
+  /// No description provided for @restrictedAppealSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send appeal'**
+  String get restrictedAppealSend;
+
+  /// No description provided for @restrictedAppealSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Appeal sent. We will review it.'**
+  String get restrictedAppealSent;
+
+  /// No description provided for @restrictedErrorItem.
+  ///
+  /// In en, this message translates to:
+  /// **'This item cannot be listed. See prohibited items policy'**
+  String get restrictedErrorItem;
+
+  /// No description provided for @restrictedErrorSuspended.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is suspended due to policy violations'**
+  String get restrictedErrorSuspended;
+
+  /// No description provided for @restrictedErrorUnderReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing flagged for review. You\'ll be notified within 24 hours'**
+  String get restrictedErrorUnderReview;
+
+  /// No description provided for @restrictedErrorAppealDone.
+  ///
+  /// In en, this message translates to:
+  /// **'You have already appealed this item'**
+  String get restrictedErrorAppealDone;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

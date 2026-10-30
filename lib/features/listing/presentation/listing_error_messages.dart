@@ -30,6 +30,10 @@ String? listingCodeMessage(AppLocalizations l10n, String? code) {
       l10n.itemCategoryUnavailable,
     'AADHAAR_VERIFICATION_REQUIRED' => l10n.homeSellAadhaarRequired,
     'ERROR_AI_SERVICE_UNAVAILABLE' => l10n.sellAiUnavailable,
+    'ERROR_RESTRICTED_ITEM' => l10n.restrictedErrorItem,
+    'ERROR_ACCOUNT_SUSPENDED' => l10n.restrictedErrorSuspended,
+    'LISTING_UNDER_REVIEW' => l10n.restrictedErrorUnderReview,
+    'ERROR_APPEAL_ALREADY_SUBMITTED' => l10n.restrictedErrorAppealDone,
     _ => null,
   };
 }

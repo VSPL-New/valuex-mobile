@@ -5,6 +5,7 @@ import '../../data/listing_repository.dart';
 import '../../domain/category.dart';
 import '../../domain/listing_details.dart';
 import '../../domain/listing_schema.dart';
+import '../../domain/restricted_check.dart';
 
 /// What the Item Details page is opened with: the draft, and what AI suggested if it did.
 class ItemDetailsArgs {
@@ -231,6 +232,39 @@ class ItemDetailsController extends Notifier<ItemDetailsState> {
       return (saved: false, error: error);
     } finally {
       if (ref.mounted) state = state.copyWith(isSaving: false);
+    }
+  }
+
+  /// Checks the saved draft against the restricted items policy (US-007); the error is returned
+  /// when the check could not be made.
+  Future<({RestrictedCheck? check, Object? error})> checkRestricted() async {
+    state = state.copyWith(isSaving: true);
+    try {
+      return (check: await _repository.checkRestrictedItems(args.listingId), error: null);
+    } on ApiError catch (error) {
+      return (check: null, error: error);
+    } finally {
+      if (ref.mounted) state = state.copyWith(isSaving: false);
+    }
+  }
+
+  /// "Agree & Continue" for every row the check showed; null when it was recorded.
+  Future<Object?> acceptCompliance(RestrictedCheck check) async {
+    try {
+      await _repository.acceptCompliance(args.listingId, check.checkId, check.policyCodes);
+      return null;
+    } on ApiError catch (error) {
+      return error;
+    }
+  }
+
+  /// Sends the appeal of a blocked check; null when it was sent.
+  Future<Object?> appealRestricted(RestrictedCheck check, String reason) async {
+    try {
+      await _repository.appealRestricted(args.listingId, check.checkId, reason);
+      return null;
+    } on ApiError catch (error) {
+      return error;
     }
   }
 

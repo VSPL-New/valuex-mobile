@@ -602,5 +602,19 @@
   "itemPleaseVerify": "Please verify",
   "sellAiAnalysing": "Analysing your photos",
   "sellAiUnavailable": "AI Service is not available at this moment or your usage quota has exhausted, please do manual entry",
-  "sellAiNotRecognised": "We could not recognise the item from your photos. Please fill in the details yourself."
+  "sellAiNotRecognised": "We could not recognise the item from your photos. Please fill in the details yourself.",
+  "restrictedComplianceTitle": "Before you continue",
+  "restrictedBlockedTitle": "This item cannot be listed",
+  "restrictedAgreeContinue": "Agree & Continue",
+  "restrictedCancel": "Cancel",
+  "restrictedGoBack": "Go Back",
+  "restrictedAppeal": "Appeal",
+  "restrictedAppealTitle": "Appeal this decision",
+  "restrictedAppealHint": "Tell us why this item is allowed",
+  "restrictedAppealSend": "Send appeal",
+  "restrictedAppealSent": "Appeal sent. We will review it.",
+  "restrictedErrorItem": "This item cannot be listed. See prohibited items policy",
+  "restrictedErrorSuspended": "Your account is suspended due to policy violations",
+  "restrictedErrorUnderReview": "Listing flagged for review. You'll be notified within 24 hours",
+  "restrictedErrorAppealDone": "You have already appealed this item"
 }

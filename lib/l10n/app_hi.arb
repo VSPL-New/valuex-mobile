@@ -456,5 +456,19 @@
   "itemPleaseVerify": "कृपया जाँच लें",
   "sellAiAnalysing": "आपकी फ़ोटो का विश्लेषण हो रहा है",
   "sellAiUnavailable": "AI सेवा अभी उपलब्ध नहीं है या आपका उपयोग कोटा समाप्त हो गया है, कृपया जानकारी स्वयं भरें",
-  "sellAiNotRecognised": "हम आपकी फ़ोटो से वस्तु को पहचान नहीं सके। कृपया जानकारी स्वयं भरें।"
+  "sellAiNotRecognised": "हम आपकी फ़ोटो से वस्तु को पहचान नहीं सके। कृपया जानकारी स्वयं भरें।",
+  "restrictedComplianceTitle": "आगे बढ़ने से पहले",
+  "restrictedBlockedTitle": "इस वस्तु को लिस्ट नहीं किया जा सकता",
+  "restrictedAgreeContinue": "सहमत हों और आगे बढ़ें",
+  "restrictedCancel": "रद्द करें",
+  "restrictedGoBack": "वापस जाएँ",
+  "restrictedAppeal": "अपील करें",
+  "restrictedAppealTitle": "इस निर्णय पर अपील करें",
+  "restrictedAppealHint": "बताएँ कि यह वस्तु क्यों अनुमत है",
+  "restrictedAppealSend": "अपील भेजें",
+  "restrictedAppealSent": "अपील भेज दी गई है। हम इसकी समीक्षा करेंगे।",
+  "restrictedErrorItem": "इस वस्तु को लिस्ट नहीं किया जा सकता। प्रतिबंधित वस्तुओं की नीति देखें",
+  "restrictedErrorSuspended": "नीति उल्लंघन के कारण आपका खाता निलंबित है",
+  "restrictedErrorUnderReview": "लिस्टिंग समीक्षा के लिए चिह्नित की गई है। 24 घंटों के भीतर आपको सूचित किया जाएगा",
+  "restrictedErrorAppealDone": "आप इस वस्तु पर पहले ही अपील कर चुके हैं"
 }

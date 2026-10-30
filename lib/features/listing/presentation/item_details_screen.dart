@@ -20,10 +20,12 @@ import '../../home/presentation/widgets/location_sheet.dart';
 import '../../home/presentation/widgets/saved_location_dialog.dart';
 import '../domain/listing_details.dart';
 import '../domain/listing_schema.dart';
+import '../domain/restricted_check.dart';
 import 'category_picker_screen.dart';
 import 'listing_error_messages.dart';
 import 'providers/item_details_controller.dart';
 import 'widgets/option_chip.dart';
+import 'widgets/restricted_item_dialogs.dart';
 import 'widgets/schema_field_input.dart';
 import 'widgets/sell_step_header.dart';
 
@@ -81,15 +83,55 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
     final result = await _controller.save();
     if (!mounted) return;
     if (result.saved) {
-      unawaited(context.push(RouteNames.sellPlan));
+      await _checkRestricted();
       return;
     }
-    final error = result.error;
+    _showError(result.error);
+  }
+
+  /// US-007: the plan page opens only when the item passes the restricted items policy.
+  Future<void> _checkRestricted() async {
+    final outcome = await _controller.checkRestricted();
+    if (!mounted) return;
+    final check = outcome.check;
+    if (check == null) {
+      _showError(outcome.error);
+      return;
+    }
+    switch (check.result) {
+      case RestrictedResult.safe:
+        unawaited(context.push(RouteNames.sellPlan));
+      case RestrictedResult.complianceRequired:
+        final agreed = await showComplianceDialog(context, check);
+        if (!agreed || !mounted) return;
+        final error = await _controller.acceptCompliance(check);
+        if (!mounted) return;
+        if (error == null) {
+          unawaited(context.push(RouteNames.sellPlan));
+        } else {
+          _showError(error);
+        }
+      case RestrictedResult.restricted || RestrictedResult.severeViolation:
+        final appealed = await showBlockedDialog(
+          context,
+          check,
+          onAppeal: (reason) => _controller.appealRestricted(check, reason),
+        );
+        if (appealed && mounted) _showMessage(AppLocalizations.of(context).restrictedAppealSent);
+      case RestrictedResult.unclear:
+        _showMessage(AppLocalizations.of(context).restrictedErrorUnderReview);
+    }
+  }
+
+  void _showError(Object? error) {
     if (error == null) return;
+    _showMessage(listingErrorMessage(AppLocalizations.of(context), error));
+  }
+
+  void _showMessage(String message) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(
-          SnackBar(content: Text(listingErrorMessage(AppLocalizations.of(context), error))));
+      ..showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override

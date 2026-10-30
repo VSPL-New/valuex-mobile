@@ -1526,4 +1526,47 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get sellAiNotRecognised =>
       'We could not recognise the item from your photos. Please fill in the details yourself.';
+
+  @override
+  String get restrictedComplianceTitle => 'Before you continue';
+
+  @override
+  String get restrictedBlockedTitle => 'This item cannot be listed';
+
+  @override
+  String get restrictedAgreeContinue => 'Agree & Continue';
+
+  @override
+  String get restrictedCancel => 'Cancel';
+
+  @override
+  String get restrictedGoBack => 'Go Back';
+
+  @override
+  String get restrictedAppeal => 'Appeal';
+
+  @override
+  String get restrictedAppealTitle => 'Appeal this decision';
+
+  @override
+  String get restrictedAppealHint => 'Tell us why this item is allowed';
+
+  @override
+  String get restrictedAppealSend => 'Send appeal';
+
+  @override
+  String get restrictedAppealSent => 'Appeal sent. We will review it.';
+
+  @override
+  String get restrictedErrorItem => 'This item cannot be listed. See prohibited items policy';
+
+  @override
+  String get restrictedErrorSuspended => 'Your account is suspended due to policy violations';
+
+  @override
+  String get restrictedErrorUnderReview =>
+      'Listing flagged for review. You\'ll be notified within 24 hours';
+
+  @override
+  String get restrictedErrorAppealDone => 'You have already appealed this item';
 }

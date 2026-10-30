@@ -14,6 +14,7 @@ import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
 import 'package:valuex_mobile/features/listing/domain/category.dart';
 import 'package:valuex_mobile/features/listing/domain/listing_details.dart';
 import 'package:valuex_mobile/features/listing/domain/listing_schema.dart';
+import 'package:valuex_mobile/features/listing/domain/restricted_check.dart';
 import 'package:valuex_mobile/features/listing/presentation/listing_plan_screen.dart';
 import 'package:valuex_mobile/features/listing/presentation/providers/item_details_controller.dart';
 import 'package:valuex_mobile/features/notifications/data/notifications_repository.dart';
@@ -103,6 +104,10 @@ void main() {
         .thenAnswer((_) async {});
     when(() => repository.sendSuggestionFeedback(any(), any(), any())).thenAnswer((_) async {});
     when(() => repository.sellerPlans()).thenAnswer((_) async => []);
+    when(() => repository.checkRestrictedItems(any())).thenAnswer(
+        (_) async => const RestrictedCheck(checkId: 'c1', result: RestrictedResult.safe));
+    when(() => repository.acceptCompliance(any(), any(), any())).thenAnswer((_) async {});
+    when(() => repository.appealRestricted(any(), any(), any())).thenAnswer((_) async {});
     when(() => repository.categoryChildren(
           parentCode: any(named: 'parentCode'),
           scope: any(named: 'scope'),
@@ -294,6 +299,216 @@ void main() {
 
       expect(find.byType(ListingPlanScreen), findsNothing);
       expect(find.byType(SnackBar), findsOneWidget);
+      await harness.dispose();
+    });
+
+    Future<AppHarness> openAiFilled(WidgetTester tester) async {
+      final harness = await open(
+        tester,
+        args: const ItemDetailsArgs(listingId: 'l1', suggestion: _suggestion),
+      );
+      await tester.enterText(notesField, 'Fine');
+      await tester.enterText(attributeField('CAT-1', 'brand'), 'Sony');
+      await tester.tap(find.text('128 GB'));
+      await tester.tap(find.text('No'));
+      await tester.enterText(priceField, '500');
+      await harness.settle();
+      return harness;
+    }
+
+    Future<void> continueToPlan(WidgetTester tester, AppHarness harness) async {
+      await tester.tap(find.text('Choose Listing Plan'));
+      await harness.settle();
+    }
+
+    void answerCheck(RestrictedResult result, {List<RestrictionPolicy> policies = const []}) {
+      when(() => repository.checkRestrictedItems('l1')).thenAnswer(
+          (_) async => RestrictedCheck(checkId: 'c1', result: result, policies: policies));
+    }
+
+    const drones = RestrictionPolicy(
+      code: 'DRONES',
+      title: 'Drones',
+      message: 'Confirm the drone is legal to sell',
+      titleHi: 'ड्रोन',
+      messageHi: 'पुष्टि करें कि ड्रोन बेचना कानूनी है',
+    );
+    const realEstate = RestrictionPolicy(
+      code: 'REAL_ESTATE',
+      title: 'Real estate',
+      message: 'Confirm you may list this property',
+    );
+    const alcohol = RestrictionPolicy(
+      code: 'ALCOHOL_TOBACCO',
+      title: 'Alcohol and tobacco',
+      message: 'Alcohol cannot be listed',
+    );
+
+    testWidgets('a clean item goes straight to the plan page after the check', (tester) async {
+      final harness = await openAiFilled(tester);
+
+      await continueToPlan(tester, harness);
+
+      verify(() => repository.checkRestrictedItems('l1')).called(1);
+      verifyNever(() => repository.acceptCompliance(any(), any(), any()));
+      expect(find.byType(ListingPlanScreen), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('a conditional item asks once for every row, then records them and goes on',
+        (tester) async {
+      answerCheck(RestrictedResult.complianceRequired, policies: [drones, realEstate]);
+      final harness = await openAiFilled(tester);
+
+      await continueToPlan(tester, harness);
+
+      expect(find.text('Before you continue'), findsOneWidget);
+      expect(find.text('Drones'), findsOneWidget);
+      expect(find.text('Real estate'), findsOneWidget);
+      expect(find.text('Confirm the drone is legal to sell'), findsOneWidget);
+      expect(find.byType(ListingPlanScreen), findsNothing);
+
+      await tester.tap(find.text('Agree & Continue'));
+      await harness.settle();
+
+      verify(() => repository.acceptCompliance('l1', 'c1', ['DRONES', 'REAL_ESTATE'])).called(1);
+      expect(find.byType(ListingPlanScreen), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('Cancel on the compliance dialog stays on the page and records nothing',
+        (tester) async {
+      answerCheck(RestrictedResult.complianceRequired, policies: [drones]);
+      final harness = await openAiFilled(tester);
+
+      await continueToPlan(tester, harness);
+      await tester.tap(find.text('Cancel'));
+      await harness.settle();
+
+      verifyNever(() => repository.acceptCompliance(any(), any(), any()));
+      expect(find.byType(ListingPlanScreen), findsNothing);
+      expect(find.text('Item Details'), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('an acceptance the server refuses is shown and the plan page stays closed',
+        (tester) async {
+      answerCheck(RestrictedResult.complianceRequired, policies: [drones]);
+      when(() => repository.acceptCompliance(any(), any(), any())).thenThrow(
+        const ApiError(type: ApiErrorType.network, message: 'x'),
+      );
+      final harness = await openAiFilled(tester);
+
+      await continueToPlan(tester, harness);
+      await tester.tap(find.text('Agree & Continue'));
+      await harness.settle();
+
+      expect(find.byType(ListingPlanScreen), findsNothing);
+      expect(find.byType(SnackBar), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('a prohibited item is blocked with its rows and the plan page stays closed',
+        (tester) async {
+      answerCheck(RestrictedResult.restricted, policies: [alcohol]);
+      final harness = await openAiFilled(tester);
+
+      await continueToPlan(tester, harness);
+
+      expect(find.text('This item cannot be listed'), findsOneWidget);
+      expect(find.text('Alcohol and tobacco'), findsOneWidget);
+      expect(find.text('Alcohol cannot be listed'), findsOneWidget);
+      expect(find.text('Your account is suspended due to policy violations'), findsNothing);
+      await tester.tap(find.text('Go Back'));
+      await harness.settle();
+      expect(find.byType(ListingPlanScreen), findsNothing);
+      verifyNever(() => repository.appealRestricted(any(), any(), any()));
+      await harness.dispose();
+    });
+
+    testWidgets('a severe violation also tells the seller the account is suspended',
+        (tester) async {
+      answerCheck(RestrictedResult.severeViolation, policies: [alcohol]);
+      final harness = await openAiFilled(tester);
+
+      await continueToPlan(tester, harness);
+
+      expect(find.text('Your account is suspended due to policy violations'), findsOneWidget);
+      expect(find.byType(ListingPlanScreen), findsNothing);
+      await harness.dispose();
+    });
+
+    testWidgets('the seller can appeal a blocked item', (tester) async {
+      answerCheck(RestrictedResult.restricted, policies: [alcohol]);
+      final harness = await openAiFilled(tester);
+      await continueToPlan(tester, harness);
+
+      await tester.tap(find.text('Appeal'));
+      await harness.settle();
+      expect(find.text('Appeal this decision'), findsOneWidget);
+      final send = find.widgetWithText(FilledButton, 'Send appeal');
+      expect(tester.widget<FilledButton>(send).onPressed, isNull, reason: 'a reason is needed');
+      await tester.enterText(find.byType(TextFormField).last, 'Empty decorative bottles');
+      await harness.settle();
+      await tester.tap(send);
+      await harness.settle();
+
+      verify(() => repository.appealRestricted('l1', 'c1', 'Empty decorative bottles')).called(1);
+      expect(find.text('Appeal sent. We will review it.'), findsOneWidget);
+      expect(find.byType(ListingPlanScreen), findsNothing);
+      await harness.dispose();
+    });
+
+    testWidgets('an appeal the server refuses shows why and keeps the dialog open', (tester) async {
+      answerCheck(RestrictedResult.restricted, policies: [alcohol]);
+      when(() => repository.appealRestricted(any(), any(), any())).thenThrow(
+        const ApiError(
+          type: ApiErrorType.business,
+          message: 'x',
+          code: 'ERROR_APPEAL_ALREADY_SUBMITTED',
+        ),
+      );
+      final harness = await openAiFilled(tester);
+      await continueToPlan(tester, harness);
+
+      await tester.tap(find.text('Appeal'));
+      await harness.settle();
+      await tester.enterText(find.byType(TextFormField).last, 'Please look again');
+      await harness.settle();
+      await tester.tap(find.widgetWithText(FilledButton, 'Send appeal'));
+      await harness.settle();
+
+      expect(find.text('You have already appealed this item'), findsOneWidget);
+      expect(find.text('Appeal this decision'), findsOneWidget);
+      await tester.tap(find.text('Go Back'));
+      await harness.settle();
+      expect(find.text('This item cannot be listed'), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('an item that needs review is held with the review notice', (tester) async {
+      answerCheck(RestrictedResult.unclear);
+      final harness = await openAiFilled(tester);
+
+      await continueToPlan(tester, harness);
+
+      expect(find.text("Listing flagged for review. You'll be notified within 24 hours"),
+          findsOneWidget);
+      expect(find.byType(ListingPlanScreen), findsNothing);
+      await harness.dispose();
+    });
+
+    testWidgets('a check that cannot be made shows an error and keeps the seller here',
+        (tester) async {
+      when(() => repository.checkRestrictedItems(any())).thenThrow(
+        const ApiError(type: ApiErrorType.network, message: 'x'),
+      );
+      final harness = await openAiFilled(tester);
+
+      await continueToPlan(tester, harness);
+
+      expect(find.byType(SnackBar), findsOneWidget);
+      expect(find.byType(ListingPlanScreen), findsNothing);
       await harness.dispose();
     });
 

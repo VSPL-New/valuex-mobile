@@ -17,12 +17,16 @@ class ApiError implements Exception {
   final int? statusCode;
   final Map<String, String> details;
 
+  /// The envelope's `data` when an error response carries one (the restricted-item check does).
+  final Object? data;
+
   const ApiError({
     required this.type,
     required this.message,
     this.code,
     this.statusCode,
     this.details = const {},
+    this.data,
   });
 
   const ApiError.sessionExpired()
@@ -30,7 +34,8 @@ class ApiError implements Exception {
         message = 'Session expired',
         code = null,
         statusCode = 401,
-        details = const {};
+        details = const {},
+        data = null;
 
   /// Network, timeout and 5xx failures: the request may succeed on retry.
   bool get isRetryable =>

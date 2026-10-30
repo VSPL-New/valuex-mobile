@@ -44,6 +44,11 @@ class ApiConstants {
   static String listingImages(String listingId) => '/listings/$listingId/images';
   static String listingSubmit(String listingId) => '/listings/$listingId/submit';
   static String listingCategory(String listingId) => '/listings/$listingId/category';
+  static String listingRestrictedCheck(String listingId) => '/listings/$listingId/restricted-check';
+  static String listingComplianceAcceptance(String listingId, String checkId) =>
+      '/listings/$listingId/restricted-check/$checkId/compliance-acceptance';
+  static String listingRestrictedAppeal(String listingId, String checkId) =>
+      '/listings/$listingId/restricted-check/$checkId/appeal';
   static const String categoryChildren = '/categories/children';
   static const String categorySearch = '/categories/search';
   static String categoryListingSchema(String code) => '/categories/$code/listing-schema';

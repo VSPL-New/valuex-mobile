@@ -57,6 +57,9 @@ class ApiErrorMapper {
       code: envelope?.errorCode,
       statusCode: status,
       details: envelope?.errorDetails ?? const {},
+      data: _dataOf(response?.data),
     );
   }
+
+  static Object? _dataOf(Object? body) => body is Map<String, dynamic> ? body['data'] : null;
 }
