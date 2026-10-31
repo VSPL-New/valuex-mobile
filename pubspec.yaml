@@ -46,7 +46,7 @@ dependencies:
   screen_protector: ^1.5.3
   geocoding: ^5.0.0
   geolocator_platform_interface: ^4.4.1
-  geolocator_android: ^5.1.1+1
+  geolocator_android: ^5.2.1
   geolocator_apple: ^2.4.3
   google_sign_in: ^7.2.0
   sendotp_flutter_sdk: ^0.0.2
