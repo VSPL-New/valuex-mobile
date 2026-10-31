@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,17 +12,22 @@ import '../../../core/widgets/brand_gradient_button.dart';
 import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/loading_indicator.dart';
 import '../../../l10n/app_localizations.dart';
+import '../domain/plan_selection.dart';
 import '../domain/seller_plan.dart';
 import 'listing_error_messages.dart';
 import 'providers/listing_plan_controller.dart';
+import 'providers/plan_selection_controller.dart';
 import 'widgets/plan_breakdown.dart';
 import 'widgets/plan_card.dart';
 import 'widgets/sell_step_header.dart';
 
 /// Sell step 3 of 4 (Figma Make: ListingPlanScreen): the plans from the server side by side with
-/// the payment breakdown of the selected one. Choosing and paying are added by US-008.
+/// the payment breakdown of the selected one. Review Listing starts the plan on the server (US-008)
+/// and opens the review page.
 class ListingPlanScreen extends ConsumerWidget {
-  const ListingPlanScreen({super.key});
+  final PlanArgs args;
+
+  const ListingPlanScreen({super.key, required this.args});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -74,7 +81,8 @@ class ListingPlanScreen extends ConsumerWidget {
                 child: BrandGradientButton(
                   label: l10n.planReviewListing,
                   trailingIcon: Icons.chevron_right_rounded,
-                  onPressed: selected == null ? null : () => _review(context, l10n),
+                  isLoading: ref.watch(planSelectionControllerProvider),
+                  onPressed: selected == null ? null : () => _review(context, ref, selected),
                 ),
               ),
             ),
@@ -84,10 +92,33 @@ class ListingPlanScreen extends ConsumerWidget {
     );
   }
 
-  void _review(BuildContext context, AppLocalizations l10n) {
+  Future<void> _review(BuildContext context, WidgetRef ref, SellerPlan plan) async {
+    final result =
+        await ref.read(planSelectionControllerProvider.notifier).select(args.listingId, plan.code);
+    if (!context.mounted) return;
+    switch (result.outcome) {
+      case PlanSelectionOutcome.selected:
+        unawaited(context.push(
+          RouteNames.sellReview,
+          extra: ReviewArgs(
+            listingId: args.listingId,
+            summary: args.summary,
+            plan: plan,
+            selection: result.selection!,
+          ),
+        ));
+      case PlanSelectionOutcome.aadhaarRequired:
+        _show(context, AppLocalizations.of(context).homeSellAadhaarRequired);
+        unawaited(context.push(RouteNames.signupAadhaar));
+      case PlanSelectionOutcome.failed:
+        _show(context, listingErrorMessage(AppLocalizations.of(context), result.error));
+    }
+  }
+
+  void _show(BuildContext context, String message) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(l10n.planReviewSoon)));
+      ..showSnackBar(SnackBar(content: Text(message)));
   }
 }
 

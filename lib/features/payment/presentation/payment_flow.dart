@@ -38,7 +38,8 @@ class PaymentFlow {
       final outcome = await _checkout.open(context, request);
       return switch (outcome) {
         CheckoutCancelled() => await _cancelled(request),
-        CheckoutCompleted(:final gatewayPaymentId) => await _settle(request, 'COMPLETED', gatewayPaymentId),
+        CheckoutCompleted(:final gatewayPaymentId) =>
+          await _settle(request, 'COMPLETED', gatewayPaymentId),
         CheckoutFailed() => await _settle(request, 'FAILED', null),
       };
     } finally {
@@ -51,7 +52,8 @@ class PaymentFlow {
     return PaymentResult.cancelled;
   }
 
-  Future<PaymentResult> _settle(CheckoutRequest request, String result, String? gatewayPaymentId) async {
+  Future<PaymentResult> _settle(
+      CheckoutRequest request, String result, String? gatewayPaymentId) async {
     final reported = await _report(request.paymentId, result, gatewayPaymentId);
     var elapsed = Duration.zero;
     var status = reported;

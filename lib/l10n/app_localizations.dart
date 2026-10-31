@@ -2739,12 +2739,6 @@ abstract class AppLocalizations {
   /// **'Review Listing'**
   String get planReviewListing;
 
-  /// No description provided for @planReviewSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Reviewing your listing is coming soon.'**
-  String get planReviewSoon;
-
   /// No description provided for @sellYourPhotos.
   ///
   /// In en, this message translates to:
@@ -2924,6 +2918,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We could not confirm your payment yet. We will keep checking.'**
   String get paymentErrorTimeout;
+
+  /// No description provided for @reviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review & Publish'**
+  String get reviewTitle;
+
+  /// No description provided for @reviewSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check everything before you publish'**
+  String get reviewSubtitle;
+
+  /// No description provided for @reviewItemSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Your item'**
+  String get reviewItemSection;
+
+  /// No description provided for @reviewPlanSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Your plan'**
+  String get reviewPlanSection;
+
+  /// No description provided for @reviewValidity.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid for {days} days'**
+  String reviewValidity(int days);
+
+  /// No description provided for @reviewTrustNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Our Trust & Safety team checks every listing, usually within a few hours.'**
+  String get reviewTrustNote;
+
+  /// No description provided for @reviewPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay {amount} & Publish'**
+  String reviewPay(String amount);
+
+  /// No description provided for @reviewPublish.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish'**
+  String get reviewPublish;
+
+  /// No description provided for @reviewPaymentReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment received, your listing is under review'**
+  String get reviewPaymentReceived;
+
+  /// No description provided for @reviewSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing is under review'**
+  String get reviewSubmitted;
+
+  /// No description provided for @sellErrorIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete all required fields before choosing a plan'**
+  String get sellErrorIncomplete;
+
+  /// No description provided for @sellErrorMaxListings.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve reached the maximum listing limit'**
+  String get sellErrorMaxListings;
+
+  /// No description provided for @planErrorNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This plan is not available for your listing'**
+  String get planErrorNotAvailable;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

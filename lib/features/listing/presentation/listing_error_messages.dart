@@ -1,6 +1,7 @@
 import '../../../core/network/api_error.dart';
 import '../../../core/network/api_error_messages.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../payment/presentation/payment_error_messages.dart';
 import 'providers/create_listing_controller.dart';
 
 /// User-facing text for a listing/media backend error code (US-004 error scenarios).
@@ -34,7 +35,10 @@ String? listingCodeMessage(AppLocalizations l10n, String? code) {
     'ERROR_ACCOUNT_SUSPENDED' => l10n.restrictedErrorSuspended,
     'LISTING_UNDER_REVIEW' => l10n.restrictedErrorUnderReview,
     'ERROR_APPEAL_ALREADY_SUBMITTED' => l10n.restrictedErrorAppealDone,
-    _ => null,
+    'ERROR_INCOMPLETE_LISTING' => l10n.sellErrorIncomplete,
+    'ERROR_MAX_LISTINGS_REACHED' => l10n.sellErrorMaxListings,
+    'ERROR_PLAN_SELECTION_NOT_ALLOWED' || 'PLAN_NOT_FOUND' => l10n.planErrorNotAvailable,
+    _ => paymentCodeMessage(l10n, code),
   };
 }
 

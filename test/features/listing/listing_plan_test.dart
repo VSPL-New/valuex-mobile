@@ -10,6 +10,7 @@ import 'package:valuex_mobile/core/routing/route_names.dart';
 import 'package:valuex_mobile/core/utils/formatters.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
+import 'package:valuex_mobile/features/listing/domain/plan_selection.dart';
 import 'package:valuex_mobile/features/listing/domain/seller_plan.dart';
 import 'package:valuex_mobile/features/listing/presentation/listing_plan_screen.dart';
 import 'package:valuex_mobile/features/notifications/data/notifications_repository.dart';
@@ -57,6 +58,16 @@ Map<String, dynamic> _json({
       'gstAmount': gst,
       'totalAmount': total,
     };
+
+const _args = PlanArgs(
+  listingId: 'l1',
+  summary: ListingSummary(
+    title: 'Wooden chair',
+    categoryPath: 'Furniture > Chairs',
+    price: '500',
+    description: 'A sturdy chair',
+  ),
+);
 
 final _basic = SellerPlan.fromJson(_json());
 final _boosted = SellerPlan.fromJson(_json(
@@ -178,7 +189,7 @@ void main() {
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
       await harness.launch(location: RouteNames.home);
       tester.view.physicalSize = Size(1080, 1800 * textScale * 3);
-      harness.container.read(appRouterProvider).go(RouteNames.sellPlan);
+      harness.container.read(appRouterProvider).go(RouteNames.sellPlan, extra: _args);
       await harness.settle();
       return harness;
     }
@@ -311,16 +322,6 @@ void main() {
 
       expect(find.text('Basic'), findsOneWidget);
       expect(find.text('Retry'), findsNothing);
-      await harness.dispose();
-    });
-
-    testWidgets('Review Listing tells the seller it is coming soon', (tester) async {
-      final harness = await open(tester);
-
-      await tester.tap(find.text('Review Listing'));
-      await harness.settle();
-
-      expect(find.text('Reviewing your listing is coming soon.'), findsOneWidget);
       await harness.dispose();
     });
 

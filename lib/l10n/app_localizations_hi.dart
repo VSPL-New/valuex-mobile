@@ -1493,9 +1493,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get planReviewListing => 'लिस्टिंग की समीक्षा करें';
 
   @override
-  String get planReviewSoon => 'लिस्टिंग की समीक्षा जल्द आ रही है।';
-
-  @override
   String get sellYourPhotos => 'आपकी फ़ोटो';
 
   @override
@@ -1592,4 +1589,48 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get paymentErrorTimeout =>
       'हम अभी आपके भुगतान की पुष्टि नहीं कर पाए। हम जाँच करते रहेंगे।';
+
+  @override
+  String get reviewTitle => 'समीक्षा करें और प्रकाशित करें';
+
+  @override
+  String get reviewSubtitle => 'प्रकाशित करने से पहले सब कुछ जाँच लें';
+
+  @override
+  String get reviewItemSection => 'आपकी वस्तु';
+
+  @override
+  String get reviewPlanSection => 'आपका प्लान';
+
+  @override
+  String reviewValidity(int days) {
+    return '$days दिनों के लिए मान्य';
+  }
+
+  @override
+  String get reviewTrustNote =>
+      'हमारी ट्रस्ट एंड सेफ्टी टीम हर लिस्टिंग की जाँच करती है, आमतौर पर कुछ घंटों में।';
+
+  @override
+  String reviewPay(String amount) {
+    return '$amount चुकाएँ और प्रकाशित करें';
+  }
+
+  @override
+  String get reviewPublish => 'प्रकाशित करें';
+
+  @override
+  String get reviewPaymentReceived => 'भुगतान मिल गया, आपकी लिस्टिंग की समीक्षा हो रही है';
+
+  @override
+  String get reviewSubmitted => 'आपकी लिस्टिंग की समीक्षा हो रही है';
+
+  @override
+  String get sellErrorIncomplete => 'प्लान चुनने से पहले सभी ज़रूरी जानकारी पूरी करें';
+
+  @override
+  String get sellErrorMaxListings => 'आप लिस्टिंग की अधिकतम सीमा तक पहुँच चुके हैं';
+
+  @override
+  String get planErrorNotAvailable => 'यह प्लान आपकी लिस्टिंग के लिए उपलब्ध नहीं है';
 }

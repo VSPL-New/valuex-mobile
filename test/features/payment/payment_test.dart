@@ -95,7 +95,8 @@ void main() {
     });
 
     test('PaymentStatus parses the server answer', () {
-      final status = PaymentStatus.fromJson({..._statusJson('PAYMENT_FAILED'), 'failureReason': 'EXPIRED'});
+      final status =
+          PaymentStatus.fromJson({..._statusJson('PAYMENT_FAILED'), 'failureReason': 'EXPIRED'});
 
       expect(status.paymentId, 'p1');
       expect(status.amount, 49.0);
@@ -106,7 +107,8 @@ void main() {
   group('app config', () {
     AppConfig parse(String env, [String? provider]) => AppConfig.parse(
           env: env,
-          apiBaseUrl: env == 'dev' ? 'http://localhost/api/v1' : 'https://api.valuex.example/api/v1',
+          apiBaseUrl:
+              env == 'dev' ? 'http://localhost/api/v1' : 'https://api.valuex.example/api/v1',
           aadhaarFlow: env == 'prod' ? 'thirdparty' : 'sandbox',
           googleSignIn: env == 'prod' ? 'native' : 'mock',
           googleServerClientId: env == 'prod' ? 'client' : '',
@@ -237,7 +239,8 @@ void main() {
       expect(result, PaymentResult.confirmed);
       expect(protection.enabled, 1);
       expect(protection.disabled, 1);
-      verify(() => repository.reportCheckoutResult('p1', result: 'COMPLETED', gatewayPaymentId: 'pay_1'))
+      verify(() =>
+              repository.reportCheckoutResult('p1', result: 'COMPLETED', gatewayPaymentId: 'pay_1'))
           .called(1);
     });
 
@@ -255,7 +258,8 @@ void main() {
       expect(reads, 3);
     });
 
-    testWidgets('never trusts the checkout: still pending after the timeout is pending, not confirmed',
+    testWidgets(
+        'never trusts the checkout: still pending after the timeout is pending, not confirmed',
         (tester) async {
       stubReport(_status('PAYMENT_PENDING'));
       when(() => repository.getStatus('p1')).thenAnswer((_) async => _status('PAYMENT_PENDING'));
@@ -361,7 +365,8 @@ void main() {
       );
 
       expect(containerFor(mock).read(paymentCheckoutProvider), isA<MockPaymentCheckout>());
-      expect(containerFor(testConfig).read(paymentCheckoutProvider), isA<UnavailablePaymentCheckout>());
+      expect(containerFor(testConfig).read(paymentCheckoutProvider),
+          isA<UnavailablePaymentCheckout>());
     });
 
     test('the unavailable checkout fails with the gateway-unavailable code', () {
@@ -395,7 +400,8 @@ void main() {
         home: Builder(
           builder: (context) => Scaffold(
             body: TextButton(
-              onPressed: () async => outcome = await MockPaymentCheckout(repository).open(context, _request),
+              onPressed: () async =>
+                  outcome = await MockPaymentCheckout(repository).open(context, _request),
               child: const Text('open'),
             ),
           ),
@@ -427,7 +433,8 @@ void main() {
       verify(() => repository.simulate('p1', success: false)).called(1);
     });
 
-    testWidgets('Cancel and dismissing the sheet both cancel without calling the server', (tester) async {
+    testWidgets('Cancel and dismissing the sheet both cancel without calling the server',
+        (tester) async {
       expect(await pick(tester, const Key('mockCheckoutCancel')), isA<CheckoutCancelled>());
       expect(await pick(tester, null), isA<CheckoutCancelled>());
       verifyNever(() => repository.simulate(any(), success: any(named: 'success')));
@@ -435,7 +442,8 @@ void main() {
   });
 
   group('MockCheckoutSheet', () {
-    Future<void> show(WidgetTester tester, {Locale locale = const Locale('en'), double textScale = 1}) async {
+    Future<void> show(WidgetTester tester,
+        {Locale locale = const Locale('en'), double textScale = 1}) async {
       tester.platformDispatcher.textScaleFactorTestValue = textScale;
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
       await tester.pumpWidget(MaterialApp(
@@ -447,7 +455,8 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('shows the test title, the note, the amount and three actions in English', (tester) async {
+    testWidgets('shows the test title, the note, the amount and three actions in English',
+        (tester) async {
       await show(tester);
 
       expect(find.text('Test payment'), findsOneWidget);
@@ -477,7 +486,8 @@ void main() {
       expect(find.text('Amount: USD 5.00'), findsOneWidget);
     });
 
-    testWidgets('meets the tap target and label guidelines and marks its title as a header', (tester) async {
+    testWidgets('meets the tap target and label guidelines and marks its title as a header',
+        (tester) async {
       final semantics = tester.ensureSemantics();
       await show(tester);
 
@@ -499,16 +509,19 @@ void main() {
     final hi = AppLocalizationsHi();
 
     test('maps the payment error codes in English and Hindi', () {
-      expect(paymentCodeMessage(en, 'ERROR_GATEWAY_UNAVAILABLE'), en.paymentErrorGatewayUnavailable);
+      expect(
+          paymentCodeMessage(en, 'ERROR_GATEWAY_UNAVAILABLE'), en.paymentErrorGatewayUnavailable);
       expect(paymentCodeMessage(en, 'ERROR_PAYMENT_FAILED'), en.paymentErrorFailed);
       expect(paymentCodeMessage(en, 'ERROR_PAYMENT_TIMEOUT'), en.paymentErrorTimeout);
-      expect(paymentCodeMessage(hi, 'ERROR_GATEWAY_UNAVAILABLE'), hi.paymentErrorGatewayUnavailable);
+      expect(
+          paymentCodeMessage(hi, 'ERROR_GATEWAY_UNAVAILABLE'), hi.paymentErrorGatewayUnavailable);
       expect(paymentCodeMessage(en, 'SOMETHING_ELSE'), isNull);
       expect(paymentCodeMessage(en, null), isNull);
     });
 
     test('falls back to the general message for other errors', () {
-      const gateway = ApiError(type: ApiErrorType.server, message: 'x', code: 'ERROR_GATEWAY_UNAVAILABLE');
+      const gateway =
+          ApiError(type: ApiErrorType.server, message: 'x', code: 'ERROR_GATEWAY_UNAVAILABLE');
       const offline = ApiError(type: ApiErrorType.network, message: 'x');
       const unknown = ApiError(type: ApiErrorType.business, message: 'x', code: 'OTHER');
 

@@ -450,7 +450,6 @@
   "planFreeNote": "इस प्लान के लिए भुगतान की ज़रूरत नहीं है।",
   "planNoPlans": "अभी कोई प्लान उपलब्ध नहीं है।",
   "planReviewListing": "लिस्टिंग की समीक्षा करें",
-  "planReviewSoon": "लिस्टिंग की समीक्षा जल्द आ रही है।",
   "sellYourPhotos": "आपकी फ़ोटो",
   "itemAiGenerated": "AI द्वारा बनाया गया",
   "itemPleaseVerify": "कृपया जाँच लें",
@@ -480,5 +479,18 @@
   "paymentConfirming": "हम आपके भुगतान की पुष्टि कर रहे हैं",
   "paymentErrorGatewayUnavailable": "इस समय भुगतान उपलब्ध नहीं है, कृपया बाद में पुनः प्रयास करें",
   "paymentErrorFailed": "आपका भुगतान पूरा नहीं हुआ। आपसे कोई शुल्क नहीं लिया गया।",
-  "paymentErrorTimeout": "हम अभी आपके भुगतान की पुष्टि नहीं कर पाए। हम जाँच करते रहेंगे।"
+  "paymentErrorTimeout": "हम अभी आपके भुगतान की पुष्टि नहीं कर पाए। हम जाँच करते रहेंगे।",
+  "reviewTitle": "समीक्षा करें और प्रकाशित करें",
+  "reviewSubtitle": "प्रकाशित करने से पहले सब कुछ जाँच लें",
+  "reviewItemSection": "आपकी वस्तु",
+  "reviewPlanSection": "आपका प्लान",
+  "reviewValidity": "{days} दिनों के लिए मान्य",
+  "reviewTrustNote": "हमारी ट्रस्ट एंड सेफ्टी टीम हर लिस्टिंग की जाँच करती है, आमतौर पर कुछ घंटों में।",
+  "reviewPay": "{amount} चुकाएँ और प्रकाशित करें",
+  "reviewPublish": "प्रकाशित करें",
+  "reviewPaymentReceived": "भुगतान मिल गया, आपकी लिस्टिंग की समीक्षा हो रही है",
+  "reviewSubmitted": "आपकी लिस्टिंग की समीक्षा हो रही है",
+  "sellErrorIncomplete": "प्लान चुनने से पहले सभी ज़रूरी जानकारी पूरी करें",
+  "sellErrorMaxListings": "आप लिस्टिंग की अधिकतम सीमा तक पहुँच चुके हैं",
+  "planErrorNotAvailable": "यह प्लान आपकी लिस्टिंग के लिए उपलब्ध नहीं है"
 }
