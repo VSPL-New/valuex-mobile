@@ -29,6 +29,7 @@ import '../../features/listing/domain/plan_selection.dart';
 import '../../features/listing/presentation/create_listing_screen.dart';
 import '../../features/listing/presentation/item_details_screen.dart';
 import '../../features/listing/presentation/listing_plan_screen.dart';
+import '../../features/listing/presentation/listing_submitted_screen.dart';
 import '../../features/listing/presentation/review_listing_screen.dart';
 import '../../features/listing/presentation/providers/item_details_controller.dart';
 import '../../features/profile/presentation/profile_details_screen.dart';
@@ -201,6 +202,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'sellReview',
         redirect: (context, state) => state.extra is ReviewArgs ? null : RouteNames.sell,
         builder: (context, state) => ReviewListingScreen(args: state.extra! as ReviewArgs),
+      ),
+      GoRoute(
+        path: RouteNames.sellSubmitted,
+        name: 'sellSubmitted',
+        // The review page passes the id of the submitted listing as `extra`.
+        redirect: (context, state) => state.extra is String ? null : RouteNames.sell,
+        builder: (context, state) => ListingSubmittedScreen(listingId: state.extra! as String),
       ),
     ],
   );
