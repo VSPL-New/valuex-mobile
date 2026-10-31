@@ -159,7 +159,8 @@ void main() {
       container.listen(planSelectionControllerProvider, (_, __) {});
     });
 
-    PlanSelectionController controller() => container.read(planSelectionControllerProvider.notifier);
+    PlanSelectionController controller() =>
+        container.read(planSelectionControllerProvider.notifier);
 
     test('returns the selection', () async {
       when(() => repository.selectPlan('l1', 'BOOSTED')).thenAnswer((_) async => _paid);
@@ -185,7 +186,8 @@ void main() {
     });
 
     test('returns any other error', () async {
-      const error = ApiError(type: ApiErrorType.business, message: 'x', code: 'ERROR_INCOMPLETE_LISTING');
+      const error =
+          ApiError(type: ApiErrorType.business, message: 'x', code: 'ERROR_INCOMPLETE_LISTING');
       when(() => repository.selectPlan(any(), any())).thenThrow(error);
 
       final result = await controller().select('l1', 'BOOSTED');
@@ -213,8 +215,10 @@ void main() {
       expect(listingCodeMessage(l10n, 'ERROR_INCOMPLETE_LISTING'), l10n.sellErrorIncomplete);
       expect(listingCodeMessage(l10n, 'ERROR_MAX_LISTINGS_REACHED'), l10n.sellErrorMaxListings);
       expect(listingCodeMessage(l10n, 'PLAN_NOT_FOUND'), l10n.planErrorNotAvailable);
-      expect(listingCodeMessage(l10n, 'ERROR_PLAN_SELECTION_NOT_ALLOWED'), l10n.planErrorNotAvailable);
-      expect(listingCodeMessage(l10n, 'ERROR_GATEWAY_UNAVAILABLE'), l10n.paymentErrorGatewayUnavailable);
+      expect(
+          listingCodeMessage(l10n, 'ERROR_PLAN_SELECTION_NOT_ALLOWED'), l10n.planErrorNotAvailable);
+      expect(listingCodeMessage(l10n, 'ERROR_GATEWAY_UNAVAILABLE'),
+          l10n.paymentErrorGatewayUnavailable);
       expect(listingCodeMessage(l10n, 'SOMETHING_ELSE'), isNull);
     });
   });
@@ -253,7 +257,8 @@ void main() {
       return harness;
     }
 
-    Future<AppHarness> openReview(WidgetTester tester, PlanSelection selection, {double textScale = 1}) {
+    Future<AppHarness> openReview(WidgetTester tester, PlanSelection selection,
+        {double textScale = 1}) {
       return open(
         tester,
         ReviewArgs(listingId: 'l1', summary: _summary, plan: _plan, selection: selection),
@@ -266,7 +271,8 @@ void main() {
         open(tester, const PlanArgs(listingId: 'l1', summary: _summary), RouteNames.sellPlan);
 
     group('plan page', () {
-      testWidgets('Review Listing chooses the plan on the server and opens the review page', (tester) async {
+      testWidgets('Review Listing chooses the plan on the server and opens the review page',
+          (tester) async {
         when(() => repository.selectPlan('l1', 'BOOSTED')).thenAnswer((_) async => _paid);
         final harness = await openPlan(tester);
 
@@ -279,7 +285,8 @@ void main() {
         await harness.dispose();
       });
 
-      testWidgets('shows the reason when the plan cannot be chosen and stays on the page', (tester) async {
+      testWidgets('shows the reason when the plan cannot be chosen and stays on the page',
+          (tester) async {
         when(() => repository.selectPlan(any(), any())).thenThrow(const ApiError(
           type: ApiErrorType.business,
           message: 'x',
@@ -311,7 +318,8 @@ void main() {
         await harness.dispose();
       });
 
-      testWidgets('opening the page without a draft goes back to the first sell step', (tester) async {
+      testWidgets('opening the page without a draft goes back to the first sell step',
+          (tester) async {
         final harness = await open(tester, 'not-args', RouteNames.sellPlan);
 
         expect(find.byType(ListingPlanScreen), findsNothing);
@@ -320,7 +328,8 @@ void main() {
     });
 
     group('review page', () {
-      testWidgets('shows the item, the plan, the breakdown, the note and the pay button', (tester) async {
+      testWidgets('shows the item, the plan, the breakdown, the note and the pay button',
+          (tester) async {
         final harness = await openReview(tester, _paid);
 
         expect(find.text('Review & Publish'), findsOneWidget);
@@ -336,7 +345,8 @@ void main() {
         await harness.dispose();
       });
 
-      testWidgets('a plan priced at zero shows Publish without an amount and goes on without a checkout',
+      testWidgets(
+          'a plan priced at zero shows Publish without an amount and goes on without a checkout',
           (tester) async {
         final harness = await openReview(tester, _free);
 
@@ -364,7 +374,8 @@ void main() {
         await harness.dispose();
       });
 
-      testWidgets('a payment the server has not settled yet says it is being confirmed', (tester) async {
+      testWidgets('a payment the server has not settled yet says it is being confirmed',
+          (tester) async {
         when(() => flow.start(any(), any())).thenAnswer((_) async => PaymentResult.pending);
         final harness = await openReview(tester, _paid);
 
@@ -376,7 +387,8 @@ void main() {
         await harness.dispose();
       });
 
-      testWidgets('a cancelled checkout stays on the page and keeps the same order', (tester) async {
+      testWidgets('a cancelled checkout stays on the page and keeps the same order',
+          (tester) async {
         when(() => flow.start(any(), any())).thenAnswer((_) async => PaymentResult.cancelled);
         final harness = await openReview(tester, _paid);
 
@@ -394,7 +406,11 @@ void main() {
       testWidgets('a failed payment says so and the next try asks for a new order', (tester) async {
         final retry = PlanSelection.fromJson({
           ..._paidJson(),
-          'payment': {..._paidJson()['payment'] as Map<String, dynamic>, 'orderId': 'order-2', 'paymentId': 'p2'},
+          'payment': {
+            ..._paidJson()['payment'] as Map<String, dynamic>,
+            'orderId': 'order-2',
+            'paymentId': 'p2'
+          },
         });
         var calls = 0;
         when(() => flow.start(any(), any())).thenAnswer((_) async {
@@ -405,7 +421,8 @@ void main() {
 
         await tester.tap(find.text('Pay ₹149 & Publish'));
         await harness.settle();
-        expect(find.text('Your payment did not go through. You have not been charged.'), findsOneWidget);
+        expect(find.text('Your payment did not go through. You have not been charged.'),
+            findsOneWidget);
         await tester.tap(find.text('Pay ₹149 & Publish'));
         await harness.settle();
 
@@ -415,7 +432,8 @@ void main() {
         await harness.dispose();
       });
 
-      testWidgets('shows why a new order could not be made and does not open the checkout', (tester) async {
+      testWidgets('shows why a new order could not be made and does not open the checkout',
+          (tester) async {
         when(() => flow.start(any(), any())).thenAnswer((_) async => PaymentResult.failed);
         when(() => repository.selectPlan(any(), any())).thenThrow(const ApiError(
           type: ApiErrorType.server,
@@ -429,7 +447,8 @@ void main() {
         await tester.tap(find.text('Pay ₹149 & Publish'));
         await harness.settle();
 
-        expect(find.text('Payments are not available at this moment, please try again later'), findsOneWidget);
+        expect(find.text('Payments are not available at this moment, please try again later'),
+            findsOneWidget);
         verify(() => flow.start(any(), any())).called(1);
         await harness.dispose();
       });
@@ -452,7 +471,8 @@ void main() {
         await harness.dispose();
       });
 
-      testWidgets('a new order for a plan that now costs nothing finishes without a checkout', (tester) async {
+      testWidgets('a new order for a plan that now costs nothing finishes without a checkout',
+          (tester) async {
         when(() => flow.start(any(), any())).thenAnswer((_) async => PaymentResult.failed);
         when(() => repository.selectPlan(any(), any())).thenAnswer((_) async => _free);
         final harness = await openReview(tester, _paid);
@@ -478,7 +498,8 @@ void main() {
         await tester.tap(find.text('Pay ₹149 & Publish'));
         await harness.settle();
 
-        expect(find.text('Payments are not available at this moment, please try again later'), findsOneWidget);
+        expect(find.text('Payments are not available at this moment, please try again later'),
+            findsOneWidget);
         expect(find.byType(ReviewListingScreen), findsOneWidget);
         await harness.dispose();
       });

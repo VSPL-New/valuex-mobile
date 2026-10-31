@@ -93,9 +93,8 @@ class ListingPlanScreen extends ConsumerWidget {
   }
 
   Future<void> _review(BuildContext context, WidgetRef ref, SellerPlan plan) async {
-    final result = await ref
-        .read(planSelectionControllerProvider.notifier)
-        .select(args.listingId, plan.code);
+    final result =
+        await ref.read(planSelectionControllerProvider.notifier).select(args.listingId, plan.code);
     if (!context.mounted) return;
     switch (result.outcome) {
       case PlanSelectionOutcome.selected:
