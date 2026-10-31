@@ -25,9 +25,11 @@ import '../../features/account_security/domain/account_security.dart';
 import '../../features/account_security/presentation/account_security_screen.dart';
 import '../../features/account_security/presentation/change_contact_screen.dart';
 import '../../features/notifications/presentation/notifications_screen.dart';
+import '../../features/listing/domain/plan_selection.dart';
 import '../../features/listing/presentation/create_listing_screen.dart';
 import '../../features/listing/presentation/item_details_screen.dart';
 import '../../features/listing/presentation/listing_plan_screen.dart';
+import '../../features/listing/presentation/review_listing_screen.dart';
 import '../../features/listing/presentation/providers/item_details_controller.dart';
 import '../../features/profile/presentation/profile_details_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
@@ -190,7 +192,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: RouteNames.sellPlan,
         name: 'sellPlan',
-        builder: (context, state) => const ListingPlanScreen(),
+        // Item Details passes the draft id and a summary of it as `extra`.
+        redirect: (context, state) => state.extra is PlanArgs ? null : RouteNames.sell,
+        builder: (context, state) => ListingPlanScreen(args: state.extra! as PlanArgs),
+      ),
+      GoRoute(
+        path: RouteNames.sellReview,
+        name: 'sellReview',
+        redirect: (context, state) => state.extra is ReviewArgs ? null : RouteNames.sell,
+        builder: (context, state) => ReviewListingScreen(args: state.extra! as ReviewArgs),
       ),
     ],
   );

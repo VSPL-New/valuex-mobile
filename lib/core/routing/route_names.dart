@@ -28,4 +28,5 @@ class RouteNames {
   static const String sell = '/sell';
   static const String sellDetails = '/sell/details';
   static const String sellPlan = '/sell/plan';
+  static const String sellReview = '/sell/review';
 }

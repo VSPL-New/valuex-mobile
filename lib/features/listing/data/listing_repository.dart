@@ -9,6 +9,7 @@ import '../../../core/network/api_error_mapper.dart';
 import '../domain/category.dart';
 import '../domain/listing_details.dart';
 import '../domain/listing_schema.dart';
+import '../domain/plan_selection.dart';
 import '../domain/restricted_check.dart';
 import '../domain/seller_plan.dart';
 
@@ -172,6 +173,15 @@ class ListingRepository {
           for (final item in json as List<dynamic>)
             SellerPlan.fromJson(item as Map<String, dynamic>),
         ],
+      );
+
+  /// Chooses a plan for a finished draft (US-008). The server decides the amount; a plan that costs
+  /// something comes back with the checkout details. An unverified seller is refused with
+  /// `AADHAAR_VERIFICATION_REQUIRED`.
+  Future<PlanSelection> selectPlan(String listingId, String planCode) => _client.post(
+        ApiConstants.listingPlanSelection(listingId),
+        data: {'planCode': planCode},
+        parse: (json) => PlanSelection.fromJson(json as Map<String, dynamic>),
       );
 
   /// Asks AI to suggest the details of a submitted draft (US-005). Null when AI cannot help right

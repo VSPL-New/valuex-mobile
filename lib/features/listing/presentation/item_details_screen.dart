@@ -20,6 +20,7 @@ import '../../home/presentation/widgets/location_sheet.dart';
 import '../../home/presentation/widgets/saved_location_dialog.dart';
 import '../domain/listing_details.dart';
 import '../domain/listing_schema.dart';
+import '../domain/plan_selection.dart';
 import '../domain/restricted_check.dart';
 import 'category_picker_screen.dart';
 import 'listing_error_messages.dart';
@@ -100,14 +101,14 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
     }
     switch (check.result) {
       case RestrictedResult.safe:
-        unawaited(context.push(RouteNames.sellPlan));
+        unawaited(context.push(RouteNames.sellPlan, extra: _planArgs()));
       case RestrictedResult.complianceRequired:
         final agreed = await showComplianceDialog(context, check);
         if (!agreed || !mounted) return;
         final error = await _controller.acceptCompliance(check);
         if (!mounted) return;
         if (error == null) {
-          unawaited(context.push(RouteNames.sellPlan));
+          unawaited(context.push(RouteNames.sellPlan, extra: _planArgs()));
         } else {
           _showError(error);
         }
@@ -126,6 +127,21 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
   void _showError(Object? error) {
     if (error == null) return;
     _showMessage(listingErrorMessage(AppLocalizations.of(context), error));
+  }
+
+  /// The draft and what the plan and review pages repeat back to the seller.
+  PlanArgs _planArgs() {
+    final state = ref.read(itemDetailsControllerProvider(widget.args));
+    final draft = state.draft;
+    return PlanArgs(
+      listingId: widget.args.listingId,
+      summary: ListingSummary(
+        title: draft.title,
+        categoryPath: state.category?.path.map((item) => item.name).join(' > ') ?? '',
+        price: draft.price,
+        description: draft.description,
+      ),
+    );
   }
 
   void _showMessage(String message) {

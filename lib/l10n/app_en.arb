@@ -596,7 +596,6 @@
   "planFreeNote": "No payment is needed for this plan.",
   "planNoPlans": "No plans are available right now.",
   "planReviewListing": "Review Listing",
-  "planReviewSoon": "Reviewing your listing is coming soon.",
   "sellYourPhotos": "Your photos",
   "itemAiGenerated": "AI generated",
   "itemPleaseVerify": "Please verify",
@@ -633,5 +632,32 @@
   "paymentConfirming": "We're confirming your payment",
   "paymentErrorGatewayUnavailable": "Payments are not available at this moment, please try again later",
   "paymentErrorFailed": "Your payment did not go through. You have not been charged.",
-  "paymentErrorTimeout": "We could not confirm your payment yet. We will keep checking."
+  "paymentErrorTimeout": "We could not confirm your payment yet. We will keep checking.",
+  "reviewTitle": "Review & Publish",
+  "reviewSubtitle": "Check everything before you publish",
+  "reviewItemSection": "Your item",
+  "reviewPlanSection": "Your plan",
+  "reviewValidity": "Valid for {days} days",
+  "@reviewValidity": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "reviewTrustNote": "Our Trust & Safety team checks every listing, usually within a few hours.",
+  "reviewPay": "Pay {amount} & Publish",
+  "@reviewPay": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewPublish": "Publish",
+  "reviewPaymentReceived": "Payment received, your listing is under review",
+  "reviewSubmitted": "Your listing is under review",
+  "sellErrorIncomplete": "Complete all required fields before choosing a plan",
+  "sellErrorMaxListings": "You've reached the maximum listing limit",
+  "planErrorNotAvailable": "This plan is not available for your listing"
 }

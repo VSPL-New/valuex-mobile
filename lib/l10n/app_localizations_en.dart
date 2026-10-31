@@ -1505,9 +1505,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planReviewListing => 'Review Listing';
 
   @override
-  String get planReviewSoon => 'Reviewing your listing is coming soon.';
-
-  @override
   String get sellYourPhotos => 'Your photos';
 
   @override
@@ -1602,4 +1599,48 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get paymentErrorTimeout => 'We could not confirm your payment yet. We will keep checking.';
+
+  @override
+  String get reviewTitle => 'Review & Publish';
+
+  @override
+  String get reviewSubtitle => 'Check everything before you publish';
+
+  @override
+  String get reviewItemSection => 'Your item';
+
+  @override
+  String get reviewPlanSection => 'Your plan';
+
+  @override
+  String reviewValidity(int days) {
+    return 'Valid for $days days';
+  }
+
+  @override
+  String get reviewTrustNote =>
+      'Our Trust & Safety team checks every listing, usually within a few hours.';
+
+  @override
+  String reviewPay(String amount) {
+    return 'Pay $amount & Publish';
+  }
+
+  @override
+  String get reviewPublish => 'Publish';
+
+  @override
+  String get reviewPaymentReceived => 'Payment received, your listing is under review';
+
+  @override
+  String get reviewSubmitted => 'Your listing is under review';
+
+  @override
+  String get sellErrorIncomplete => 'Complete all required fields before choosing a plan';
+
+  @override
+  String get sellErrorMaxListings => 'You\'ve reached the maximum listing limit';
+
+  @override
+  String get planErrorNotAvailable => 'This plan is not available for your listing';
 }
