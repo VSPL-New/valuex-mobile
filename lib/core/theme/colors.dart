@@ -17,19 +17,19 @@ class AppColors {
   static const Color brandPlaceholder = Color(0xFF4A5A72);
   static const Color brandOnPrimary = Color(0xFFFFFFFF);
 
-  // Brand
-  static const Color brandPrimary = Color(0xFF0A47D9);
-  static const Color brandAccent = Color(0xFF86198F);
+  // Brand: fixed by the brand kit (logos and corporate colours); never change these two or the gradient.
+  static const Color brandPrimary = Color(0xFF135CFF);
+  static const Color brandAccent = Color(0xFFC026D3);
 
   /// Blue for text links: 7.7:1 on the page, 7.4:1 on the input fill.
   static const Color brandLink = Color(0xFF0B3FC4);
-  static const Color brandInstruction = Color(0xFF0B3FC4);
+  static const Color brandInstruction = Color(0xFF135CFF);
 
   // Lines and status
   static const Color brandBorder = Color(0x1F135CFF);
 
-  /// Focus ring: solid so it reads at 3:1 or better.
-  static const Color brandBorderFocused = Color(0xFF0A47D9);
+  /// Focus ring: solid brand blue (5.3:1 on white) so it reads at 3:1 or better.
+  static const Color brandBorderFocused = Color(0xFF135CFF);
   static const Color brandOutline = Color(0xFFDEDEDE);
 
   /// Edge of a control that must be seen to be found (4.8:1 or better on white, page and input fill).
