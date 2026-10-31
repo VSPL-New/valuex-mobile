@@ -27,67 +27,65 @@ class BrandGradientButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final enabled = onPressed != null || isLoading;
     final radius = BorderRadius.circular(AppRadius.xl);
-    return Opacity(
-      opacity: enabled ? 1 : 0.4,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: radius,
-          boxShadow: enabled
-              ? const [
-                  BoxShadow(color: Color(0x59135CFF), blurRadius: 24),
-                ]
-              : null,
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: Ink(
-            decoration: BoxDecoration(
-              borderRadius: radius,
-              gradient: AppGradients.brand,
-            ),
-            child: InkWell(
-              borderRadius: radius,
-              onTap: isLoading ? null : onPressed,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  minHeight: AppSizes.buttonMedium,
-                  minWidth: double.infinity,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: radius,
+        boxShadow: enabled
+            ? const [
+                BoxShadow(color: Color(0x59135CFF), blurRadius: 24),
+              ]
+            : null,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: Ink(
+          decoration: BoxDecoration(
+            borderRadius: radius,
+            color: enabled ? null : AppColors.brandControlBorder,
+            gradient: enabled ? AppGradients.brand : null,
+          ),
+          child: InkWell(
+            borderRadius: radius,
+            onTap: isLoading ? null : onPressed,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                minHeight: AppSizes.buttonMedium,
+                minWidth: double.infinity,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.md,
+                  vertical: AppSpacing.sm,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.md,
-                    vertical: AppSpacing.sm,
-                  ),
-                  child: Center(
-                    child: isLoading
-                        ? Semantics(
-                            label: label,
-                            child: const SizedBox(
-                              width: 22,
-                              height: 22,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.5,
-                                color: AppColors.brandOnPrimary,
-                              ),
+                child: Center(
+                  child: isLoading
+                      ? Semantics(
+                          label: label,
+                          child: const SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                              color: AppColors.brandOnPrimary,
                             ),
-                          )
-                        : trailingIcon == null
-                            ? Text(label, textAlign: TextAlign.center, style: AppTextStyles.button)
-                            : Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Flexible(
-                                    child: Text(label,
-                                        textAlign: TextAlign.center, style: AppTextStyles.button),
-                                  ),
-                                  const SizedBox(width: AppSpacing.xs),
-                                  ExcludeSemantics(
-                                    child: Icon(trailingIcon,
-                                        size: 20, color: AppColors.brandOnPrimary),
-                                  ),
-                                ],
-                              ),
-                  ),
+                          ),
+                        )
+                      : trailingIcon == null
+                          ? Text(label, textAlign: TextAlign.center, style: AppTextStyles.button)
+                          : Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Flexible(
+                                  child: Text(label,
+                                      textAlign: TextAlign.center, style: AppTextStyles.button),
+                                ),
+                                const SizedBox(width: AppSpacing.xs),
+                                ExcludeSemantics(
+                                  child:
+                                      Icon(trailingIcon, size: 20, color: AppColors.brandOnPrimary),
+                                ),
+                              ],
+                            ),
                 ),
               ),
             ),

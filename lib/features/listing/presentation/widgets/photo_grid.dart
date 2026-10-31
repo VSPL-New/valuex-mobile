@@ -167,7 +167,7 @@ class _PhotoTile extends StatelessWidget {
                 ),
               if (failed)
                 ColoredBox(
-                  color: const Color(0x99C81E1E),
+                  color: AppColors.brandError,
                   // Bottom-left keeps the retry target clear of the remove button (top-right).
                   child: Align(
                     alignment: Alignment.bottomLeft,

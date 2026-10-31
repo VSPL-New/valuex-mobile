@@ -60,7 +60,7 @@ class PlanCard extends StatelessWidget {
             borderRadius: radius,
             color: AppColors.brandSurface,
             border: Border.all(
-              color: selected ? look.accent : AppColors.brandBorder,
+              color: selected ? look.accent : AppColors.brandControlBorder,
               width: selected ? 2 : 1,
             ),
             boxShadow: [
