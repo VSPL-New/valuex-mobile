@@ -46,7 +46,7 @@ class _ReviewListingScreenState extends ConsumerState<ReviewListingScreen> {
       if (!mounted) return;
       final checkout = _selection.checkout;
       if (!_selection.paymentRequired || checkout == null) {
-        _finish(AppLocalizations.of(context).reviewSubmitted);
+        _submitted();
         return;
       }
       final result = await ref.read(paymentFlowProvider).start(context, checkout);
@@ -54,7 +54,7 @@ class _ReviewListingScreenState extends ConsumerState<ReviewListingScreen> {
       final l10n = AppLocalizations.of(context);
       switch (result) {
         case PaymentResult.confirmed:
-          _finish(l10n.reviewPaymentReceived);
+          _submitted();
         case PaymentResult.pending:
           _finish(l10n.paymentConfirming);
         case PaymentResult.failed:
@@ -89,6 +89,12 @@ class _ReviewListingScreenState extends ConsumerState<ReviewListingScreen> {
     return true;
   }
 
+  /// The plan is paid (or costs nothing): the listing is with the Trust & Safety review.
+  void _submitted() {
+    context.go(RouteNames.sellSubmitted, extra: widget.args.listingId);
+  }
+
+  /// The payment is not confirmed yet, so the listing is not known to be paid: say so and go Home.
   void _finish(String message) {
     _show(message);
     context.go(RouteNames.home);

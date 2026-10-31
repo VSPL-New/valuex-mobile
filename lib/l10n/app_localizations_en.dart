@@ -1630,10 +1630,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewPublish => 'Publish';
 
   @override
-  String get reviewPaymentReceived => 'Payment received, your listing is under review';
+  String get submittedTitle => 'Your listing is submitted';
 
   @override
-  String get reviewSubmitted => 'Your listing is under review';
+  String get submittedMessage =>
+      'Your listing is under Trust & Safety compliance review. It may take a few minutes. If any action is required, you will see it in your listing updates; otherwise your listing goes live automatically if it is compliant.';
+
+  @override
+  String get submittedPreview => 'Preview your listing';
+
+  @override
+  String get submittedPreviewSoon => 'Preview is coming soon';
+
+  @override
+  String get submittedHome => 'Back to Home';
 
   @override
   String get sellErrorIncomplete => 'Complete all required fields before choosing a plan';

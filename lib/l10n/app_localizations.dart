@@ -2967,17 +2967,35 @@ abstract class AppLocalizations {
   /// **'Publish'**
   String get reviewPublish;
 
-  /// No description provided for @reviewPaymentReceived.
+  /// No description provided for @submittedTitle.
   ///
   /// In en, this message translates to:
-  /// **'Payment received, your listing is under review'**
-  String get reviewPaymentReceived;
+  /// **'Your listing is submitted'**
+  String get submittedTitle;
 
-  /// No description provided for @reviewSubmitted.
+  /// No description provided for @submittedMessage.
   ///
   /// In en, this message translates to:
-  /// **'Your listing is under review'**
-  String get reviewSubmitted;
+  /// **'Your listing is under Trust & Safety compliance review. It may take a few minutes. If any action is required, you will see it in your listing updates; otherwise your listing goes live automatically if it is compliant.'**
+  String get submittedMessage;
+
+  /// No description provided for @submittedPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview your listing'**
+  String get submittedPreview;
+
+  /// No description provided for @submittedPreviewSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview is coming soon'**
+  String get submittedPreviewSoon;
+
+  /// No description provided for @submittedHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Home'**
+  String get submittedHome;
 
   /// No description provided for @sellErrorIncomplete.
   ///
