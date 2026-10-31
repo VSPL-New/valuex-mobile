@@ -147,12 +147,12 @@ class AppTextStyles {
     color: AppColors.brandForeground,
   );
 
-  /// Badges, chips and tab labels only; 12 px is not for body or helper text.
+  /// Badges, chips and tab labels; 14 px so it stays readable at the high-contrast palette.
   static const TextStyle caption = TextStyle(
     fontFamily: AppFonts.body,
     fontFamilyFallback: AppFonts.bodyFallback,
-    fontSize: 12,
-    height: 16 / 12,
+    fontSize: 14,
+    height: 20 / 14,
     fontWeight: FontWeight.w600,
     color: AppColors.brandMutedText,
   );

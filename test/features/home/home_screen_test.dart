@@ -50,6 +50,21 @@ void main() {
     await tester.tap(finder);
   }
 
+  /// Tapping a button lower on the page scrolls the header out of the list, where it is not built.
+  Future<void> showHeaderThenListing(WidgetTester tester, AppHarness harness) async {
+    final page = find.byType(Scrollable).first;
+    tester.state<ScrollableState>(page).position.jumpTo(0);
+    await harness.settle();
+  }
+
+  Future<void> scrollToListing(WidgetTester tester) async {
+    await tester.scrollUntilVisible(
+      find.text('Sony A7 IV Camera'),
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+  }
+
   Future<AppHarness> openHome(
     WidgetTester tester, {
     bool aadhaarVerified = true,
@@ -140,7 +155,9 @@ void main() {
       await harness.settle();
 
       expect(harness.locationService.requests, 1);
+      await showHeaderThenListing(tester, harness);
       expect(find.text('Andheri (East)'), findsOneWidget);
+      await scrollToListing(tester);
       expect(find.text('Sony A7 IV Camera'), findsOneWidget);
       await harness.dispose();
     });
@@ -202,7 +219,9 @@ void main() {
       await harness.settle();
 
       expect(find.text('Choose a saved location'), findsNothing);
+      await showHeaderThenListing(tester, harness);
       expect(find.text('Pune, Maharashtra'), findsOneWidget);
+      await scrollToListing(tester);
       expect(find.text('Sony A7 IV Camera'), findsOneWidget);
       final prefs = await SharedPreferences.getInstance();
       final kept = HomeLocation.tryParse(prefs.getString(StorageKeys.homeLocation));

@@ -13,30 +13,32 @@ class AppColors {
 
   // Text
   static const Color brandForeground = Color(0xFF0A0D1E);
-  static const Color brandMutedText = Color(0xFF5B6B82);
-  static const Color brandPlaceholder = Color(0xFF5F6D83);
+  static const Color brandMutedText = Color(0xFF3A4960);
+  static const Color brandPlaceholder = Color(0xFF4A5A72);
   static const Color brandOnPrimary = Color(0xFFFFFFFF);
 
-  // Brand
+  // Brand: fixed by the brand kit (logos and corporate colours); never change these two or the gradient.
   static const Color brandPrimary = Color(0xFF135CFF);
   static const Color brandAccent = Color(0xFFC026D3);
 
-  /// Blue for text links; `brandPrimary` is 4.9:1 on the page, this is 5.3:1.
-  static const Color brandLink = Color(0xFF1F5AE6);
+  /// Blue for text links: 7.7:1 on the page, 7.4:1 on the input fill.
+  static const Color brandLink = Color(0xFF0B3FC4);
   static const Color brandInstruction = Color(0xFF135CFF);
 
   // Lines and status
   static const Color brandBorder = Color(0x1F135CFF);
-  static const Color brandBorderFocused = Color(0x4D135CFF);
+
+  /// Focus ring: solid brand blue (5.3:1 on white) so it reads at 3:1 or better.
+  static const Color brandBorderFocused = Color(0xFF135CFF);
   static const Color brandOutline = Color(0xFFDEDEDE);
 
-  /// Edge of a control that must be seen to be found (3:1 on white, page and input fill).
-  static const Color brandControlBorder = Color(0xFF76839B);
+  /// Edge of a control that must be seen to be found (4.8:1 or better on white, page and input fill).
+  static const Color brandControlBorder = Color(0xFF5B6B82);
   static const Color brandDivider = Color(0xFFDCE4E8);
-  static const Color brandError = Color(0xFFC81E1E);
+  static const Color brandError = Color(0xFFA31515);
 
-  /// Success marks (tick badges); 3:1 against white.
-  static const Color brandSuccess = Color(0xFF16A34A);
+  /// Success marks (tick badges); 5:1 against white.
+  static const Color brandSuccess = Color(0xFF15803D);
 
   // Sell flow (Figma: Create Listing, AI intro card)
   static const Color sellAiCardStart = Color(0xFFEDE9FF);
@@ -45,7 +47,7 @@ class AppColors {
   static const Color sellAddTile = Color(0x14135CFF);
 
   /// Selected condition chip: green text on a pale green fill (text 4.5:1 or better).
-  static const Color brandSuccessText = Color(0xFF166534);
+  static const Color brandSuccessText = Color(0xFF14532D);
   static const Color brandSuccessTint = Color(0xFFE8F6ED);
 
   /// Price note card: pale amber fill and border (Figma Make).
@@ -59,10 +61,10 @@ class AppColors {
 
   // Onboarding only (Figma: Just Qlic)
   static const Color onboardingSkipBackground = Color(0xFFE9E9FF);
-  static const Color onboardingSkipText = Color(0xFF4A4AE0);
-  static const Color onboardingSubtitle = Color(0xFF6F6B6B);
-  static const Color onboardingDotActive = Color(0xFFD708B7);
-  static const Color onboardingDotInactive = Color(0xFF0149FD);
-  static const Color onboardingBackButton = Color(0xFFE703B2);
-  static const Color onboardingNextButton = Color(0xFF0149FD);
+  static const Color onboardingSkipText = Color(0xFF2F2FB5);
+  static const Color onboardingSubtitle = Color(0xFF4A4646);
+  static const Color onboardingDotActive = Color(0xFFB0068F);
+  static const Color onboardingDotInactive = Color(0xFF0A38B0);
+  static const Color onboardingBackButton = Color(0xFFB0068F);
+  static const Color onboardingNextButton = Color(0xFF0A38B0);
 }
