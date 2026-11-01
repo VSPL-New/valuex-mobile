@@ -7,6 +7,7 @@ import '../../../core/network/api_client.dart';
 import '../../../core/network/api_error.dart';
 import '../../../core/network/api_error_mapper.dart';
 import '../domain/category.dart';
+import '../domain/existing_listing.dart';
 import '../domain/listing_details.dart';
 import '../domain/listing_schema.dart';
 import '../domain/plan_selection.dart';
@@ -39,6 +40,16 @@ class ListingRepository {
   /// `AADHAAR_VERIFICATION_REQUIRED`.
   Future<void> submitDraft(String listingId) =>
       _client.post<void>(ApiConstants.listingSubmit(listingId));
+
+  /// Loads a listing the seller already created, to reopen it from a notification (US-115).
+  Future<ExistingListing> getListing(String listingId) => _client.get(
+        ApiConstants.listing(listingId),
+        parse: (json) => ExistingListing.fromJson(json as Map<String, dynamic>),
+      );
+
+  /// Sends a listing that needed changes back to the Trust & Safety review without a new payment.
+  Future<void> resubmitForReview(String listingId) =>
+      _client.post<void>(ApiConstants.listingTrustSafetyReview(listingId));
 
   Future<UploadTicket> requestUpload({
     required String listingId,

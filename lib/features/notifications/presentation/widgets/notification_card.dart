@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../profile/presentation/widgets/profile_menu_section.dart';
 import '../../domain/app_notification.dart';
 import '../notification_presentation.dart';
+import '../notification_text.dart';
 
 /// One notification. Unread ones have a tinted background, a bar on the left and a dot, and are
 /// announced as "Unread" so the state never depends on colour alone.
@@ -23,11 +24,13 @@ class NotificationCard extends StatelessWidget {
     final unread = !notification.read;
     final alert = notification.isAlert;
     final time = notificationTimeLabel(context, notification.createdAt);
+    final title = notificationTitle(l10n, notification);
+    final body = notificationBody(l10n, notification);
     final radius = BorderRadius.circular(AppRadius.lg);
     final spoken = [
       if (unread) l10n.notificationUnread,
-      notification.title,
-      notification.body,
+      title,
+      body,
       time,
     ].join('. ');
 
@@ -87,7 +90,7 @@ class NotificationCard extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      notification.title,
+                                      title,
                                       style: unread
                                           ? AppTextStyles.cardTitle
                                           : AppTextStyles.cardTitle.copyWith(
@@ -113,7 +116,7 @@ class NotificationCard extends StatelessWidget {
                                 ],
                               ),
                               const SizedBox(height: AppSpacing.xs),
-                              Text(notification.body, style: AppTextStyles.bodySecondary),
+                              Text(body, style: AppTextStyles.bodySecondary),
                               const SizedBox(height: AppSpacing.sm),
                               Text(time, style: AppTextStyles.hint),
                             ],

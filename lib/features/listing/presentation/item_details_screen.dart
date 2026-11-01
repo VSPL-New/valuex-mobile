@@ -103,14 +103,14 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
     }
     switch (check.result) {
       case RestrictedResult.safe:
-        unawaited(context.push(RouteNames.sellPlan, extra: _planArgs()));
+        await _afterRestrictedCheck();
       case RestrictedResult.complianceRequired:
         final agreed = await showComplianceDialog(context, check);
         if (!agreed || !mounted) return;
         final error = await _controller.acceptCompliance(check);
         if (!mounted) return;
         if (error == null) {
-          unawaited(context.push(RouteNames.sellPlan, extra: _planArgs()));
+          await _afterRestrictedCheck();
         } else {
           _showError(error);
         }
@@ -131,6 +131,22 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
     _showMessage(listingErrorMessage(AppLocalizations.of(context), error));
   }
 
+  /// A new listing goes on to plan selection; one that needed changes goes back to review without
+  /// a new payment (US-115).
+  Future<void> _afterRestrictedCheck() async {
+    if (!widget.args.isRevision) {
+      unawaited(context.push(RouteNames.sellPlan, extra: _planArgs()));
+      return;
+    }
+    final error = await _controller.resubmit();
+    if (!mounted) return;
+    if (error != null) {
+      _showError(error);
+      return;
+    }
+    unawaited(context.push(RouteNames.sellSubmitted, extra: widget.args.listingId));
+  }
+
   /// The draft and what the plan and review pages repeat back to the seller.
   PlanArgs _planArgs() {
     final state = ref.read(itemDetailsControllerProvider(widget.args));
@@ -149,7 +165,7 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
         description: draft.description,
         thumbnailBytes: photo?.bytes,
         conditionLabel: state.schema?.common.conditionVisible == true && draft.condition != null
-            ? _conditionLabel(AppLocalizations.of(context), draft.condition!)
+            ? listingConditionLabel(AppLocalizations.of(context), draft.condition!)
             : '',
         city: location is LocationKnown ? location.location.city : '',
       ),
@@ -251,7 +267,9 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                       const SizedBox(height: AppSpacing.sm),
                     ],
                     BrandGradientButton(
-                      label: l10n.itemChooseListingPlan,
+                      label: widget.args.isRevision
+                          ? l10n.itemResubmitForReview
+                          : l10n.itemChooseListingPlan,
                       trailingIcon: Icons.chevron_right_rounded,
                       isLoading: state.isSaving,
                       onPressed: state.canContinue ? () => unawaited(_continue()) : null,
@@ -313,7 +331,7 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                   children: [
                     for (final condition in ListingCondition.values)
                       OptionChip(
-                        label: _conditionLabel(l10n, condition),
+                        label: listingConditionLabel(l10n, condition),
                         selected: draft.condition == condition,
                         tone: OptionChipTone.success,
                         onTap: () => _controller.setCondition(condition),
@@ -468,7 +486,7 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
   }
 }
 
-String _conditionLabel(AppLocalizations l10n, ListingCondition condition) {
+String listingConditionLabel(AppLocalizations l10n, ListingCondition condition) {
   return switch (condition) {
     ListingCondition.brandNew => l10n.itemConditionNew,
     ListingCondition.likeNew => l10n.itemConditionLikeNew,

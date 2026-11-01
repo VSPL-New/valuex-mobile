@@ -50,7 +50,7 @@ void main() {
       expect(find.text('Approved? You are live.'), findsOneWidget);
       expect(find.text('We publish your listing automatically.'), findsOneWidget);
       expect(find.text('Anything needed from you?'), findsOneWidget);
-      expect(find.text('It will appear in your listing updates.'), findsOneWidget);
+      expect(find.text('We will notify you if any action is required.'), findsOneWidget);
       expect(find.byIcon(Icons.schedule_outlined), findsOneWidget);
       expect(find.byIcon(Icons.verified_user_outlined), findsOneWidget);
       expect(find.byIcon(Icons.notifications_none_rounded), findsOneWidget);
@@ -59,10 +59,11 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('never promises a notification until the notifications exist', (tester) async {
+    testWidgets('promises a notification only for what needs action, not that it is live',
+        (tester) async {
       final harness = await open(tester);
 
-      expect(find.textContaining('notify'), findsNothing);
+      expect(find.textContaining('notify you if any action is required'), findsOneWidget);
       expect(find.textContaining('is live'), findsNothing);
       expect(find.textContaining('published'), findsNothing);
       await harness.dispose();
@@ -121,7 +122,8 @@ void main() {
       expect(find.text('मंज़ूरी मिलते ही लाइव।'), findsOneWidget);
       expect(find.text('आपकी लिस्टिंग अपने आप प्रकाशित हो जाएगी।'), findsOneWidget);
       expect(find.text('आपसे कोई कार्रवाई चाहिए?'), findsOneWidget);
-      expect(find.text('वह आपकी लिस्टिंग अपडेट में दिखेगी।'), findsOneWidget);
+      expect(
+          find.text('आपसे किसी कार्रवाई की ज़रूरत होने पर हम आपको सूचित करेंगे।'), findsOneWidget);
       expect(find.text('अपनी लिस्टिंग का पूर्वावलोकन देखें'), findsOneWidget);
       expect(find.text('होम पर वापस जाएँ'), findsOneWidget);
       await harness.dispose();

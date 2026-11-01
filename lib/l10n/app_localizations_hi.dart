@@ -1649,7 +1649,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get submittedActionTitle => 'आपसे कोई कार्रवाई चाहिए?';
 
   @override
-  String get submittedActionMessage => 'वह आपकी लिस्टिंग अपडेट में दिखेगी।';
+  String get submittedActionMessage => 'आपसे किसी कार्रवाई की ज़रूरत होने पर हम आपको सूचित करेंगे।';
 
   @override
   String get submittedPreview => 'अपनी लिस्टिंग का पूर्वावलोकन देखें';
@@ -1668,4 +1668,85 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get planErrorNotAvailable => 'यह प्लान आपकी लिस्टिंग के लिए उपलब्ध नहीं है';
+
+  @override
+  String get notifListingUnderReviewTitle => 'लिस्टिंग की समीक्षा चल रही है';
+
+  @override
+  String get notifListingUnderReviewBody =>
+      'भुगतान प्राप्त हुआ। आपकी लिस्टिंग की समीक्षा चल रही है, कुछ घंटों में जाँच हो जाएगी।';
+
+  @override
+  String get notifListingPublishedTitle => 'आपकी लिस्टिंग लाइव है';
+
+  @override
+  String notifListingPublishedBody(String title) {
+    return 'आपकी लिस्टिंग \"$title\" अब लाइव है। खरीदार इसे देख सकते हैं।';
+  }
+
+  @override
+  String get notifListingRevisionTitle => 'आपकी लिस्टिंग में बदलाव ज़रूरी हैं';
+
+  @override
+  String notifListingRevisionBody(String title, String reason, int attempt) {
+    return 'आपकी लिस्टिंग \"$title\" में बदलाव ज़रूरी हैं: $reason। इसे सुधारकर दोबारा भेजें (समीक्षा $attempt/3)। दोबारा भुगतान नहीं करना होगा।';
+  }
+
+  @override
+  String notifListingRevisionEditBody(String title, String reason) {
+    return 'आपकी लिस्टिंग \"$title\" में बदलाव ज़रूरी हैं: $reason। इसे सुधारकर दोबारा भेजें। दोबारा भुगतान नहीं करना होगा।';
+  }
+
+  @override
+  String get notifListingRejectedTitle => 'लिस्टिंग स्वीकृत नहीं हुई';
+
+  @override
+  String notifListingRejectedBody(String title) {
+    return 'आपकी लिस्टिंग \"$title\" 3 समीक्षाओं के बाद भी स्वीकृत नहीं हुई।';
+  }
+
+  @override
+  String notifListingRejectedRefundBody(String title, String amount) {
+    return 'आपकी लिस्टिंग \"$title\" 3 समीक्षाओं के बाद भी स्वीकृत नहीं हुई। आपके प्लान शुल्क ₹$amount की वापसी की जाएगी।';
+  }
+
+  @override
+  String get notifListingRefundTitle => 'वापसी प्रक्रिया में है';
+
+  @override
+  String notifListingRefundBody(String amount) {
+    return 'लिस्टिंग प्लान के ₹$amount की वापसी प्रक्रिया में है।';
+  }
+
+  @override
+  String get notifListingPaymentFailedTitle => 'भुगतान सफल नहीं हुआ';
+
+  @override
+  String get notifListingPaymentFailedBody =>
+      'आपका भुगतान सफल नहीं हुआ। कृपया दोबारा कोशिश करें या दूसरा प्लान चुनें।';
+
+  @override
+  String get notifListingExpiredTitle => 'लिस्टिंग की अवधि समाप्त';
+
+  @override
+  String notifListingExpiredBody(String title) {
+    return 'आपकी लिस्टिंग \"$title\" की अवधि समाप्त हो गई है। फिर से दिखाने के लिए इसे रिन्यू करें।';
+  }
+
+  @override
+  String get notifListingRemovedTitle => 'लिस्टिंग हटाई गई';
+
+  @override
+  String notifListingRemovedBody(String title) {
+    return 'आपकी लिस्टिंग \"$title\" को JustQlic ने हटा दिया है। विवरण के लिए सहायता से संपर्क करें।';
+  }
+
+  @override
+  String get notifListingNotFound => 'यह लिस्टिंग अब उपलब्ध नहीं है';
+
+  @override
+  String get notifListingNotActionable => 'इस लिस्टिंग को अब यहाँ बदला नहीं जा सकता';
+
+  @override
+  String get itemResubmitForReview => 'समीक्षा के लिए दोबारा भेजें';
 }

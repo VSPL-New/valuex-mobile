@@ -8,6 +8,9 @@ const Set<String> _alertEventTypes = {
   'ACCOUNT_UNDER_REVIEW',
   'ACCOUNT_SUSPENDED',
   'ACCOUNT_BANNED',
+  'LISTING_REVISION_REQUIRED',
+  'LISTING_REJECTED_FINAL',
+  'LISTING_REMOVED_BY_ADMIN',
 };
 
 const Map<NotificationCategory, List<String>> _categoryPrefixes = {
@@ -44,6 +47,10 @@ class AppNotification {
 
   /// A path inside the app as the backend sends it, for example `/profile`.
   final String? deepLink;
+
+  /// Values behind the message (title, reason, attempt, amount) so the app can show it in the
+  /// user's language; empty for messages that have none.
+  final Map<String, dynamic> params;
   final NotificationPriority priority;
   final bool read;
   final DateTime createdAt;
@@ -57,6 +64,7 @@ class AppNotification {
     required this.read,
     required this.createdAt,
     this.deepLink,
+    this.params = const {},
   });
 
   NotificationCategory get category => notificationCategoryOf(eventType);
@@ -69,6 +77,7 @@ class AppNotification {
         title: title,
         body: body,
         deepLink: deepLink,
+        params: params,
         priority: priority,
         read: read ?? this.read,
         createdAt: createdAt,

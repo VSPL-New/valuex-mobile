@@ -17,6 +17,7 @@ import '../../profile/presentation/widgets/profile_menu_section.dart';
 import '../domain/app_notification.dart';
 import '../domain/notification_deep_links.dart';
 import 'providers/notifications_providers.dart';
+import 'notification_navigation.dart';
 import 'widgets/notification_card.dart';
 import 'widgets/notification_tabs.dart';
 
@@ -85,7 +86,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
       if (notification.deepLink != null) showComingSoon(context);
       return;
     }
-    if (target.isTab) {
+    if (target.needsListing) {
+      unawaited(openListingNotificationTarget(context, ref, target));
+    } else if (target.isTab) {
       context.go(target.route);
     } else {
       unawaited(context.push(target.route));
