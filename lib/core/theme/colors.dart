@@ -14,7 +14,9 @@ class AppColors {
   // Text
   static const Color brandForeground = Color(0xFF0A0D1E);
   static const Color brandMutedText = Color(0xFF3A4960);
-  static const Color brandPlaceholder = Color(0xFF4A5A72);
+
+  /// Hint text: 4.6:1 on the input fill, light enough not to read as typed text.
+  static const Color brandPlaceholder = Color(0xFF626E80);
   static const Color brandOnPrimary = Color(0xFFFFFFFF);
 
   // Brand: fixed by the brand kit (logos and corporate colours); never change these two or the gradient.
