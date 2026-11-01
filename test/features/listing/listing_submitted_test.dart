@@ -21,6 +21,7 @@ void main() {
     WidgetTester tester, {
     Object? extra = 'l1',
     double textScale = 1,
+    Size size = const Size(390, 844),
   }) async {
     final notifications = _MockNotifications();
     when(notifications.unreadCount).thenAnswer((_) async => 0);
@@ -31,7 +32,7 @@ void main() {
     tester.platformDispatcher.textScaleFactorTestValue = textScale;
     addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
     await harness.launch(location: RouteNames.home);
-    tester.view.physicalSize = Size(1080, 1800 * textScale * 3);
+    tester.view.physicalSize = size * tester.view.devicePixelRatio;
     harness.container.read(appRouterProvider).go(RouteNames.sellSubmitted, extra: extra);
     await harness.settle();
     return harness;
@@ -44,8 +45,15 @@ void main() {
 
       expect(find.byType(ListingSubmittedScreen), findsOneWidget);
       expect(find.text('Your listing is submitted'), findsOneWidget);
-      expect(find.textContaining('under Trust & Safety compliance review'), findsOneWidget);
-      expect(find.textContaining('goes live automatically if it is compliant'), findsOneWidget);
+      expect(find.text('Under Trust & Safety review'), findsOneWidget);
+      expect(find.text('This may take a few minutes.'), findsOneWidget);
+      expect(find.text('Approved? You are live.'), findsOneWidget);
+      expect(find.text('We publish your listing automatically.'), findsOneWidget);
+      expect(find.text('Anything needed from you?'), findsOneWidget);
+      expect(find.text('It will appear in your listing updates.'), findsOneWidget);
+      expect(find.byIcon(Icons.schedule_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.verified_user_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.notifications_none_rounded), findsOneWidget);
       expect(find.text('Preview your listing'), findsOneWidget);
       expect(find.text('Back to Home'), findsOneWidget);
       await harness.dispose();
@@ -108,6 +116,12 @@ void main() {
       final harness = await open(tester);
 
       expect(find.text('आपकी लिस्टिंग जमा हो गई है'), findsOneWidget);
+      expect(find.text('ट्रस्ट एंड सेफ्टी समीक्षा जारी है'), findsOneWidget);
+      expect(find.text('इसमें कुछ मिनट लग सकते हैं।'), findsOneWidget);
+      expect(find.text('मंज़ूरी मिलते ही लाइव।'), findsOneWidget);
+      expect(find.text('आपकी लिस्टिंग अपने आप प्रकाशित हो जाएगी।'), findsOneWidget);
+      expect(find.text('आपसे कोई कार्रवाई चाहिए?'), findsOneWidget);
+      expect(find.text('वह आपकी लिस्टिंग अपडेट में दिखेगी।'), findsOneWidget);
       expect(find.text('अपनी लिस्टिंग का पूर्वावलोकन देखें'), findsOneWidget);
       expect(find.text('होम पर वापस जाएँ'), findsOneWidget);
       await harness.dispose();
@@ -124,13 +138,25 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('lays out without overflow at 2x text size', (tester) async {
-      final harness = await open(tester, textScale: 2);
+    for (final language in ['en', 'hi']) {
+      testWidgets('scrolls without overflow on a narrow phone at 2x text size in $language',
+          (tester) async {
+        tester.platformDispatcher.localesTestValue = [Locale(language)];
+        addTearDown(tester.platformDispatcher.clearAllTestValues);
+        final harness = await open(tester, textScale: 2, size: const Size(320, 640));
 
-      expect(tester.takeException(), isNull);
-      expect(find.text('Preview your listing'), findsOneWidget);
-      expect(find.text('Back to Home'), findsOneWidget);
-      await harness.dispose();
-    });
+        expect(tester.takeException(), isNull);
+        final preview = find
+            .text(language == 'en' ? 'Preview your listing' : 'अपनी लिस्टिंग का पूर्वावलोकन देखें');
+        await tester.ensureVisible(preview);
+        await harness.settle();
+        await tester.tap(preview);
+        await harness.settle();
+        expect(find.text(language == 'en' ? 'Preview is coming soon' : 'पूर्वावलोकन जल्द आ रहा है'),
+            findsOneWidget);
+        expect(tester.takeException(), isNull);
+        await harness.dispose();
+      });
+    }
   });
 }

@@ -1618,8 +1618,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get reviewTrustNote =>
-      'Our Trust & Safety team checks every listing, usually within a few hours.';
+  String get reviewListedPrice => 'Listed price';
+
+  @override
+  String get reviewPaymentSection => 'Payment summary';
+
+  @override
+  String get reviewTrustTitle => 'Trust & Safety review';
+
+  @override
+  String get reviewTrustNote => 'Every listing is checked before going live.';
+
+  @override
+  String get reviewApprovalNote => 'Goes live after Trust & Safety approval';
 
   @override
   String reviewPay(String amount) {
@@ -1633,8 +1644,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get submittedTitle => 'Your listing is submitted';
 
   @override
-  String get submittedMessage =>
-      'Your listing is under Trust & Safety compliance review. It may take a few minutes. If any action is required, you will see it in your listing updates; otherwise your listing goes live automatically if it is compliant.';
+  String get submittedReviewStatus => 'Under Trust & Safety review';
+
+  @override
+  String get submittedReviewTiming => 'This may take a few minutes.';
+
+  @override
+  String get submittedApprovalTitle => 'Approved? You are live.';
+
+  @override
+  String get submittedApprovalMessage => 'We publish your listing automatically.';
+
+  @override
+  String get submittedActionTitle => 'Anything needed from you?';
+
+  @override
+  String get submittedActionMessage => 'It will appear in your listing updates.';
 
   @override
   String get submittedPreview => 'Preview your listing';

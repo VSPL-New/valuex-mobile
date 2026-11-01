@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import '../../payment/domain/payment_checkout.dart';
 import 'seller_plan.dart';
 
@@ -36,12 +38,18 @@ class ListingSummary {
   final String categoryPath;
   final String price;
   final String description;
+  final Uint8List? thumbnailBytes;
+  final String conditionLabel;
+  final String city;
 
   const ListingSummary({
     required this.title,
     required this.categoryPath,
     required this.price,
     required this.description,
+    this.thumbnailBytes,
+    this.conditionLabel = '',
+    this.city = '',
   });
 }
 

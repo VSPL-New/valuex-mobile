@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -16,6 +17,8 @@ import 'package:valuex_mobile/features/listing/presentation/listing_plan_screen.
 import 'package:valuex_mobile/features/listing/presentation/listing_submitted_screen.dart';
 import 'package:valuex_mobile/features/listing/presentation/providers/plan_selection_controller.dart';
 import 'package:valuex_mobile/features/listing/presentation/review_listing_screen.dart';
+import 'package:valuex_mobile/features/listing/presentation/widgets/plan_breakdown.dart';
+import 'package:valuex_mobile/l10n/app_localizations.dart';
 import 'package:valuex_mobile/features/notifications/data/notifications_repository.dart';
 import 'package:valuex_mobile/features/payment/domain/payment_checkout.dart';
 import 'package:valuex_mobile/features/payment/domain/payment_status.dart';
@@ -240,6 +243,7 @@ void main() {
       String route, {
       double textScale = 1,
       Locale? locale,
+      Size? size,
     }) async {
       final notifications = _MockNotifications();
       when(notifications.unreadCount).thenAnswer((_) async => 0);
@@ -251,20 +255,31 @@ void main() {
         ..signedInAs(AccountStatus.active, aadhaarVerified: true);
       tester.platformDispatcher.textScaleFactorTestValue = textScale;
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      if (locale != null) {
+        tester.platformDispatcher.localesTestValue = [locale];
+        addTearDown(tester.platformDispatcher.clearLocalesTestValue);
+      }
       await harness.launch(location: RouteNames.home);
-      tester.view.physicalSize = Size(1080, 1800 * textScale * 3);
+      tester.view.physicalSize =
+          size == null ? Size(1080, 1800 * textScale * 3) : size * tester.view.devicePixelRatio;
       harness.container.read(appRouterProvider).go(route, extra: extra);
       await harness.settle();
       return harness;
     }
 
     Future<AppHarness> openReview(WidgetTester tester, PlanSelection selection,
-        {double textScale = 1}) {
+        {double textScale = 1,
+        ListingSummary summary = _summary,
+        SellerPlan? plan,
+        Size? size,
+        Locale? locale}) {
       return open(
         tester,
-        ReviewArgs(listingId: 'l1', summary: _summary, plan: _plan, selection: selection),
+        ReviewArgs(listingId: 'l1', summary: summary, plan: plan ?? _plan, selection: selection),
         RouteNames.sellReview,
         textScale: textScale,
+        size: size,
+        locale: locale,
       );
     }
 
@@ -329,6 +344,110 @@ void main() {
     });
 
     group('review page', () {
+      testWidgets('renders C with the listing photo and metadata', (tester) async {
+        final bytes =
+            (await rootBundle.load('assets/images/home_listing_ipad.jpg')).buffer.asUint8List();
+        final summary = ListingSummary(
+          title: 'iPad Pro 11-inch, 128GB Space Grey',
+          categoryPath: 'Tablets',
+          price: '48,000',
+          description:
+              'Excellent condition. Apple Pencil included. Original box and charger available.',
+          thumbnailBytes: bytes,
+          conditionLabel: 'Like new',
+          city: 'Mumbai',
+        );
+        final harness =
+            await openReview(tester, _paid, summary: summary, size: const Size(390, 900));
+        await tester.pumpAndSettle();
+
+        final photo = tester.widget<Image>(find.byType(Image));
+        await tester.runAsync(() => precacheImage(photo.image, tester.element(find.byType(Image))));
+        await tester.pump();
+        expect(tester.widget<RawImage>(find.byType(RawImage)).image, isNotNull);
+        expect((photo.image as ResizeImage).imageProvider, isA<MemoryImage>());
+        expect(photo.width, 82);
+        expect(photo.height, 66);
+        expect(find.text('Tablets · Like new · Mumbai'), findsOneWidget);
+        expect(find.text('₹48,000'), findsOneWidget);
+        expect(tester.widget<PlanBreakdown>(find.byType(PlanBreakdown)).framed, isFalse);
+        expect(tester.takeException(), isNull);
+        await harness.dispose();
+      });
+
+      testWidgets('handles an undecodable thumbnail without losing the summary', (tester) async {
+        final harness = await openReview(tester, _paid,
+            summary: ListingSummary(
+              title: 'Chair',
+              categoryPath: '',
+              price: '500',
+              description: 'Wooden chair',
+              thumbnailBytes: Uint8List.fromList([1, 2, 3]),
+            ));
+        await tester.pumpAndSettle();
+
+        expect(find.byIcon(Icons.image_not_supported_outlined), findsOneWidget);
+        expect(find.text('Chair'), findsOneWidget);
+        expect(find.text('₹500'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+        await harness.dispose();
+      });
+
+      testWidgets('shows a free breakdown without paid amounts', (tester) async {
+        const freePlan = SellerPlan(
+            code: 'FREE',
+            name: 'Basic',
+            price: 0,
+            validityDays: 7,
+            supportLevel: 'AI',
+            totalAmount: 0);
+        final harness = await openReview(tester, _free, plan: freePlan);
+
+        expect(find.text('Free'), findsNWidgets(2));
+        expect(find.text('No payment is needed for this plan.'), findsOneWidget);
+        expect(find.text('₹149'), findsNothing);
+        expect(find.text('Publish'), findsOneWidget);
+        expect(find.byType(Image), findsNothing);
+        await harness.dispose();
+      });
+
+      for (final language in ['en', 'hi']) {
+        testWidgets('C scrolls and keeps checkout usable at 320px and 2x text in $language',
+            (tester) async {
+          when(() => flow.start(any(), any())).thenAnswer((_) async => PaymentResult.cancelled);
+          final bytes =
+              (await rootBundle.load('assets/images/home_listing_ipad.jpg')).buffer.asUint8List();
+          final harness = await openReview(tester, _paid,
+              textScale: 2,
+              size: const Size(320, 640),
+              locale: Locale(language),
+              summary: ListingSummary(
+                title: 'iPad Pro 11-inch with a keyboard and Apple Pencil',
+                categoryPath: 'Electronics > Tablets',
+                price: '100000000',
+                description: 'Original accessories included. ' * 20,
+                thumbnailBytes: bytes,
+                conditionLabel: 'Like new',
+                city: 'Mumbai',
+              ));
+          final l10n = AppLocalizations.of(tester.element(find.byType(ReviewListingScreen)));
+          expect(l10n.localeName, language);
+          expect(tester.takeException(), isNull);
+          await tester.scrollUntilVisible(find.text(l10n.reviewTrustTitle), 180,
+              scrollable: find
+                  .descendant(
+                      of: find.byType(ReviewListingScreen), matching: find.byType(Scrollable))
+                  .first);
+          await tester.pumpAndSettle();
+          expect(tester.takeException(), isNull);
+          await tester.tap(find.text(l10n.reviewPay('₹149')));
+          await harness.settle();
+          verify(() => flow.start(any(), _checkout)).called(1);
+          expect(find.byType(ReviewListingScreen), findsOneWidget);
+          await harness.dispose();
+        });
+      }
+
       testWidgets('shows the item, the plan, the breakdown, the note and the pay button',
           (tester) async {
         final harness = await openReview(tester, _paid);
@@ -340,8 +459,12 @@ void main() {
         expect(find.text('A sturdy chair'), findsOneWidget);
         expect(find.text('Boosted'), findsOneWidget);
         expect(find.text('Valid for 7 days'), findsOneWidget);
-        expect(find.text('Inclusive of GST'), findsOneWidget);
-        expect(find.textContaining('Trust & Safety team'), findsOneWidget);
+        expect(find.text('GST included'), findsOneWidget);
+        expect(find.text('Trust & Safety review'), findsOneWidget);
+        expect(find.text('Every listing is checked before going live.'), findsOneWidget);
+        expect(find.text('YOUR ITEM'), findsOneWidget);
+        expect(find.text('YOUR PLAN'), findsOneWidget);
+        expect(find.text('PAYMENT SUMMARY'), findsOneWidget);
         expect(find.text('Pay ₹149 & Publish'), findsOneWidget);
         await harness.dispose();
       });

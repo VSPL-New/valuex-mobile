@@ -2949,11 +2949,35 @@ abstract class AppLocalizations {
   /// **'Valid for {days} days'**
   String reviewValidity(int days);
 
+  /// No description provided for @reviewListedPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Listed price'**
+  String get reviewListedPrice;
+
+  /// No description provided for @reviewPaymentSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment summary'**
+  String get reviewPaymentSection;
+
+  /// No description provided for @reviewTrustTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trust & Safety review'**
+  String get reviewTrustTitle;
+
   /// No description provided for @reviewTrustNote.
   ///
   /// In en, this message translates to:
-  /// **'Our Trust & Safety team checks every listing, usually within a few hours.'**
+  /// **'Every listing is checked before going live.'**
   String get reviewTrustNote;
+
+  /// No description provided for @reviewApprovalNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Goes live after Trust & Safety approval'**
+  String get reviewApprovalNote;
 
   /// No description provided for @reviewPay.
   ///
@@ -2973,11 +2997,41 @@ abstract class AppLocalizations {
   /// **'Your listing is submitted'**
   String get submittedTitle;
 
-  /// No description provided for @submittedMessage.
+  /// No description provided for @submittedReviewStatus.
   ///
   /// In en, this message translates to:
-  /// **'Your listing is under Trust & Safety compliance review. It may take a few minutes. If any action is required, you will see it in your listing updates; otherwise your listing goes live automatically if it is compliant.'**
-  String get submittedMessage;
+  /// **'Under Trust & Safety review'**
+  String get submittedReviewStatus;
+
+  /// No description provided for @submittedReviewTiming.
+  ///
+  /// In en, this message translates to:
+  /// **'This may take a few minutes.'**
+  String get submittedReviewTiming;
+
+  /// No description provided for @submittedApprovalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved? You are live.'**
+  String get submittedApprovalTitle;
+
+  /// No description provided for @submittedApprovalMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'We publish your listing automatically.'**
+  String get submittedApprovalMessage;
+
+  /// No description provided for @submittedActionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything needed from you?'**
+  String get submittedActionTitle;
+
+  /// No description provided for @submittedActionMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'It will appear in your listing updates.'**
+  String get submittedActionMessage;
 
   /// No description provided for @submittedPreview.
   ///

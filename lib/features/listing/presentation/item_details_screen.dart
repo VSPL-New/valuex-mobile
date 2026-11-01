@@ -19,12 +19,14 @@ import '../../home/presentation/widgets/location_prompt.dart';
 import '../../home/presentation/widgets/location_sheet.dart';
 import '../../home/presentation/widgets/saved_location_dialog.dart';
 import '../domain/listing_details.dart';
+import '../domain/listing_photo.dart';
 import '../domain/listing_schema.dart';
 import '../domain/plan_selection.dart';
 import '../domain/restricted_check.dart';
 import 'category_picker_screen.dart';
 import 'listing_error_messages.dart';
 import 'providers/item_details_controller.dart';
+import 'providers/create_listing_controller.dart';
 import 'widgets/option_chip.dart';
 import 'widgets/restricted_item_dialogs.dart';
 import 'widgets/schema_field_input.dart';
@@ -133,6 +135,11 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
   PlanArgs _planArgs() {
     final state = ref.read(itemDetailsControllerProvider(widget.args));
     final draft = state.draft;
+    final photos = ref.read(createListingControllerProvider);
+    final photo = photos.listingId == widget.args.listingId
+        ? photos.photos.where((photo) => photo.status == PhotoStatus.ready).firstOrNull
+        : null;
+    final location = ref.read(homeLocationControllerProvider).value;
     return PlanArgs(
       listingId: widget.args.listingId,
       summary: ListingSummary(
@@ -140,6 +147,11 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
         categoryPath: state.category?.path.map((item) => item.name).join(' > ') ?? '',
         price: draft.price,
         description: draft.description,
+        thumbnailBytes: photo?.bytes,
+        conditionLabel: state.schema?.common.conditionVisible == true && draft.condition != null
+            ? _conditionLabel(AppLocalizations.of(context), draft.condition!)
+            : '',
+        city: location is LocationKnown ? location.location.city : '',
       ),
     );
   }
@@ -181,6 +193,7 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                         label: l10n.itemTitleLabel,
                         icon: Icons.edit_outlined,
                         isField: true,
+                        aiGenerated: state.isAiGenerated(DetailsField.title),
                         child: AppTextField(
                           controller: _title,
                           hint: l10n.itemTitleHint,
@@ -188,15 +201,14 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                           onChanged: _controller.setTitle,
                         ),
                       ),
-                      _AiMark(show: state.isAiGenerated(DetailsField.title)),
                       _Hint(show: hints.contains(DetailsField.title), text: l10n.itemTitleRequired),
                       const SizedBox(height: AppSpacing.md),
                       _Section(
                         label: l10n.itemCategoryLabel,
                         icon: Icons.grid_view_rounded,
+                        aiGenerated: state.isAiGenerated(DetailsField.category),
                         child: _CategoryRow(state: state, onTap: _chooseCategory),
                       ),
-                      _AiMark(show: state.isAiGenerated(DetailsField.category)),
                       _Hint(
                           show: hints.contains(DetailsField.category),
                           text: l10n.itemCategoryRequired),
@@ -294,6 +306,7 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
               _Section(
                 label: l10n.itemConditionLabel,
                 icon: Icons.verified_outlined,
+                aiGenerated: state.isAiGenerated(DetailsField.condition),
                 child: Wrap(
                   spacing: AppSpacing.sm,
                   runSpacing: 0,
@@ -308,13 +321,13 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                   ],
                 ),
               ),
-              _AiMark(show: state.isAiGenerated(DetailsField.condition)),
               _Hint(show: hints.contains(DetailsField.condition), text: l10n.itemConditionRequired),
               const SizedBox(height: AppSpacing.md),
               _Section(
                 label: l10n.itemConditionNotesLabel,
                 icon: Icons.build_outlined,
                 isField: true,
+                aiGenerated: state.isAiGenerated(DetailsField.conditionNotes),
                 child: AppTextField(
                   controller: _conditionNotes,
                   hint: l10n.itemConditionNotesHint,
@@ -324,7 +337,6 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                   onChanged: _controller.setConditionNotes,
                 ),
               ),
-              _AiMark(show: state.isAiGenerated(DetailsField.conditionNotes)),
               _Hint(
                   show: hints.contains(DetailsField.conditionNotes),
                   text: l10n.itemConditionNotesRequired),
@@ -334,6 +346,7 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
               label: l10n.itemDescriptionLabel,
               icon: Icons.notes_rounded,
               isField: true,
+              aiGenerated: state.isAiGenerated(DetailsField.description),
               child: AppTextField(
                 controller: _description,
                 hint: l10n.itemDescriptionHint,
@@ -343,7 +356,6 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                 onChanged: _controller.setDescription,
               ),
             ),
-            _AiMark(show: state.isAiGenerated(DetailsField.description)),
             _Hint(
                 show: hints.contains(DetailsField.description), text: l10n.itemDescriptionRequired),
           ],
@@ -371,9 +383,9 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
         const SizedBox(height: AppSpacing.md),
         SoftCard(
           child: _Collapsible(
+            key: ValueKey(schema.category.code),
             title: l10n.itemMoreDetails,
             subtitle: l10n.itemMoreDetailsHint,
-            initiallyOpen: optional.any((field) => state.isAiAttribute(field.key)),
             children: [for (final field in optional) attribute(field)],
           ),
         ),
@@ -480,12 +492,14 @@ class _Section extends StatelessWidget {
   final IconData icon;
   final Widget child;
   final bool isField;
+  final bool aiGenerated;
 
   const _Section({
     required this.label,
     required this.icon,
     required this.child,
     this.isField = false,
+    this.aiGenerated = false,
   });
 
   @override
@@ -501,9 +515,10 @@ class _Section extends StatelessWidget {
           children: [
             IconTile(icon: icon, size: 28),
             const SizedBox(width: AppSpacing.sm),
-            Expanded(
+            Flexible(
                 child:
                     isField ? ExcludeSemantics(child: text) : Semantics(header: true, child: text)),
+            _AiMark(show: aiGenerated),
           ],
         ),
         const SizedBox(height: AppSpacing.sm),
@@ -513,8 +528,8 @@ class _Section extends StatelessWidget {
   }
 }
 
-/// Sparkle and "AI generated" under a field that still holds what AI suggested; it goes away as
-/// soon as the seller edits that field.
+/// Sparkle beside the label of a field that still holds what AI suggested; hover, tap or long
+/// press shows "AI generated". It goes away as soon as the seller edits that field.
 class _AiMark extends StatelessWidget {
   final bool show;
 
@@ -523,19 +538,12 @@ class _AiMark extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!show) return const SizedBox.shrink();
-    return Padding(
-      padding: const EdgeInsets.only(top: AppSpacing.xs),
-      child: Row(
-        children: [
-          const ExcludeSemantics(
-            child: Icon(Icons.auto_awesome, size: 16, color: AppColors.brandLink),
-          ),
-          const SizedBox(width: AppSpacing.xs),
-          Text(
-            AppLocalizations.of(context).itemAiGenerated,
-            style: AppTextStyles.hint.copyWith(color: AppColors.brandForeground),
-          ),
-        ],
+    return Tooltip(
+      message: AppLocalizations.of(context).itemAiGenerated,
+      triggerMode: TooltipTriggerMode.tap,
+      child: const Padding(
+        padding: EdgeInsets.all(AppSpacing.sm),
+        child: Icon(Icons.auto_awesome, size: 16, color: AppColors.brandLink),
       ),
     );
   }
@@ -692,14 +700,11 @@ class _Collapsible extends StatefulWidget {
   final String subtitle;
   final List<Widget> children;
 
-  /// Starts open, e.g. when AI filled something inside.
-  final bool initiallyOpen;
-
   const _Collapsible({
+    super.key,
     required this.title,
     required this.subtitle,
     required this.children,
-    this.initiallyOpen = false,
   });
 
   @override
@@ -707,7 +712,7 @@ class _Collapsible extends StatefulWidget {
 }
 
 class _CollapsibleState extends State<_Collapsible> {
-  late bool _open = widget.initiallyOpen;
+  bool _open = false;
 
   @override
   Widget build(BuildContext context) {
@@ -731,7 +736,9 @@ class _CollapsibleState extends State<_Collapsible> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(widget.title, style: AppTextStyles.cardTitle),
+                        Text(widget.title.toUpperCase(),
+                            style: AppTextStyles.label
+                                .copyWith(color: AppColors.brandForeground, letterSpacing: 0.8)),
                         Text(widget.subtitle, style: AppTextStyles.hint),
                       ],
                     ),
@@ -811,16 +818,22 @@ class _AttributeField extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Semantics(
-            header: true,
-            child: Text(
-              required ? '$label *' : label,
-              style: AppTextStyles.label.copyWith(color: AppColors.brandForeground),
-            ),
+          Row(
+            children: [
+              Flexible(
+                child: Semantics(
+                  header: true,
+                  child: Text(
+                    required ? '$label *' : label,
+                    style: AppTextStyles.label.copyWith(color: AppColors.brandForeground),
+                  ),
+                ),
+              ),
+              _AiMark(show: aiGenerated),
+            ],
           ),
           const SizedBox(height: AppSpacing.xs),
           SchemaFieldInput(field: field, value: value, onChanged: onChanged),
-          _AiMark(show: aiGenerated),
           _VerifyHint(show: verify),
           _Hint(
             show: showHint,

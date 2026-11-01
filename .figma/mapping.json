@@ -4,6 +4,34 @@
   "entries": [
     {
       "figma": {
+        "fileKey": "3LUBiPqzccGNMi3RIHd59d",
+        "nodeId": "4:176",
+        "nodeName": "C  /  Sectioned review"
+      },
+      "local": {
+        "components": [
+          { "path": "lib/features/listing/presentation/review_listing_screen.dart", "tier": "page" },
+          { "path": "lib/features/listing/presentation/widgets/review_item_summary.dart", "tier": "organism" },
+          { "path": "lib/features/listing/presentation/widgets/review_section_title.dart", "tier": "atom" },
+          { "path": "lib/features/listing/presentation/widgets/plan_breakdown.dart", "tier": "organism" },
+          { "path": "lib/features/listing/presentation/widgets/sell_step_header.dart", "tier": "organism" },
+          { "path": "lib/core/widgets/brand_gradient_button.dart", "tier": "atom" }
+        ],
+        "tokens": [
+          "lib/core/theme/colors.dart",
+          "lib/core/theme/spacing.dart",
+          "lib/core/theme/text_styles.dart"
+        ],
+        "stories": []
+      },
+      "sync": {
+        "contentHash": "sha256:89926473af668115ed5b15f318bc9a88f1e795e44a58ed6e397d19e567848b98",
+        "lastSyncedAt": "2026-11-01T00:00:00Z",
+        "status": "in-sync"
+      }
+    },
+    {
+      "figma": {
         "fileKey": "D1BtJ1lsMVRBLtUPBv1UIr",
         "nodeId": "3:126",
         "nodeName": "splash"

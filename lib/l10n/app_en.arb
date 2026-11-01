@@ -645,7 +645,11 @@
       }
     }
   },
-  "reviewTrustNote": "Our Trust & Safety team checks every listing, usually within a few hours.",
+  "reviewListedPrice": "Listed price",
+  "reviewPaymentSection": "Payment summary",
+  "reviewTrustTitle": "Trust & Safety review",
+  "reviewTrustNote": "Every listing is checked before going live.",
+  "reviewApprovalNote": "Goes live after Trust & Safety approval",
   "reviewPay": "Pay {amount} & Publish",
   "@reviewPay": {
     "placeholders": {
@@ -656,7 +660,12 @@
   },
   "reviewPublish": "Publish",
   "submittedTitle": "Your listing is submitted",
-  "submittedMessage": "Your listing is under Trust & Safety compliance review. It may take a few minutes. If any action is required, you will see it in your listing updates; otherwise your listing goes live automatically if it is compliant.",
+  "submittedReviewStatus": "Under Trust & Safety review",
+  "submittedReviewTiming": "This may take a few minutes.",
+  "submittedApprovalTitle": "Approved? You are live.",
+  "submittedApprovalMessage": "We publish your listing automatically.",
+  "submittedActionTitle": "Anything needed from you?",
+  "submittedActionMessage": "It will appear in your listing updates.",
   "submittedPreview": "Preview your listing",
   "submittedPreviewSoon": "Preview is coming soon",
   "submittedHome": "Back to Home",

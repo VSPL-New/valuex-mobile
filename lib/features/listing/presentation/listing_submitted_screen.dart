@@ -43,7 +43,7 @@ class ListingSubmittedScreen extends StatelessWidget {
                     children: [
                       const Spacer(),
                       const Center(child: _SuccessMark()),
-                      const SizedBox(height: AppSpacing.lg),
+                      const SizedBox(height: AppSpacing.md),
                       Semantics(
                         header: true,
                         child: Text(
@@ -52,11 +52,45 @@ class ListingSubmittedScreen extends StatelessWidget {
                           textAlign: TextAlign.center,
                         ),
                       ),
+                      const SizedBox(height: AppSpacing.lg),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const ExcludeSemantics(
+                            child: Icon(Icons.schedule_outlined, color: AppColors.brandLink),
+                          ),
+                          const SizedBox(width: AppSpacing.sm),
+                          Flexible(
+                            child: Text(
+                              l10n.submittedReviewStatus,
+                              style: AppTextStyles.body.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.brandLink,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: AppSpacing.sm),
                       Text(
-                        l10n.submittedMessage,
-                        style: AppTextStyles.body,
+                        l10n.submittedReviewTiming,
+                        style: AppTextStyles.bodySecondary,
                         textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+                      const Divider(height: 1, color: AppColors.brandDivider),
+                      const SizedBox(height: AppSpacing.lg),
+                      _SubmissionDetail(
+                        icon: Icons.verified_user_outlined,
+                        title: l10n.submittedApprovalTitle,
+                        message: l10n.submittedApprovalMessage,
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+                      _SubmissionDetail(
+                        icon: Icons.notifications_none_rounded,
+                        title: l10n.submittedActionTitle,
+                        message: l10n.submittedActionMessage,
                       ),
                       const Spacer(),
                       const SizedBox(height: AppSpacing.lg),
@@ -82,20 +116,49 @@ class ListingSubmittedScreen extends StatelessWidget {
   }
 }
 
+class _SubmissionDetail extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String message;
+
+  const _SubmissionDetail({required this.icon, required this.title, required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ExcludeSemantics(child: Icon(icon, color: AppColors.brandLink)),
+        const SizedBox(width: AppSpacing.md),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w700)),
+              const SizedBox(height: AppSpacing.xs),
+              Text(message, style: AppTextStyles.bodySecondary),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _SuccessMark extends StatelessWidget {
   const _SuccessMark();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 88,
-      height: 88,
+      width: 64,
+      height: 64,
       decoration: const BoxDecoration(
         color: AppColors.brandSurfaceTint,
         shape: BoxShape.circle,
       ),
       child: const ExcludeSemantics(
-        child: Icon(Icons.check_rounded, size: 48, color: AppColors.brandLink),
+        child: Icon(Icons.check_rounded, size: 36, color: AppColors.brandLink),
       ),
     );
   }

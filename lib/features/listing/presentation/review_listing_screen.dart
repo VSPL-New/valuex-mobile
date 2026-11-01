@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/network/api_error.dart';
 import '../../../core/routing/route_names.dart';
@@ -10,7 +11,6 @@ import '../../../core/theme/spacing.dart';
 import '../../../core/theme/text_styles.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/brand_gradient_button.dart';
-import '../../../core/widgets/soft_card.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../payment/domain/payment_status.dart';
 import '../../payment/presentation/payment_flow.dart';
@@ -18,6 +18,8 @@ import '../domain/plan_selection.dart';
 import 'listing_error_messages.dart';
 import 'providers/plan_selection_controller.dart';
 import 'widgets/plan_breakdown.dart';
+import 'widgets/review_item_summary.dart';
+import 'widgets/review_section_title.dart';
 import 'widgets/sell_step_header.dart';
 
 /// Sell step 4 of 4 (Figma Make: Review & Publish): the item and plan summary and the pay button.
@@ -110,78 +112,81 @@ class _ReviewListingScreenState extends ConsumerState<ReviewListingScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final args = widget.args;
-    final summary = args.summary;
     final free = !_selection.paymentRequired;
     final selecting = ref.watch(planSelectionControllerProvider);
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SellStepHeader(
-            step: 3,
-            title: l10n.reviewTitle,
-            subtitle: l10n.reviewSubtitle,
-            onBack: () => context.canPop() ? context.pop() : context.go(RouteNames.sell),
+      backgroundColor: AppColors.brandSurface,
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: SellStepHeader(
+              step: 3,
+              title: l10n.reviewTitle,
+              subtitle: l10n.reviewSubtitle,
+              onBack: () => context.canPop() ? context.pop() : context.go(RouteNames.sell),
+            ),
           ),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(AppSpacing.md),
+          SliverPadding(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            sliver: SliverList.list(
               children: [
-                SoftCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Semantics(
-                        header: true,
-                        child: Text(l10n.reviewItemSection, style: AppTextStyles.sectionTitle),
+                ReviewItemSummary(summary: args.summary),
+                const Divider(height: AppSpacing.lg * 2, color: AppColors.brandDivider),
+                ReviewSectionTitle(l10n.reviewPlanSection),
+                const SizedBox(height: AppSpacing.md),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SvgPicture.asset('assets/icons/review_bolt.svg',
+                        width: 22, height: 22, excludeFromSemantics: true),
+                    const SizedBox(width: AppSpacing.sm),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(args.plan.name,
+                              style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w700)),
+                          const SizedBox(height: AppSpacing.xs),
+                          Text(l10n.reviewValidity(args.plan.validityDays),
+                              style: AppTextStyles.bodySecondary),
+                        ],
                       ),
-                      const SizedBox(height: AppSpacing.sm),
-                      Text(summary.title, style: AppTextStyles.cardTitle),
-                      if (summary.categoryPath.isNotEmpty)
-                        Text(summary.categoryPath, style: AppTextStyles.hint),
-                      const SizedBox(height: AppSpacing.xs),
-                      Text(
-                        Formatters.money(double.tryParse(summary.price) ?? 0),
-                        style: AppTextStyles.cardPrice,
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: Text(
+                        args.plan.isFree ? l10n.planFree : Formatters.money(args.plan.totalAmount),
+                        style: AppTextStyles.cardTitle,
+                        textAlign: TextAlign.end,
                       ),
-                      const SizedBox(height: AppSpacing.xs),
-                      Text(
-                        summary.description,
-                        style: AppTextStyles.bodySecondary,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: AppSpacing.md),
-                SoftCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Semantics(
-                        header: true,
-                        child: Text(l10n.reviewPlanSection, style: AppTextStyles.sectionTitle),
+                const Divider(height: AppSpacing.lg * 2, color: AppColors.brandDivider),
+                PlanBreakdown(plan: args.plan, framed: false),
+                const SizedBox(height: AppSpacing.lg),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SvgPicture.asset('assets/icons/review_shield.svg',
+                        width: 22, height: 22, excludeFromSemantics: true),
+                    const SizedBox(width: AppSpacing.sm),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(l10n.reviewTrustTitle,
+                              style: AppTextStyles.bodySecondary.copyWith(
+                                color: AppColors.brandForeground,
+                                fontWeight: FontWeight.w700,
+                              )),
+                          const SizedBox(height: AppSpacing.xs),
+                          Text(l10n.reviewTrustNote, style: AppTextStyles.bodySecondary),
+                        ],
                       ),
-                      const SizedBox(height: AppSpacing.sm),
-                      Text(args.plan.name, style: AppTextStyles.cardTitle),
-                      Text(l10n.reviewValidity(args.plan.validityDays), style: AppTextStyles.hint),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.md),
-                PlanBreakdown(plan: args.plan),
-                const SizedBox(height: AppSpacing.md),
-                Container(
-                  padding: const EdgeInsets.all(AppSpacing.md),
-                  decoration: BoxDecoration(
-                    color: AppColors.sellNoteTint,
-                    borderRadius: BorderRadius.circular(AppRadius.lg),
-                  ),
-                  child: Text(
-                    l10n.reviewTrustNote,
-                    style: AppTextStyles.hint.copyWith(color: AppColors.brandForeground),
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -190,13 +195,14 @@ class _ReviewListingScreenState extends ConsumerState<ReviewListingScreen> {
       ),
       bottomNavigationBar: DecoratedBox(
         decoration: const BoxDecoration(
-          border: Border(top: BorderSide(color: AppColors.brandBorder)),
+          color: AppColors.brandSurface,
+          border: Border(top: BorderSide(color: AppColors.brandDivider)),
         ),
         child: SafeArea(
           top: false,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(
-                AppSpacing.md, AppSpacing.sm, AppSpacing.md, AppSpacing.md),
+                AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, AppSpacing.md),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -207,6 +213,9 @@ class _ReviewListingScreenState extends ConsumerState<ReviewListingScreen> {
                   isLoading: _busy || selecting,
                   onPressed: _pay,
                 ),
+                const SizedBox(height: AppSpacing.sm),
+                Text(l10n.reviewApprovalNote,
+                    textAlign: TextAlign.center, style: AppTextStyles.bodySecondary),
               ],
             ),
           ),

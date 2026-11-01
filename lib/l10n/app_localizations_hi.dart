@@ -1608,8 +1608,19 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get reviewTrustNote =>
-      'हमारी ट्रस्ट एंड सेफ्टी टीम हर लिस्टिंग की जाँच करती है, आमतौर पर कुछ घंटों में।';
+  String get reviewListedPrice => 'लिस्टिंग की कीमत';
+
+  @override
+  String get reviewPaymentSection => 'भुगतान का सारांश';
+
+  @override
+  String get reviewTrustTitle => 'ट्रस्ट एंड सेफ्टी समीक्षा';
+
+  @override
+  String get reviewTrustNote => 'हर लिस्टिंग की लाइव होने से पहले जाँच होती है।';
+
+  @override
+  String get reviewApprovalNote => 'ट्रस्ट एंड सेफ्टी की मंज़ूरी के बाद लाइव होगी';
 
   @override
   String reviewPay(String amount) {
@@ -1623,8 +1634,22 @@ class AppLocalizationsHi extends AppLocalizations {
   String get submittedTitle => 'आपकी लिस्टिंग जमा हो गई है';
 
   @override
-  String get submittedMessage =>
-      'आपकी लिस्टिंग ट्रस्ट एंड सेफ्टी अनुपालन समीक्षा में है। इसमें कुछ मिनट लग सकते हैं। अगर कोई कार्रवाई ज़रूरी हुई तो वह आपको अपनी लिस्टिंग अपडेट में दिखेगी; वरना नियमों के अनुसार होने पर आपकी लिस्टिंग अपने आप लाइव हो जाएगी।';
+  String get submittedReviewStatus => 'ट्रस्ट एंड सेफ्टी समीक्षा जारी है';
+
+  @override
+  String get submittedReviewTiming => 'इसमें कुछ मिनट लग सकते हैं।';
+
+  @override
+  String get submittedApprovalTitle => 'मंज़ूरी मिलते ही लाइव।';
+
+  @override
+  String get submittedApprovalMessage => 'आपकी लिस्टिंग अपने आप प्रकाशित हो जाएगी।';
+
+  @override
+  String get submittedActionTitle => 'आपसे कोई कार्रवाई चाहिए?';
+
+  @override
+  String get submittedActionMessage => 'वह आपकी लिस्टिंग अपडेट में दिखेगी।';
 
   @override
   String get submittedPreview => 'अपनी लिस्टिंग का पूर्वावलोकन देखें';
