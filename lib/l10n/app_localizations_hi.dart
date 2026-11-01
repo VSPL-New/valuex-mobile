@@ -1620,10 +1620,20 @@ class AppLocalizationsHi extends AppLocalizations {
   String get reviewPublish => 'प्रकाशित करें';
 
   @override
-  String get reviewPaymentReceived => 'भुगतान मिल गया, आपकी लिस्टिंग की समीक्षा हो रही है';
+  String get submittedTitle => 'आपकी लिस्टिंग जमा हो गई है';
 
   @override
-  String get reviewSubmitted => 'आपकी लिस्टिंग की समीक्षा हो रही है';
+  String get submittedMessage =>
+      'आपकी लिस्टिंग ट्रस्ट एंड सेफ्टी अनुपालन समीक्षा में है। इसमें कुछ मिनट लग सकते हैं। अगर कोई कार्रवाई ज़रूरी हुई तो वह आपको अपनी लिस्टिंग अपडेट में दिखेगी; वरना नियमों के अनुसार होने पर आपकी लिस्टिंग अपने आप लाइव हो जाएगी।';
+
+  @override
+  String get submittedPreview => 'अपनी लिस्टिंग का पूर्वावलोकन देखें';
+
+  @override
+  String get submittedPreviewSoon => 'पूर्वावलोकन जल्द आ रहा है';
+
+  @override
+  String get submittedHome => 'होम पर वापस जाएँ';
 
   @override
   String get sellErrorIncomplete => 'प्लान चुनने से पहले सभी ज़रूरी जानकारी पूरी करें';

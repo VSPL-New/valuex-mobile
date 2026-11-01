@@ -655,8 +655,11 @@
     }
   },
   "reviewPublish": "Publish",
-  "reviewPaymentReceived": "Payment received, your listing is under review",
-  "reviewSubmitted": "Your listing is under review",
+  "submittedTitle": "Your listing is submitted",
+  "submittedMessage": "Your listing is under Trust & Safety compliance review. It may take a few minutes. If any action is required, you will see it in your listing updates; otherwise your listing goes live automatically if it is compliant.",
+  "submittedPreview": "Preview your listing",
+  "submittedPreviewSoon": "Preview is coming soon",
+  "submittedHome": "Back to Home",
   "sellErrorIncomplete": "Complete all required fields before choosing a plan",
   "sellErrorMaxListings": "You've reached the maximum listing limit",
   "planErrorNotAvailable": "This plan is not available for your listing"

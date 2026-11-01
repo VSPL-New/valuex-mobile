@@ -13,6 +13,7 @@ import 'package:valuex_mobile/features/listing/domain/plan_selection.dart';
 import 'package:valuex_mobile/features/listing/domain/seller_plan.dart';
 import 'package:valuex_mobile/features/listing/presentation/listing_error_messages.dart';
 import 'package:valuex_mobile/features/listing/presentation/listing_plan_screen.dart';
+import 'package:valuex_mobile/features/listing/presentation/listing_submitted_screen.dart';
 import 'package:valuex_mobile/features/listing/presentation/providers/plan_selection_controller.dart';
 import 'package:valuex_mobile/features/listing/presentation/review_listing_screen.dart';
 import 'package:valuex_mobile/features/notifications/data/notifications_repository.dart';
@@ -356,12 +357,13 @@ void main() {
         await harness.settle();
 
         verifyNever(() => flow.start(any(), any()));
-        expect(find.text('Your listing is under review'), findsOneWidget);
+        expect(find.byType(ListingSubmittedScreen), findsOneWidget);
+        expect(find.text('Your listing is submitted'), findsOneWidget);
         expect(find.byType(ReviewListingScreen), findsNothing);
         await harness.dispose();
       });
 
-      testWidgets('a confirmed payment says it was received and leaves the page', (tester) async {
+      testWidgets('a confirmed payment opens the submitted page for the listing', (tester) async {
         when(() => flow.start(any(), any())).thenAnswer((_) async => PaymentResult.confirmed);
         final harness = await openReview(tester, _paid);
 
@@ -369,7 +371,8 @@ void main() {
         await harness.settle();
 
         verify(() => flow.start(any(), _checkout)).called(1);
-        expect(find.text('Payment received, your listing is under review'), findsOneWidget);
+        expect(find.byType(ListingSubmittedScreen), findsOneWidget);
+        expect(find.text('Your listing is submitted'), findsOneWidget);
         expect(find.byType(ReviewListingScreen), findsNothing);
         await harness.dispose();
       });
@@ -384,6 +387,7 @@ void main() {
 
         expect(find.text("We're confirming your payment"), findsOneWidget);
         expect(find.byType(ReviewListingScreen), findsNothing);
+        expect(find.byType(ListingSubmittedScreen), findsNothing);
         await harness.dispose();
       });
 
@@ -483,7 +487,7 @@ void main() {
         await harness.settle();
 
         verify(() => flow.start(any(), any())).called(1);
-        expect(find.text('Your listing is under review'), findsOneWidget);
+        expect(find.byType(ListingSubmittedScreen), findsOneWidget);
         await harness.dispose();
       });
 
