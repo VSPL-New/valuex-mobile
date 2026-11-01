@@ -1633,8 +1633,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get submittedTitle => 'Your listing is submitted';
 
   @override
-  String get submittedMessage =>
-      'Your listing is under Trust & Safety compliance review. It may take a few minutes. If any action is required, you will see it in your listing updates; otherwise your listing goes live automatically if it is compliant.';
+  String get submittedReviewStatus => 'Under Trust & Safety review';
+
+  @override
+  String get submittedReviewTiming => 'This may take a few minutes.';
+
+  @override
+  String get submittedApprovalTitle => 'Approved? You are live.';
+
+  @override
+  String get submittedApprovalMessage => 'We publish your listing automatically.';
+
+  @override
+  String get submittedActionTitle => 'Anything needed from you?';
+
+  @override
+  String get submittedActionMessage => 'It will appear in your listing updates.';
 
   @override
   String get submittedPreview => 'Preview your listing';

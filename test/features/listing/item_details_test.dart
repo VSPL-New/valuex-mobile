@@ -262,11 +262,17 @@ void main() {
       verify(() => repository.setCategory('l1', 'CAT-1')).called(1);
       expect(find.text('Headphones'), findsOneWidget);
       expect(find.text('Over-ear'), findsOneWidget);
-      expect(find.text('AI generated'), findsNWidgets(4));
+      expect(find.byTooltip('AI generated'), findsNWidgets(4));
+      expect(find.text('AI generated'), findsNothing, reason: 'only the icon is shown');
+      await tester.tap(find.byTooltip('AI generated').first);
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.text('AI generated'), findsOneWidget, reason: 'tapping the icon names it');
+      await harness.settle();
 
       await tester.enterText(titleField, 'Sony Headphones');
       await harness.settle();
-      expect(find.text('AI generated'), findsNWidgets(3), reason: 'an edited field loses the mark');
+      expect(find.byTooltip('AI generated'), findsNWidgets(3),
+          reason: 'an edited field loses the mark');
 
       await tester.enterText(notesField, 'Fine');
       await tester.enterText(attributeField('CAT-1', 'brand'), 'Sony');

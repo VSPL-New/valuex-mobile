@@ -610,7 +610,7 @@ void main() {
       expect(
           tester.widget<TextField>(attributeField('battery_health_pct')).controller!.text, '87.5');
       expect(find.text('Please verify'), findsNWidgets(2));
-      expect(find.text('AI generated'), findsNWidgets(8));
+      expect(find.byTooltip('AI generated'), findsNWidgets(8));
       await harness.dispose();
     });
 
@@ -624,7 +624,7 @@ void main() {
 
       await tester.enterText(attributeField('brand'), '');
       await harness.settle();
-      expect(find.text('AI generated'), findsNWidgets(6));
+      expect(find.byTooltip('AI generated'), findsNWidgets(6));
       expect(find.text('brand is required'), findsOneWidget);
       await harness.dispose();
     });

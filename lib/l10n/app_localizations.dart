@@ -2973,11 +2973,41 @@ abstract class AppLocalizations {
   /// **'Your listing is submitted'**
   String get submittedTitle;
 
-  /// No description provided for @submittedMessage.
+  /// No description provided for @submittedReviewStatus.
   ///
   /// In en, this message translates to:
-  /// **'Your listing is under Trust & Safety compliance review. It may take a few minutes. If any action is required, you will see it in your listing updates; otherwise your listing goes live automatically if it is compliant.'**
-  String get submittedMessage;
+  /// **'Under Trust & Safety review'**
+  String get submittedReviewStatus;
+
+  /// No description provided for @submittedReviewTiming.
+  ///
+  /// In en, this message translates to:
+  /// **'This may take a few minutes.'**
+  String get submittedReviewTiming;
+
+  /// No description provided for @submittedApprovalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved? You are live.'**
+  String get submittedApprovalTitle;
+
+  /// No description provided for @submittedApprovalMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'We publish your listing automatically.'**
+  String get submittedApprovalMessage;
+
+  /// No description provided for @submittedActionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything needed from you?'**
+  String get submittedActionTitle;
+
+  /// No description provided for @submittedActionMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'It will appear in your listing updates.'**
+  String get submittedActionMessage;
 
   /// No description provided for @submittedPreview.
   ///
