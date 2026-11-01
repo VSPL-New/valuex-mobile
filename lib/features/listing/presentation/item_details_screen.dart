@@ -19,12 +19,14 @@ import '../../home/presentation/widgets/location_prompt.dart';
 import '../../home/presentation/widgets/location_sheet.dart';
 import '../../home/presentation/widgets/saved_location_dialog.dart';
 import '../domain/listing_details.dart';
+import '../domain/listing_photo.dart';
 import '../domain/listing_schema.dart';
 import '../domain/plan_selection.dart';
 import '../domain/restricted_check.dart';
 import 'category_picker_screen.dart';
 import 'listing_error_messages.dart';
 import 'providers/item_details_controller.dart';
+import 'providers/create_listing_controller.dart';
 import 'widgets/option_chip.dart';
 import 'widgets/restricted_item_dialogs.dart';
 import 'widgets/schema_field_input.dart';
@@ -133,6 +135,11 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
   PlanArgs _planArgs() {
     final state = ref.read(itemDetailsControllerProvider(widget.args));
     final draft = state.draft;
+    final photos = ref.read(createListingControllerProvider);
+    final photo = photos.listingId == widget.args.listingId
+        ? photos.photos.where((photo) => photo.status == PhotoStatus.ready).firstOrNull
+        : null;
+    final location = ref.read(homeLocationControllerProvider).value;
     return PlanArgs(
       listingId: widget.args.listingId,
       summary: ListingSummary(
@@ -140,6 +147,11 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
         categoryPath: state.category?.path.map((item) => item.name).join(' > ') ?? '',
         price: draft.price,
         description: draft.description,
+        thumbnailBytes: photo?.bytes,
+        conditionLabel: state.schema?.common.conditionVisible == true && draft.condition != null
+            ? _conditionLabel(AppLocalizations.of(context), draft.condition!)
+            : '',
+        city: location is LocationKnown ? location.location.city : '',
       ),
     );
   }
@@ -371,9 +383,9 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
         const SizedBox(height: AppSpacing.md),
         SoftCard(
           child: _Collapsible(
+            key: ValueKey(schema.category.code),
             title: l10n.itemMoreDetails,
             subtitle: l10n.itemMoreDetailsHint,
-            initiallyOpen: optional.any((field) => state.isAiAttribute(field.key)),
             children: [for (final field in optional) attribute(field)],
           ),
         ),
@@ -688,14 +700,11 @@ class _Collapsible extends StatefulWidget {
   final String subtitle;
   final List<Widget> children;
 
-  /// Starts open, e.g. when AI filled something inside.
-  final bool initiallyOpen;
-
   const _Collapsible({
+    super.key,
     required this.title,
     required this.subtitle,
     required this.children,
-    this.initiallyOpen = false,
   });
 
   @override
@@ -703,7 +712,7 @@ class _Collapsible extends StatefulWidget {
 }
 
 class _CollapsibleState extends State<_Collapsible> {
-  late bool _open = widget.initiallyOpen;
+  bool _open = false;
 
   @override
   Widget build(BuildContext context) {
@@ -727,7 +736,9 @@ class _CollapsibleState extends State<_Collapsible> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(widget.title, style: AppTextStyles.cardTitle),
+                        Text(widget.title.toUpperCase(),
+                            style: AppTextStyles.label
+                                .copyWith(color: AppColors.brandForeground, letterSpacing: 0.8)),
                         Text(widget.subtitle, style: AppTextStyles.hint),
                       ],
                     ),

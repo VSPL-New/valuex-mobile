@@ -645,7 +645,11 @@
       }
     }
   },
-  "reviewTrustNote": "Our Trust & Safety team checks every listing, usually within a few hours.",
+  "reviewListedPrice": "Listed price",
+  "reviewPaymentSection": "Payment summary",
+  "reviewTrustTitle": "Trust & Safety review",
+  "reviewTrustNote": "Every listing is checked before going live.",
+  "reviewApprovalNote": "Goes live after Trust & Safety approval",
   "reviewPay": "Pay {amount} & Publish",
   "@reviewPay": {
     "placeholders": {

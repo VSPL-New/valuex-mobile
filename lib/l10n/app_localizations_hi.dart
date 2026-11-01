@@ -1608,8 +1608,19 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get reviewTrustNote =>
-      'हमारी ट्रस्ट एंड सेफ्टी टीम हर लिस्टिंग की जाँच करती है, आमतौर पर कुछ घंटों में।';
+  String get reviewListedPrice => 'लिस्टिंग की कीमत';
+
+  @override
+  String get reviewPaymentSection => 'भुगतान का सारांश';
+
+  @override
+  String get reviewTrustTitle => 'ट्रस्ट एंड सेफ्टी समीक्षा';
+
+  @override
+  String get reviewTrustNote => 'हर लिस्टिंग की लाइव होने से पहले जाँच होती है।';
+
+  @override
+  String get reviewApprovalNote => 'ट्रस्ट एंड सेफ्टी की मंज़ूरी के बाद लाइव होगी';
 
   @override
   String reviewPay(String amount) {

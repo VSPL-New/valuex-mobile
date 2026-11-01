@@ -2949,11 +2949,35 @@ abstract class AppLocalizations {
   /// **'Valid for {days} days'**
   String reviewValidity(int days);
 
+  /// No description provided for @reviewListedPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Listed price'**
+  String get reviewListedPrice;
+
+  /// No description provided for @reviewPaymentSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment summary'**
+  String get reviewPaymentSection;
+
+  /// No description provided for @reviewTrustTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trust & Safety review'**
+  String get reviewTrustTitle;
+
   /// No description provided for @reviewTrustNote.
   ///
   /// In en, this message translates to:
-  /// **'Our Trust & Safety team checks every listing, usually within a few hours.'**
+  /// **'Every listing is checked before going live.'**
   String get reviewTrustNote;
+
+  /// No description provided for @reviewApprovalNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Goes live after Trust & Safety approval'**
+  String get reviewApprovalNote;
 
   /// No description provided for @reviewPay.
   ///

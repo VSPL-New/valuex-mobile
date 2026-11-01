@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,10 +14,12 @@ import 'package:valuex_mobile/features/home/presentation/providers/home_provider
 import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
 import 'package:valuex_mobile/features/listing/domain/category.dart';
 import 'package:valuex_mobile/features/listing/domain/listing_details.dart';
+import 'package:valuex_mobile/features/listing/domain/listing_photo.dart';
 import 'package:valuex_mobile/features/listing/domain/listing_schema.dart';
 import 'package:valuex_mobile/features/listing/domain/restricted_check.dart';
 import 'package:valuex_mobile/features/listing/presentation/listing_plan_screen.dart';
 import 'package:valuex_mobile/features/listing/presentation/providers/item_details_controller.dart';
+import 'package:valuex_mobile/features/listing/presentation/providers/create_listing_controller.dart';
 import 'package:valuex_mobile/features/notifications/data/notifications_repository.dart';
 
 import '../../helpers/app_harness.dart';
@@ -39,6 +42,15 @@ class _FakeLocation extends HomeLocationController {
 class _FakeDraft extends Fake implements ListingDetailsDraft {}
 
 class _FakeSchema extends Fake implements ListingSchema {}
+
+class _FakePhotos extends CreateListingController {
+  final CreateListingState initial;
+
+  _FakePhotos(this.initial);
+
+  @override
+  CreateListingState build() => initial;
+}
 
 const _suggestion = AiSuggestion(
   id: 's1',
@@ -131,6 +143,7 @@ void main() {
       ItemDetailsArgs args = const ItemDetailsArgs(listingId: 'l1'),
       HomeLocationState location = const LocationNeeded(LocationNeed.notAsked),
       double textScale = 1,
+      CreateListingState photos = const CreateListingState(),
     }) async {
       final notifications = _MockNotifications();
       when(notifications.unreadCount).thenAnswer((_) async => 0);
@@ -138,6 +151,7 @@ void main() {
         notificationsRepositoryProvider.overrideWithValue(notifications),
         listingRepositoryProvider.overrideWithValue(repository),
         homeLocationControllerProvider.overrideWith(() => _FakeLocation(location)),
+        createListingControllerProvider.overrideWith(() => _FakePhotos(photos)),
       ])
         ..signedInAs(AccountStatus.active, aadhaarVerified: true);
       tester.platformDispatcher.textScaleFactorTestValue = textScale;
@@ -237,10 +251,12 @@ void main() {
       final harness = await open(tester);
       await chooseCategory(tester, harness);
 
-      expect(find.text('More details'), findsOneWidget);
+      expect(find.text('MORE DETAILS'), findsOneWidget);
+      expect(tester.widget<Text>(find.text('MORE DETAILS')).style,
+          tester.widget<Text>(find.text('ABOUT THIS ITEM')).style);
       expect(find.text('age months'), findsNothing);
 
-      await tester.tap(find.text('More details'));
+      await tester.tap(find.text('MORE DETAILS'));
       await harness.settle();
       expect(find.text('age months'), findsOneWidget);
       expect(find.text('battery health pct (%)'), findsOneWidget);
@@ -248,6 +264,19 @@ void main() {
       await tester.enterText(attributeField('CAT-1', 'age_months'), '5000');
       await harness.settle();
       expect(find.text('Enter a valid age months'), findsOneWidget);
+      await tester.tap(find.text('MORE DETAILS'));
+      await harness.settle();
+      expect(attributeField('CAT-1', 'age_months'), findsNothing);
+      await tester.tap(find.text('MORE DETAILS'));
+      await harness.settle();
+      expect(
+          tester.widget<TextField>(attributeField('CAT-1', 'age_months')).controller!.text, '5000');
+      await harness.container
+          .read(itemDetailsControllerProvider(const ItemDetailsArgs(listingId: 'l1')).notifier)
+          .selectCategory('CAT-7');
+      await harness.settle();
+      expect(find.text('MORE DETAILS'), findsOneWidget);
+      expect(attributeField('CAT-7', 'keys_known'), findsNothing);
       await harness.dispose();
     });
 
@@ -308,10 +337,16 @@ void main() {
       await harness.dispose();
     });
 
-    Future<AppHarness> openAiFilled(WidgetTester tester) async {
+    Future<AppHarness> openAiFilled(
+      WidgetTester tester, {
+      CreateListingState photos = const CreateListingState(),
+      HomeLocationState location = const LocationNeeded(LocationNeed.notAsked),
+    }) async {
       final harness = await open(
         tester,
         args: const ItemDetailsArgs(listingId: 'l1', suggestion: _suggestion),
+        photos: photos,
+        location: location,
       );
       await tester.enterText(notesField, 'Fine');
       await tester.enterText(attributeField('CAT-1', 'brand'), 'Sony');
@@ -358,8 +393,40 @@ void main() {
       verify(() => repository.checkRestrictedItems('l1')).called(1);
       verifyNever(() => repository.acceptCompliance(any(), any(), any()));
       expect(find.byType(ListingPlanScreen), findsOneWidget);
+      final summary = tester.widget<ListingPlanScreen>(find.byType(ListingPlanScreen)).args.summary;
+      expect(summary.conditionLabel, 'Good');
+      expect(summary.thumbnailBytes, isNull);
+      expect(summary.city, isEmpty);
       await harness.dispose();
     });
+
+    for (final photoListingId in ['l1', 'other-listing']) {
+      testWidgets('summary only carries photos belonging to the draft: $photoListingId',
+          (tester) async {
+        final bytes = Uint8List.fromList([1, 2, 3]);
+        final readyPhoto = ListingPhoto(
+            localId: 'photo',
+            fileName: 'item.jpg',
+            bytes: bytes,
+            contentType: 'image/jpeg',
+            width: 480,
+            height: 480,
+            status: PhotoStatus.ready);
+        final harness = await openAiFilled(tester,
+            location: const LocationKnown(HomeLocation(city: 'Pune')),
+            photos: CreateListingState(
+                listingId: photoListingId,
+                photos: [readyPhoto.copyWith(status: PhotoStatus.failed), readyPhoto]));
+        await continueToPlan(tester, harness);
+
+        final summary =
+            tester.widget<ListingPlanScreen>(find.byType(ListingPlanScreen)).args.summary;
+        expect(summary.thumbnailBytes, photoListingId == 'l1' ? same(bytes) : isNull);
+        expect(summary.city, 'Pune');
+        expect(summary.conditionLabel, 'Good');
+        await harness.dispose();
+      });
+    }
 
     testWidgets('a conditional item asks once for every row, then records them and goes on',
         (tester) async {

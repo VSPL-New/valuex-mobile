@@ -1618,8 +1618,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get reviewTrustNote =>
-      'Our Trust & Safety team checks every listing, usually within a few hours.';
+  String get reviewListedPrice => 'Listed price';
+
+  @override
+  String get reviewPaymentSection => 'Payment summary';
+
+  @override
+  String get reviewTrustTitle => 'Trust & Safety review';
+
+  @override
+  String get reviewTrustNote => 'Every listing is checked before going live.';
+
+  @override
+  String get reviewApprovalNote => 'Goes live after Trust & Safety approval';
 
   @override
   String reviewPay(String amount) {

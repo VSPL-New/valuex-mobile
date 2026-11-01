@@ -598,15 +598,17 @@ void main() {
     final priceField =
         find.byWidgetPredicate((w) => w is TextField && w.decoration?.prefixText == '₹ ');
 
-    testWidgets('prefills attributes and notes, opens More details and asks to verify',
+    testWidgets('keeps AI-prefilled More details collapsed until the seller expands it',
         (tester) async {
       final harness = await open(tester, _parsed());
 
       expect(find.text('Light scratches on the band'), findsOneWidget);
       expect(attributeField('brand'), findsOneWidget);
       expect(tester.widget<TextField>(attributeField('brand')).controller!.text, 'Sony');
-      expect(find.text('battery health pct (%)'), findsOneWidget,
-          reason: 'More details opens when AI filled something inside');
+      expect(attributeField('battery_health_pct'), findsNothing);
+      await tester.tap(find.text('MORE DETAILS'));
+      await harness.settle();
+      expect(find.text('battery health pct (%)'), findsOneWidget);
       expect(
           tester.widget<TextField>(attributeField('battery_health_pct')).controller!.text, '87.5');
       expect(find.text('Please verify'), findsNWidgets(2));
@@ -617,6 +619,8 @@ void main() {
     testWidgets('editing a flagged value clears its hint and the seller can clear any value',
         (tester) async {
       final harness = await open(tester, _parsed());
+      await tester.tap(find.text('MORE DETAILS'));
+      await harness.settle();
 
       await tester.enterText(attributeField('battery_health_pct'), '80');
       await harness.settle();
@@ -631,6 +635,8 @@ void main() {
 
     testWidgets('saving sends feedback for notes and attributes', (tester) async {
       final harness = await open(tester, _parsed());
+      await tester.tap(find.text('MORE DETAILS'));
+      await harness.settle();
       await tester.enterText(attributeField('battery_health_pct'), '80');
       await tester.enterText(priceField, '500');
       await tester.tap(find.text('Yes'));

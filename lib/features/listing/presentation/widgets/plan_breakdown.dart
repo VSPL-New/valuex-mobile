@@ -5,13 +5,15 @@ import '../../../../core/theme/text_styles.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/seller_plan.dart';
+import 'review_section_title.dart';
 
 /// What the seller pays for the selected plan, shown before they confirm: original price,
 /// discount, GST and the total. A free plan shows "Free" and no payment wording.
 class PlanBreakdown extends StatelessWidget {
   final SellerPlan plan;
+  final bool framed;
 
-  const PlanBreakdown({super.key, required this.plan});
+  const PlanBreakdown({super.key, required this.plan, this.framed = true});
 
   @override
   Widget build(BuildContext context) {
@@ -20,17 +22,20 @@ class PlanBreakdown extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.brandSurface,
         borderRadius: BorderRadius.circular(AppRadius.xl),
-        border: Border.all(color: AppColors.brandBorder),
+        border: framed ? Border.all(color: AppColors.brandBorder) : null,
       ),
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.md),
+        padding: EdgeInsets.all(framed ? AppSpacing.md : 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Semantics(
-              header: true,
-              child: Text(l10n.planBreakdownTitle, style: AppTextStyles.sectionTitle),
-            ),
+            if (framed)
+              Semantics(
+                header: true,
+                child: Text(l10n.planBreakdownTitle, style: AppTextStyles.sectionTitle),
+              )
+            else
+              ReviewSectionTitle(l10n.reviewPaymentSection),
             const SizedBox(height: AppSpacing.sm),
             if (plan.isFree) ...[
               _Row(label: l10n.planBreakdownTotal, value: l10n.planFree, strong: true),
@@ -63,8 +68,10 @@ class PlanBreakdown extends StatelessWidget {
                 label: l10n.planBreakdownTotal,
                 value: Formatters.money(plan.totalAmount),
                 strong: true,
+                valueStyle:
+                    framed ? null : AppTextStyles.heading2.copyWith(fontSize: 22, height: 1.4),
               ),
-              if (plan.priceIncludesGst && plan.gstAmount > 0)
+              if (framed && plan.priceIncludesGst && plan.gstAmount > 0)
                 Padding(
                   padding: const EdgeInsets.only(top: AppSpacing.xs),
                   child: Text(
@@ -87,14 +94,21 @@ class _Row extends StatelessWidget {
   final String value;
   final bool strong;
   final Color? valueColor;
+  final TextStyle? valueStyle;
 
-  const _Row({required this.label, required this.value, this.strong = false, this.valueColor});
+  const _Row(
+      {required this.label,
+      required this.value,
+      this.strong = false,
+      this.valueColor,
+      this.valueStyle});
 
   @override
   Widget build(BuildContext context) {
     final labelStyle = (strong ? AppTextStyles.cardTitle : AppTextStyles.bodySecondary)
         .copyWith(color: AppColors.brandForeground);
-    final valueStyle = (strong ? AppTextStyles.cardPrice : AppTextStyles.body).copyWith(
+    final resolvedValueStyle =
+        (valueStyle ?? (strong ? AppTextStyles.cardPrice : AppTextStyles.body)).copyWith(
       color: valueColor ?? AppColors.brandForeground,
       fontWeight: FontWeight.w700,
     );
@@ -105,7 +119,9 @@ class _Row extends StatelessWidget {
         children: [
           Expanded(child: Text(label, style: labelStyle)),
           const SizedBox(width: AppSpacing.sm),
-          Text(value, style: valueStyle),
+          Flexible(
+              fit: FlexFit.tight,
+              child: Text(value, style: resolvedValueStyle, textAlign: TextAlign.end)),
         ],
       ),
     );
