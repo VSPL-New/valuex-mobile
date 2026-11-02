@@ -43,6 +43,8 @@ class ApiConstants {
   static String mediaComplete(String mediaId) => '/media/$mediaId/complete';
   static String listingImages(String listingId) => '/listings/$listingId/images';
   static String listingSubmit(String listingId) => '/listings/$listingId/submit';
+  static String listingTrustSafetyReview(String listingId) =>
+      '/listings/$listingId/trust-safety-review';
   static String listingPlanSelection(String listingId) => '/listings/$listingId/plan-selection';
   static String listingCategory(String listingId) => '/listings/$listingId/category';
   static String listingRestrictedCheck(String listingId) => '/listings/$listingId/restricted-check';

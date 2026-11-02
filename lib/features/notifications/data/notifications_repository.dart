@@ -54,6 +54,9 @@ class NotificationsRepository {
         title: json['title'] as String? ?? '',
         body: json['body'] as String? ?? '',
         deepLink: _link(json['deepLink']),
+        params: json['params'] is Map<String, dynamic>
+            ? json['params'] as Map<String, dynamic>
+            : const {},
         priority: _priority(json['priority']),
         read: json['read'] == true,
         createdAt:

@@ -3,25 +3,32 @@ import '../../../../core/network/api_error.dart';
 import '../../../home/presentation/providers/home_providers.dart';
 import '../../data/listing_repository.dart';
 import '../../domain/category.dart';
+import '../../domain/existing_listing.dart';
 import '../../domain/listing_details.dart';
 import '../../domain/listing_schema.dart';
 import '../../domain/restricted_check.dart';
 
-/// What the Item Details page is opened with: the draft, and what AI suggested if it did.
+/// What the Item Details page is opened with: the draft, and what AI suggested if it did. A listing
+/// the seller already created (opened from a notification, US-115) comes as [existing].
 class ItemDetailsArgs {
   final String listingId;
   final AiSuggestion? suggestion;
+  final ExistingListing? existing;
 
-  const ItemDetailsArgs({required this.listingId, this.suggestion});
+  const ItemDetailsArgs({required this.listingId, this.suggestion, this.existing});
+
+  /// A listing that needs changes is resubmitted for review, not sent to plan selection again.
+  bool get isRevision => existing?.status == 'REVISION_REQUIRED';
 
   @override
   bool operator ==(Object other) =>
       other is ItemDetailsArgs &&
       other.listingId == listingId &&
-      other.suggestion?.id == suggestion?.id;
+      other.suggestion?.id == suggestion?.id &&
+      other.existing?.status == existing?.status;
 
   @override
-  int get hashCode => Object.hash(listingId, suggestion?.id);
+  int get hashCode => Object.hash(listingId, suggestion?.id, existing?.status);
 }
 
 /// Where the form for the chosen category is: nothing chosen yet, loading, ready, or failed.
@@ -138,10 +145,23 @@ class ItemDetailsController extends Notifier<ItemDetailsState> {
 
   int _categoryRequest = 0;
 
+  /// True once the seller picked another category than the one the listing already has.
+  bool _categoryChanged = false;
+
   ListingRepository get _repository => ref.read(listingRepositoryProvider);
 
   @override
   ItemDetailsState build() {
+    final existing = args.existing;
+    if (existing != null) {
+      final existingCode = existing.draft.categoryCode;
+      if (existingCode != null) Future.microtask(() => _loadExistingForm(existingCode));
+      return ItemDetailsState(
+        draft: existing.draft,
+        category: existing.category,
+        schemaStatus: existingCode == null ? SchemaStatus.none : SchemaStatus.loading,
+      );
+    }
     final suggestion = args.suggestion;
     final code = suggestion?.categoryCode;
     if (code != null) Future.microtask(() => selectCategory(code));
@@ -190,6 +210,7 @@ class ItemDetailsController extends Notifier<ItemDetailsState> {
   /// are dropped, and fields that repeat the category name are filled in.
   Future<void> selectCategory(String code) async {
     final request = ++_categoryRequest;
+    _categoryChanged = true;
     state = state.copyWith(
       draft: state.draft.copyWith(categoryCode: code),
       schemaStatus: SchemaStatus.loading,
@@ -215,7 +236,61 @@ class ItemDetailsController extends Notifier<ItemDetailsState> {
   /// Tries the current category again after a failure.
   Future<void> retryCategory() async {
     final code = state.draft.categoryCode;
-    if (code != null) await selectCategory(code);
+    if (code == null) return;
+    if (!_categoryChanged && code == args.existing?.draft.categoryCode) {
+      await _loadExistingForm(code);
+    } else {
+      await selectCategory(code);
+    }
+  }
+
+  /// Loads the form of the category the listing already has; the category is not filed again.
+  Future<void> _loadExistingForm(String code) async {
+    final request = ++_categoryRequest;
+    state = state.copyWith(schemaStatus: SchemaStatus.loading, clearSchemaError: true);
+    try {
+      final schema = await _repository.listingSchema(code);
+      if (!ref.mounted || request != _categoryRequest) return;
+      state = state.copyWith(
+        draft: state.draft.copyWith(attributes: _typedForForm(state.draft.attributes, schema)),
+        category: schema.category,
+        schema: schema,
+        schemaStatus: SchemaStatus.ready,
+      );
+    } on ApiError catch (error) {
+      if (!ref.mounted || request != _categoryRequest) return;
+      state = state.copyWith(schemaStatus: SchemaStatus.failed, schemaError: error);
+    }
+  }
+
+  /// The server returns numbers as numbers; the form keeps them as typed text.
+  Map<String, Object?> _typedForForm(Map<String, Object?> stored, ListingSchema schema) {
+    final numberKeys = {
+      for (final field in schema.fields)
+        if (field.type.isNumber) field.key,
+    };
+    return {
+      for (final entry in stored.entries)
+        entry.key: numberKeys.contains(entry.key) && entry.value is num
+            ? _numberText(entry.value! as num)
+            : entry.value,
+    };
+  }
+
+  static String _numberText(num value) =>
+      value == value.roundToDouble() ? value.toInt().toString() : value.toString();
+
+  /// Sends a listing that needed changes back to review (no new payment); null when it was sent.
+  Future<Object?> resubmit() async {
+    state = state.copyWith(isSaving: true);
+    try {
+      await _repository.resubmitForReview(args.listingId);
+      return null;
+    } on ApiError catch (error) {
+      return error;
+    } finally {
+      if (ref.mounted) state = state.copyWith(isSaving: false);
+    }
   }
 
   /// Saves the details; returns the error when the server refused them.

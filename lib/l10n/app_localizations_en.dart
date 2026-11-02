@@ -1659,7 +1659,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get submittedActionTitle => 'Anything needed from you?';
 
   @override
-  String get submittedActionMessage => 'It will appear in your listing updates.';
+  String get submittedActionMessage => 'We will notify you if any action is required.';
 
   @override
   String get submittedPreview => 'Preview your listing';
@@ -1678,4 +1678,85 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get planErrorNotAvailable => 'This plan is not available for your listing';
+
+  @override
+  String get notifListingUnderReviewTitle => 'Listing under review';
+
+  @override
+  String get notifListingUnderReviewBody =>
+      'Payment received. Your listing is under review and will be checked within a few hours.';
+
+  @override
+  String get notifListingPublishedTitle => 'Your listing is live';
+
+  @override
+  String notifListingPublishedBody(String title) {
+    return 'Your listing \"$title\" is now live. Buyers can find it.';
+  }
+
+  @override
+  String get notifListingRevisionTitle => 'Your listing needs changes';
+
+  @override
+  String notifListingRevisionBody(String title, String reason, int attempt) {
+    return 'Your listing \"$title\" needs changes: $reason. Update it and resubmit (review $attempt of 3). You will not be charged again.';
+  }
+
+  @override
+  String notifListingRevisionEditBody(String title, String reason) {
+    return 'Your listing \"$title\" needs changes: $reason. Update it and resubmit. You will not be charged again.';
+  }
+
+  @override
+  String get notifListingRejectedTitle => 'Listing not approved';
+
+  @override
+  String notifListingRejectedBody(String title) {
+    return 'Your listing \"$title\" was not approved after 3 reviews.';
+  }
+
+  @override
+  String notifListingRejectedRefundBody(String title, String amount) {
+    return 'Your listing \"$title\" was not approved after 3 reviews. Your plan fee of ₹$amount will be refunded.';
+  }
+
+  @override
+  String get notifListingRefundTitle => 'Refund is being processed';
+
+  @override
+  String notifListingRefundBody(String amount) {
+    return 'Your refund of ₹$amount for the listing plan is being processed.';
+  }
+
+  @override
+  String get notifListingPaymentFailedTitle => 'Payment unsuccessful';
+
+  @override
+  String get notifListingPaymentFailedBody =>
+      'Your payment was unsuccessful. Please try again or choose another plan.';
+
+  @override
+  String get notifListingExpiredTitle => 'Listing expired';
+
+  @override
+  String notifListingExpiredBody(String title) {
+    return 'Your listing \"$title\" has expired. Renew it to make it visible again.';
+  }
+
+  @override
+  String get notifListingRemovedTitle => 'Listing removed';
+
+  @override
+  String notifListingRemovedBody(String title) {
+    return 'Your listing \"$title\" was removed by JustQlic. Contact support for details.';
+  }
+
+  @override
+  String get notifListingNotFound => 'This listing is no longer available';
+
+  @override
+  String get notifListingNotActionable => 'This listing can no longer be changed here';
+
+  @override
+  String get itemResubmitForReview => 'Resubmit for review';
 }

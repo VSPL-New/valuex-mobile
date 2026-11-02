@@ -3030,7 +3030,7 @@ abstract class AppLocalizations {
   /// No description provided for @submittedActionMessage.
   ///
   /// In en, this message translates to:
-  /// **'It will appear in your listing updates.'**
+  /// **'We will notify you if any action is required.'**
   String get submittedActionMessage;
 
   /// No description provided for @submittedPreview.
@@ -3068,6 +3068,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This plan is not available for your listing'**
   String get planErrorNotAvailable;
+
+  /// No description provided for @notifListingUnderReviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing under review'**
+  String get notifListingUnderReviewTitle;
+
+  /// No description provided for @notifListingUnderReviewBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment received. Your listing is under review and will be checked within a few hours.'**
+  String get notifListingUnderReviewBody;
+
+  /// No description provided for @notifListingPublishedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing is live'**
+  String get notifListingPublishedTitle;
+
+  /// No description provided for @notifListingPublishedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing \"{title}\" is now live. Buyers can find it.'**
+  String notifListingPublishedBody(String title);
+
+  /// No description provided for @notifListingRevisionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing needs changes'**
+  String get notifListingRevisionTitle;
+
+  /// No description provided for @notifListingRevisionBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing \"{title}\" needs changes: {reason}. Update it and resubmit (review {attempt} of 3). You will not be charged again.'**
+  String notifListingRevisionBody(String title, String reason, int attempt);
+
+  /// No description provided for @notifListingRevisionEditBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing \"{title}\" needs changes: {reason}. Update it and resubmit. You will not be charged again.'**
+  String notifListingRevisionEditBody(String title, String reason);
+
+  /// No description provided for @notifListingRejectedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing not approved'**
+  String get notifListingRejectedTitle;
+
+  /// No description provided for @notifListingRejectedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing \"{title}\" was not approved after 3 reviews.'**
+  String notifListingRejectedBody(String title);
+
+  /// No description provided for @notifListingRejectedRefundBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing \"{title}\" was not approved after 3 reviews. Your plan fee of ₹{amount} will be refunded.'**
+  String notifListingRejectedRefundBody(String title, String amount);
+
+  /// No description provided for @notifListingRefundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Refund is being processed'**
+  String get notifListingRefundTitle;
+
+  /// No description provided for @notifListingRefundBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your refund of ₹{amount} for the listing plan is being processed.'**
+  String notifListingRefundBody(String amount);
+
+  /// No description provided for @notifListingPaymentFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment unsuccessful'**
+  String get notifListingPaymentFailedTitle;
+
+  /// No description provided for @notifListingPaymentFailedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your payment was unsuccessful. Please try again or choose another plan.'**
+  String get notifListingPaymentFailedBody;
+
+  /// No description provided for @notifListingExpiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing expired'**
+  String get notifListingExpiredTitle;
+
+  /// No description provided for @notifListingExpiredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing \"{title}\" has expired. Renew it to make it visible again.'**
+  String notifListingExpiredBody(String title);
+
+  /// No description provided for @notifListingRemovedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing removed'**
+  String get notifListingRemovedTitle;
+
+  /// No description provided for @notifListingRemovedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing \"{title}\" was removed by JustQlic. Contact support for details.'**
+  String notifListingRemovedBody(String title);
+
+  /// No description provided for @notifListingNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing is no longer available'**
+  String get notifListingNotFound;
+
+  /// No description provided for @notifListingNotActionable.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing can no longer be changed here'**
+  String get notifListingNotActionable;
+
+  /// No description provided for @itemResubmitForReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Resubmit for review'**
+  String get itemResubmitForReview;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
