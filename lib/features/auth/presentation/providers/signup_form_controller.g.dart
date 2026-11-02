@@ -11,12 +11,12 @@ part of 'signup_form_controller.dart';
 /// The Sign Up form: values, validation and submission.
 
 @ProviderFor(SignupForm)
-const signupFormProvider = SignupFormProvider._();
+final signupFormProvider = SignupFormProvider._();
 
 /// The Sign Up form: values, validation and submission.
 final class SignupFormProvider extends $NotifierProvider<SignupForm, SignupFormState> {
   /// The Sign Up form: values, validation and submission.
-  const SignupFormProvider._()
+  SignupFormProvider._()
       : super(
           from: null,
           argument: null,
@@ -51,19 +51,18 @@ abstract class _$SignupForm extends $Notifier<SignupFormState> {
   SignupFormState build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<SignupFormState, SignupFormState>;
     final element = ref.element as $ClassProviderElement<
         AnyNotifier<SignupFormState, SignupFormState>, SignupFormState, Object?, Object?>;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 /// The signed-in user's profile (contact details arrive masked from the server).
 
 @ProviderFor(currentUserProfile)
-const currentUserProfileProvider = CurrentUserProfileProvider._();
+final currentUserProfileProvider = CurrentUserProfileProvider._();
 
 /// The signed-in user's profile (contact details arrive masked from the server).
 
@@ -71,7 +70,7 @@ final class CurrentUserProfileProvider
     extends $FunctionalProvider<AsyncValue<UserProfile>, UserProfile, FutureOr<UserProfile>>
     with $FutureModifier<UserProfile>, $FutureProvider<UserProfile> {
   /// The signed-in user's profile (contact details arrive masked from the server).
-  const CurrentUserProfileProvider._()
+  CurrentUserProfileProvider._()
       : super(
           from: null,
           argument: null,

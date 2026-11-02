@@ -11,13 +11,13 @@ part of 'otp_verification_controller.dart';
 /// Code entry, countdowns, resend limits and verification for one OTP step.
 
 @ProviderFor(OtpVerificationController)
-const otpVerificationControllerProvider = OtpVerificationControllerFamily._();
+final otpVerificationControllerProvider = OtpVerificationControllerFamily._();
 
 /// Code entry, countdowns, resend limits and verification for one OTP step.
 final class OtpVerificationControllerProvider
     extends $NotifierProvider<OtpVerificationController, OtpVerificationState> {
   /// Code entry, countdowns, resend limits and verification for one OTP step.
-  const OtpVerificationControllerProvider._(
+  OtpVerificationControllerProvider._(
       {required OtpVerificationControllerFamily super.from, required OtpChannel super.argument})
       : super(
           retry: null,
@@ -68,7 +68,7 @@ final class OtpVerificationControllerFamily extends $Family
     with
         $ClassFamilyOverride<OtpVerificationController, OtpVerificationState, OtpVerificationState,
             OtpVerificationState, OtpChannel> {
-  const OtpVerificationControllerFamily._()
+  OtpVerificationControllerFamily._()
       : super(
           retry: null,
           name: r'otpVerificationControllerProvider',
@@ -99,16 +99,17 @@ abstract class _$OtpVerificationController extends $Notifier<OtpVerificationStat
   );
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build(
-      _$args,
-    );
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<OtpVerificationState, OtpVerificationState>;
     final element = ref.element as $ClassProviderElement<
         AnyNotifier<OtpVerificationState, OtpVerificationState>,
         OtpVerificationState,
         Object?,
         Object?>;
-    element.handleValue(ref, created);
+    return element.handleCreate(
+        ref,
+        () => build(
+              _$args,
+            ));
   }
 }

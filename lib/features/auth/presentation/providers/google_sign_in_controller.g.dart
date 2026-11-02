@@ -11,13 +11,13 @@ part of 'google_sign_in_controller.dart';
 /// Turns a Google account into a ValueX session. The state carries the last error.
 
 @ProviderFor(GoogleSignInController)
-const googleSignInControllerProvider = GoogleSignInControllerProvider._();
+final googleSignInControllerProvider = GoogleSignInControllerProvider._();
 
 /// Turns a Google account into a ValueX session. The state carries the last error.
 final class GoogleSignInControllerProvider
     extends $AsyncNotifierProvider<GoogleSignInController, void> {
   /// Turns a Google account into a ValueX session. The state carries the last error.
-  const GoogleSignInControllerProvider._()
+  GoogleSignInControllerProvider._()
       : super(
           from: null,
           argument: null,
@@ -44,11 +44,10 @@ abstract class _$GoogleSignInController extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<void>, void>;
     final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<void>, void>,
         AsyncValue<void>, Object?, Object?>;
-    element.handleValue(ref, null);
+    return element.handleCreate(ref, build);
   }
 }

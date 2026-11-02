@@ -12,14 +12,14 @@ part of 'aadhaar_controllers.dart';
 /// closes, and is never logged or stored.
 
 @ProviderFor(AadhaarForm)
-const aadhaarFormProvider = AadhaarFormProvider._();
+final aadhaarFormProvider = AadhaarFormProvider._();
 
 /// Aadhaar entry. The number lives only in this state, which is dropped when the screen
 /// closes, and is never logged or stored.
 final class AadhaarFormProvider extends $NotifierProvider<AadhaarForm, AadhaarFormState> {
   /// Aadhaar entry. The number lives only in this state, which is dropped when the screen
   /// closes, and is never logged or stored.
-  const AadhaarFormProvider._()
+  AadhaarFormProvider._()
       : super(
           from: null,
           argument: null,
@@ -55,25 +55,24 @@ abstract class _$AadhaarForm extends $Notifier<AadhaarFormState> {
   AadhaarFormState build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AadhaarFormState, AadhaarFormState>;
     final element = ref.element as $ClassProviderElement<
         AnyNotifier<AadhaarFormState, AadhaarFormState>, AadhaarFormState, Object?, Object?>;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 /// Development-only OTP step for the sandbox Aadhaar provider.
 
 @ProviderFor(AadhaarOtpController)
-const aadhaarOtpControllerProvider = AadhaarOtpControllerProvider._();
+final aadhaarOtpControllerProvider = AadhaarOtpControllerProvider._();
 
 /// Development-only OTP step for the sandbox Aadhaar provider.
 final class AadhaarOtpControllerProvider
     extends $NotifierProvider<AadhaarOtpController, AadhaarOtpState> {
   /// Development-only OTP step for the sandbox Aadhaar provider.
-  const AadhaarOtpControllerProvider._()
+  AadhaarOtpControllerProvider._()
       : super(
           from: null,
           argument: null,
@@ -108,11 +107,10 @@ abstract class _$AadhaarOtpController extends $Notifier<AadhaarOtpState> {
   AadhaarOtpState build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AadhaarOtpState, AadhaarOtpState>;
     final element = ref.element as $ClassProviderElement<
         AnyNotifier<AadhaarOtpState, AadhaarOtpState>, AadhaarOtpState, Object?, Object?>;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
