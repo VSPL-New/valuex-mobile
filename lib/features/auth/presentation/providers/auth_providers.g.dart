@@ -10,12 +10,12 @@ part of 'auth_providers.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(authRemoteDataSource)
-const authRemoteDataSourceProvider = AuthRemoteDataSourceProvider._();
+final authRemoteDataSourceProvider = AuthRemoteDataSourceProvider._();
 
 final class AuthRemoteDataSourceProvider
     extends $FunctionalProvider<AuthRemoteDataSource, AuthRemoteDataSource, AuthRemoteDataSource>
     with $Provider<AuthRemoteDataSource> {
-  const AuthRemoteDataSourceProvider._()
+  AuthRemoteDataSourceProvider._()
       : super(
           from: null,
           argument: null,
@@ -51,12 +51,12 @@ final class AuthRemoteDataSourceProvider
 String _$authRemoteDataSourceHash() => r'bd3dd57e0bb5e9b0f986870f2ba42619c3314f7a';
 
 @ProviderFor(authRepository)
-const authRepositoryProvider = AuthRepositoryProvider._();
+final authRepositoryProvider = AuthRepositoryProvider._();
 
 final class AuthRepositoryProvider
     extends $FunctionalProvider<AuthRepository, AuthRepository, AuthRepository>
     with $Provider<AuthRepository> {
-  const AuthRepositoryProvider._()
+  AuthRepositoryProvider._()
       : super(
           from: null,
           argument: null,
@@ -92,12 +92,12 @@ final class AuthRepositoryProvider
 String _$authRepositoryHash() => r'd011a43f0664c4a7bbe2882c293b74b49b66459b';
 
 @ProviderFor(restoreSession)
-const restoreSessionProvider = RestoreSessionProvider._();
+final restoreSessionProvider = RestoreSessionProvider._();
 
 final class RestoreSessionProvider
     extends $FunctionalProvider<RestoreSession, RestoreSession, RestoreSession>
     with $Provider<RestoreSession> {
-  const RestoreSessionProvider._()
+  RestoreSessionProvider._()
       : super(
           from: null,
           argument: null,
@@ -133,12 +133,12 @@ final class RestoreSessionProvider
 String _$restoreSessionHash() => r'd877dfa4382456f958b117215fbbb3c7a07e7966';
 
 @ProviderFor(googleIdTokenSource)
-const googleIdTokenSourceProvider = GoogleIdTokenSourceProvider._();
+final googleIdTokenSourceProvider = GoogleIdTokenSourceProvider._();
 
 final class GoogleIdTokenSourceProvider
     extends $FunctionalProvider<GoogleIdTokenSource, GoogleIdTokenSource, GoogleIdTokenSource>
     with $Provider<GoogleIdTokenSource> {
-  const GoogleIdTokenSourceProvider._()
+  GoogleIdTokenSourceProvider._()
       : super(
           from: null,
           argument: null,

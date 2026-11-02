@@ -10,10 +10,10 @@ part of 'entry_controllers.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(MobileInput)
-const mobileInputProvider = MobileInputProvider._();
+final mobileInputProvider = MobileInputProvider._();
 
 final class MobileInputProvider extends $NotifierProvider<MobileInput, String> {
-  const MobileInputProvider._()
+  MobileInputProvider._()
       : super(
           from: null,
           argument: null,
@@ -46,24 +46,23 @@ abstract class _$MobileInput extends $Notifier<String> {
   String build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<String, String>;
     final element =
         ref.element as $ClassProviderElement<AnyNotifier<String, String>, String, Object?, Object?>;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 /// Number typed on the Sign In screen; separate from the sign-up number so the two never mix.
 
 @ProviderFor(SignInMobileInput)
-const signInMobileInputProvider = SignInMobileInputProvider._();
+final signInMobileInputProvider = SignInMobileInputProvider._();
 
 /// Number typed on the Sign In screen; separate from the sign-up number so the two never mix.
 final class SignInMobileInputProvider extends $NotifierProvider<SignInMobileInput, String> {
   /// Number typed on the Sign In screen; separate from the sign-up number so the two never mix.
-  const SignInMobileInputProvider._()
+  SignInMobileInputProvider._()
       : super(
           from: null,
           argument: null,
@@ -98,24 +97,23 @@ abstract class _$SignInMobileInput extends $Notifier<String> {
   String build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<String, String>;
     final element =
         ref.element as $ClassProviderElement<AnyNotifier<String, String>, String, Object?, Object?>;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 /// Number typed when Google sign-in asks for a mobile number.
 
 @ProviderFor(GoogleMobileInput)
-const googleMobileInputProvider = GoogleMobileInputProvider._();
+final googleMobileInputProvider = GoogleMobileInputProvider._();
 
 /// Number typed when Google sign-in asks for a mobile number.
 final class GoogleMobileInputProvider extends $NotifierProvider<GoogleMobileInput, String> {
   /// Number typed when Google sign-in asks for a mobile number.
-  const GoogleMobileInputProvider._()
+  GoogleMobileInputProvider._()
       : super(
           from: null,
           argument: null,
@@ -150,20 +148,19 @@ abstract class _$GoogleMobileInput extends $Notifier<String> {
   String build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<String, String>;
     final element =
         ref.element as $ClassProviderElement<AnyNotifier<String, String>, String, Object?, Object?>;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(EmailInput)
-const emailInputProvider = EmailInputProvider._();
+final emailInputProvider = EmailInputProvider._();
 
 final class EmailInputProvider extends $NotifierProvider<EmailInput, String> {
-  const EmailInputProvider._()
+  EmailInputProvider._()
       : super(
           from: null,
           argument: null,
@@ -196,25 +193,24 @@ abstract class _$EmailInput extends $Notifier<String> {
   String build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<String, String>;
     final element =
         ref.element as $ClassProviderElement<AnyNotifier<String, String>, String, Object?, Object?>;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 /// Sends the registration OTP to the typed mobile number.
 
 @ProviderFor(MobileEntryController)
-const mobileEntryControllerProvider = MobileEntryControllerProvider._();
+final mobileEntryControllerProvider = MobileEntryControllerProvider._();
 
 /// Sends the registration OTP to the typed mobile number.
 final class MobileEntryControllerProvider
     extends $AsyncNotifierProvider<MobileEntryController, void> {
   /// Sends the registration OTP to the typed mobile number.
-  const MobileEntryControllerProvider._()
+  MobileEntryControllerProvider._()
       : super(
           from: null,
           argument: null,
@@ -241,25 +237,24 @@ abstract class _$MobileEntryController extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<void>, void>;
     final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<void>, void>,
         AsyncValue<void>, Object?, Object?>;
-    element.handleValue(ref, null);
+    return element.handleCreate(ref, build);
   }
 }
 
 /// Sends the sign-in OTP to the typed mobile number of an existing account.
 
 @ProviderFor(SignInEntryController)
-const signInEntryControllerProvider = SignInEntryControllerProvider._();
+final signInEntryControllerProvider = SignInEntryControllerProvider._();
 
 /// Sends the sign-in OTP to the typed mobile number of an existing account.
 final class SignInEntryControllerProvider
     extends $AsyncNotifierProvider<SignInEntryController, void> {
   /// Sends the sign-in OTP to the typed mobile number of an existing account.
-  const SignInEntryControllerProvider._()
+  SignInEntryControllerProvider._()
       : super(
           from: null,
           argument: null,
@@ -286,12 +281,11 @@ abstract class _$SignInEntryController extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<void>, void>;
     final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<void>, void>,
         AsyncValue<void>, Object?, Object?>;
-    element.handleValue(ref, null);
+    return element.handleCreate(ref, build);
   }
 }
 
@@ -299,7 +293,7 @@ abstract class _$SignInEntryController extends $AsyncNotifier<void> {
 /// an existing one).
 
 @ProviderFor(GoogleMobileEntryController)
-const googleMobileEntryControllerProvider = GoogleMobileEntryControllerProvider._();
+final googleMobileEntryControllerProvider = GoogleMobileEntryControllerProvider._();
 
 /// Sends the OTP that proves the mobile number for a new Google account (or links Google to
 /// an existing one).
@@ -307,7 +301,7 @@ final class GoogleMobileEntryControllerProvider
     extends $AsyncNotifierProvider<GoogleMobileEntryController, void> {
   /// Sends the OTP that proves the mobile number for a new Google account (or links Google to
   /// an existing one).
-  const GoogleMobileEntryControllerProvider._()
+  GoogleMobileEntryControllerProvider._()
       : super(
           from: null,
           argument: null,
@@ -335,25 +329,24 @@ abstract class _$GoogleMobileEntryController extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<void>, void>;
     final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<void>, void>,
         AsyncValue<void>, Object?, Object?>;
-    element.handleValue(ref, null);
+    return element.handleCreate(ref, build);
   }
 }
 
 /// Sends the verification OTP to the typed email address.
 
 @ProviderFor(EmailEntryController)
-const emailEntryControllerProvider = EmailEntryControllerProvider._();
+final emailEntryControllerProvider = EmailEntryControllerProvider._();
 
 /// Sends the verification OTP to the typed email address.
 final class EmailEntryControllerProvider
     extends $AsyncNotifierProvider<EmailEntryController, void> {
   /// Sends the verification OTP to the typed email address.
-  const EmailEntryControllerProvider._()
+  EmailEntryControllerProvider._()
       : super(
           from: null,
           argument: null,
@@ -380,11 +373,10 @@ abstract class _$EmailEntryController extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<void>, void>;
     final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<void>, void>,
         AsyncValue<void>, Object?, Object?>;
-    element.handleValue(ref, null);
+    return element.handleCreate(ref, build);
   }
 }

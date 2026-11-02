@@ -12,7 +12,7 @@ part of 'session_controller.dart';
 /// lookup; routing decisions come from the server status, not from cached screens.
 
 @ProviderFor(SessionController)
-const sessionControllerProvider = SessionControllerProvider._();
+final sessionControllerProvider = SessionControllerProvider._();
 
 /// Account state of the signed-in user. Loading and error describe the startup
 /// lookup; routing decisions come from the server status, not from cached screens.
@@ -20,7 +20,7 @@ final class SessionControllerProvider
     extends $AsyncNotifierProvider<SessionController, SessionState> {
   /// Account state of the signed-in user. Loading and error describe the startup
   /// lookup; routing decisions come from the server status, not from cached screens.
-  const SessionControllerProvider._()
+  SessionControllerProvider._()
       : super(
           from: null,
           argument: null,
@@ -48,14 +48,13 @@ abstract class _$SessionController extends $AsyncNotifier<SessionState> {
   FutureOr<SessionState> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<SessionState>, SessionState>;
     final element = ref.element as $ClassProviderElement<
         AnyNotifier<AsyncValue<SessionState>, SessionState>,
         AsyncValue<SessionState>,
         Object?,
         Object?>;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

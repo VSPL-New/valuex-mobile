@@ -12,7 +12,7 @@ part of 'contact_change_controller.dart';
 /// sent to it. The current value stays active on the server until the code is confirmed.
 
 @ProviderFor(ContactChangeController)
-const contactChangeControllerProvider = ContactChangeControllerFamily._();
+final contactChangeControllerProvider = ContactChangeControllerFamily._();
 
 /// Two-step change of the mobile number or email: enter the new value, then confirm the code
 /// sent to it. The current value stays active on the server until the code is confirmed.
@@ -20,7 +20,7 @@ final class ContactChangeControllerProvider
     extends $NotifierProvider<ContactChangeController, ContactChangeState> {
   /// Two-step change of the mobile number or email: enter the new value, then confirm the code
   /// sent to it. The current value stays active on the server until the code is confirmed.
-  const ContactChangeControllerProvider._(
+  ContactChangeControllerProvider._(
       {required ContactChangeControllerFamily super.from, required ContactKind super.argument})
       : super(
           retry: null,
@@ -72,7 +72,7 @@ final class ContactChangeControllerFamily extends $Family
     with
         $ClassFamilyOverride<ContactChangeController, ContactChangeState, ContactChangeState,
             ContactChangeState, ContactKind> {
-  const ContactChangeControllerFamily._()
+  ContactChangeControllerFamily._()
       : super(
           retry: null,
           name: r'contactChangeControllerProvider',
@@ -105,13 +105,14 @@ abstract class _$ContactChangeController extends $Notifier<ContactChangeState> {
   );
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build(
-      _$args,
-    );
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<ContactChangeState, ContactChangeState>;
     final element = ref.element as $ClassProviderElement<
         AnyNotifier<ContactChangeState, ContactChangeState>, ContactChangeState, Object?, Object?>;
-    element.handleValue(ref, created);
+    return element.handleCreate(
+        ref,
+        () => build(
+              _$args,
+            ));
   }
 }

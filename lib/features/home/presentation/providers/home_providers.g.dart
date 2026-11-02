@@ -10,12 +10,12 @@ part of 'home_providers.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(homeRepository)
-const homeRepositoryProvider = HomeRepositoryProvider._();
+final homeRepositoryProvider = HomeRepositoryProvider._();
 
 final class HomeRepositoryProvider
     extends $FunctionalProvider<HomeRepository, HomeRepository, HomeRepository>
     with $Provider<HomeRepository> {
-  const HomeRepositoryProvider._()
+  HomeRepositoryProvider._()
       : super(
           from: null,
           argument: null,
@@ -51,12 +51,12 @@ final class HomeRepositoryProvider
 String _$homeRepositoryHash() => r'fb4f0de04e88837063c9071e5a6bbf03f219acd6';
 
 @ProviderFor(locationService)
-const locationServiceProvider = LocationServiceProvider._();
+final locationServiceProvider = LocationServiceProvider._();
 
 final class LocationServiceProvider
     extends $FunctionalProvider<LocationService, LocationService, LocationService>
     with $Provider<LocationService> {
-  const LocationServiceProvider._()
+  LocationServiceProvider._()
       : super(
           from: null,
           argument: null,
@@ -92,12 +92,12 @@ final class LocationServiceProvider
 String _$locationServiceHash() => r'4c4dd57dd4144057ab2361e237186dacd0d0ca2d';
 
 @ProviderFor(categories)
-const categoriesProvider = CategoriesProvider._();
+final categoriesProvider = CategoriesProvider._();
 
 final class CategoriesProvider extends $FunctionalProvider<AsyncValue<List<ListingCategory>>,
         List<ListingCategory>, FutureOr<List<ListingCategory>>>
     with $FutureModifier<List<ListingCategory>>, $FutureProvider<List<ListingCategory>> {
-  const CategoriesProvider._()
+  CategoriesProvider._()
       : super(
           from: null,
           argument: null,
@@ -125,12 +125,12 @@ final class CategoriesProvider extends $FunctionalProvider<AsyncValue<List<Listi
 String _$categoriesHash() => r'a403df085289ccd1b174ad109da707cc8985dc45';
 
 @ProviderFor(promos)
-const promosProvider = PromosProvider._();
+final promosProvider = PromosProvider._();
 
 final class PromosProvider
     extends $FunctionalProvider<AsyncValue<List<Promo>>, List<Promo>, FutureOr<List<Promo>>>
     with $FutureModifier<List<Promo>>, $FutureProvider<List<Promo>> {
-  const PromosProvider._()
+  PromosProvider._()
       : super(
           from: null,
           argument: null,
@@ -158,12 +158,12 @@ final class PromosProvider
 String _$promosHash() => r'ac0ddc16bfc60fbad23252b553664ce6b6338bd4';
 
 @ProviderFor(homeBadges)
-const homeBadgesProvider = HomeBadgesProvider._();
+final homeBadgesProvider = HomeBadgesProvider._();
 
 final class HomeBadgesProvider
     extends $FunctionalProvider<AsyncValue<HomeBadges>, HomeBadges, FutureOr<HomeBadges>>
     with $FutureModifier<HomeBadges>, $FutureProvider<HomeBadges> {
-  const HomeBadgesProvider._()
+  HomeBadgesProvider._()
       : super(
           from: null,
           argument: null,
@@ -193,7 +193,7 @@ String _$homeBadgesHash() => r'440a92ddc37a00f9b77eb38c9e88012fd978da55';
 /// Featured and nearby listings for the chosen place; empty until a place is known.
 
 @ProviderFor(featuredListings)
-const featuredListingsProvider = FeaturedListingsProvider._();
+final featuredListingsProvider = FeaturedListingsProvider._();
 
 /// Featured and nearby listings for the chosen place; empty until a place is known.
 
@@ -201,7 +201,7 @@ final class FeaturedListingsProvider
     extends $FunctionalProvider<AsyncValue<List<Listing>>, List<Listing>, FutureOr<List<Listing>>>
     with $FutureModifier<List<Listing>>, $FutureProvider<List<Listing>> {
   /// Featured and nearby listings for the chosen place; empty until a place is known.
-  const FeaturedListingsProvider._()
+  FeaturedListingsProvider._()
       : super(
           from: null,
           argument: null,
@@ -233,7 +233,7 @@ String _$featuredListingsHash() => r'96315245719bc121925bf7836cc195478be804d6';
 /// on the device and never saved as an address.
 
 @ProviderFor(HomeLocationController)
-const homeLocationControllerProvider = HomeLocationControllerProvider._();
+final homeLocationControllerProvider = HomeLocationControllerProvider._();
 
 /// The place Home measures "near you" from: one of the user's saved addresses, otherwise the
 /// device location when permission is given. The place is only used to find listings; it is kept
@@ -243,7 +243,7 @@ final class HomeLocationControllerProvider
   /// The place Home measures "near you" from: one of the user's saved addresses, otherwise the
   /// device location when permission is given. The place is only used to find listings; it is kept
   /// on the device and never saved as an address.
-  const HomeLocationControllerProvider._()
+  HomeLocationControllerProvider._()
       : super(
           from: null,
           argument: null,
@@ -272,14 +272,13 @@ abstract class _$HomeLocationController extends $AsyncNotifier<HomeLocationState
   FutureOr<HomeLocationState> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<HomeLocationState>, HomeLocationState>;
     final element = ref.element as $ClassProviderElement<
         AnyNotifier<AsyncValue<HomeLocationState>, HomeLocationState>,
         AsyncValue<HomeLocationState>,
         Object?,
         Object?>;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
