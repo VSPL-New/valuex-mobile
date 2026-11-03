@@ -39,6 +39,9 @@ class AppColors {
   static const Color brandDivider = Color(0xFFDCE4E8);
   static const Color brandError = Color(0xFFA31515);
 
+  /// Pale red fill for a status that needs attention; [brandError] text on it is 6:1 or better.
+  static const Color brandErrorTint = Color(0xFFFCEBEB);
+
   /// Success marks (tick badges); 5:1 against white.
   static const Color brandSuccess = Color(0xFF15803D);
 

@@ -1749,4 +1749,239 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get itemResubmitForReview => 'समीक्षा के लिए दोबारा भेजें';
+
+  @override
+  String get commonCancel => 'रद्द करें';
+
+  @override
+  String get myListingsTitle => 'मेरी लिस्टिंग';
+
+  @override
+  String myListingsTotal(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'कुल $count लिस्टिंग',
+      one: 'कुल 1 लिस्टिंग',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get myListingsSummaryActive => 'सक्रिय';
+
+  @override
+  String get myListingsSummarySold => 'बिकी';
+
+  @override
+  String get myListingsSummaryViews => 'कुल व्यू';
+
+  @override
+  String get myListingsFilterAll => 'सभी';
+
+  @override
+  String get myListingsFilterActive => 'सक्रिय';
+
+  @override
+  String get myListingsFilterSold => 'बिकी';
+
+  @override
+  String myListingsPlan(String name) {
+    return '$name प्लान';
+  }
+
+  @override
+  String get myListingsBadgeActive => 'सक्रिय';
+
+  @override
+  String get myListingsBadgeSold => 'बिकी';
+
+  @override
+  String get myListingsBadgeDraft => 'ड्राफ्ट';
+
+  @override
+  String get myListingsBadgeProcessing => 'भुगतान प्रक्रिया में';
+
+  @override
+  String get myListingsBadgeUnderReview => 'समीक्षा में';
+
+  @override
+  String get myListingsBadgeNeedsChanges => 'बदलाव ज़रूरी';
+
+  @override
+  String get myListingsBadgeExpired => 'समाप्त';
+
+  @override
+  String get myListingsBadgeRejected => 'अस्वीकृत';
+
+  @override
+  String get myListingsBadgeUnavailable => 'उपलब्ध नहीं';
+
+  @override
+  String myListingsViews(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count व्यू',
+      one: '1 व्यू',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String myListingsChats(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count चैट',
+      one: '1 चैट',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get myListingsUntitled => 'बिना शीर्षक की लिस्टिंग';
+
+  @override
+  String myListingsEdit(String title) {
+    return '$title बदलें';
+  }
+
+  @override
+  String myListingsDelete(String title) {
+    return '$title हटाएं';
+  }
+
+  @override
+  String myListingsCardLabel(String title, String price, String status) {
+    return '$title, $price, $status';
+  }
+
+  @override
+  String get myListingsEmptyAll => 'आपने अभी तक कुछ लिस्ट नहीं किया है';
+
+  @override
+  String get myListingsEmptyActive => 'आपकी कोई सक्रिय लिस्टिंग नहीं है';
+
+  @override
+  String get myListingsEmptySold => 'आपने अभी तक कुछ नहीं बेचा है';
+
+  @override
+  String get myListingsListItem => 'वस्तु लिस्ट करें';
+
+  @override
+  String get myListingsLoadMore => 'और दिखाएं';
+
+  @override
+  String get myListingsDeleteTitle => 'इस लिस्टिंग को हटाएं?';
+
+  @override
+  String myListingsDeleteBody(String title) {
+    return '\"$title\" आपकी लिस्टिंग से हटा दी जाएगी। प्लान शुल्क वापस नहीं किया जाएगा।';
+  }
+
+  @override
+  String get myListingsDeleteConfirm => 'हटाएं';
+
+  @override
+  String get myListingsDeleted => 'लिस्टिंग हटाई गई';
+
+  @override
+  String get myListingsUndo => 'पूर्ववत करें';
+
+  @override
+  String get myListingsSaleDetailsSoon => 'बिक्री का विवरण जल्द उपलब्ध होगा';
+
+  @override
+  String get myListingsStatusProcessing =>
+      'हम आपके भुगतान की पुष्टि कर रहे हैं। पूरा होते ही यह लिस्टिंग अपने आप आगे बढ़ जाएगी।';
+
+  @override
+  String get myListingsStatusUnderReview =>
+      'आपकी लिस्टिंग की समीक्षा हो रही है। लाइव होते ही हम आपको बता देंगे।';
+
+  @override
+  String get myListingsStatusExpired =>
+      'इस लिस्टिंग की अवधि समाप्त हो गई है। आप इसे यहाँ से हटा सकते हैं।';
+
+  @override
+  String get myListingsStatusRejected => 'समीक्षा के बाद यह लिस्टिंग अस्वीकृत कर दी गई।';
+
+  @override
+  String get myListingsStatusUnavailable => 'यह लिस्टिंग उपलब्ध नहीं है।';
+
+  @override
+  String get sellErrorNotDeletable =>
+      'इस लिस्टिंग को अभी हटाया नहीं जा सकता। समीक्षा पूरी होने के बाद फिर कोशिश करें';
+
+  @override
+  String get sellErrorCategoryLocked => 'लिस्टिंग लाइव होने के बाद श्रेणी बदली नहीं जा सकती';
+
+  @override
+  String get sellErrorMainPhoto => 'मुख्य फ़ोटो हटाई नहीं जा सकती';
+
+  @override
+  String get sellErrorActiveOrder =>
+      'इस लिस्टिंग पर एक सक्रिय ऑर्डर है, इसलिए इसे हटाया नहीं जा सकता';
+
+  @override
+  String get itemEditTitle => 'लिस्टिंग बदलें';
+
+  @override
+  String get itemEditSubtitle =>
+      'जब तक किसी बदलाव की समीक्षा ज़रूरी न हो, आपकी लिस्टिंग लाइव रहती है';
+
+  @override
+  String get itemSaveChanges => 'बदलाव सहेजें';
+
+  @override
+  String get itemCategoryLocked => 'लिस्टिंग लाइव होने के बाद श्रेणी बदली नहीं जा सकती';
+
+  @override
+  String get itemPhotosLabel => 'फ़ोटो';
+
+  @override
+  String get itemPhotosAdd => 'फ़ोटो जोड़ें';
+
+  @override
+  String itemPhotosCount(int count) {
+    return '$count / 10';
+  }
+
+  @override
+  String get itemPhotosMinHint => 'लिस्टिंग में कम से कम 2 फ़ोटो ज़रूरी हैं';
+
+  @override
+  String get itemPhotosAddedNote => 'जोड़ी गई फ़ोटो लाइव होने से पहले जाँची जाती हैं';
+
+  @override
+  String get itemEditSaved => 'बदलाव सहेजे गए';
+
+  @override
+  String get itemEditSentForReview =>
+      'समीक्षा के लिए भेजा गया। मंज़ूरी मिलने तक आपकी लिस्टिंग छिपी रहेगी';
+
+  @override
+  String get remoderationTitle => 'इस बदलाव की समीक्षा ज़रूरी है';
+
+  @override
+  String get remoderationBody => 'दोबारा समीक्षा होने तक आपकी लिस्टिंग छिपी रहेगी।';
+
+  @override
+  String get remoderationPlanRuns => 'इस बीच आपका प्लान चलता रहेगा।';
+
+  @override
+  String get remoderationReasonPrice => 'कीमत मंज़ूर की गई कीमत से 20% से ज़्यादा अलग है';
+
+  @override
+  String get remoderationReasonContent => 'नए टेक्स्ट को हमारी टीम को देखना होगा';
+
+  @override
+  String get remoderationReasonPhotos => 'आपने फ़ोटो जोड़ी हैं';
+
+  @override
+  String get remoderationConfirm => 'सहेजें और समीक्षा के लिए भेजें';
+
+  @override
+  String get remoderationCancel => 'बदलाव जारी रखें';
 }

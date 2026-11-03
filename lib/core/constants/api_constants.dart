@@ -33,6 +33,7 @@ class ApiConstants {
   static String notificationRead(String id) => '/notifications/$id/read';
 
   static const String listings = '/listings';
+  static const String myListings = '/listings/mine';
   static const String sellerPlans = '/plans/seller';
   static const String mediaUploads = '/media/uploads';
 
@@ -41,6 +42,7 @@ class ApiConstants {
   static String listingAiFeedback(String listingId, String suggestionId) =>
       '/listings/$listingId/ai-suggestions/$suggestionId/feedback';
   static String mediaComplete(String mediaId) => '/media/$mediaId/complete';
+  static String mediaAccess(String mediaId) => '/media/$mediaId/access';
   static String listingImages(String listingId) => '/listings/$listingId/images';
   static String listingSubmit(String listingId) => '/listings/$listingId/submit';
   static String listingTrustSafetyReview(String listingId) =>

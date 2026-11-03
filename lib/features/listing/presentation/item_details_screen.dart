@@ -18,6 +18,7 @@ import '../../home/presentation/providers/home_providers.dart';
 import '../../home/presentation/widgets/location_prompt.dart';
 import '../../home/presentation/widgets/location_sheet.dart';
 import '../../home/presentation/widgets/saved_location_dialog.dart';
+import '../data/photo_source.dart';
 import '../domain/listing_details.dart';
 import '../domain/listing_photo.dart';
 import '../domain/listing_schema.dart';
@@ -27,7 +28,10 @@ import 'category_picker_screen.dart';
 import 'listing_error_messages.dart';
 import 'providers/item_details_controller.dart';
 import 'providers/create_listing_controller.dart';
+import 'providers/live_photos_controller.dart';
+import 'widgets/live_photos_section.dart';
 import 'widgets/option_chip.dart';
+import 'widgets/remoderation_sheet.dart';
 import 'widgets/restricted_item_dialogs.dart';
 import 'widgets/schema_field_input.dart';
 import 'widgets/sell_step_header.dart';
@@ -90,6 +94,67 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
       return;
     }
     _showError(result.error);
+  }
+
+  /// US-010: saves an edit of a live listing. A major edit is answered with the reasons first;
+  /// it is saved, and the listing sent back to review, only once the seller confirms.
+  Future<void> _saveLive({bool confirm = false}) async {
+    final photos = ref.read(livePhotosControllerProvider(widget.args));
+    final result = await _controller.saveLive(
+      addMediaIds: photos.addedMediaIds,
+      removeImageIds: photos.removedImageIds,
+      confirm: confirm,
+    );
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context);
+    if (result.saved) {
+      _showMessage(confirm ? l10n.itemEditSentForReview : l10n.itemEditSaved);
+      context.pop();
+      return;
+    }
+    final error = result.error;
+    if (error is ApiError && error.code == 'ERROR_REMODERATION_CONFIRMATION_REQUIRED') {
+      final agreed = await showRemoderationSheet(
+        context,
+        parseRemoderationReasons(error.details['reasons']),
+      );
+      if (agreed && mounted) await _saveLive(confirm: true);
+      return;
+    }
+    _showError(error);
+  }
+
+  Future<void> _addPhotos(PhotoSourceKind kind) async {
+    final notice =
+        await ref.read(livePhotosControllerProvider(widget.args).notifier).addPhotos(kind);
+    if (notice == null || !mounted) return;
+    _showMessage(listingNoticeMessage(AppLocalizations.of(context), notice));
+  }
+
+  Future<void> _chooseSource() async {
+    final l10n = AppLocalizations.of(context);
+    final kind = await showModalBottomSheet<PhotoSourceKind>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_camera_outlined),
+              title: Text(l10n.sellTakePhoto),
+              onTap: () => Navigator.pop(context, PhotoSourceKind.camera),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library_outlined),
+              title: Text(l10n.sellChooseFromGallery),
+              onTap: () => Navigator.pop(context, PhotoSourceKind.gallery),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (kind != null) await _addPhotos(kind);
   }
 
   /// US-007: the plan page opens only when the item passes the restricted items policy.
@@ -182,9 +247,14 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final state = ref.watch(itemDetailsControllerProvider(widget.args));
+    final live = widget.args.isLive;
+    final photos = live ? ref.watch(livePhotosControllerProvider(widget.args)) : null;
     final hints = state.visibleHints.toSet();
     final schema = state.schema;
     final ready = state.schemaStatus == SchemaStatus.ready && schema != null;
+    final canSave = live
+        ? state.canContinue && photos!.hasEnoughPhotos && !photos.hasPending && !photos.hasFailed
+        : state.canContinue;
 
     return Scaffold(
       body: Column(
@@ -192,8 +262,9 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
         children: [
           SellStepHeader(
             step: 1,
-            title: l10n.itemDetailsTitle,
-            subtitle: l10n.itemDetailsSubtitleManual,
+            showProgress: !live,
+            title: live ? l10n.itemEditTitle : l10n.itemDetailsTitle,
+            subtitle: live ? l10n.itemEditSubtitle : l10n.itemDetailsSubtitleManual,
             aiNotice: state.aiFilled ? l10n.itemDetailsAiBanner : null,
             onBack: () => context.canPop() ? context.pop() : context.go(RouteNames.sell),
           ),
@@ -223,7 +294,7 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                         label: l10n.itemCategoryLabel,
                         icon: Icons.grid_view_rounded,
                         aiGenerated: state.isAiGenerated(DetailsField.category),
-                        child: _CategoryRow(state: state, onTap: _chooseCategory),
+                        child: _CategoryRow(state: state, onTap: _chooseCategory, locked: live),
                       ),
                       _Hint(
                           show: hints.contains(DetailsField.category),
@@ -231,6 +302,19 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                     ],
                   ),
                 ),
+                if (photos != null) ...[
+                  const SizedBox(height: AppSpacing.md),
+                  LivePhotosSection(
+                    state: photos,
+                    onAdd: () => unawaited(_chooseSource()),
+                    onRemove: (photo) => ref
+                        .read(livePhotosControllerProvider(widget.args).notifier)
+                        .remove(photo.localId),
+                    onRetry: (photo) => unawaited(ref
+                        .read(livePhotosControllerProvider(widget.args).notifier)
+                        .retry(photo.localId)),
+                  ),
+                ],
                 if (state.schemaStatus == SchemaStatus.loading)
                   Padding(
                     padding: const EdgeInsets.only(top: AppSpacing.md),
@@ -267,12 +351,14 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                       const SizedBox(height: AppSpacing.sm),
                     ],
                     BrandGradientButton(
-                      label: widget.args.isRevision
-                          ? l10n.itemResubmitForReview
-                          : l10n.itemChooseListingPlan,
-                      trailingIcon: Icons.chevron_right_rounded,
+                      label: live
+                          ? l10n.itemSaveChanges
+                          : widget.args.isRevision
+                              ? l10n.itemResubmitForReview
+                              : l10n.itemChooseListingPlan,
+                      trailingIcon: live ? null : Icons.chevron_right_rounded,
                       isLoading: state.isSaving,
-                      onPressed: state.canContinue ? () => unawaited(_continue()) : null,
+                      onPressed: canSave ? () => unawaited(live ? _saveLive() : _continue()) : null,
                     ),
                   ],
                 ),
@@ -662,12 +748,14 @@ class _InfoCard extends StatelessWidget {
   }
 }
 
-/// The chosen category with its path and a button to change it, or a button to choose one.
+/// The chosen category with its path and a button to change it, or a button to choose one. On a
+/// live listing the category is [locked]: it is shown with the reason, without a button.
 class _CategoryRow extends StatelessWidget {
   final ItemDetailsState state;
   final VoidCallback onTap;
+  final bool locked;
 
-  const _CategoryRow({required this.state, required this.onTap});
+  const _CategoryRow({required this.state, required this.onTap, this.locked = false});
 
   @override
   Widget build(BuildContext context) {
@@ -683,7 +771,7 @@ class _CategoryRow extends StatelessWidget {
         ),
       );
     }
-    return DecoratedBox(
+    final row = DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.brandSurfaceTint,
         borderRadius: BorderRadius.circular(AppRadius.lg),
@@ -703,10 +791,24 @@ class _CategoryRow extends StatelessWidget {
                 ],
               ),
             ),
-            TextButton(onPressed: onTap, child: Text(l10n.itemCategoryChange)),
+            if (locked)
+              const ExcludeSemantics(
+                child: Icon(Icons.lock_outline_rounded, size: 20, color: AppColors.brandMutedText),
+              )
+            else
+              TextButton(onPressed: onTap, child: Text(l10n.itemCategoryChange)),
           ],
         ),
       ),
+    );
+    if (!locked) return row;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        row,
+        const SizedBox(height: AppSpacing.xs),
+        Text(l10n.itemCategoryLocked, style: AppTextStyles.hint),
+      ],
     );
   }
 }

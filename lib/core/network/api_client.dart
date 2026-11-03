@@ -155,11 +155,17 @@ class ApiClient {
   Future<T> patch<T>(
     String path, {
     Object? data,
+    Map<String, dynamic>? queryParameters,
     bool authenticated = true,
     T Function(Object? data)? parse,
   }) {
     return _send(
-      () => dio.patch<dynamic>(path, data: data, options: _options(authenticated)),
+      () => dio.patch<dynamic>(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: _options(authenticated),
+      ),
       parse,
     );
   }
@@ -202,6 +208,8 @@ class ApiClient {
     }
 
     try {
+      // 204 No Content (a delete) has no envelope to read.
+      if (response.statusCode == 204) return (null as T, response);
       final envelope = ApiResponse.tryParse<T>(response.data, parse: parse);
       if (envelope == null || !envelope.success) {
         throw ApiError(
