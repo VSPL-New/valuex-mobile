@@ -161,8 +161,11 @@ class ProfileScreen extends ConsumerWidget {
                         items: [
                           item(Icons.assignment_outlined, l10n.profileIncomingOrders,
                               ProfileMenuKeys.incomingOrders),
-                          item(Icons.sell_outlined, l10n.profileMyListings,
-                              ProfileMenuKeys.myListings),
+                          item(
+                              Icons.sell_outlined,
+                              l10n.profileMyListings,
+                              ProfileMenuKeys.myListings,
+                              () => context.push(RouteNames.myListings)),
                           item(Icons.account_balance_outlined, l10n.profilePayoutDetails,
                               ProfileMenuKeys.payouts),
                           item(Icons.bar_chart, l10n.profileSellerAnalytics),

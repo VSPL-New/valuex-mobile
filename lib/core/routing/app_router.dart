@@ -30,6 +30,7 @@ import '../../features/listing/presentation/create_listing_screen.dart';
 import '../../features/listing/presentation/item_details_screen.dart';
 import '../../features/listing/presentation/listing_plan_screen.dart';
 import '../../features/listing/presentation/listing_submitted_screen.dart';
+import '../../features/listing/presentation/my_listings_screen.dart';
 import '../../features/listing/presentation/review_listing_screen.dart';
 import '../../features/listing/presentation/providers/item_details_controller.dart';
 import '../../features/profile/presentation/profile_details_screen.dart';
@@ -62,6 +63,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: 'details',
             name: 'profileDetails',
             builder: (context, state) => const ProfileDetailsScreen(),
+          ),
+          GoRoute(
+            path: 'listings',
+            name: 'myListings',
+            builder: (context, state) => const MyListingsScreen(),
           ),
           GoRoute(
             path: 'security',

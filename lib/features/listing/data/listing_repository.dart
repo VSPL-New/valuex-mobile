@@ -10,6 +10,7 @@ import '../domain/category.dart';
 import '../domain/existing_listing.dart';
 import '../domain/listing_details.dart';
 import '../domain/listing_schema.dart';
+import '../domain/my_listings.dart';
 import '../domain/plan_selection.dart';
 import '../domain/restricted_check.dart';
 import '../domain/seller_plan.dart';
@@ -126,6 +127,55 @@ class ListingRepository {
 
   Future<void> deleteImage(String listingId, String imageId) =>
       _client.delete<void>(ApiConstants.listingImage(listingId, imageId));
+
+  /// One page of the seller's own listings with the counts shown above them (US-010).
+  Future<MyListingsPage> myListings({
+    MyListingsFilter filter = MyListingsFilter.all,
+    int page = 0,
+    int size = 20,
+  }) =>
+      _client.get(
+        ApiConstants.myListings,
+        queryParameters: {
+          'page': page,
+          'size': size,
+          if (filter.apiValue != null) 'status': filter.apiValue,
+        },
+        parse: (json) => MyListingsPage.fromJson(json as Map<String, dynamic>),
+      );
+
+  /// Deletes a listing (a soft delete on the server); the plan fee is not refunded.
+  Future<void> deleteListing(String listingId) =>
+      _client.delete<void>(ApiConstants.listing(listingId));
+
+  /// A short-lived link to show one of the listing's photos.
+  Future<String> photoUrl(String mediaId) => _client.post(
+        ApiConstants.mediaAccess(mediaId),
+        parse: (json) => (json as Map<String, dynamic>)['accessUrl'] as String,
+      );
+
+  /// Saves an edit of a live listing (US-010): the details, plus photos added by media id and
+  /// removed by listing image id. A major edit is answered with 409
+  /// `ERROR_REMODERATION_CONFIRMATION_REQUIRED` and changes nothing until it is sent again with
+  /// [confirmRemoderation].
+  Future<void> editLiveListing(
+    String listingId,
+    ListingDetailsDraft details,
+    ListingSchema schema, {
+    String? city,
+    List<String> addMediaIds = const [],
+    List<String> removeImageIds = const [],
+    bool confirmRemoderation = false,
+  }) =>
+      _client.patch<void>(
+        ApiConstants.listing(listingId),
+        queryParameters: confirmRemoderation ? {'confirmRemoderation': true} : null,
+        data: {
+          ...details.toJson(schema, city: city),
+          if (addMediaIds.isNotEmpty) 'addMediaIds': addMediaIds,
+          if (removeImageIds.isNotEmpty) 'removeImageIds': removeImageIds,
+        },
+      );
 
   /// Saves the item details of a draft (US-114, US-006): the common fields plus the values the
   /// category asks for. Only the city is sent as the location.

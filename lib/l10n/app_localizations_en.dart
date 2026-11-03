@@ -1759,4 +1759,238 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get itemResubmitForReview => 'Resubmit for review';
+
+  @override
+  String get commonCancel => 'Cancel';
+
+  @override
+  String get myListingsTitle => 'My Listings';
+
+  @override
+  String myListingsTotal(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count total listings',
+      one: '1 total listing',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get myListingsSummaryActive => 'Active';
+
+  @override
+  String get myListingsSummarySold => 'Sold';
+
+  @override
+  String get myListingsSummaryViews => 'Total Views';
+
+  @override
+  String get myListingsFilterAll => 'All';
+
+  @override
+  String get myListingsFilterActive => 'Active';
+
+  @override
+  String get myListingsFilterSold => 'Sold';
+
+  @override
+  String myListingsPlan(String name) {
+    return '$name plan';
+  }
+
+  @override
+  String get myListingsBadgeActive => 'Active';
+
+  @override
+  String get myListingsBadgeSold => 'Sold';
+
+  @override
+  String get myListingsBadgeDraft => 'Draft';
+
+  @override
+  String get myListingsBadgeProcessing => 'Processing payment';
+
+  @override
+  String get myListingsBadgeUnderReview => 'Under review';
+
+  @override
+  String get myListingsBadgeNeedsChanges => 'Needs changes';
+
+  @override
+  String get myListingsBadgeExpired => 'Expired';
+
+  @override
+  String get myListingsBadgeRejected => 'Rejected';
+
+  @override
+  String get myListingsBadgeUnavailable => 'Unavailable';
+
+  @override
+  String myListingsViews(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count views',
+      one: '1 view',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String myListingsChats(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count chats',
+      one: '1 chat',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get myListingsUntitled => 'Untitled listing';
+
+  @override
+  String myListingsEdit(String title) {
+    return 'Edit $title';
+  }
+
+  @override
+  String myListingsDelete(String title) {
+    return 'Delete $title';
+  }
+
+  @override
+  String myListingsCardLabel(String title, String price, String status) {
+    return '$title, $price, $status';
+  }
+
+  @override
+  String get myListingsEmptyAll => 'You haven\'t listed anything yet';
+
+  @override
+  String get myListingsEmptyActive => 'You have no active listings';
+
+  @override
+  String get myListingsEmptySold => 'You haven\'t sold anything yet';
+
+  @override
+  String get myListingsListItem => 'List an item';
+
+  @override
+  String get myListingsLoadMore => 'Load more';
+
+  @override
+  String get myListingsDeleteTitle => 'Delete this listing?';
+
+  @override
+  String myListingsDeleteBody(String title) {
+    return '\"$title\" will be removed from your listings. The plan fee is not refunded.';
+  }
+
+  @override
+  String get myListingsDeleteConfirm => 'Delete';
+
+  @override
+  String get myListingsDeleted => 'Listing deleted';
+
+  @override
+  String get myListingsUndo => 'Undo';
+
+  @override
+  String get myListingsSaleDetailsSoon => 'Sale details are coming soon';
+
+  @override
+  String get myListingsStatusProcessing =>
+      'We\'re confirming your payment. This listing moves on by itself once it\'s done.';
+
+  @override
+  String get myListingsStatusUnderReview =>
+      'Your listing is being reviewed. We\'ll let you know as soon as it\'s live.';
+
+  @override
+  String get myListingsStatusExpired => 'This listing has expired. You can delete it from here.';
+
+  @override
+  String get myListingsStatusRejected => 'This listing was rejected after review.';
+
+  @override
+  String get myListingsStatusUnavailable => 'This listing is not available.';
+
+  @override
+  String get sellErrorNotDeletable =>
+      'This listing can\'t be deleted right now. Try again after the review is done';
+
+  @override
+  String get sellErrorCategoryLocked =>
+      'The category can\'t be changed after your listing has gone live';
+
+  @override
+  String get sellErrorMainPhoto => 'The main photo can\'t be deleted';
+
+  @override
+  String get sellErrorActiveOrder => 'This listing has an active order and can\'t be deleted';
+
+  @override
+  String get itemEditTitle => 'Edit Listing';
+
+  @override
+  String get itemEditSubtitle => 'Your listing stays live unless a change needs a review';
+
+  @override
+  String get itemSaveChanges => 'Save changes';
+
+  @override
+  String get itemCategoryLocked =>
+      'The category can\'t be changed after your listing has gone live';
+
+  @override
+  String get itemPhotosLabel => 'Photos';
+
+  @override
+  String get itemPhotosAdd => 'Add photos';
+
+  @override
+  String itemPhotosCount(int count) {
+    return '$count of 10';
+  }
+
+  @override
+  String get itemPhotosMinHint => 'A listing needs at least 2 photos';
+
+  @override
+  String get itemPhotosAddedNote => 'Added photos are checked before they go live';
+
+  @override
+  String get itemEditSaved => 'Changes saved';
+
+  @override
+  String get itemEditSentForReview =>
+      'Sent for review. Your listing is hidden until it\'s approved';
+
+  @override
+  String get remoderationTitle => 'This change needs a review';
+
+  @override
+  String get remoderationBody => 'Your listing will be hidden until it\'s reviewed again.';
+
+  @override
+  String get remoderationPlanRuns => 'Your plan keeps running meanwhile.';
+
+  @override
+  String get remoderationReasonPrice => 'The price is more than 20% away from the approved price';
+
+  @override
+  String get remoderationReasonContent => 'The new text needs a look from our team';
+
+  @override
+  String get remoderationReasonPhotos => 'You added photos';
+
+  @override
+  String get remoderationConfirm => 'Save and send for review';
+
+  @override
+  String get remoderationCancel => 'Keep editing';
 }

@@ -20,6 +20,10 @@ class ItemDetailsArgs {
   /// A listing that needs changes is resubmitted for review, not sent to plan selection again.
   bool get isRevision => existing?.status == 'REVISION_REQUIRED';
 
+  /// A published listing being edited in place (US-010): no steps, no AI, no plan; its category is
+  /// locked and its photos change on this page.
+  bool get isLive => existing?.status == 'PUBLISHED';
+
   @override
   bool operator ==(Object other) =>
       other is ItemDetailsArgs &&
@@ -302,6 +306,36 @@ class ItemDetailsController extends Notifier<ItemDetailsState> {
     try {
       await _repository.saveDetails(args.listingId, draft, schema, city: _city());
       await _sendFeedback(draft);
+      return (saved: true, error: null);
+    } on ApiError catch (error) {
+      return (saved: false, error: error);
+    } finally {
+      if (ref.mounted) state = state.copyWith(isSaving: false);
+    }
+  }
+
+  /// Saves an edit of a live listing with its photo changes (US-010). A major edit comes back as
+  /// the error `ERROR_REMODERATION_CONFIRMATION_REQUIRED` and nothing is saved; send it again with
+  /// [confirm] once the seller agreed.
+  Future<({bool saved, Object? error})> saveLive({
+    List<String> addMediaIds = const [],
+    Set<String> removeImageIds = const {},
+    bool confirm = false,
+  }) async {
+    final schema = state.schema;
+    if (schema == null || !state.canContinue) return (saved: false, error: null);
+    state = state.copyWith(isSaving: true);
+    try {
+      await _repository.editLiveListing(
+        args.listingId,
+        state.draft,
+        schema,
+        // Keeps the stored city when the place chosen on Home is not known.
+        city: _city() ?? args.existing?.city,
+        addMediaIds: addMediaIds,
+        removeImageIds: [...removeImageIds],
+        confirmRemoderation: confirm,
+      );
       return (saved: true, error: null);
     } on ApiError catch (error) {
       return (saved: false, error: error);

@@ -19,6 +19,9 @@ class SellStepHeader extends StatelessWidget {
   final String? aiNotice;
   final VoidCallback onBack;
 
+  /// False on a page that is not one of the four Sell steps (editing a live listing).
+  final bool showProgress;
+
   const SellStepHeader({
     super.key,
     required this.step,
@@ -26,6 +29,7 @@ class SellStepHeader extends StatelessWidget {
     required this.subtitle,
     this.aiNotice,
     required this.onBack,
+    this.showProgress = true,
   });
 
   @override
@@ -43,25 +47,26 @@ class SellStepHeader extends StatelessWidget {
             children: [
               SquareBackButton(onPressed: onBack),
               const SizedBox(height: AppSpacing.sm),
-              ExcludeSemantics(
-                child: Row(
-                  children: [
-                    for (var i = 0; i < steps; i++) ...[
-                      if (i > 0) const SizedBox(width: 6),
-                      Expanded(
-                        child: Container(
-                          height: 4,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(2),
-                            gradient: i <= step ? AppGradients.brand : null,
-                            color: i <= step ? null : AppColors.brandBorder,
+              if (showProgress)
+                ExcludeSemantics(
+                  child: Row(
+                    children: [
+                      for (var i = 0; i < steps; i++) ...[
+                        if (i > 0) const SizedBox(width: 6),
+                        Expanded(
+                          child: Container(
+                            height: 4,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2),
+                              gradient: i <= step ? AppGradients.brand : null,
+                              color: i <= step ? null : AppColors.brandBorder,
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
               const SizedBox(height: AppSpacing.md),
               Semantics(header: true, child: Text(title, style: AppTextStyles.heading2)),
               if (aiNotice == null)

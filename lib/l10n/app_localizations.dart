@@ -3194,6 +3194,390 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Resubmit for review'**
   String get itemResubmitForReview;
+
+  /// No description provided for @commonCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get commonCancel;
+
+  /// No description provided for @myListingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Listings'**
+  String get myListingsTitle;
+
+  /// No description provided for @myListingsTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 total listing} other{{count} total listings}}'**
+  String myListingsTotal(int count);
+
+  /// No description provided for @myListingsSummaryActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get myListingsSummaryActive;
+
+  /// No description provided for @myListingsSummarySold.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold'**
+  String get myListingsSummarySold;
+
+  /// No description provided for @myListingsSummaryViews.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Views'**
+  String get myListingsSummaryViews;
+
+  /// No description provided for @myListingsFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get myListingsFilterAll;
+
+  /// No description provided for @myListingsFilterActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get myListingsFilterActive;
+
+  /// No description provided for @myListingsFilterSold.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold'**
+  String get myListingsFilterSold;
+
+  /// No description provided for @myListingsPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} plan'**
+  String myListingsPlan(String name);
+
+  /// No description provided for @myListingsBadgeActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get myListingsBadgeActive;
+
+  /// No description provided for @myListingsBadgeSold.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold'**
+  String get myListingsBadgeSold;
+
+  /// No description provided for @myListingsBadgeDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft'**
+  String get myListingsBadgeDraft;
+
+  /// No description provided for @myListingsBadgeProcessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing payment'**
+  String get myListingsBadgeProcessing;
+
+  /// No description provided for @myListingsBadgeUnderReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Under review'**
+  String get myListingsBadgeUnderReview;
+
+  /// No description provided for @myListingsBadgeNeedsChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs changes'**
+  String get myListingsBadgeNeedsChanges;
+
+  /// No description provided for @myListingsBadgeExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get myListingsBadgeExpired;
+
+  /// No description provided for @myListingsBadgeRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get myListingsBadgeRejected;
+
+  /// No description provided for @myListingsBadgeUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get myListingsBadgeUnavailable;
+
+  /// No description provided for @myListingsViews.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 view} other{{count} views}}'**
+  String myListingsViews(int count);
+
+  /// No description provided for @myListingsChats.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 chat} other{{count} chats}}'**
+  String myListingsChats(int count);
+
+  /// No description provided for @myListingsUntitled.
+  ///
+  /// In en, this message translates to:
+  /// **'Untitled listing'**
+  String get myListingsUntitled;
+
+  /// No description provided for @myListingsEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit {title}'**
+  String myListingsEdit(String title);
+
+  /// No description provided for @myListingsDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {title}'**
+  String myListingsDelete(String title);
+
+  /// No description provided for @myListingsCardLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{title}, {price}, {status}'**
+  String myListingsCardLabel(String title, String price, String status);
+
+  /// No description provided for @myListingsEmptyAll.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t listed anything yet'**
+  String get myListingsEmptyAll;
+
+  /// No description provided for @myListingsEmptyActive.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no active listings'**
+  String get myListingsEmptyActive;
+
+  /// No description provided for @myListingsEmptySold.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t sold anything yet'**
+  String get myListingsEmptySold;
+
+  /// No description provided for @myListingsListItem.
+  ///
+  /// In en, this message translates to:
+  /// **'List an item'**
+  String get myListingsListItem;
+
+  /// No description provided for @myListingsLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get myListingsLoadMore;
+
+  /// No description provided for @myListingsDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this listing?'**
+  String get myListingsDeleteTitle;
+
+  /// No description provided for @myListingsDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" will be removed from your listings. The plan fee is not refunded.'**
+  String myListingsDeleteBody(String title);
+
+  /// No description provided for @myListingsDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get myListingsDeleteConfirm;
+
+  /// No description provided for @myListingsDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing deleted'**
+  String get myListingsDeleted;
+
+  /// No description provided for @myListingsUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get myListingsUndo;
+
+  /// No description provided for @myListingsSaleDetailsSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale details are coming soon'**
+  String get myListingsSaleDetailsSoon;
+
+  /// No description provided for @myListingsStatusProcessing.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re confirming your payment. This listing moves on by itself once it\'s done.'**
+  String get myListingsStatusProcessing;
+
+  /// No description provided for @myListingsStatusUnderReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing is being reviewed. We\'ll let you know as soon as it\'s live.'**
+  String get myListingsStatusUnderReview;
+
+  /// No description provided for @myListingsStatusExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing has expired. You can delete it from here.'**
+  String get myListingsStatusExpired;
+
+  /// No description provided for @myListingsStatusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing was rejected after review.'**
+  String get myListingsStatusRejected;
+
+  /// No description provided for @myListingsStatusUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing is not available.'**
+  String get myListingsStatusUnavailable;
+
+  /// No description provided for @sellErrorNotDeletable.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing can\'t be deleted right now. Try again after the review is done'**
+  String get sellErrorNotDeletable;
+
+  /// No description provided for @sellErrorCategoryLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'The category can\'t be changed after your listing has gone live'**
+  String get sellErrorCategoryLocked;
+
+  /// No description provided for @sellErrorMainPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'The main photo can\'t be deleted'**
+  String get sellErrorMainPhoto;
+
+  /// No description provided for @sellErrorActiveOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing has an active order and can\'t be deleted'**
+  String get sellErrorActiveOrder;
+
+  /// No description provided for @itemEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Listing'**
+  String get itemEditTitle;
+
+  /// No description provided for @itemEditSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing stays live unless a change needs a review'**
+  String get itemEditSubtitle;
+
+  /// No description provided for @itemSaveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get itemSaveChanges;
+
+  /// No description provided for @itemCategoryLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'The category can\'t be changed after your listing has gone live'**
+  String get itemCategoryLocked;
+
+  /// No description provided for @itemPhotosLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos'**
+  String get itemPhotosLabel;
+
+  /// No description provided for @itemPhotosAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photos'**
+  String get itemPhotosAdd;
+
+  /// No description provided for @itemPhotosCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of 10'**
+  String itemPhotosCount(int count);
+
+  /// No description provided for @itemPhotosMinHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A listing needs at least 2 photos'**
+  String get itemPhotosMinHint;
+
+  /// No description provided for @itemPhotosAddedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Added photos are checked before they go live'**
+  String get itemPhotosAddedNote;
+
+  /// No description provided for @itemEditSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes saved'**
+  String get itemEditSaved;
+
+  /// No description provided for @itemEditSentForReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent for review. Your listing is hidden until it\'s approved'**
+  String get itemEditSentForReview;
+
+  /// No description provided for @remoderationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This change needs a review'**
+  String get remoderationTitle;
+
+  /// No description provided for @remoderationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing will be hidden until it\'s reviewed again.'**
+  String get remoderationBody;
+
+  /// No description provided for @remoderationPlanRuns.
+  ///
+  /// In en, this message translates to:
+  /// **'Your plan keeps running meanwhile.'**
+  String get remoderationPlanRuns;
+
+  /// No description provided for @remoderationReasonPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'The price is more than 20% away from the approved price'**
+  String get remoderationReasonPrice;
+
+  /// No description provided for @remoderationReasonContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The new text needs a look from our team'**
+  String get remoderationReasonContent;
+
+  /// No description provided for @remoderationReasonPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'You added photos'**
+  String get remoderationReasonPhotos;
+
+  /// No description provided for @remoderationConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Save and send for review'**
+  String get remoderationConfirm;
+
+  /// No description provided for @remoderationCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep editing'**
+  String get remoderationCancel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

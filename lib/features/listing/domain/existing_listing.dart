@@ -1,6 +1,21 @@
 import 'category.dart';
 import 'listing_details.dart';
 
+/// A photo already on a listing: the listing image id (to remove it) and its media asset (to show it).
+class ListingImageRef {
+  final String imageId;
+  final String mediaId;
+  final int sortOrder;
+
+  const ListingImageRef({required this.imageId, required this.mediaId, required this.sortOrder});
+
+  factory ListingImageRef.fromJson(Map<String, dynamic> json) => ListingImageRef(
+        imageId: json['imageId'] as String,
+        mediaId: json['mediaId'] as String,
+        sortOrder: (json['sortOrder'] as num?)?.toInt() ?? 0,
+      );
+}
+
 /// A listing the seller already created, as the server stores it (`GET /listings/{id}`); used to
 /// reopen Item Details or plan selection from a notification.
 class ExistingListing {
@@ -12,12 +27,16 @@ class ExistingListing {
   final CategoryRef? category;
   final String city;
 
+  /// The photos in order; the first is the main photo.
+  final List<ListingImageRef> images;
+
   const ExistingListing({
     required this.listingId,
     required this.status,
     required this.draft,
     this.category,
     this.city = '',
+    this.images = const [],
   });
 
   factory ExistingListing.fromJson(Map<String, dynamic> json) {
@@ -29,6 +48,10 @@ class ExistingListing {
       status: json['status'] as String? ?? '',
       category: categoryRef,
       city: json['location'] as String? ?? '',
+      images: [
+        for (final image in json['images'] as List<dynamic>? ?? const [])
+          ListingImageRef.fromJson(image as Map<String, dynamic>),
+      ],
       draft: ListingDetailsDraft(
         title: json['title'] as String? ?? '',
         categoryCode: categoryRef?.code,
