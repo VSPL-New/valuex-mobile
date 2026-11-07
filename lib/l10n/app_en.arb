@@ -773,5 +773,27 @@
   "remoderationReasonContent": "The new text needs a look from our team",
   "remoderationReasonPhotos": "You added photos",
   "remoderationConfirm": "Save and send for review",
-  "remoderationCancel": "Keep editing"
+  "remoderationCancel": "Keep editing",
+  "languageTitle": "Language",
+  "languageSubtitle": "Choose your preferred language",
+  "languageSave": "Save Language Preference",
+  "languageNameEnglish": "English",
+  "languageNameHindi": "Hindi",
+  "languageSelected": "{name}, selected",
+  "@languageSelected": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "languageChipLabel": "Language, {name}",
+  "@languageChipLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "languageSheetTitle": "Choose your language"
 }

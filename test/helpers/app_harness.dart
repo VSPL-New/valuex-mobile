@@ -16,6 +16,7 @@ import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart'
 import 'package:valuex_mobile/features/auth/domain/entities/user_profile.dart';
 import 'package:valuex_mobile/features/auth/presentation/providers/auth_providers.dart';
 import 'package:valuex_mobile/features/home/presentation/providers/home_providers.dart';
+import 'package:valuex_mobile/features/settings/presentation/providers/locale_controller.dart';
 
 import 'fake_location_service.dart';
 import 'mocks.dart';
@@ -52,13 +53,26 @@ class AppHarness {
   final AppConfig config;
   final List<Override> extraOverrides;
 
-  AppHarness(this.tester, {AppConfig? config, this.extraOverrides = const []})
-      : config = config ?? testConfig {
+  /// Pass false to start like a fresh install: nothing saved, whatever the phone's language is.
+  final bool deviceLanguageSaved;
+
+  AppHarness(
+    this.tester, {
+    AppConfig? config,
+    this.extraOverrides = const [],
+    this.deviceLanguageSaved = true,
+  }) : config = config ?? testConfig {
     SharedPreferences.setMockInitialValues({});
     when(() => apiClient.sessionEvents).thenAnswer((_) => sessionExpired.stream);
     when(() => repository.hasSession()).thenAnswer((_) async => false);
     when(() => repository.clearSession()).thenAnswer((_) async {});
     when(() => repository.revokePendingSession()).thenAnswer((_) async {});
+  }
+
+  String _platformLanguage() {
+    final dispatcher = tester.platformDispatcher;
+    final codes = [dispatcher.locale, ...dispatcher.locales].map((l) => l.languageCode);
+    return codes.contains('hi') ? 'hi' : 'en';
   }
 
   ProviderContainer get container =>
@@ -91,6 +105,9 @@ class AppHarness {
           apiClientProvider.overrideWithValue(apiClient),
           screenProtectionServiceProvider.overrideWithValue(screenProtection),
           locationServiceProvider.overrideWithValue(locationService),
+          // The app ignores the phone's language. Tests that set the platform locale before
+          // launching stand for a user who saved that language.
+          if (deviceLanguageSaved) savedLanguageCodeProvider.overrideWithValue(_platformLanguage()),
           ...extraOverrides,
         ],
         child: const ValueXApp(),

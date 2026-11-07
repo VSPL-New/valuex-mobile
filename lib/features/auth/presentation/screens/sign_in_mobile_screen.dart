@@ -8,6 +8,7 @@ import '../../../../core/theme/text_styles.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../core/widgets/brand_gradient_button.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../settings/presentation/widgets/language_chip.dart';
 import '../auth_error_messages.dart';
 import '../providers/entry_controllers.dart';
 import '../widgets/auth_form_scaffold.dart';
@@ -62,6 +63,7 @@ class _SignInMobileScreenState extends ConsumerState<SignInMobileScreen> {
 
     return AuthFormScaffold(
       onBack: () => context.go(RouteNames.createAccount),
+      trailing: const LanguageChip(),
       title: l10n.signInTitle,
       subtitle: l10n.signInSubtitle,
       content: [

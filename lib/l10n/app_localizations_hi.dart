@@ -1984,4 +1984,32 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get remoderationCancel => 'बदलाव जारी रखें';
+
+  @override
+  String get languageTitle => 'भाषा';
+
+  @override
+  String get languageSubtitle => 'अपनी पसंदीदा भाषा चुनें';
+
+  @override
+  String get languageSave => 'भाषा की पसंद सहेजें';
+
+  @override
+  String get languageNameEnglish => 'अंग्रेज़ी';
+
+  @override
+  String get languageNameHindi => 'हिन्दी';
+
+  @override
+  String languageSelected(String name) {
+    return '$name, चयनित';
+  }
+
+  @override
+  String languageChipLabel(String name) {
+    return 'भाषा, $name';
+  }
+
+  @override
+  String get languageSheetTitle => 'अपनी भाषा चुनें';
 }

@@ -52,6 +52,48 @@ void main() {
     }
   });
 
+  group('English and Hindi files', () {
+    Map<String, dynamic> load(String language) =>
+        jsonDecode(File('lib/l10n/app_$language.arb').readAsStringSync()) as Map<String, dynamic>;
+    final en = load('en');
+    final hi = load('hi');
+    Iterable<String> messageKeys(Map<String, dynamic> arb) =>
+        arb.keys.where((key) => !key.startsWith('@'));
+
+    test('have the same keys, so no string can be missing in Hindi', () {
+      expect(messageKeys(hi).toSet().difference(messageKeys(en).toSet()), isEmpty,
+          reason: 'only in Hindi');
+      expect(messageKeys(en).toSet().difference(messageKeys(hi).toSet()), isEmpty,
+          reason: 'missing in Hindi');
+    });
+
+    test('use every placeholder the English template declares', () {
+      for (final key in messageKeys(en)) {
+        final meta = en['@$key'];
+        if (meta is! Map || meta['placeholders'] is! Map) continue;
+        for (final name in (meta['placeholders'] as Map).keys) {
+          final used = RegExp('\\{$name\\s*[,}]');
+          expect(used.hasMatch(hi[key] as String), isTrue, reason: '$key is missing {$name}');
+        }
+      }
+    });
+
+    test('have no empty values', () {
+      for (final arb in [en, hi]) {
+        for (final key in messageKeys(arb)) {
+          expect((arb[key] as String).trim(), isNotEmpty, reason: key);
+        }
+      }
+    });
+
+    test('Hindi differs from English except for words that read the same', () {
+      const sameInBoth = {'appName', 'languageNameEnglish'};
+      final same = messageKeys(en).where((key) => en[key] == hi[key] && !sameInBoth.contains(key));
+      // Reported, not failed: names, numbers and units can legitimately be identical.
+      expect(same.length, lessThan(messageKeys(en).length ~/ 10), reason: same.join(', '));
+    });
+  });
+
   test('English and Hindi define the same keys', () {
     final en = lookupAppLocalizations(const Locale('en'));
     final hi = lookupAppLocalizations(const Locale('hi'));

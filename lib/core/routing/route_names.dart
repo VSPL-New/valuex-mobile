@@ -22,6 +22,7 @@ class RouteNames {
   static const String profileDetails = '/profile/details';
   static const String myListings = '/profile/listings';
   static const String accountSecurity = '/profile/security';
+  static const String language = '/profile/language';
   static const String changeMobile = '/profile/security/mobile';
   static const String changeEmail = '/profile/security/email';
   static const String categories = '/home/categories';

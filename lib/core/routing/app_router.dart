@@ -35,6 +35,7 @@ import '../../features/listing/presentation/review_listing_screen.dart';
 import '../../features/listing/presentation/providers/item_details_controller.dart';
 import '../../features/profile/presentation/profile_details_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
+import '../../features/settings/presentation/language_screen.dart';
 import 'route_guard.dart';
 import 'post_aadhaar_route.dart';
 import 'route_names.dart';
@@ -68,6 +69,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: 'listings',
             name: 'myListings',
             builder: (context, state) => const MyListingsScreen(),
+          ),
+          GoRoute(
+            path: 'language',
+            name: 'language',
+            builder: (context, state) => const LanguageScreen(),
           ),
           GoRoute(
             path: 'security',

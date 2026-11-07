@@ -3578,6 +3578,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Keep editing'**
   String get remoderationCancel;
+
+  /// No description provided for @languageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get languageTitle;
+
+  /// No description provided for @languageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your preferred language'**
+  String get languageSubtitle;
+
+  /// No description provided for @languageSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Language Preference'**
+  String get languageSave;
+
+  /// No description provided for @languageNameEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageNameEnglish;
+
+  /// No description provided for @languageNameHindi.
+  ///
+  /// In en, this message translates to:
+  /// **'Hindi'**
+  String get languageNameHindi;
+
+  /// No description provided for @languageSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, selected'**
+  String languageSelected(String name);
+
+  /// No description provided for @languageChipLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Language, {name}'**
+  String languageChipLabel(String name);
+
+  /// No description provided for @languageSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your language'**
+  String get languageSheetTitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -589,5 +589,13 @@
   "remoderationReasonContent": "नए टेक्स्ट को हमारी टीम को देखना होगा",
   "remoderationReasonPhotos": "आपने फ़ोटो जोड़ी हैं",
   "remoderationConfirm": "सहेजें और समीक्षा के लिए भेजें",
-  "remoderationCancel": "बदलाव जारी रखें"
+  "remoderationCancel": "बदलाव जारी रखें",
+  "languageTitle": "भाषा",
+  "languageSubtitle": "अपनी पसंदीदा भाषा चुनें",
+  "languageSave": "भाषा की पसंद सहेजें",
+  "languageNameEnglish": "अंग्रेज़ी",
+  "languageNameHindi": "हिन्दी",
+  "languageSelected": "{name}, चयनित",
+  "languageChipLabel": "भाषा, {name}",
+  "languageSheetTitle": "अपनी भाषा चुनें"
 }
