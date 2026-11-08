@@ -89,12 +89,13 @@ String? redirectFor({
   // The OTP screen exists only for the sandbox provider; production uses the third-party flow.
   if (location == RouteNames.devAadhaarOtp && !aadhaarSandbox) return RouteNames.signupAadhaar;
 
-  final allowedSteps = _gatedRoutes[location];
+  final gated = location.startsWith('${RouteNames.myListings}/') ? RouteNames.myListings : location;
+  final allowedSteps = _gatedRoutes[gated];
   if (allowedSteps == null) return null;
 
   switch (state) {
     case Unauthenticated():
-      if (_signedInOnlyRoutes.contains(location)) return RouteNames.signIn;
+      if (_signedInOnlyRoutes.contains(gated)) return RouteNames.signIn;
       // Signed-out users can enter the registration start and browse as guests.
       final open = allowedSteps.contains(RegistrationStep.mobile) ||
           allowedSteps.contains(RegistrationStep.home);

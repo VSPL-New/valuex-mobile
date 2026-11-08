@@ -11,9 +11,11 @@ import 'package:valuex_mobile/features/home/presentation/providers/home_provider
 import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
 import 'package:valuex_mobile/features/listing/domain/category.dart';
 import 'package:valuex_mobile/features/listing/domain/existing_listing.dart';
+import 'package:valuex_mobile/features/listing/domain/listing_preview.dart';
 import 'package:valuex_mobile/features/listing/domain/my_listings.dart';
 import 'package:valuex_mobile/features/listing/presentation/item_details_screen.dart';
 import 'package:valuex_mobile/features/listing/presentation/listing_plan_screen.dart';
+import 'package:valuex_mobile/features/listing/presentation/listing_preview_screen.dart';
 import 'package:valuex_mobile/features/listing/presentation/my_listings_screen.dart';
 import 'package:valuex_mobile/features/listing/presentation/providers/my_listings_controller.dart';
 import 'package:valuex_mobile/features/listing/presentation/widgets/listing_status_badge.dart';
@@ -534,6 +536,11 @@ void main() {
       });
     }
 
+    void stubPreview(String id, String status) {
+      when(() => repository.getListingPreview(id)).thenAnswer(
+          (_) async => ListingPreviewData(listingId: id, status: status, title: 'Thing'));
+    }
+
     Future<void> launch(
       WidgetTester tester, {
       List<Map<String, dynamic>>? items,
@@ -768,28 +775,30 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('a listing in review explains where it stands instead of opening', (tester) async {
+    testWidgets('a listing in review opens its preview instead of the editor', (tester) async {
+      stubPreview('l3', 'TRUST_SAFETY_REVIEW');
       await launch(tester);
 
       await tester.tap(find.text('Under review chair'));
       await harness.settle();
 
-      expect(find.textContaining('being reviewed'), findsOneWidget);
+      expect(find.byType(ListingPreviewScreen), findsOneWidget);
+      expect(find.textContaining('reviewing your listing'), findsOneWidget);
+      verify(() => repository.getListingPreview('l3')).called(1);
       verifyNever(() => repository.getListing(any()));
-      await tester.tap(find.text('Close'));
-      await harness.settle();
-      expect(find.textContaining('being reviewed'), findsNothing);
       await harness.dispose();
     });
 
-    testWidgets('each status that cannot be opened has its own explanation', (tester) async {
+    testWidgets('each status that cannot be opened for editing shows its own preview banner',
+        (tester) async {
       const cases = {
         'PLAN_PAYMENT_PENDING': 'confirming your payment',
-        'EXPIRED': 'has expired',
-        'REJECTED': 'was rejected',
-        'REMOVED_BY_ADMIN': 'not available',
+        'EXPIRED': 'plan has ended',
+        'REJECTED': 'was not approved',
+        'REMOVED_BY_ADMIN': 'not available to buyers',
       };
       for (final entry in cases.entries) {
+        stubPreview('x', entry.key);
         await launch(tester, items: [
           _item('x', title: 'Thing', status: entry.key, canEdit: false, canDelete: false),
         ]);
@@ -797,9 +806,41 @@ void main() {
         await tester.tap(find.text('Thing'));
         await harness.settle();
 
+        expect(find.byType(ListingPreviewScreen), findsOneWidget, reason: entry.key);
         expect(find.textContaining(entry.value), findsOneWidget, reason: entry.key);
         await harness.dispose();
       }
+    });
+
+    testWidgets('every card has its own Preview action that leaves Edit and the card tap alone',
+        (tester) async {
+      stubPreview('l1', 'PUBLISHED');
+      when(() => repository.getListing('l1')).thenAnswer((_) async => _existing('PUBLISHED'));
+      await launch(tester);
+
+      expect(find.text('Preview'), findsNWidgets(3));
+      await tester.tap(find.byWidgetPredicate(
+          (widget) => widget is Semantics && widget.properties.label == 'Preview Hero cycle'));
+      await harness.settle();
+
+      expect(find.byType(ListingPreviewScreen), findsOneWidget);
+      verify(() => repository.getListingPreview('l1')).called(1);
+      verifyNever(() => repository.getListing(any()));
+      await harness.dispose();
+    });
+
+    testWidgets('a sold listing previews its item content but its card tap stays the sale details',
+        (tester) async {
+      stubPreview('l2', 'SOLD');
+      await launch(tester);
+
+      await tester.tap(find.byWidgetPredicate(
+          (widget) => widget is Semantics && widget.properties.label == 'Preview Sold bike'));
+      await harness.settle();
+
+      expect(find.byType(ListingPreviewScreen), findsOneWidget);
+      expect(find.text('This item has been sold.'), findsOneWidget);
+      await harness.dispose();
     });
 
     testWidgets('a sold listing says its sale details are coming soon', (tester) async {

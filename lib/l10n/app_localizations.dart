@@ -3039,12 +3039,6 @@ abstract class AppLocalizations {
   /// **'Preview your listing'**
   String get submittedPreview;
 
-  /// No description provided for @submittedPreviewSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Preview is coming soon'**
-  String get submittedPreviewSoon;
-
   /// No description provided for @submittedHome.
   ///
   /// In en, this message translates to:
@@ -3411,35 +3405,221 @@ abstract class AppLocalizations {
   /// **'Sale details are coming soon'**
   String get myListingsSaleDetailsSoon;
 
-  /// No description provided for @myListingsStatusProcessing.
+  /// No description provided for @myListingsPreview.
   ///
   /// In en, this message translates to:
-  /// **'We\'re confirming your payment. This listing moves on by itself once it\'s done.'**
-  String get myListingsStatusProcessing;
+  /// **'Preview'**
+  String get myListingsPreview;
 
-  /// No description provided for @myListingsStatusUnderReview.
+  /// No description provided for @myListingsPreviewLabel.
   ///
   /// In en, this message translates to:
-  /// **'Your listing is being reviewed. We\'ll let you know as soon as it\'s live.'**
-  String get myListingsStatusUnderReview;
+  /// **'Preview {title}'**
+  String myListingsPreviewLabel(String title);
 
-  /// No description provided for @myListingsStatusExpired.
+  /// No description provided for @previewTitle.
   ///
   /// In en, this message translates to:
-  /// **'This listing has expired. You can delete it from here.'**
-  String get myListingsStatusExpired;
+  /// **'Listing preview'**
+  String get previewTitle;
 
-  /// No description provided for @myListingsStatusRejected.
+  /// No description provided for @previewSaveUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'This listing was rejected after review.'**
-  String get myListingsStatusRejected;
+  /// **'Save is unavailable in preview'**
+  String get previewSaveUnavailable;
 
-  /// No description provided for @myListingsStatusUnavailable.
+  /// No description provided for @previewStatusDraft.
   ///
   /// In en, this message translates to:
-  /// **'This listing is not available.'**
-  String get myListingsStatusUnavailable;
+  /// **'Not submitted yet. Only you can see this listing.'**
+  String get previewStatusDraft;
+
+  /// No description provided for @previewStatusProcessing.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re confirming your payment. Only you can see this listing.'**
+  String get previewStatusProcessing;
+
+  /// No description provided for @previewStatusUnderReview.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re reviewing your listing. Only you can see it until it\'s approved.'**
+  String get previewStatusUnderReview;
+
+  /// No description provided for @previewStatusNeedsChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes are needed before this listing can go live.'**
+  String get previewStatusNeedsChanges;
+
+  /// No description provided for @previewStatusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing is visible to buyers.'**
+  String get previewStatusActive;
+
+  /// No description provided for @previewStatusSold.
+  ///
+  /// In en, this message translates to:
+  /// **'This item has been sold.'**
+  String get previewStatusSold;
+
+  /// No description provided for @previewStatusExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing plan has ended. Buyers can no longer see it.'**
+  String get previewStatusExpired;
+
+  /// No description provided for @previewStatusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing was not approved.'**
+  String get previewStatusRejected;
+
+  /// No description provided for @previewStatusUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing is not available to buyers.'**
+  String get previewStatusUnavailable;
+
+  /// No description provided for @previewReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason: {reason}'**
+  String previewReason(String reason);
+
+  /// No description provided for @previewOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get previewOverview;
+
+  /// No description provided for @previewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get previewDetails;
+
+  /// No description provided for @previewAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About this item'**
+  String get previewAbout;
+
+  /// No description provided for @previewKeyDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Key details'**
+  String get previewKeyDetails;
+
+  /// No description provided for @previewItemDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Item details'**
+  String get previewItemDetails;
+
+  /// No description provided for @previewNotProvided.
+  ///
+  /// In en, this message translates to:
+  /// **'Not provided'**
+  String get previewNotProvided;
+
+  /// No description provided for @previewNoAdditionalDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'No additional details'**
+  String get previewNoAdditionalDetails;
+
+  /// No description provided for @previewDetailsUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Some details can\'t be shown right now. Try again in a moment.'**
+  String get previewDetailsUnavailable;
+
+  /// No description provided for @previewNegotiable.
+  ///
+  /// In en, this message translates to:
+  /// **'Negotiable'**
+  String get previewNegotiable;
+
+  /// No description provided for @previewQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity'**
+  String get previewQuantity;
+
+  /// No description provided for @previewConditionNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Condition notes'**
+  String get previewConditionNotes;
+
+  /// No description provided for @previewPlanBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'{plan} plan'**
+  String previewPlanBadge(String plan);
+
+  /// No description provided for @previewPhotoLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo {index} of {total}'**
+  String previewPhotoLabel(int index, int total);
+
+  /// No description provided for @previewEnlargePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Enlarge photo'**
+  String get previewEnlargePhoto;
+
+  /// No description provided for @previewNoPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'No photo'**
+  String get previewNoPhoto;
+
+  /// No description provided for @previewPhotoFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'This photo could not be loaded'**
+  String get previewPhotoFailed;
+
+  /// No description provided for @previewBuyerActionsUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Buyer actions are unavailable in preview'**
+  String get previewBuyerActionsUnavailable;
+
+  /// No description provided for @previewChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get previewChat;
+
+  /// No description provided for @previewCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get previewCall;
+
+  /// No description provided for @previewVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Video'**
+  String get previewVideo;
+
+  /// No description provided for @previewMakeOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Make an Offer'**
+  String get previewMakeOffer;
+
+  /// No description provided for @previewBuyNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Now'**
+  String get previewBuyNow;
 
   /// No description provided for @sellErrorNotDeletable.
   ///

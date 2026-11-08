@@ -17,6 +17,7 @@ class MyListingCard extends StatelessWidget {
 
   final MyListingItem item;
   final VoidCallback onOpen;
+  final VoidCallback? onPreview;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
 
@@ -24,6 +25,7 @@ class MyListingCard extends StatelessWidget {
     super.key,
     required this.item,
     required this.onOpen,
+    this.onPreview,
     this.onEdit,
     this.onDelete,
   });
@@ -61,7 +63,7 @@ class MyListingCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: AppSpacing.md),
-                        Expanded(child: _Details(item: item, title: title)),
+                        Expanded(child: _Details(item: item, title: title, onPreview: onPreview)),
                       ],
                     ),
                   ),
@@ -102,8 +104,9 @@ class MyListingCard extends StatelessWidget {
 class _Details extends StatelessWidget {
   final MyListingItem item;
   final String title;
+  final VoidCallback? onPreview;
 
-  const _Details({required this.item, required this.title});
+  const _Details({required this.item, required this.title, this.onPreview});
 
   @override
   Widget build(BuildContext context) {
@@ -137,6 +140,22 @@ class _Details extends StatelessWidget {
                 text: l10n.myListingsChats(item.chatCount)),
           ],
         ),
+        if (onPreview != null)
+          Semantics(
+            button: true,
+            label: l10n.myListingsPreviewLabel(title),
+            excludeSemantics: true,
+            child: InkWell(
+              onTap: onPreview,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(minHeight: AppSizes.minTouchTarget),
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(l10n.myListingsPreview, style: AppTextStyles.linkSmall),
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }

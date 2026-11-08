@@ -18,16 +18,6 @@ String listingBadgeLabel(AppLocalizations l10n, ListingBadge badge) => switch (b
       ListingBadge.unavailable => l10n.myListingsBadgeUnavailable,
     };
 
-/// What a status means and what the seller can do about it, for a listing that cannot be opened for
-/// editing. Until the read-only listing page exists (US-123) this is shown in a sheet.
-String listingStatusExplanation(AppLocalizations l10n, ListingBadge badge) => switch (badge) {
-      ListingBadge.processingPayment => l10n.myListingsStatusProcessing,
-      ListingBadge.underReview => l10n.myListingsStatusUnderReview,
-      ListingBadge.expired => l10n.myListingsStatusExpired,
-      ListingBadge.rejected => l10n.myListingsStatusRejected,
-      _ => l10n.myListingsStatusUnavailable,
-    };
-
 /// The pill that names a listing's status. The words carry the meaning; the colour only supports
 /// them.
 class ListingStatusBadge extends StatelessWidget {

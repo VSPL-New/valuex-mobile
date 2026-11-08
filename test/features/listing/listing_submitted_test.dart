@@ -5,6 +5,9 @@ import 'package:valuex_mobile/core/routing/app_router.dart';
 import 'package:valuex_mobile/core/routing/route_names.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/home/presentation/home_screen.dart';
+import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
+import 'package:valuex_mobile/features/listing/domain/listing_preview.dart';
+import 'package:valuex_mobile/features/listing/presentation/listing_preview_screen.dart';
 import 'package:valuex_mobile/features/listing/presentation/listing_submitted_screen.dart';
 import 'package:valuex_mobile/features/notifications/data/notifications_repository.dart';
 
@@ -14,8 +17,21 @@ import '../../helpers/fonts.dart';
 
 class _MockNotifications extends Mock implements NotificationsRepository {}
 
+class _MockListings extends Mock implements ListingRepository {}
+
 void main() {
   setUpAll(loadBrandFonts);
+
+  late _MockListings listings;
+
+  setUp(() {
+    listings = _MockListings();
+    when(() => listings.getListingPreview(any())).thenAnswer((invocation) async =>
+        ListingPreviewData(
+            listingId: invocation.positionalArguments.first as String,
+            status: 'TRUST_SAFETY_REVIEW',
+            title: 'Hero cycle'));
+  });
 
   Future<AppHarness> open(
     WidgetTester tester, {
@@ -27,6 +43,7 @@ void main() {
     when(notifications.unreadCount).thenAnswer((_) async => 0);
     final harness = AppHarness(tester, extraOverrides: [
       notificationsRepositoryProvider.overrideWithValue(notifications),
+      listingRepositoryProvider.overrideWithValue(listings),
     ])
       ..signedInAs(AccountStatus.active, aadhaarVerified: true);
     tester.platformDispatcher.textScaleFactorTestValue = textScale;
@@ -69,15 +86,15 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('Preview your listing says the preview is coming soon and stays on the page',
-        (tester) async {
+    testWidgets('Preview your listing opens the owner preview of this listing', (tester) async {
       final harness = await open(tester);
 
       await tester.tap(find.text('Preview your listing'));
       await harness.settle();
 
-      expect(find.text('Preview is coming soon'), findsOneWidget);
-      expect(find.byType(ListingSubmittedScreen), findsOneWidget);
+      expect(find.byType(ListingPreviewScreen), findsOneWidget);
+      verify(() => listings.getListingPreview('l1')).called(1);
+      expect(find.text('Preview is coming soon'), findsNothing);
       await harness.dispose();
     });
 
@@ -154,8 +171,7 @@ void main() {
         await harness.settle();
         await tester.tap(preview);
         await harness.settle();
-        expect(find.text(language == 'en' ? 'Preview is coming soon' : 'पूर्वावलोकन जल्द आ रहा है'),
-            findsOneWidget);
+        expect(find.byType(ListingPreviewScreen), findsOneWidget);
         expect(tester.takeException(), isNull);
         await harness.dispose();
       });

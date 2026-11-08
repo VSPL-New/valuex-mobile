@@ -9,6 +9,7 @@ import '../../../core/network/api_error_mapper.dart';
 import '../domain/category.dart';
 import '../domain/existing_listing.dart';
 import '../domain/listing_details.dart';
+import '../domain/listing_preview.dart';
 import '../domain/listing_schema.dart';
 import '../domain/my_listings.dart';
 import '../domain/plan_selection.dart';
@@ -152,6 +153,19 @@ class ListingRepository {
   Future<String> photoUrl(String mediaId) => _client.post(
         ApiConstants.mediaAccess(mediaId),
         parse: (json) => (json as Map<String, dynamic>)['accessUrl'] as String,
+      );
+
+  /// The same link with its expiry, for the preview gallery (US-123).
+  Future<PhotoLink> photoLink(String mediaId) => _client.post(
+        ApiConstants.mediaAccess(mediaId),
+        parse: (json) => PhotoLink.fromJson(json as Map<String, dynamic>),
+      );
+
+  /// The owner's read-only preview of a listing (US-123). Another seller's or a deleted listing
+  /// answers 404 `LISTING_NOT_FOUND`.
+  Future<ListingPreviewData> getListingPreview(String listingId) => _client.get(
+        ApiConstants.listing(listingId),
+        parse: (json) => ListingPreviewData.fromJson(json as Map<String, dynamic>),
       );
 
   /// Saves an edit of a live listing (US-010): the details, plus photos added by media id and
