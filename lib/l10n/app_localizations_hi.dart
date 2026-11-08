@@ -1655,9 +1655,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get submittedPreview => 'अपनी लिस्टिंग का पूर्वावलोकन देखें';
 
   @override
-  String get submittedPreviewSoon => 'पूर्वावलोकन जल्द आ रहा है';
-
-  @override
   String get submittedHome => 'होम पर वापस जाएँ';
 
   @override
@@ -1893,22 +1890,125 @@ class AppLocalizationsHi extends AppLocalizations {
   String get myListingsSaleDetailsSoon => 'बिक्री का विवरण जल्द उपलब्ध होगा';
 
   @override
-  String get myListingsStatusProcessing =>
-      'हम आपके भुगतान की पुष्टि कर रहे हैं। पूरा होते ही यह लिस्टिंग अपने आप आगे बढ़ जाएगी।';
+  String get myListingsPreview => 'पूर्वावलोकन';
 
   @override
-  String get myListingsStatusUnderReview =>
-      'आपकी लिस्टिंग की समीक्षा हो रही है। लाइव होते ही हम आपको बता देंगे।';
+  String myListingsPreviewLabel(String title) {
+    return '$title का पूर्वावलोकन';
+  }
 
   @override
-  String get myListingsStatusExpired =>
-      'इस लिस्टिंग की अवधि समाप्त हो गई है। आप इसे यहाँ से हटा सकते हैं।';
+  String get previewTitle => 'लिस्टिंग पूर्वावलोकन';
 
   @override
-  String get myListingsStatusRejected => 'समीक्षा के बाद यह लिस्टिंग अस्वीकृत कर दी गई।';
+  String get previewSaveUnavailable => 'पूर्वावलोकन में सेव उपलब्ध नहीं है';
 
   @override
-  String get myListingsStatusUnavailable => 'यह लिस्टिंग उपलब्ध नहीं है।';
+  String get previewStatusDraft => 'अभी जमा नहीं की गई है। यह लिस्टिंग केवल आपको दिखती है।';
+
+  @override
+  String get previewStatusProcessing =>
+      'हम आपके भुगतान की पुष्टि कर रहे हैं। यह लिस्टिंग केवल आपको दिखती है।';
+
+  @override
+  String get previewStatusUnderReview =>
+      'हम आपकी लिस्टिंग की समीक्षा कर रहे हैं। मंज़ूरी तक यह केवल आपको दिखती है।';
+
+  @override
+  String get previewStatusNeedsChanges => 'लिस्टिंग लाइव होने से पहले बदलाव ज़रूरी हैं।';
+
+  @override
+  String get previewStatusActive => 'आपकी लिस्टिंग खरीदारों को दिख रही है।';
+
+  @override
+  String get previewStatusSold => 'यह सामान बिक चुका है।';
+
+  @override
+  String get previewStatusExpired =>
+      'आपका लिस्टिंग प्लान समाप्त हो गया है। खरीदार अब इसे नहीं देख सकते।';
+
+  @override
+  String get previewStatusRejected => 'यह लिस्टिंग मंज़ूर नहीं हुई।';
+
+  @override
+  String get previewStatusUnavailable => 'यह लिस्टिंग खरीदारों के लिए उपलब्ध नहीं है।';
+
+  @override
+  String previewReason(String reason) {
+    return 'कारण: $reason';
+  }
+
+  @override
+  String get previewOverview => 'ओवरव्यू';
+
+  @override
+  String get previewDetails => 'विवरण';
+
+  @override
+  String get previewAbout => 'इस सामान के बारे में';
+
+  @override
+  String get previewKeyDetails => 'मुख्य जानकारी';
+
+  @override
+  String get previewItemDetails => 'सामान का विवरण';
+
+  @override
+  String get previewNotProvided => 'उपलब्ध नहीं कराया गया';
+
+  @override
+  String get previewNoAdditionalDetails => 'कोई अतिरिक्त विवरण नहीं';
+
+  @override
+  String get previewDetailsUnavailable =>
+      'कुछ विवरण अभी नहीं दिखाए जा सकते। थोड़ी देर बाद फिर कोशिश करें।';
+
+  @override
+  String get previewNegotiable => 'मोलभाव संभव';
+
+  @override
+  String get previewQuantity => 'मात्रा';
+
+  @override
+  String get previewConditionNotes => 'स्थिति के नोट्स';
+
+  @override
+  String previewPlanBadge(String plan) {
+    return '$plan प्लान';
+  }
+
+  @override
+  String previewPhotoLabel(int index, int total) {
+    return 'फ़ोटो $index / $total';
+  }
+
+  @override
+  String get previewEnlargePhoto => 'फ़ोटो बड़ी करें';
+
+  @override
+  String get previewNoPhoto => 'कोई फ़ोटो नहीं';
+
+  @override
+  String get previewPhotoFailed => 'यह फ़ोटो लोड नहीं हो सकी';
+
+  @override
+  String get previewBuyerActionsUnavailable =>
+      'पूर्वावलोकन में खरीदार की कार्रवाइयाँ उपलब्ध नहीं हैं';
+
+  @override
+  String get previewChat => 'चैट';
+
+  @override
+  String get previewCall => 'कॉल';
+
+  @override
+  String get previewVideo => 'वीडियो';
+
+  @override
+  String get previewMakeOffer => 'ऑफ़र दें';
+
+  @override
+  String get previewBuyNow => 'अभी खरीदें';
 
   @override
   String get sellErrorNotDeletable =>

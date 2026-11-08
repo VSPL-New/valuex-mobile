@@ -15,12 +15,7 @@ class ListingSubmittedScreen extends StatelessWidget {
 
   const ListingSubmittedScreen({super.key, required this.listingId});
 
-  /// The preview page is a later story; until it exists the button only says so.
-  void _preview(BuildContext context) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).submittedPreviewSoon)));
-  }
+  void _preview(BuildContext context) => context.push(RouteNames.listingPreview(listingId));
 
   @override
   Widget build(BuildContext context) {

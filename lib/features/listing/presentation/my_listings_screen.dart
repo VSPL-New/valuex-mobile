@@ -20,7 +20,6 @@ import 'listing_error_messages.dart';
 import 'providers/item_details_controller.dart';
 import 'providers/my_listings_controller.dart';
 import 'widgets/confirmation_sheet.dart';
-import 'widgets/listing_status_sheet.dart';
 import 'widgets/my_listing_card.dart';
 import 'widgets/my_listings_summary_cards.dart';
 import 'widgets/option_chip.dart';
@@ -62,7 +61,7 @@ class _MyListingsScreenState extends ConsumerState<MyListingsScreen> {
     } else if (item.canEdit || _planStatuses.contains(item.status)) {
       await _edit(item);
     } else {
-      await showListingStatusSheet(context, item);
+      await context.push<void>(RouteNames.listingPreview(item.id));
     }
   }
 
@@ -181,6 +180,7 @@ class _MyListingsScreenState extends ConsumerState<MyListingsScreen> {
         MyListingCard(
           item: item,
           onOpen: () => unawaited(_open(item)),
+          onPreview: () => unawaited(context.push<void>(RouteNames.listingPreview(item.id))),
           onEdit: item.canEdit ? () => unawaited(_edit(item)) : null,
           onDelete: item.canDelete ? () => unawaited(_delete(item)) : null,
         ),

@@ -1665,9 +1665,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get submittedPreview => 'Preview your listing';
 
   @override
-  String get submittedPreviewSoon => 'Preview is coming soon';
-
-  @override
   String get submittedHome => 'Back to Home';
 
   @override
@@ -1903,21 +1900,123 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myListingsSaleDetailsSoon => 'Sale details are coming soon';
 
   @override
-  String get myListingsStatusProcessing =>
-      'We\'re confirming your payment. This listing moves on by itself once it\'s done.';
+  String get myListingsPreview => 'Preview';
 
   @override
-  String get myListingsStatusUnderReview =>
-      'Your listing is being reviewed. We\'ll let you know as soon as it\'s live.';
+  String myListingsPreviewLabel(String title) {
+    return 'Preview $title';
+  }
 
   @override
-  String get myListingsStatusExpired => 'This listing has expired. You can delete it from here.';
+  String get previewTitle => 'Listing preview';
 
   @override
-  String get myListingsStatusRejected => 'This listing was rejected after review.';
+  String get previewSaveUnavailable => 'Save is unavailable in preview';
 
   @override
-  String get myListingsStatusUnavailable => 'This listing is not available.';
+  String get previewStatusDraft => 'Not submitted yet. Only you can see this listing.';
+
+  @override
+  String get previewStatusProcessing =>
+      'We\'re confirming your payment. Only you can see this listing.';
+
+  @override
+  String get previewStatusUnderReview =>
+      'We\'re reviewing your listing. Only you can see it until it\'s approved.';
+
+  @override
+  String get previewStatusNeedsChanges => 'Changes are needed before this listing can go live.';
+
+  @override
+  String get previewStatusActive => 'Your listing is visible to buyers.';
+
+  @override
+  String get previewStatusSold => 'This item has been sold.';
+
+  @override
+  String get previewStatusExpired => 'Your listing plan has ended. Buyers can no longer see it.';
+
+  @override
+  String get previewStatusRejected => 'This listing was not approved.';
+
+  @override
+  String get previewStatusUnavailable => 'This listing is not available to buyers.';
+
+  @override
+  String previewReason(String reason) {
+    return 'Reason: $reason';
+  }
+
+  @override
+  String get previewOverview => 'Overview';
+
+  @override
+  String get previewDetails => 'Details';
+
+  @override
+  String get previewAbout => 'About this item';
+
+  @override
+  String get previewKeyDetails => 'Key details';
+
+  @override
+  String get previewItemDetails => 'Item details';
+
+  @override
+  String get previewNotProvided => 'Not provided';
+
+  @override
+  String get previewNoAdditionalDetails => 'No additional details';
+
+  @override
+  String get previewDetailsUnavailable =>
+      'Some details can\'t be shown right now. Try again in a moment.';
+
+  @override
+  String get previewNegotiable => 'Negotiable';
+
+  @override
+  String get previewQuantity => 'Quantity';
+
+  @override
+  String get previewConditionNotes => 'Condition notes';
+
+  @override
+  String previewPlanBadge(String plan) {
+    return '$plan plan';
+  }
+
+  @override
+  String previewPhotoLabel(int index, int total) {
+    return 'Photo $index of $total';
+  }
+
+  @override
+  String get previewEnlargePhoto => 'Enlarge photo';
+
+  @override
+  String get previewNoPhoto => 'No photo';
+
+  @override
+  String get previewPhotoFailed => 'This photo could not be loaded';
+
+  @override
+  String get previewBuyerActionsUnavailable => 'Buyer actions are unavailable in preview';
+
+  @override
+  String get previewChat => 'Chat';
+
+  @override
+  String get previewCall => 'Call';
+
+  @override
+  String get previewVideo => 'Video';
+
+  @override
+  String get previewMakeOffer => 'Make an Offer';
+
+  @override
+  String get previewBuyNow => 'Buy Now';
 
   @override
   String get sellErrorNotDeletable =>
