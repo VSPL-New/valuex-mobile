@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/routing/route_names.dart';
+import '../../../core/theme/spacing.dart';
 import '../../../core/utils/motion.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../settings/presentation/widgets/language_chip.dart';
 import 'onboarding_content.dart';
 import 'widgets/onboarding_slide.dart';
 
@@ -63,22 +65,36 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     ];
 
     return Scaffold(
-      body: PageView.builder(
-        controller: _pageController,
-        itemCount: onboardingPages.length,
-        onPageChanged: (index) => setState(() => _currentPage = index),
-        itemBuilder: (context, index) {
-          return OnboardingSlide(
-            content: onboardingPages[index],
-            title: titles[index],
-            subtitle: subtitles[index],
-            dotIndex: index,
-            showBackButton: index > 0,
-            onSkip: _finish,
-            onBack: _back,
-            onNext: _next,
-          );
-        },
+      body: Stack(
+        children: [
+          PageView.builder(
+            controller: _pageController,
+            itemCount: onboardingPages.length,
+            onPageChanged: (index) => setState(() => _currentPage = index),
+            itemBuilder: (context, index) {
+              return OnboardingSlide(
+                content: onboardingPages[index],
+                title: titles[index],
+                subtitle: subtitles[index],
+                dotIndex: index,
+                showBackButton: index > 0,
+                onSkip: _finish,
+                onBack: _back,
+                onNext: _next,
+              );
+            },
+          ),
+          const Positioned(
+            top: 0,
+            right: AppSpacing.md,
+            child: SafeArea(
+              child: Padding(
+                padding: EdgeInsets.only(top: AppSpacing.sm),
+                child: LanguageChip(),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

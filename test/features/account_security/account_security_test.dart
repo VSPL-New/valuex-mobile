@@ -14,6 +14,7 @@ import 'package:valuex_mobile/features/account_security/presentation/providers/c
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/otp_sent.dart';
 import 'package:valuex_mobile/features/profile/presentation/widgets/profile_menu_section.dart';
+import 'package:valuex_mobile/features/settings/presentation/providers/locale_controller.dart';
 
 import '../../helpers/accessibility.dart';
 import '../../helpers/app_harness.dart';
@@ -938,8 +939,7 @@ void main() {
       tester.view.physicalSize = const Size(960, 1920);
       tester.platformDispatcher.textScaleFactorTestValue = 2;
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-      tester.platformDispatcher.localeTestValue = const Locale('hi');
-      addTearDown(tester.platformDispatcher.clearLocaleTestValue);
+      await harness.container.read(localeControllerProvider.notifier).select(const Locale('hi'));
       await harness.settle();
 
       expect(tester.takeException(), isNull);
@@ -955,8 +955,7 @@ void main() {
       tester.view.physicalSize = const Size(960, 1920);
       tester.platformDispatcher.textScaleFactorTestValue = 2;
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-      tester.platformDispatcher.localeTestValue = const Locale('hi');
-      addTearDown(tester.platformDispatcher.clearLocaleTestValue);
+      await harness.container.read(localeControllerProvider.notifier).select(const Locale('hi'));
       await harness.settle();
 
       expect(tester.takeException(), isNull);

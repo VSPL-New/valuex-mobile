@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/presentation/widgets/session_expiry_listener.dart';
+import 'features/settings/domain/supported_languages.dart';
+import 'features/settings/presentation/providers/locale_controller.dart';
 import 'l10n/app_localizations.dart';
 
 class ValueXApp extends ConsumerWidget {
@@ -12,6 +14,7 @@ class ValueXApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
+    final locale = ref.watch(localeControllerProvider);
 
     return MaterialApp.router(
       onGenerateTitle: (context) => AppLocalizations.of(context).appName,
@@ -26,6 +29,11 @@ class ValueXApp extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
+      locale: locale,
+      localeResolutionCallback: (requested, supported) =>
+          requested != null && isSupportedLocale(requested)
+              ? localeFromCode(requested.languageCode)
+              : defaultLocale,
     );
   }
 }

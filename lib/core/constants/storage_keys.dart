@@ -7,4 +7,5 @@ class StorageKeys {
   static const String pendingLogoutToken = 'pending_logout_token';
   static const String onboardingComplete = 'onboarding_complete';
   static const String homeLocation = 'home_location';
+  static const String appLanguage = 'app_language';
 }

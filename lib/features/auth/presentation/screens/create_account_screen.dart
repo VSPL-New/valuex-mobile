@@ -16,6 +16,7 @@ import '../../../../core/widgets/outlined_icon_button.dart';
 import '../../../../core/widgets/single_tone_button.dart';
 import '../../../../core/widgets/square_back_button.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../settings/presentation/widgets/language_chip.dart';
 import '../auth_error_messages.dart';
 import '../providers/google_sign_in_controller.dart';
 import '../providers/session_controller.dart';
@@ -65,11 +66,14 @@ class CreateAccountScreen extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 21.5, top: 22.6),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: SquareBackButton(
-                  onPressed: () => context.go(RouteNames.onboarding),
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SquareBackButton(
+                    onPressed: () => context.go(RouteNames.onboarding),
+                  ),
+                  const LanguageChip(),
+                ],
               ),
             ),
             const Expanded(

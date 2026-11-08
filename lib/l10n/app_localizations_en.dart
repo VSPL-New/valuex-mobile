@@ -1993,4 +1993,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get remoderationCancel => 'Keep editing';
+
+  @override
+  String get languageTitle => 'Language';
+
+  @override
+  String get languageSubtitle => 'Choose your preferred language';
+
+  @override
+  String get languageSave => 'Save Language Preference';
+
+  @override
+  String get languageNameEnglish => 'English';
+
+  @override
+  String get languageNameHindi => 'Hindi';
+
+  @override
+  String languageSelected(String name) {
+    return '$name, selected';
+  }
+
+  @override
+  String languageChipLabel(String name) {
+    return 'Language, $name';
+  }
+
+  @override
+  String get languageSheetTitle => 'Choose your language';
 }

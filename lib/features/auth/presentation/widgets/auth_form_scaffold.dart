@@ -15,6 +15,9 @@ class AuthFormScaffold extends StatelessWidget {
   /// Puts the title and subtitle, centred, on the same level as the back button.
   final bool centeredHeader;
 
+  /// Control shown at the right of the back button (the language chip on Sign In).
+  final Widget? trailing;
+
   const AuthFormScaffold({
     super.key,
     required this.onBack,
@@ -23,6 +26,7 @@ class AuthFormScaffold extends StatelessWidget {
     required this.content,
     required this.bottom,
     this.centeredHeader = false,
+    this.trailing,
   });
 
   Widget _header() {
@@ -31,7 +35,10 @@ class AuthFormScaffold extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SquareBackButton(onPressed: onBack),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [SquareBackButton(onPressed: onBack), if (trailing != null) trailing!],
+          ),
           const SizedBox(height: AppSpacing.lg),
           heading,
           const SizedBox(height: AppSpacing.sm),

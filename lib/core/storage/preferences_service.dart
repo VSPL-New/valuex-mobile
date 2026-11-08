@@ -24,6 +24,10 @@ class PreferencesService {
     return prefs.getBool(StorageKeys.onboardingComplete) ?? false;
   }
 
+  Future<String?> getAppLanguage() => getString(StorageKeys.appLanguage);
+
+  Future<bool> setAppLanguage(String code) => setString(StorageKeys.appLanguage, code);
+
   Future<bool> setString(String key, String value) async {
     final prefs = await _instance;
     return prefs.setString(key, value);

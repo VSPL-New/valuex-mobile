@@ -25,6 +25,7 @@ import 'package:valuex_mobile/features/profile/domain/profile_summary.dart';
 import 'package:valuex_mobile/features/profile/presentation/profile_details_screen.dart';
 import 'package:valuex_mobile/features/profile/presentation/profile_screen.dart';
 import 'package:valuex_mobile/features/profile/presentation/widgets/profile_menu_section.dart';
+import 'package:valuex_mobile/features/settings/presentation/providers/locale_controller.dart';
 
 import '../../helpers/app_harness.dart';
 import '../../helpers/fake_http_adapter.dart';
@@ -493,8 +494,7 @@ void main() {
       tester.view.physicalSize = const Size(960, 1920);
       tester.platformDispatcher.textScaleFactorTestValue = 2;
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-      tester.platformDispatcher.localeTestValue = const Locale('hi');
-      addTearDown(tester.platformDispatcher.clearLocaleTestValue);
+      await harness.container.read(localeControllerProvider.notifier).select(const Locale('hi'));
       await harness.settle();
       expect(tester.takeException(), isNull);
       await tester.scrollUntilVisible(find.byType(ProfileSignOutTile), 300);
@@ -507,8 +507,7 @@ void main() {
       tester.view.physicalSize = const Size(960, 1920);
       tester.platformDispatcher.textScaleFactorTestValue = 2;
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-      tester.platformDispatcher.localeTestValue = const Locale('hi');
-      addTearDown(tester.platformDispatcher.clearLocaleTestValue);
+      await harness.container.read(localeControllerProvider.notifier).select(const Locale('hi'));
       await harness.settle();
       expect(tester.takeException(), isNull);
       expect(find.byType(SingleChildScrollView), findsOneWidget);

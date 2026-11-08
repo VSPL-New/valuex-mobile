@@ -21,6 +21,7 @@ import 'package:valuex_mobile/features/listing/presentation/widgets/option_chip.
 import 'package:valuex_mobile/features/notifications/data/notifications_repository.dart';
 import 'package:valuex_mobile/l10n/app_localizations_en.dart';
 import 'package:valuex_mobile/l10n/app_localizations_hi.dart';
+import 'package:valuex_mobile/features/settings/presentation/providers/locale_controller.dart';
 
 import '../../helpers/accessibility.dart';
 import '../../helpers/app_harness.dart';
@@ -1008,10 +1009,7 @@ void main() {
 
     testWidgets('the words come from the language in use', (tester) async {
       await launch(tester);
-      tester.platformDispatcher.localesTestValue = const [Locale('hi')];
-      addTearDown(tester.platformDispatcher.clearLocalesTestValue);
-      tester.platformDispatcher.localeTestValue = const Locale('hi');
-      addTearDown(tester.platformDispatcher.clearLocaleTestValue);
+      await harness.container.read(localeControllerProvider.notifier).select(const Locale('hi'));
       await harness.settle();
 
       expect(find.text(AppLocalizationsHi().myListingsTitle), findsOneWidget);

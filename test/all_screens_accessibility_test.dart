@@ -23,6 +23,7 @@ void main() {
     RouteNames.accountBlocked: AccountStatus.suspended,
     RouteNames.home: AccountStatus.active,
     RouteNames.categories: AccountStatus.active,
+    RouteNames.language: AccountStatus.active,
   };
 
   final guidelines = <String, AccessibilityGuideline>{

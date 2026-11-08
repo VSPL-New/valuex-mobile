@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app.dart';
 import 'core/config/app_config.dart';
 import 'core/security/secure_storage_service.dart';
+import 'core/storage/preferences_service.dart';
+import 'features/settings/presentation/providers/locale_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,9 +16,14 @@ Future<void> main() async {
     await SecureStorageService().clearPendingLogoutToken();
   }
 
+  final savedLanguage = await PreferencesService().getAppLanguage();
+
   runApp(
     ProviderScope(
-      overrides: [appConfigProvider.overrideWithValue(config)],
+      overrides: [
+        appConfigProvider.overrideWithValue(config),
+        savedLanguageCodeProvider.overrideWithValue(savedLanguage),
+      ],
       child: const ValueXApp(),
     ),
   );
