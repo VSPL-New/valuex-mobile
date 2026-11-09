@@ -214,6 +214,15 @@ void main() {
           {'brand': 'Sony', 'battery_health_pct': 10, 'age_months': 18});
     });
 
+    test('the state of the chosen place is sent only when there is one', () {
+      expect(complete.toJson(phoneSchema).containsKey('locationState'), isFalse);
+      expect(
+          complete.copyWith(locationState: '  ').toJson(phoneSchema).containsKey('locationState'),
+          isFalse);
+      expect(complete.copyWith(locationState: ' Karnataka ').toJson(phoneSchema)['locationState'],
+          'Karnataka');
+    });
+
     test('the request body has only what the category shows', () {
       final goods = complete.toJson(phoneSchema, city: 'Pune');
       expect(goods['title'], 'Sony headphones');
