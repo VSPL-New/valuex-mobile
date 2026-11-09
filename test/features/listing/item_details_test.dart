@@ -227,6 +227,7 @@ void main() {
       expect(saved.categoryCode, 'CAT-1');
       expect(saved.attributes, {'brand': 'Sony', 'storage_gb': '64_GB'});
       expect(saved.negotiable, isTrue);
+      expect(saved.locationState, 'MH');
       expect(find.byType(ListingPlanScreen), findsOneWidget);
       await harness.dispose();
     });

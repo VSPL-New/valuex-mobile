@@ -66,6 +66,10 @@ class ListingDetailsDraft {
   /// ISO dates, lists and maps.
   final Map<String, Object?> attributes;
 
+  /// The state of the place chosen on Home (US-120), so search can favour nearby listings. Set when
+  /// saving; never typed by the seller.
+  final String? locationState;
+
   const ListingDetailsDraft({
     this.title = '',
     this.categoryCode,
@@ -76,6 +80,7 @@ class ListingDetailsDraft {
     this.negotiable,
     this.quantity = '1',
     this.attributes = const {},
+    this.locationState,
   });
 
   ListingDetailsDraft copyWith({
@@ -88,6 +93,7 @@ class ListingDetailsDraft {
     bool? negotiable,
     String? quantity,
     Map<String, Object?>? attributes,
+    String? locationState,
   }) {
     return ListingDetailsDraft(
       title: title ?? this.title,
@@ -99,6 +105,7 @@ class ListingDetailsDraft {
       negotiable: negotiable ?? this.negotiable,
       quantity: quantity ?? this.quantity,
       attributes: attributes ?? this.attributes,
+      locationState: locationState ?? this.locationState,
     );
   }
 
@@ -182,6 +189,8 @@ class ListingDetailsDraft {
       if (common.quantityVisible) 'quantity': parsedQuantity,
       'attributes': attributePayload(schema),
       'location': city,
+      if (locationState != null && locationState!.trim().isNotEmpty)
+        'locationState': locationState!.trim(),
     };
   }
 }
