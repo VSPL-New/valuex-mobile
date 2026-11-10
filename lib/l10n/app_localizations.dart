@@ -3806,6 +3806,354 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose your language'**
   String get languageSheetTitle;
+
+  /// No description provided for @searchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search items'**
+  String get searchTitle;
+
+  /// No description provided for @searchFieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for items'**
+  String get searchFieldHint;
+
+  /// No description provided for @searchFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for items'**
+  String get searchFieldLabel;
+
+  /// No description provided for @searchQueryCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of {max} characters'**
+  String searchQueryCounter(int count, int max);
+
+  /// No description provided for @searchClearText.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search text'**
+  String get searchClearText;
+
+  /// No description provided for @searchFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get searchFilters;
+
+  /// No description provided for @searchFiltersApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters, {count} applied'**
+  String searchFiltersApplied(int count);
+
+  /// No description provided for @searchPopularCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular categories'**
+  String get searchPopularCategories;
+
+  /// No description provided for @searchBrowseAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse all categories'**
+  String get searchBrowseAll;
+
+  /// No description provided for @searchStartHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Type what you are looking for, or pick a category'**
+  String get searchStartHint;
+
+  /// No description provided for @searchCategoriesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse categories'**
+  String get searchCategoriesTitle;
+
+  /// No description provided for @searchCategoriesPopular.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular'**
+  String get searchCategoriesPopular;
+
+  /// No description provided for @searchCategoriesOthers.
+  ///
+  /// In en, this message translates to:
+  /// **'Others'**
+  String get searchCategoriesOthers;
+
+  /// No description provided for @searchViewAllIn.
+  ///
+  /// In en, this message translates to:
+  /// **'View all in {name}'**
+  String searchViewAllIn(String name);
+
+  /// No description provided for @searchCategoriesFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load categories. Try again'**
+  String get searchCategoriesFailed;
+
+  /// No description provided for @searchResultsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 item found} other{{count} items found}}'**
+  String searchResultsCount(int count);
+
+  /// No description provided for @searchNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No items found. Try different keywords'**
+  String get searchNoResults;
+
+  /// No description provided for @searchNoResultsFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'No items match your filters. Try fewer filters'**
+  String get searchNoResultsFilters;
+
+  /// No description provided for @searchClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get searchClearFilters;
+
+  /// No description provided for @searchLoadMoreFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load more items. Tap to try again'**
+  String get searchLoadMoreFailed;
+
+  /// No description provided for @searchStartingFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting from'**
+  String get searchStartingFrom;
+
+  /// No description provided for @searchFeatured.
+  ///
+  /// In en, this message translates to:
+  /// **'Featured'**
+  String get searchFeatured;
+
+  /// No description provided for @searchErrorTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Search text is too long'**
+  String get searchErrorTooLong;
+
+  /// No description provided for @searchErrorPriceRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum price cannot be above maximum price'**
+  String get searchErrorPriceRange;
+
+  /// No description provided for @searchErrorInvalidFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid filter combination'**
+  String get searchErrorInvalidFilters;
+
+  /// No description provided for @searchErrorIntentRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Buy, Rent or Lease'**
+  String get searchErrorIntentRequired;
+
+  /// No description provided for @searchErrorIntentNotSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'This option is not available for this property type'**
+  String get searchErrorIntentNotSupported;
+
+  /// No description provided for @searchErrorUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Search is not available right now. Try again'**
+  String get searchErrorUnavailable;
+
+  /// No description provided for @searchErrorRateLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many searches. Wait a moment and try again'**
+  String get searchErrorRateLimit;
+
+  /// No description provided for @searchErrorCategoryUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This category is not available'**
+  String get searchErrorCategoryUnavailable;
+
+  /// No description provided for @searchIntentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Buy, Rent or Lease'**
+  String get searchIntentTitle;
+
+  /// No description provided for @searchIntentPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Buy, Rent or Lease to see properties'**
+  String get searchIntentPrompt;
+
+  /// No description provided for @searchIntentChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose'**
+  String get searchIntentChoose;
+
+  /// No description provided for @searchIntentBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy'**
+  String get searchIntentBuy;
+
+  /// No description provided for @searchIntentRent.
+  ///
+  /// In en, this message translates to:
+  /// **'Rent'**
+  String get searchIntentRent;
+
+  /// No description provided for @searchIntentLease.
+  ///
+  /// In en, this message translates to:
+  /// **'Lease'**
+  String get searchIntentLease;
+
+  /// No description provided for @searchIntentChange.
+  ///
+  /// In en, this message translates to:
+  /// **'{intent}. Change'**
+  String searchIntentChange(String intent);
+
+  /// No description provided for @filterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get filterTitle;
+
+  /// No description provided for @filterReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get filterReset;
+
+  /// No description provided for @filterApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get filterApply;
+
+  /// No description provided for @filterClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close filters'**
+  String get filterClose;
+
+  /// No description provided for @filterSortTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get filterSortTitle;
+
+  /// No description provided for @filterSortRelevance.
+  ///
+  /// In en, this message translates to:
+  /// **'Most relevant'**
+  String get filterSortRelevance;
+
+  /// No description provided for @filterSortNewest.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest first'**
+  String get filterSortNewest;
+
+  /// No description provided for @filterSortPriceAsc.
+  ///
+  /// In en, this message translates to:
+  /// **'Price: low to high'**
+  String get filterSortPriceAsc;
+
+  /// No description provided for @filterSortPriceDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Price: high to low'**
+  String get filterSortPriceDesc;
+
+  /// No description provided for @filterPriceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Price (₹)'**
+  String get filterPriceTitle;
+
+  /// No description provided for @filterPriceMin.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum price'**
+  String get filterPriceMin;
+
+  /// No description provided for @filterPriceMax.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum price'**
+  String get filterPriceMax;
+
+  /// No description provided for @filterConditionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Condition'**
+  String get filterConditionTitle;
+
+  /// No description provided for @filterLocationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get filterLocationTitle;
+
+  /// No description provided for @filterCity.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get filterCity;
+
+  /// No description provided for @filterClearState.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear state'**
+  String get filterClearState;
+
+  /// No description provided for @filterRangeMin.
+  ///
+  /// In en, this message translates to:
+  /// **'{label}, minimum'**
+  String filterRangeMin(String label);
+
+  /// No description provided for @filterRangeMax.
+  ///
+  /// In en, this message translates to:
+  /// **'{label}, maximum'**
+  String filterRangeMax(String label);
+
+  /// No description provided for @filterRangeAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Available: {min} to {max}'**
+  String filterRangeAvailable(String min, String max);
+
+  /// No description provided for @filterRangeError.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum cannot be above maximum'**
+  String get filterRangeError;
+
+  /// No description provided for @filterBucketLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} ({count})'**
+  String filterBucketLabel(String label, int count);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

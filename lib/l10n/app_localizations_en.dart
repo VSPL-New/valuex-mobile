@@ -2120,4 +2120,202 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languageSheetTitle => 'Choose your language';
+
+  @override
+  String get searchTitle => 'Search items';
+
+  @override
+  String get searchFieldHint => 'Search for items';
+
+  @override
+  String get searchFieldLabel => 'Search for items';
+
+  @override
+  String searchQueryCounter(int count, int max) {
+    return '$count of $max characters';
+  }
+
+  @override
+  String get searchClearText => 'Clear search text';
+
+  @override
+  String get searchFilters => 'Filters';
+
+  @override
+  String searchFiltersApplied(int count) {
+    return 'Filters, $count applied';
+  }
+
+  @override
+  String get searchPopularCategories => 'Popular categories';
+
+  @override
+  String get searchBrowseAll => 'Browse all categories';
+
+  @override
+  String get searchStartHint => 'Type what you are looking for, or pick a category';
+
+  @override
+  String get searchCategoriesTitle => 'Browse categories';
+
+  @override
+  String get searchCategoriesPopular => 'Popular';
+
+  @override
+  String get searchCategoriesOthers => 'Others';
+
+  @override
+  String searchViewAllIn(String name) {
+    return 'View all in $name';
+  }
+
+  @override
+  String get searchCategoriesFailed => 'Unable to load categories. Try again';
+
+  @override
+  String searchResultsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items found',
+      one: '1 item found',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchNoResults => 'No items found. Try different keywords';
+
+  @override
+  String get searchNoResultsFilters => 'No items match your filters. Try fewer filters';
+
+  @override
+  String get searchClearFilters => 'Clear filters';
+
+  @override
+  String get searchLoadMoreFailed => 'Unable to load more items. Tap to try again';
+
+  @override
+  String get searchStartingFrom => 'Starting from';
+
+  @override
+  String get searchFeatured => 'Featured';
+
+  @override
+  String get searchErrorTooLong => 'Search text is too long';
+
+  @override
+  String get searchErrorPriceRange => 'Minimum price cannot be above maximum price';
+
+  @override
+  String get searchErrorInvalidFilters => 'Invalid filter combination';
+
+  @override
+  String get searchErrorIntentRequired => 'Choose Buy, Rent or Lease';
+
+  @override
+  String get searchErrorIntentNotSupported => 'This option is not available for this property type';
+
+  @override
+  String get searchErrorUnavailable => 'Search is not available right now. Try again';
+
+  @override
+  String get searchErrorRateLimit => 'Too many searches. Wait a moment and try again';
+
+  @override
+  String get searchErrorCategoryUnavailable => 'This category is not available';
+
+  @override
+  String get searchIntentTitle => 'Choose Buy, Rent or Lease';
+
+  @override
+  String get searchIntentPrompt => 'Choose Buy, Rent or Lease to see properties';
+
+  @override
+  String get searchIntentChoose => 'Choose';
+
+  @override
+  String get searchIntentBuy => 'Buy';
+
+  @override
+  String get searchIntentRent => 'Rent';
+
+  @override
+  String get searchIntentLease => 'Lease';
+
+  @override
+  String searchIntentChange(String intent) {
+    return '$intent. Change';
+  }
+
+  @override
+  String get filterTitle => 'Filters';
+
+  @override
+  String get filterReset => 'Reset';
+
+  @override
+  String get filterApply => 'Apply';
+
+  @override
+  String get filterClose => 'Close filters';
+
+  @override
+  String get filterSortTitle => 'Sort by';
+
+  @override
+  String get filterSortRelevance => 'Most relevant';
+
+  @override
+  String get filterSortNewest => 'Newest first';
+
+  @override
+  String get filterSortPriceAsc => 'Price: low to high';
+
+  @override
+  String get filterSortPriceDesc => 'Price: high to low';
+
+  @override
+  String get filterPriceTitle => 'Price (₹)';
+
+  @override
+  String get filterPriceMin => 'Minimum price';
+
+  @override
+  String get filterPriceMax => 'Maximum price';
+
+  @override
+  String get filterConditionTitle => 'Condition';
+
+  @override
+  String get filterLocationTitle => 'Location';
+
+  @override
+  String get filterCity => 'City';
+
+  @override
+  String get filterClearState => 'Clear state';
+
+  @override
+  String filterRangeMin(String label) {
+    return '$label, minimum';
+  }
+
+  @override
+  String filterRangeMax(String label) {
+    return '$label, maximum';
+  }
+
+  @override
+  String filterRangeAvailable(String min, String max) {
+    return 'Available: $min to $max';
+  }
+
+  @override
+  String get filterRangeError => 'Minimum cannot be above maximum';
+
+  @override
+  String filterBucketLabel(String label, int count) {
+    return '$label ($count)';
+  }
 }

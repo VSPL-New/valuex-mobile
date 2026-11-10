@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 /// Where "near you" is measured from. Only the area, city, state and pincode are kept, never
-/// coordinates, and it is never sent to the server.
+/// coordinates. Search sends only the city and state, to rank nearby listings first.
 class HomeLocation {
   final String? area;
   final String city;

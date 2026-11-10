@@ -36,7 +36,9 @@ void onMainNavSelected(
         return;
       }
       unawaited(context.push(RouteNames.sell));
-    case BottomNavItem.search || BottomNavItem.chats:
+    case BottomNavItem.search:
+      context.go(RouteNames.search);
+    case BottomNavItem.chats:
       showComingSoon(context);
   }
 }

@@ -11,6 +11,8 @@ void main() {
     RouteNames.accountBlocked: ('Account unavailable', AccountStatus.suspended),
     RouteNames.home: ('Featured Deals Near You', AccountStatus.active),
     RouteNames.categories: ('All categories', AccountStatus.active),
+    RouteNames.search: ('Search items', AccountStatus.active),
+    RouteNames.searchCategories: ('Browse categories', AccountStatus.active),
     RouteNames.language: ('Language', AccountStatus.active),
     RouteNames.signupProfile: ('Create your profile', AccountStatus.signupPending),
     RouteNames.signupAadhaar: ('Verify Aadhaar', AccountStatus.identityVerificationPending),

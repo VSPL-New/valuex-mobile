@@ -35,6 +35,9 @@ import '../../features/listing/presentation/my_listings_screen.dart';
 import '../../features/listing/presentation/review_listing_screen.dart';
 import '../../features/listing/presentation/providers/item_details_controller.dart';
 import '../../features/profile/presentation/profile_details_screen.dart';
+import '../../features/search/presentation/category_browse_screen.dart';
+import '../../features/search/presentation/search_routes.dart';
+import '../../features/search/presentation/search_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/settings/presentation/language_screen.dart';
 import 'route_guard.dart';
@@ -192,6 +195,26 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: RouteNames.categories,
         name: 'categories',
         builder: (context, state) => const CategorySelectionScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.search,
+        name: 'search',
+        // The text or category to open with is in the query string (see `searchLocation`).
+        builder: (context, state) =>
+            SearchScreen(initial: searchCriteriaFromParams(state.uri.queryParameters)),
+      ),
+      GoRoute(
+        path: RouteNames.searchCategories,
+        name: 'searchCategories',
+        builder: (context, state) {
+          final params = state.uri.queryParameters;
+          return CategoryBrowseScreen(
+            parentCode: params['parent'],
+            parentName: params['name'],
+            parentLevel: int.tryParse(params['level'] ?? ''),
+            realEstate: params['realEstate'] == 'true',
+          );
+        },
       ),
       GoRoute(
         path: RouteNames.notifications,

@@ -9,9 +9,11 @@ import '../../../core/widgets/app_image.dart';
 import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/square_back_button.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../search/presentation/search_routes.dart';
 import 'providers/home_providers.dart';
 
-/// Every category from the backend. Opening a category's listings comes with search (US-011).
+/// Every Home category. Opening one searches for its name until Home uses the real taxonomy
+/// (US-111); the full category tree is browsed from the Search screen.
 class CategorySelectionScreen extends ConsumerWidget {
   const CategorySelectionScreen({super.key});
 
@@ -66,9 +68,7 @@ class CategorySelectionScreen extends ConsumerWidget {
                       title: Text(category.name, style: AppTextStyles.body),
                       trailing:
                           const Icon(Icons.chevron_right_rounded, color: AppColors.brandMutedText),
-                      onTap: () => ScaffoldMessenger.of(context)
-                        ..hideCurrentSnackBar()
-                        ..showSnackBar(SnackBar(content: Text(l10n.homeFeatureComingSoon))),
+                      onTap: () => context.push(searchLocation(query: category.name)),
                     );
                   },
                 ),

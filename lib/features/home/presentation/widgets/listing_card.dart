@@ -20,18 +20,25 @@ class ListingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final condition = conditionLabel(l10n, listing.condition);
+    final listingCondition = listing.condition;
+    final condition = listingCondition == null ? null : conditionLabel(l10n, listingCondition);
     final rating = listing.sellerRating;
-    final price = Formatters.currency(listing.priceInr);
+    final priceInr = listing.priceInr;
+    final price = priceInr == null ? null : Formatters.money(priceInr);
+    final badge = listing.isFeatured
+        ? l10n.searchFeatured
+        : listing.isBoosted
+            ? l10n.homeBoosted
+            : null;
     final radius = BorderRadius.circular(AppRadius.xl);
 
     final spoken = [
       listing.title,
-      price,
+      if (price != null) '${listing.startingFrom ? '${l10n.searchStartingFrom} ' : ''}$price',
       listing.city,
       if (rating != null) l10n.homeRatingLabel(rating.toStringAsFixed(1)),
-      condition,
-      if (listing.isBoosted) l10n.homeBoosted,
+      if (condition != null) condition,
+      if (badge != null) badge,
     ].join(', ');
 
     return Semantics(
@@ -57,13 +64,14 @@ class ListingCard extends StatelessWidget {
                     aspectRatio: 177 / 128,
                     child: AppImage(source: listing.image, cacheWidth: 420),
                   ),
-                  if (listing.isBoosted)
+                  if (badge != null)
                     Positioned(
                       left: AppSpacing.sm,
                       top: AppSpacing.sm,
                       child: _Pill(
-                        label: l10n.homeBoosted,
-                        background: AppColors.brandAccent,
+                        label: badge,
+                        background:
+                            listing.isFeatured ? AppColors.brandPrimary : AppColors.brandAccent,
                         textColor: AppColors.brandOnPrimary,
                       ),
                     ),
@@ -82,7 +90,9 @@ class ListingCard extends StatelessWidget {
                         style: AppTextStyles.cardTitle,
                       ),
                       const SizedBox(height: 2),
-                      Text(price, style: AppTextStyles.cardPrice),
+                      if (listing.startingFrom && price != null)
+                        Text(l10n.searchStartingFrom, style: AppTextStyles.hint),
+                      if (price != null) Text(price, style: AppTextStyles.cardPrice),
                       const SizedBox(height: AppSpacing.xs),
                       Row(
                         children: [
@@ -102,15 +112,17 @@ class ListingCard extends StatelessWidget {
                         ],
                       ),
                       const Spacer(),
-                      const SizedBox(height: AppSpacing.sm - 2),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: _Pill(
-                          label: condition,
-                          background: AppColors.brandSurfaceTint,
-                          textColor: AppColors.brandForeground,
+                      if (condition != null) ...[
+                        const SizedBox(height: AppSpacing.sm - 2),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: _Pill(
+                            label: condition,
+                            background: AppColors.brandSurfaceTint,
+                            textColor: AppColors.brandForeground,
+                          ),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 ),

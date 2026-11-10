@@ -12,6 +12,7 @@ import '../../../core/widgets/field_error.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../notifications/presentation/providers/notifications_providers.dart';
 import '../domain/entities/home_badges.dart';
+import '../../search/presentation/search_routes.dart';
 import '../domain/entities/listing.dart';
 import 'main_nav.dart';
 import 'providers/home_providers.dart';
@@ -82,7 +83,7 @@ class HomeScreen extends ConsumerWidget {
                 onLocation: () => showLocationSheet(context),
                 onCart: () => showComingSoon(context),
                 onNotifications: () => context.push(RouteNames.notifications),
-                onSearch: () => showComingSoon(context),
+                onSearch: () => context.push(RouteNames.search),
                 onPhotoSearch: () => showComingSoon(context),
               ),
             ),
@@ -109,7 +110,7 @@ class HomeScreen extends ConsumerWidget {
                   categories.when(
                     data: (items) => CategoryRow(
                       categories: items,
-                      onSelect: (_) => showComingSoon(context),
+                      onSelect: (category) => context.push(searchLocation(query: category.name)),
                       onMore: () => context.push(RouteNames.categories),
                     ),
                     loading: () => const _Skeleton(height: 72),
@@ -125,7 +126,7 @@ class HomeScreen extends ConsumerWidget {
                       actionLabel: known != null && (listings.value?.isNotEmpty ?? false)
                           ? l10n.homeSeeAll
                           : null,
-                      onAction: () => showComingSoon(context),
+                      onAction: () => context.push(searchLocation(browseAll: true)),
                     ),
                   ],
                 ]),
