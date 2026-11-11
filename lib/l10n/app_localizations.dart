@@ -3825,12 +3825,6 @@ abstract class AppLocalizations {
   /// **'Search for items'**
   String get searchFieldLabel;
 
-  /// No description provided for @searchQueryCounter.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} of {max} characters'**
-  String searchQueryCounter(int count, int max);
-
   /// No description provided for @searchClearText.
   ///
   /// In en, this message translates to:
@@ -3872,6 +3866,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Browse categories'**
   String get searchCategoriesTitle;
+
+  /// No description provided for @searchMoreCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'More categories'**
+  String get searchMoreCategories;
+
+  /// No description provided for @searchViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get searchViewAll;
+
+  /// No description provided for @searchCategoriesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No more categories'**
+  String get searchCategoriesEmpty;
 
   /// No description provided for @searchCategoriesPopular.
   ///
@@ -4028,6 +4040,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{intent}. Change'**
   String searchIntentChange(String intent);
+
+  /// No description provided for @searchSuggestionsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search suggestions'**
+  String get searchSuggestionsLabel;
+
+  /// No description provided for @searchSuggestionListingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for {text}'**
+  String searchSuggestionListingLabel(String text);
+
+  /// No description provided for @searchSuggestionCategoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse category {name}'**
+  String searchSuggestionCategoryLabel(String name);
+
+  /// No description provided for @searchSuggestionCategoryTag.
+  ///
+  /// In en, this message translates to:
+  /// **'in Category'**
+  String get searchSuggestionCategoryTag;
 
   /// No description provided for @filterTitle.
   ///

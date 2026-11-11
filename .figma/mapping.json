@@ -4,6 +4,28 @@
   "entries": [
     {
       "figma": {
+        "fileKey": "MBdXT0qyBFGa6kJRoZHDpD",
+        "nodeId": "1:2",
+        "nodeName": "Generated Image"
+      },
+      "local": {
+        "components": [
+          { "path": "lib/core/widgets/category_icon.dart", "tier": "atom" }
+        ],
+        "tokens": ["lib/core/theme/spacing.dart", "lib/core/theme/colors.dart"],
+        "assets": ["assets/images/categories/l1/mobiles.png"],
+        "artworkManifest": ".figma/l1-artwork.csv",
+        "catalog": "lib/core/constants/app_assets.dart",
+        "tests": ["test/core/widgets/l1_category_artwork_test.dart"]
+      },
+      "sync": {
+        "contentHash": "sha256:c6a7b1648565939014110550d89e7c15fbdd3152d88cd10094bddf8bd16cce12",
+        "lastSyncedAt": "2026-11-11T18:22:24Z",
+        "status": "in-sync"
+      }
+    },
+    {
+      "figma": {
         "fileKey": "3LUBiPqzccGNMi3RIHd59d",
         "nodeId": "4:176",
         "nodeName": "C  /  Sectioned review"

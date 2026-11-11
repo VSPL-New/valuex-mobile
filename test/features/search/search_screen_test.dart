@@ -15,6 +15,8 @@ import 'package:valuex_mobile/features/search/domain/search_sort.dart';
 import 'package:valuex_mobile/features/search/domain/transaction_intent.dart';
 import 'package:valuex_mobile/features/search/presentation/category_browse_screen.dart';
 import 'package:valuex_mobile/features/search/presentation/search_screen.dart';
+import 'package:valuex_mobile/features/search/presentation/widgets/category_browser.dart';
+import 'package:valuex_mobile/features/search/presentation/widgets/category_browser_tiles.dart';
 import 'package:valuex_mobile/features/search/presentation/widgets/filter_sheet.dart';
 import 'package:valuex_mobile/features/search/presentation/widgets/intent_sheet.dart';
 import 'package:valuex_mobile/features/search/presentation/widgets/search_skeleton.dart';
@@ -103,10 +105,9 @@ void main() {
       return switch ((parent, scope)) {
         (null, CategoryScope.popular) => [_mobiles, _realEstate],
         (null, CategoryScope.others) => [_books],
-        ('L1-M', CategoryScope.popular) => [_phones],
-        ('L1-M', CategoryScope.others) => [_tablets],
-        ('L1-R', CategoryScope.popular) => [_homes],
-        ('L1-R', CategoryScope.others) => <CategoryNode>[],
+        (null, CategoryScope.all) => [_mobiles, _realEstate, _books],
+        ('L1-M', CategoryScope.all) => [_tablets, _phones],
+        ('L1-R', CategoryScope.all) => [_homes],
         ('L2-P', CategoryScope.all) => [_smartphones],
         _ => <CategoryNode>[],
       };
@@ -253,16 +254,16 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('the field holds 200 characters and counts them', (tester) async {
+    testWidgets('the field holds 200 characters without showing a counter', (tester) async {
       await openAt(tester, '/search');
 
-      expect(find.text('0 of 200 characters'), findsOneWidget);
+      expect(find.textContaining('characters'), findsNothing);
       await tester.enterText(find.byType(TextField), 'a' * 250);
       await tester.pump();
 
       final field = tester.widget<TextField>(find.byType(TextField));
       expect(field.controller!.text.length, 200);
-      expect(find.text('200 of 200 characters'), findsOneWidget);
+      expect(find.textContaining('characters'), findsNothing);
       await tester.pump(const Duration(milliseconds: 450));
       await harness.settle();
       expect(search.calls.single.criteria.query.length, 200);
@@ -820,19 +821,24 @@ void main() {
   });
 
   group('category browsing', () {
-    testWidgets('the top level lists the popular categories, then the others', (tester) async {
+    testWidgets('the top level shows popular cards and expands the others inline', (tester) async {
       final handle = tester.ensureSemantics();
       await openAt(tester, '/search/categories');
 
       expect(find.byType(CategoryBrowseScreen), findsOneWidget);
       expect(tester.getSemantics(find.text('Browse categories')), isSemantics(isHeader: true));
-      expect(find.text('Popular'), findsOneWidget);
-      expect(find.text('Others'), findsOneWidget);
+      expect(find.text('Popular categories'), findsOneWidget);
+      expect(find.text('Books'), findsNothing);
+      await tester.tap(find.text('More categories'));
+      await harness.settle();
       final popular = tester.getTopLeft(find.text('Mobiles & Tablets')).dy;
-      final others = tester.getTopLeft(find.text('Others')).dy;
+      final others = tester.getTopLeft(find.text('More categories')).dy;
       final book = tester.getTopLeft(find.text('Books')).dy;
       expect(popular, lessThan(others));
       expect(others, lessThan(book));
+      await tester.tap(find.text('More categories'));
+      await harness.settle();
+      expect(find.text('Books'), findsNothing);
       handle.dispose();
       await harness.dispose();
     });
@@ -846,13 +852,23 @@ void main() {
       expect(find.text('View all in Mobiles & Tablets'), findsOneWidget);
       expect(find.text('Mobile Phones'), findsOneWidget);
       expect(find.text('Tablets'), findsOneWidget);
+      expect(find.text('Other groups'), findsNothing);
+      expect(tester.getTopLeft(find.text('Mobile Phones')).dy,
+          lessThan(tester.getTopLeft(find.text('Tablets')).dy));
+      verifyNever(
+          () => categories.categoryChildren(parentCode: 'L1-M', scope: CategoryScope.popular));
+      verifyNever(
+          () => categories.categoryChildren(parentCode: 'L1-M', scope: CategoryScope.others));
+      expect(find.byType(CategoryBrowseScreen), findsOneWidget);
 
       await tester.tap(find.text('Mobile Phones'));
       await harness.settle();
       expect(find.text('Smartphones'), findsOneWidget);
-      expect(find.text('Popular'), findsNothing);
-      expect(find.text('Others'), findsNothing);
+      expect(find.text('Mobiles & Tablets'), findsOneWidget);
+      expect(find.text('Mobile Phones'), findsOneWidget);
+      expect(search.calls, isEmpty);
 
+      await tester.ensureVisible(find.text('Smartphones'));
       await tester.tap(find.text('Smartphones'));
       await harness.settle();
       expect(find.byType(SearchScreen), findsOneWidget);
@@ -913,6 +929,7 @@ void main() {
       await tester.tap(find.text('Homes'));
       await harness.settle();
 
+      await tester.ensureVisible(find.text('Villas'));
       await tester.tap(find.text('Villas'));
       await harness.settle();
 
@@ -932,6 +949,8 @@ void main() {
         return [_books];
       });
       await openAt(tester, '/search/categories');
+      await tester.tap(find.text('More categories'));
+      await harness.settle();
 
       expect(find.text('Unable to load categories. Try again'), findsOneWidget);
       fail = false;
@@ -963,13 +982,14 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('Browse all categories on the start page opens the top level', (tester) async {
+    testWidgets('Browse all categories reveals remaining roots without navigating', (tester) async {
       await openAt(tester, '/search');
 
       await tester.tap(find.text('Browse all categories'));
       await harness.settle();
 
-      expect(find.byType(CategoryBrowseScreen), findsOneWidget);
+      expect(find.byType(CategoryBrowseScreen), findsNothing);
+      expect(find.text('Books'), findsOneWidget);
       await harness.dispose();
     });
 
@@ -979,7 +999,163 @@ void main() {
       await tester.tap(find.text('Mobiles & Tablets'));
       await harness.settle();
 
-      expect(find.byType(CategoryBrowseScreen), findsOneWidget);
+      expect(find.byType(CategoryBrowseScreen), findsNothing);
+      expect(find.text('Mobile Phones'), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('only one L1 and L2 stay expanded; groups toggle inline', (tester) async {
+      await openAt(tester, '/search');
+      await tester.tap(find.text('Mobiles & Tablets'));
+      await harness.settle();
+      await tester.tap(find.text('Mobile Phones'));
+      await harness.settle();
+      await tester.ensureVisible(find.text('Tablets'));
+      await tester.tap(find.text('Tablets'));
+      await harness.settle();
+      expect(find.text('Smartphones'), findsNothing);
+      expect(find.text('View all'), findsOneWidget);
+      expect(find.text('No more categories'), findsOneWidget);
+      await tester.ensureVisible(find.text('Real Estate'));
+      await tester.tap(find.text('Real Estate'));
+      await harness.settle();
+      expect(find.text('Mobile Phones'), findsNothing);
+      expect(find.text('Homes'), findsOneWidget);
+      await tester.tap(find.text('Real Estate'));
+      await harness.settle();
+      expect(find.text('Homes'), findsNothing);
+      await harness.dispose();
+    });
+
+    testWidgets('L2 View all keeps the correct result scope', (tester) async {
+      await openAt(tester, '/search');
+      await tester.tap(find.text('Mobiles & Tablets'));
+      await harness.settle();
+      await tester.tap(find.text('Mobile Phones'));
+      await harness.settle();
+      await tester.ensureVisible(find.text('View all'));
+      await tester.tap(find.text('View all'));
+      await harness.settle();
+      expect(search.calls.single.criteria.categoryCode, 'L2-P');
+      expect(search.calls.single.criteria.categoryLevel, 2);
+      await harness.dispose();
+    });
+
+    testWidgets('all L2 groups are available even beyond the popular API limit', (tester) async {
+      when(() => categories.categoryChildren(parentCode: 'L1-M', scope: CategoryScope.all))
+          .thenAnswer((_) async => [
+                for (var index = 0; index < 24; index++)
+                  CategoryNode(
+                    code: 'GROUP-$index',
+                    name: 'Group $index',
+                    level: 2,
+                    hasChildren: true,
+                    popular: index < 12,
+                  ),
+              ]);
+      await openAt(tester, '/search');
+      await tester.tap(find.text('Mobiles & Tablets'));
+      await harness.settle();
+      for (var index = 0; index < 24; index++) {
+        expect(find.text('Group $index'), findsOneWidget);
+      }
+      expect(find.text('Other groups'), findsNothing);
+      await tester.ensureVisible(find.text('Group 23'));
+      await tester.tap(find.text('Group 23'));
+      await harness.settle();
+      verify(() => categories.categoryChildren(parentCode: 'GROUP-23', scope: CategoryScope.all))
+          .called(1);
+      await harness.dispose();
+    });
+
+    testWidgets('all leaves appear on expansion and survive search and result navigation',
+        (tester) async {
+      when(() => categories.categoryChildren(parentCode: 'L2-P', scope: CategoryScope.all))
+          .thenAnswer((_) async => [
+                _smartphones,
+                const CategoryNode(
+                    code: 'CAT-2', name: 'Feature Phones', level: 3, hasChildren: false),
+                const CategoryNode(
+                    code: 'CAT-3', name: 'Foldable Phones', level: 3, hasChildren: false),
+                const CategoryNode(
+                    code: 'CAT-4', name: 'Rugged Phones', level: 3, hasChildren: false),
+              ]);
+      await openAt(tester, '/search');
+      await tester.tap(find.text('Mobiles & Tablets'));
+      await harness.settle();
+      await tester.tap(find.text('Mobile Phones'));
+      await harness.settle();
+      expect(find.text('Rugged Phones'), findsOneWidget);
+      expect(find.text('Show more Mobile Phones'), findsNothing);
+      expect(find.text('Show less'), findsNothing);
+      final firstTile = tester.getTopLeft(find.text('Smartphones'));
+      final secondTile = tester.getTopLeft(find.text('Feature Phones'));
+      final thirdTile = tester.getTopLeft(find.text('Foldable Phones'));
+      expect(secondTile.dy, firstTile.dy);
+      expect(thirdTile.dy, firstTile.dy);
+      expect(secondTile.dx, greaterThan(firstTile.dx));
+      expect(thirdTile.dx, greaterThan(secondTile.dx));
+      final target = tester.getSize(
+        find.ancestor(of: find.text('Smartphones'), matching: find.byType(InkWell)).first,
+      );
+      expect(target.width, greaterThanOrEqualTo(48));
+      expect(target.height, greaterThanOrEqualTo(48));
+      final scroller = find.descendant(
+        of: find.byType(CategoryBrowser),
+        matching: find.byType(SingleChildScrollView),
+      );
+      await tester.ensureVisible(find.text('Rugged Phones'));
+      final offset = tester.widget<SingleChildScrollView>(scroller).controller!.offset;
+      await tester.tap(find.text('Rugged Phones'));
+      await harness.settle();
+      expect(search.calls.last.criteria.categoryCode, 'CAT-4');
+      await tester.tap(find.bySemanticsLabel('Back'));
+      await harness.settle();
+      expect(find.text('Rugged Phones'), findsOneWidget);
+      expect(tester.widget<SingleChildScrollView>(scroller).controller!.offset, offset);
+      await type(tester, 'iphone');
+      expect(find.text('Rugged Phones'), findsNothing);
+      await tester.tap(find.byTooltip('Clear search text'));
+      await harness.settle();
+      expect(find.text('Rugged Phones'), findsOneWidget);
+      await tester.ensureVisible(find.text('Mobile Phones'));
+      await tester.tap(find.text('Mobile Phones'));
+      await harness.settle();
+      expect(find.text('Rugged Phones'), findsNothing);
+      await harness.dispose();
+    });
+
+    testWidgets('parent deep links expand inline and Browse all restores the full tree',
+        (tester) async {
+      await openAt(tester, '/search/categories?parent=L2-P&name=Mobile+Phones&level=2');
+      expect(find.text('Mobile Phones'), findsOneWidget);
+      expect(find.text('Smartphones'), findsOneWidget);
+      expect(find.byType(TextField), findsOneWidget);
+      await tester.tap(find.text('Browse all categories'));
+      await harness.settle();
+      expect(find.text('Mobiles & Tablets'), findsOneWidget);
+      expect(find.text('Mobile Phones'), findsNothing);
+      expect(find.text('Books'), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('child loading and failure leave the parent usable with Retry', (tester) async {
+      final pending = Completer<List<CategoryNode>>();
+      when(() => categories.categoryChildren(parentCode: 'L1-M', scope: CategoryScope.all))
+          .thenAnswer((_) => pending.future);
+      await openAt(tester, '/search');
+      await tester.tap(find.text('Mobiles & Tablets'));
+      await harness.settle();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      pending.completeError(_offline);
+      await harness.settle();
+      expect(find.text('View all in Mobiles & Tablets'), findsOneWidget);
+      expect(find.text('Unable to load categories. Try again'), findsOneWidget);
+      when(() => categories.categoryChildren(parentCode: 'L1-M', scope: CategoryScope.all))
+          .thenAnswer((_) async => [_phones]);
+      await tester.ensureVisible(find.text('Retry'));
+      await tester.tap(find.text('Retry'));
+      await harness.settle();
       expect(find.text('Mobile Phones'), findsOneWidget);
       await harness.dispose();
     });
@@ -1013,15 +1189,18 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('a Home category tile searches for that category', (tester) async {
+    testWidgets('a Home category tile opens its taxonomy branch without a keyword search',
+        (tester) async {
       await openAt(tester, '/home');
 
-      await tester.tap(find.text('Laptops'));
+      await tester.tap(find.text('Mobiles & Tablets'));
       await harness.settle();
 
       expect(find.byType(SearchScreen), findsOneWidget);
-      expect(search.calls.single.criteria.query, 'Laptops');
-      expect(tester.widget<TextField>(find.byType(TextField)).controller!.text, 'Laptops');
+      expect(tester.widget<SearchScreen>(find.byType(SearchScreen)).browseParent?.code, 'L1-M');
+      expect(find.text('Mobile Phones'), findsOneWidget);
+      expect(search.calls, isEmpty);
+      expect(tester.widget<TextField>(find.byType(TextField)).controller!.text, isEmpty);
       await harness.dispose();
     });
 
@@ -1037,16 +1216,19 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('More lists every Home category and each one opens its search', (tester) async {
+    testWidgets('More lists all taxonomy roots and opens their branch', (tester) async {
       await openAt(tester, '/home');
 
       await tester.tap(find.text('More'));
       await harness.settle();
-      await tester.tap(find.text('Furniture'));
+      await tester.tap(find.text('Books'));
       await harness.settle();
 
       expect(find.byType(SearchScreen), findsOneWidget);
-      expect(search.calls.single.criteria.query, 'Furniture');
+      expect(tester.widget<SearchScreen>(find.byType(SearchScreen)).browseParent?.code, 'L1-B');
+      expect(search.calls, isEmpty);
+      verify(() => categories.categoryChildren(parentCode: 'L1-B', scope: CategoryScope.all))
+          .called(1);
       await harness.dispose();
     });
 
@@ -1072,6 +1254,43 @@ void main() {
 
   group('languages and text size', () {
     for (final language in const ['en', 'hi']) {
+      testWidgets('expanded categories reflow without overflow at 200% text in $language',
+          (tester) async {
+        tester.platformDispatcher.textScaleFactorTestValue = 2;
+        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+        tester.platformDispatcher.localesTestValue = [Locale(language)];
+        addTearDown(tester.platformDispatcher.clearLocalesTestValue);
+        when(() => categories.categoryChildren(parentCode: 'L2-P', scope: CategoryScope.all))
+            .thenAnswer((_) async => [
+                  _smartphones,
+                  const CategoryNode(
+                    code: 'CAT-2',
+                    name: 'Feature Phones',
+                    level: 3,
+                    hasChildren: false,
+                  ),
+                ]);
+        await openAt(tester, '/search/categories?parent=L1-M&name=Mobiles+%26+Tablets&level=1');
+        tester.view.physicalSize = const Size(640, 1280);
+        tester.view.devicePixelRatio = 2;
+        await harness.settle();
+        await tester.ensureVisible(find.text('Mobile Phones'));
+        await tester.tap(find.text('Mobile Phones'));
+        await harness.settle();
+        await tester.ensureVisible(find.text('Smartphones'));
+        expect(find.byType(CategoryLeafGrid), findsOneWidget);
+        final firstTile = tester.getTopLeft(
+          find.ancestor(of: find.text('Smartphones'), matching: find.byType(InkWell)).first,
+        );
+        final secondTile = tester.getTopLeft(
+          find.ancestor(of: find.text('Feature Phones'), matching: find.byType(InkWell)).first,
+        );
+        expect(secondTile.dy, greaterThan(firstTile.dy));
+        expect(secondTile.dx, firstTile.dx);
+        expect(tester.takeException(), isNull);
+        await harness.dispose();
+      });
+
       testWidgets('search, filters and results fit a small screen at 200% text in $language',
           (tester) async {
         final locale = Locale(language);
@@ -1159,6 +1378,11 @@ void main() {
       await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
       await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
       await expectLater(tester, meetsGuideline(textContrast));
+      await tester.tap(find.text('Mobile Phones'));
+      await harness.settle();
+      await tester.ensureVisible(find.text('Smartphones'));
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
       handle.dispose();
       await harness.dispose();
     });

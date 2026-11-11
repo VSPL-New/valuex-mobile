@@ -56,7 +56,6 @@ const Set<String> _signedInOnlyRoutes = {
   RouteNames.changeEmail,
   RouteNames.notifications,
   RouteNames.search,
-  RouteNames.searchCategories,
 };
 
 const Set<String> _aadhaarRoutes = {RouteNames.signupAadhaar, RouteNames.devAadhaarOtp};

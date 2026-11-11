@@ -833,17 +833,6 @@
   "searchTitle": "Search items",
   "searchFieldHint": "Search for items",
   "searchFieldLabel": "Search for items",
-  "searchQueryCounter": "{count} of {max} characters",
-  "@searchQueryCounter": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      },
-      "max": {
-        "type": "int"
-      }
-    }
-  },
   "searchClearText": "Clear search text",
   "searchFilters": "Filters",
   "searchFiltersApplied": "Filters, {count} applied",
@@ -858,6 +847,9 @@
   "searchBrowseAll": "Browse all categories",
   "searchStartHint": "Type what you are looking for, or pick a category",
   "searchCategoriesTitle": "Browse categories",
+  "searchMoreCategories": "More categories",
+  "searchViewAll": "View all",
+  "searchCategoriesEmpty": "No more categories",
   "searchCategoriesPopular": "Popular",
   "searchCategoriesOthers": "Others",
   "searchViewAllIn": "View all in {name}",
@@ -905,6 +897,24 @@
       }
     }
   },
+  "searchSuggestionsLabel": "Search suggestions",
+  "searchSuggestionListingLabel": "Search for {text}",
+  "@searchSuggestionListingLabel": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "searchSuggestionCategoryLabel": "Browse category {name}",
+  "@searchSuggestionCategoryLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "searchSuggestionCategoryTag": "in Category",
   "filterTitle": "Filters",
   "filterReset": "Reset",
   "filterApply": "Apply",

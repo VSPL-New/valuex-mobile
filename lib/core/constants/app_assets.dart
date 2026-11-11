@@ -11,6 +11,64 @@ class AppAssets {
   static const String googleIcon = 'assets/icons/google.svg';
   static const String guestIcon = 'assets/icons/guest_person_voice.svg';
 
+  static const String _categoryArtwork = 'assets/images/categories/l1';
+  static const Map<String, String> l1CategoryArtwork = {
+    'L1-MOBILES_TABLETS': '$_categoryArtwork/mobiles.png',
+    'L1-COMPUTERS_IT': '$_categoryArtwork/computers.png',
+    'L1-CAMERAS_PHOTOGRAPHY': '$_categoryArtwork/cameras.png',
+    'L1-CARS': '$_categoryArtwork/cars.png',
+    'L1-FURNITURE': '$_categoryArtwork/furniture.png',
+    'L1-TV_AUDIO_HOME_ENTERTAINMENT': '$_categoryArtwork/tv-audio.png',
+    'L1-GAMING': '$_categoryArtwork/gaming.png',
+    'L1-LARGE_APPLIANCES': '$_categoryArtwork/large-appliances.png',
+    'L1-SMALL_HOME_APPLIANCES': '$_categoryArtwork/small-appliances.png',
+    'L1-HOME_DECOR_FURNISHINGS': '$_categoryArtwork/home-decor.png',
+    'L1-KITCHEN_DINING': '$_categoryArtwork/kitchen.png',
+    'L1-HOME_IMPROVEMENT_TOOLS': '$_categoryArtwork/tools.png',
+    'L1-GARDEN_OUTDOOR': '$_categoryArtwork/garden.png',
+    'L1-MEN_S_FASHION': '$_categoryArtwork/mens-fashion.png',
+    'L1-WOMEN_S_FASHION': '$_categoryArtwork/womens-fashion.png',
+    'L1-KIDS_BABY_CLOTHING': '$_categoryArtwork/kids-clothing.png',
+    'L1-FOOTWEAR': '$_categoryArtwork/footwear.png',
+    'L1-BAGS_WALLETS_LUGGAGE': '$_categoryArtwork/bags.png',
+    'L1-WATCHES_JEWELLERY_FASHION_ACCESSORIES': '$_categoryArtwork/watches-jewellery.png',
+    'L1-BEAUTY_PERSONAL_CARE': '$_categoryArtwork/beauty.png',
+    'L1-BABY_GEAR_NURSERY': '$_categoryArtwork/baby-gear.png',
+    'L1-TOYS_GAMES': '$_categoryArtwork/toys.png',
+    'L1-BOOKS_STATIONERY_EDUCATION': '$_categoryArtwork/books.png',
+    'L1-SPORTS_FITNESS_OUTDOOR': '$_categoryArtwork/sports.png',
+    'L1-MUSICAL_INSTRUMENTS_PRO_AUDIO': '$_categoryArtwork/music.png',
+    'L1-MOTORCYCLES_SCOOTERS': '$_categoryArtwork/motorcycles.png',
+    'L1-COMMERCIAL_AGRICULTURAL_VEHICLES': '$_categoryArtwork/commercial-vehicles.png',
+    'L1-VEHICLE_PARTS_ACCESSORIES': '$_categoryArtwork/vehicle-parts.png',
+    'L1-BICYCLES_MICRO_MOBILITY': '$_categoryArtwork/bicycles.png',
+    'L1-OFFICE_BUSINESS_EQUIPMENT': '$_categoryArtwork/office.png',
+    'L1-INDUSTRIAL_COMMERCIAL_EQUIPMENT': '$_categoryArtwork/industrial.png',
+    'L1-HEALTH_MEDICAL_EQUIPMENT': '$_categoryArtwork/health.png',
+    'L1-PET_SUPPLIES': '$_categoryArtwork/pets.png',
+    'L1-ART_ANTIQUES_COLLECTIBLES': '$_categoryArtwork/antiques.png',
+    'L1-ARTS_CRAFTS_HOBBY_SUPPLIES': '$_categoryArtwork/crafts.png',
+    'L1-RELIGIOUS_FESTIVE_PARTY': '$_categoryArtwork/festive.png',
+    'L1-PACKAGED_GROCERY_CONSUMABLES_OPTIONAL': '$_categoryArtwork/grocery.png',
+    'L1-OTHER': '$_categoryArtwork/other.png',
+    'L1-REAL_ESTATE': '$_categoryArtwork/real-estate.png',
+  };
+
+  static const Map<String, String> homeCategoryArtworkCodes = {
+    'electronics': 'L1-TV_AUDIO_HOME_ENTERTAINMENT',
+    'laptops': 'L1-COMPUTERS_IT',
+    'mobiles': 'L1-MOBILES_TABLETS',
+    'cameras': 'L1-CAMERAS_PHOTOGRAPHY',
+    'vehicles': 'L1-CARS',
+    'furniture': 'L1-FURNITURE',
+    'fashion': 'L1-MEN_S_FASHION',
+    'appliances': 'L1-SMALL_HOME_APPLIANCES',
+    'books': 'L1-BOOKS_STATIONERY_EDUCATION',
+    'sports': 'L1-SPORTS_FITNESS_OUTDOOR',
+    'toys': 'L1-TOYS_GAMES',
+    'music': 'L1-MUSICAL_INSTRUMENTS_PRO_AUDIO',
+  };
+
   // Home header, search and cards
   static const String homeSearchIcon = 'assets/icons/home_search.svg';
   static const String homeCameraIcon = 'assets/icons/home_camera.svg';

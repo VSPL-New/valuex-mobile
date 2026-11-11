@@ -39,6 +39,8 @@
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>JustQlic uses your approximate location to show items near you.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>JustQlic connects to your Mac's local development services when testing on this network.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>JustQlic uses the camera to take photos of items you sell.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

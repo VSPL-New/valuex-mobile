@@ -1,6 +1,7 @@
 import 'package:valuex_mobile/features/search/data/search_repository.dart';
 import 'package:valuex_mobile/features/search/domain/search_criteria.dart';
 import 'package:valuex_mobile/features/search/domain/search_page.dart';
+import 'package:valuex_mobile/features/search/domain/search_suggestion.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Map<String, dynamic> listingJson(
@@ -95,7 +96,20 @@ class FakeSearchRepository extends Fake implements SearchRepository {
   SearchHandler handler;
   final List<SearchCall> calls = [];
 
+  /// Decides the suggestions for a text; none unless a test sets it.
+  Future<List<SearchSuggestion>> Function(String query) suggestHandler = (_) async => const [];
+  final List<String> suggestCalls = [];
+
   FakeSearchRepository(this.handler);
+
+  @override
+  Future<List<SearchSuggestion>> suggest(
+    String query, {
+    int limit = SearchRepository.defaultSuggestionLimit,
+  }) {
+    suggestCalls.add(query);
+    return suggestHandler(query);
+  }
 
   @override
   Future<SearchPage> search(

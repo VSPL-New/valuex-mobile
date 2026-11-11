@@ -104,6 +104,73 @@ Figma's 55 and 60 px buttons are normalised to 56. The onboarding Next button ke
 - Asset paths live in `AppAssets` (`lib/core/constants/app_assets.dart`). Do not hardcode paths in widgets.
 - Icons and illustrations are the **exact files exported from Figma**. Never hand-draw an SVG or edit exported bytes. Figma asset URLs expire in about 7 days, so download and commit them.
 - SVG icons render with `flutter_svg`.
+- Approved L1 artwork (2026-11-11): all 39 root categories use full-color, photorealistic
+  product illustrations through the shared `CategoryIcon` atom. Search, Home and the Home
+  category list use the same bundled assets. L2/L3 retain curated Flutter Material glyphs.
+  Listing photos and non-category Figma assets are unchanged.
+
+### Category icon maintenance
+
+L1 paths and Home alias mappings live in `AppAssets.l1CategoryArtwork` and
+`AppAssets.homeCategoryArtworkCodes`. Only explicit root codes or Home IDs select an image;
+names never opt into L1 artwork, so a leaf named "Toys" cannot inherit a root illustration.
+Unknown IDs keep the existing glyph resolution and parent fallback.
+
+Original 1024px PNGs live in `assets/images/categories/l1/` and work offline.
+Keep the exact exported bytes; `CategoryIcon` bounds decoding to the tile's physical pixel
+size (maximum 1024px) rather than holding full-size decoded images for 48dp tiles.
+Artwork fills the existing rounded square without tinting. Flutter reports missing/invalid
+assets normally; do not hide packaging failures behind a silent fallback.
+
+Source: [approved Figma artwork](https://www.figma.com/design/MBdXT0qyBFGa6kJRoZHDpD).
+[Provenance CSV](../.figma/l1-artwork.csv) maps every taxonomy code to its PNG basename,
+Figma node and generated asset ID. [Figma mapping](../.figma/mapping.json) records the
+representative image atom (`1:2`) used for implementation; the other nodes share that
+rendering pattern. Asset URLs expire; the bundled originals are the durable copies.
+To reconstruct a download URL while valid, use
+`https://www.figma.com/api/mcp/asset/<assetId>.png`.
+
+Legacy Home aliases retain representative roots for compatibility: electronics -> TV/audio,
+laptops -> computers, vehicles -> cars, fashion -> men's fashion, appliances -> small/home
+appliances. Home now renders real taxonomy codes, not these sample IDs. Each actual L1 root,
+including women's fashion and large appliances, retains its own distinct illustration.
+
+Home and Search share `categoryChildrenProvider` and the backend's taxonomy IDs, names and
+ordering. Home shows the first five `POPULAR` roots; More requests `ALL` roots (no local cap).
+Both Home entry points use `openCategory` to open the selected root already expanded in the
+Search browser, not a keyword search. Real Estate retains Buy/Rent/Lease selection before
+listing results. Loading, empty and retry states never substitute sample categories.
+Home pull-to-refresh invalidates the popular and all-root queries.
+Guest browsing is read-only: only `GET /categories/children` is public, and that request sends
+no bearer token or refresh attempt. Guests may open Home, More and the category browser;
+tapping search or listing results requires sign-in. Listing search, suggestions, listing forms,
+account APIs and all write operations retain authentication.
+Promos, featured listings and cart counts remain sample data; this does not migrate those features.
+
+`tool/generate_category_icons.py` contains the curated family assignments and exact leaf overrides.
+It reads the master taxonomy from the sibling Documents repository and generates
+`lib/core/theme/category_icon_catalog.g.dart` (39 L1 codes, 157 L2 path codes, 907 L3 codes,
+plus Home aliases). Parent codes follow the backend's `TaxonomyCodes` normalization.
+Use explicit mappings, not substring guesses; related variants may share a glyph.
+
+After a taxonomy or icon assignment change, from the mobile repository:
+
+```bash
+python3 tool/generate_category_icons.py
+dart format lib/core/theme/category_icon_catalog.g.dart
+python3 tool/generate_category_icons.py --check
+flutter test test/core/widgets/category_icon_test.dart
+flutter test test/core/widgets/l1_category_artwork_test.dart
+```
+
+The artwork test checks all 39 files and Home aliases, rejects L2/L3 image leakage, and
+compares a 48dp tile contact sheet against its golden. After an approved artwork change,
+update that golden with `flutter test --update-goldens test/core/widgets/l1_category_artwork_test.dart`
+and inspect it before accepting.
+
+The generated catalog is committed, so normal app builds do not need Python or Documents.
+Unknown future leaves inherit a parent glyph; unknown roots use a neutral category symbol.
+Icons are decorative; accessible category names and tap targets belong to their surrounding tiles.
 
 ### 3.1 Logo — one place to change
 
@@ -126,6 +193,7 @@ Shared widgets live in `lib/core/widgets/`. Reuse them; extract a new shared ato
 | `SquareBackButton` | atom | **Canonical back button** (Figma rounded square, 48×48 tap area). Use on every page that goes back. |
 | `OnboardingNavButton` | atom | Onboarding next (radius 7) and back (radius 12) controls. 45 px drawing inside a 48 dp tap area; requires a `label` for screen readers. |
 | `BrandLogo` | atom | The logo |
+| `CategoryIcon` | atom | Bundled category glyph on the brand tint; code mapping first, then exact name alias, then parent/neutral fallback. Shared by Search and Home category surfaces. |
 | `AppTextField`, `ErrorView`, `LoadingIndicator` | atoms | Generic building blocks themed from `AppTheme` |
 | `OtpInput` | molecule | Six-digit code drawn as boxes over one real text field (paste, autofill, backspace). Boxes use the input tint and `brandControlBorder`; the current box and errors use 2 px `brandPrimary` and `brandError` borders. Boxes grow with the text size. Screen readers hear the typed digits. Give it a new `key` to empty it. |
 | `FieldError` | atom | **The one way to show a form error:** error icon plus `error` text in a live region. Use it under every field and OTP input. |

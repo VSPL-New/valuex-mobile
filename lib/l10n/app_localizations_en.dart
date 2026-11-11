@@ -2131,11 +2131,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchFieldLabel => 'Search for items';
 
   @override
-  String searchQueryCounter(int count, int max) {
-    return '$count of $max characters';
-  }
-
-  @override
   String get searchClearText => 'Clear search text';
 
   @override
@@ -2157,6 +2152,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchCategoriesTitle => 'Browse categories';
+
+  @override
+  String get searchMoreCategories => 'More categories';
+
+  @override
+  String get searchViewAll => 'View all';
+
+  @override
+  String get searchCategoriesEmpty => 'No more categories';
 
   @override
   String get searchCategoriesPopular => 'Popular';
@@ -2247,6 +2251,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String searchIntentChange(String intent) {
     return '$intent. Change';
   }
+
+  @override
+  String get searchSuggestionsLabel => 'Search suggestions';
+
+  @override
+  String searchSuggestionListingLabel(String text) {
+    return 'Search for $text';
+  }
+
+  @override
+  String searchSuggestionCategoryLabel(String name) {
+    return 'Browse category $name';
+  }
+
+  @override
+  String get searchSuggestionCategoryTag => 'in Category';
 
   @override
   String get filterTitle => 'Filters';

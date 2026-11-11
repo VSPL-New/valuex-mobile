@@ -55,6 +55,7 @@ class ApiConstants {
   static String listingRestrictedAppeal(String listingId, String checkId) =>
       '/listings/$listingId/restricted-check/$checkId/appeal';
   static const String searchListings = '/search/listings';
+  static const String searchSuggestions = '/search/suggestions';
   static const String categoryChildren = '/categories/children';
   static const String categorySearch = '/categories/search';
   static String categoryListingSchema(String code) => '/categories/$code/listing-schema';

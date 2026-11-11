@@ -3,11 +3,13 @@ import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
 import '../domain/search_criteria.dart';
 import '../domain/search_page.dart';
+import '../domain/search_suggestion.dart';
 
 /// Search over the published listings (US-011). Only the city and state of the Home place go
 /// along, to rank nearby listings first; coordinates are never sent.
 class SearchRepository {
   static const int pageSize = 20;
+  static const int defaultSuggestionLimit = 8;
 
   final ApiClient _client;
 
@@ -32,6 +34,18 @@ class SearchRepository {
           if (nearState != null && nearState.isNotEmpty) 'nearState': nearState,
         },
         parse: (json) => SearchPage.fromJson(json as Map<String, dynamic>),
+      );
+
+  /// Auto-complete entries for the text typed so far: up to three categories, then listing
+  /// titles. An entry this app cannot show is left out.
+  Future<List<SearchSuggestion>> suggest(String query, {int limit = defaultSuggestionLimit}) =>
+      _client.get(
+        ApiConstants.searchSuggestions,
+        queryParameters: {'query': query, 'limit': limit},
+        parse: (json) => [
+          for (final entry in json as List<dynamic>)
+            if (SearchSuggestion.tryParse(entry) case final suggestion?) suggestion,
+        ],
       );
 }
 

@@ -91,39 +91,6 @@ final class LocationServiceProvider
 
 String _$locationServiceHash() => r'4c4dd57dd4144057ab2361e237186dacd0d0ca2d';
 
-@ProviderFor(categories)
-final categoriesProvider = CategoriesProvider._();
-
-final class CategoriesProvider extends $FunctionalProvider<AsyncValue<List<ListingCategory>>,
-        List<ListingCategory>, FutureOr<List<ListingCategory>>>
-    with $FutureModifier<List<ListingCategory>>, $FutureProvider<List<ListingCategory>> {
-  CategoriesProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'categoriesProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$categoriesHash();
-
-  @$internal
-  @override
-  $FutureProviderElement<List<ListingCategory>> $createElement($ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
-
-  @override
-  FutureOr<List<ListingCategory>> create(Ref ref) {
-    return categories(ref);
-  }
-}
-
-String _$categoriesHash() => r'a403df085289ccd1b174ad109da707cc8985dc45';
-
 @ProviderFor(promos)
 final promosProvider = PromosProvider._();
 

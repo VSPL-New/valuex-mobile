@@ -215,6 +215,7 @@ class ListingRepository {
   Future<List<CategoryNode>> categoryChildren({String? parentCode, CategoryScope? scope}) =>
       _client.get(
         ApiConstants.categoryChildren,
+        authenticated: false,
         queryParameters: {
           if (parentCode != null) 'parentCode': parentCode,
           'scope': (scope ?? CategoryScope.all).apiValue,

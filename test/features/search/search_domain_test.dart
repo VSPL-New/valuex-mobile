@@ -10,6 +10,7 @@ import 'package:valuex_mobile/features/search/domain/search_facet.dart';
 import 'package:valuex_mobile/features/search/domain/search_listing.dart';
 import 'package:valuex_mobile/features/search/domain/search_page.dart';
 import 'package:valuex_mobile/features/search/domain/search_sort.dart';
+import 'package:valuex_mobile/features/search/domain/search_suggestion.dart';
 import 'package:valuex_mobile/features/search/domain/transaction_intent.dart';
 import 'package:valuex_mobile/features/search/presentation/search_labels.dart';
 import 'package:valuex_mobile/features/search/presentation/search_routes.dart';
@@ -444,6 +445,101 @@ void main() {
               .having((e) => e.statusCode, 'status', 400),
         ),
       );
+    });
+
+    group('suggestions', () {
+      test('it calls the suggestions endpoint with the text and the default limit', () async {
+        final repo = repository(
+          (_) async => FakeHttpAdapter.ok([
+            {'text': 'Smartphones', 'type': 'CATEGORY', 'categoryCode': 'CAT-0001'},
+            {'text': 'iPhone 14 128GB', 'type': 'LISTING', 'categoryCode': null},
+          ]),
+        );
+
+        final suggestions = await repo.suggest('smart');
+
+        expect(api.requests.single.path, '/search/suggestions');
+        expect(api.requests.single.method, 'GET');
+        expect(api.requests.single.uri.queryParameters, {'query': 'smart', 'limit': '8'});
+        expect(suggestions, hasLength(2));
+        expect(suggestions[0].type, SuggestionType.category);
+        expect(suggestions[0].isCategory, isTrue);
+        expect(suggestions[0].categoryCode, 'CAT-0001');
+        expect(suggestions[1].text, 'iPhone 14 128GB');
+        expect(suggestions[1].type, SuggestionType.listing);
+        expect(suggestions[1].categoryCode, isNull);
+      });
+
+      test('a given limit is sent', () async {
+        final repo = repository((_) async => FakeHttpAdapter.ok([]));
+
+        final suggestions = await repo.suggest('ab', limit: 10);
+
+        expect(suggestions, isEmpty);
+        expect(api.requests.single.uri.queryParameters['limit'], '10');
+      });
+
+      test('entries the app cannot show are left out', () async {
+        final repo = repository(
+          (_) async => FakeHttpAdapter.ok([
+            {'text': 'Phone', 'type': 'LISTING'},
+            {'text': 'Plot', 'type': 'PROPERTY'},
+            {'text': '  ', 'type': 'LISTING'},
+            {'type': 'LISTING'},
+            {'text': 'Cars', 'type': 'CATEGORY', 'categoryCode': ''},
+            'nonsense',
+          ]),
+        );
+
+        final suggestions = await repo.suggest('ph');
+
+        expect(suggestions.map((s) => s.text), ['Phone', 'Cars']);
+        expect(suggestions.last.categoryCode, isNull);
+      });
+
+      test('a payload that is not a list is a server error', () async {
+        final repo = repository((_) async => FakeHttpAdapter.ok({'text': 'x'}));
+
+        await expectLater(
+          repo.suggest('ph'),
+          throwsA(isA<ApiError>().having((e) => e.type, 'type', ApiErrorType.server)),
+        );
+      });
+
+      test('the error codes come back as ApiErrors', () async {
+        final cases = {
+          400: 'ERROR_QUERY_TOO_LONG',
+          429: 'RATE_LIMITED',
+          503: 'ERROR_SEARCH_UNAVAILABLE',
+        };
+        for (final entry in cases.entries) {
+          final repo = repository(
+            (_) async => FakeHttpAdapter.error(entry.key, entry.value, 'x'),
+          );
+
+          await expectLater(
+            repo.suggest('ph'),
+            throwsA(
+              isA<ApiError>()
+                  .having((e) => e.code, 'code', entry.value)
+                  .having((e) => e.statusCode, 'status', entry.key),
+            ),
+            reason: '${entry.key}',
+          );
+        }
+      });
+
+      test('suggestions with the same content are equal', () {
+        const a = SearchSuggestion(text: 'x', type: SuggestionType.category, categoryCode: 'C');
+        const b = SearchSuggestion(text: 'x', type: SuggestionType.category, categoryCode: 'C');
+        const c = SearchSuggestion(text: 'x', type: SuggestionType.listing);
+
+        expect(a, b);
+        expect(a.hashCode, b.hashCode);
+        expect(a, isNot(c));
+        expect(SuggestionType.fromApi('LISTING'), SuggestionType.listing);
+        expect(SuggestionType.fromApi(null), isNull);
+      });
     });
   });
 

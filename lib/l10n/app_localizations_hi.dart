@@ -2123,11 +2123,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get searchFieldLabel => 'वस्तुएँ खोजें';
 
   @override
-  String searchQueryCounter(int count, int max) {
-    return '$max में से $count अक्षर';
-  }
-
-  @override
   String get searchClearText => 'खोज का टेक्स्ट हटाएँ';
 
   @override
@@ -2149,6 +2144,15 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get searchCategoriesTitle => 'श्रेणियाँ ब्राउज़ करें';
+
+  @override
+  String get searchMoreCategories => 'और श्रेणियाँ';
+
+  @override
+  String get searchViewAll => 'सभी देखें';
+
+  @override
+  String get searchCategoriesEmpty => 'और श्रेणियाँ नहीं हैं';
 
   @override
   String get searchCategoriesPopular => 'लोकप्रिय';
@@ -2240,6 +2244,22 @@ class AppLocalizationsHi extends AppLocalizations {
   String searchIntentChange(String intent) {
     return '$intent। बदलें';
   }
+
+  @override
+  String get searchSuggestionsLabel => 'खोज सुझाव';
+
+  @override
+  String searchSuggestionListingLabel(String text) {
+    return '$text खोजें';
+  }
+
+  @override
+  String searchSuggestionCategoryLabel(String name) {
+    return 'श्रेणी $name देखें';
+  }
+
+  @override
+  String get searchSuggestionCategoryTag => 'श्रेणी में';
 
   @override
   String get filterTitle => 'फ़िल्टर';
