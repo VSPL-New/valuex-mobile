@@ -70,6 +70,8 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/categories/l1/
+    - assets/images/categories/l3/
     - assets/icons/
 
   fonts:

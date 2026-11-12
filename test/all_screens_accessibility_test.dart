@@ -23,6 +23,8 @@ void main() {
     RouteNames.accountBlocked: AccountStatus.suspended,
     RouteNames.home: AccountStatus.active,
     RouteNames.categories: AccountStatus.active,
+    RouteNames.search: AccountStatus.active,
+    RouteNames.searchCategories: AccountStatus.active,
     RouteNames.language: AccountStatus.active,
   };
 

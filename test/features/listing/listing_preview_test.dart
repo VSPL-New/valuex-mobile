@@ -12,6 +12,7 @@ import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart'
 import 'package:valuex_mobile/features/auth/presentation/providers/session_state.dart';
 import 'package:valuex_mobile/features/home/presentation/providers/home_providers.dart';
 import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
+import 'package:valuex_mobile/features/listing/domain/category.dart';
 import 'package:valuex_mobile/features/listing/domain/listing_preview.dart';
 import 'package:valuex_mobile/features/listing/domain/listing_preview_fields.dart';
 import 'package:valuex_mobile/features/listing/domain/listing_schema.dart';
@@ -407,6 +408,8 @@ void main() {
     setUp(() {
       repository = _MockRepository();
       when(() => repository.photoLink(any())).thenAnswer((_) async => const PhotoLink(url: ''));
+      when(() => repository.categoryChildren(parentCode: null, scope: CategoryScope.popular))
+          .thenAnswer((_) async => const <CategoryNode>[]);
     });
 
     testWidgets('shows the saved listing as buyers will see it, read-only', (tester) async {
@@ -549,6 +552,8 @@ void main() {
       await harness.settle();
 
       verify(() => repository.getListingPreview('l1')).called(1);
+      verify(() => repository.categoryChildren(parentCode: null, scope: CategoryScope.popular))
+          .called(1);
       verifyNoMoreInteractions(repository);
       await harness.dispose();
     });

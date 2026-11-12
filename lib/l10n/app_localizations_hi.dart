@@ -2112,4 +2112,223 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get languageSheetTitle => 'अपनी भाषा चुनें';
+
+  @override
+  String get searchTitle => 'वस्तुएँ खोजें';
+
+  @override
+  String get searchFieldHint => 'वस्तुएँ खोजें';
+
+  @override
+  String get searchFieldLabel => 'वस्तुएँ खोजें';
+
+  @override
+  String get searchClearText => 'खोज का टेक्स्ट हटाएँ';
+
+  @override
+  String get searchFilters => 'फ़िल्टर';
+
+  @override
+  String searchFiltersApplied(int count) {
+    return 'फ़िल्टर, $count लागू';
+  }
+
+  @override
+  String get searchPopularCategories => 'लोकप्रिय श्रेणियाँ';
+
+  @override
+  String get searchBrowseAll => 'सभी श्रेणियाँ देखें';
+
+  @override
+  String get searchStartHint => 'जो चाहिए वह लिखें, या कोई श्रेणी चुनें';
+
+  @override
+  String get searchCategoriesTitle => 'श्रेणियाँ ब्राउज़ करें';
+
+  @override
+  String get searchMoreCategories => 'और श्रेणियाँ';
+
+  @override
+  String get searchViewAll => 'सभी देखें';
+
+  @override
+  String get searchCategoriesEmpty => 'और श्रेणियाँ नहीं हैं';
+
+  @override
+  String get searchCategoriesPopular => 'लोकप्रिय';
+
+  @override
+  String get searchCategoriesOthers => 'अन्य';
+
+  @override
+  String searchViewAllIn(String name) {
+    return '$name में सभी देखें';
+  }
+
+  @override
+  String get searchCategoriesFailed => 'श्रेणियाँ लोड नहीं हो सकीं। फिर कोशिश करें';
+
+  @override
+  String searchResultsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count वस्तुएँ मिलीं',
+      one: '1 वस्तु मिली',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchNoResults => 'कोई वस्तु नहीं मिली। अलग शब्द आज़माएँ';
+
+  @override
+  String get searchNoResultsFilters => 'आपके फ़िल्टर से कोई वस्तु नहीं मिली। कम फ़िल्टर लगाएँ';
+
+  @override
+  String get searchClearFilters => 'फ़िल्टर हटाएँ';
+
+  @override
+  String get searchLoadMoreFailed => 'और वस्तुएँ लोड नहीं हो सकीं। फिर कोशिश करने के लिए टैप करें';
+
+  @override
+  String get searchStartingFrom => 'शुरुआती कीमत';
+
+  @override
+  String get searchFeatured => 'फ़ीचर्ड';
+
+  @override
+  String get searchErrorTooLong => 'खोज का टेक्स्ट बहुत लंबा है';
+
+  @override
+  String get searchErrorPriceRange => 'न्यूनतम कीमत अधिकतम कीमत से ज़्यादा नहीं हो सकती';
+
+  @override
+  String get searchErrorInvalidFilters => 'फ़िल्टर का मेल सही नहीं है';
+
+  @override
+  String get searchErrorIntentRequired => 'खरीदें, किराये पर या लीज़ पर चुनें';
+
+  @override
+  String get searchErrorIntentNotSupported =>
+      'यह विकल्प इस प्रकार की संपत्ति के लिए उपलब्ध नहीं है';
+
+  @override
+  String get searchErrorUnavailable => 'खोज अभी उपलब्ध नहीं है। फिर कोशिश करें';
+
+  @override
+  String get searchErrorRateLimit => 'बहुत ज़्यादा खोजें हुईं। थोड़ा रुककर फिर कोशिश करें';
+
+  @override
+  String get searchErrorCategoryUnavailable => 'यह श्रेणी उपलब्ध नहीं है';
+
+  @override
+  String get searchIntentTitle => 'खरीदें, किराये पर या लीज़ पर चुनें';
+
+  @override
+  String get searchIntentPrompt => 'संपत्तियाँ देखने के लिए खरीदें, किराये पर या लीज़ पर चुनें';
+
+  @override
+  String get searchIntentChoose => 'चुनें';
+
+  @override
+  String get searchIntentBuy => 'खरीदें';
+
+  @override
+  String get searchIntentRent => 'किराये पर';
+
+  @override
+  String get searchIntentLease => 'लीज़ पर';
+
+  @override
+  String searchIntentChange(String intent) {
+    return '$intent। बदलें';
+  }
+
+  @override
+  String get searchSuggestionsLabel => 'खोज सुझाव';
+
+  @override
+  String searchSuggestionListingLabel(String text) {
+    return '$text खोजें';
+  }
+
+  @override
+  String searchSuggestionCategoryLabel(String name) {
+    return 'श्रेणी $name देखें';
+  }
+
+  @override
+  String get searchSuggestionCategoryTag => 'श्रेणी में';
+
+  @override
+  String get filterTitle => 'फ़िल्टर';
+
+  @override
+  String get filterReset => 'रीसेट';
+
+  @override
+  String get filterApply => 'लागू करें';
+
+  @override
+  String get filterClose => 'फ़िल्टर बंद करें';
+
+  @override
+  String get filterSortTitle => 'क्रमबद्ध करें';
+
+  @override
+  String get filterSortRelevance => 'सबसे प्रासंगिक';
+
+  @override
+  String get filterSortNewest => 'सबसे नई पहले';
+
+  @override
+  String get filterSortPriceAsc => 'कीमत: कम से ज़्यादा';
+
+  @override
+  String get filterSortPriceDesc => 'कीमत: ज़्यादा से कम';
+
+  @override
+  String get filterPriceTitle => 'कीमत (₹)';
+
+  @override
+  String get filterPriceMin => 'न्यूनतम कीमत';
+
+  @override
+  String get filterPriceMax => 'अधिकतम कीमत';
+
+  @override
+  String get filterConditionTitle => 'स्थिति';
+
+  @override
+  String get filterLocationTitle => 'स्थान';
+
+  @override
+  String get filterCity => 'शहर';
+
+  @override
+  String get filterClearState => 'राज्य हटाएँ';
+
+  @override
+  String filterRangeMin(String label) {
+    return '$label, न्यूनतम';
+  }
+
+  @override
+  String filterRangeMax(String label) {
+    return '$label, अधिकतम';
+  }
+
+  @override
+  String filterRangeAvailable(String min, String max) {
+    return 'उपलब्ध: $min से $max';
+  }
+
+  @override
+  String get filterRangeError => 'न्यूनतम मान अधिकतम से ज़्यादा नहीं हो सकता';
+
+  @override
+  String filterBucketLabel(String label, int count) {
+    return '$label ($count)';
+  }
 }

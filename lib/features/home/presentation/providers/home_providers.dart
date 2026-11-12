@@ -9,7 +9,6 @@ import '../../data/mock_home_repository.dart';
 import '../../domain/entities/home_badges.dart';
 import '../../domain/entities/home_location.dart';
 import '../../domain/entities/listing.dart';
-import '../../domain/entities/listing_category.dart';
 import '../../domain/entities/promo.dart';
 import '../../domain/repositories/home_repository.dart';
 import '../../domain/services/location_service.dart';
@@ -21,9 +20,6 @@ HomeRepository homeRepository(Ref ref) => const MockHomeRepository();
 
 @Riverpod(keepAlive: true)
 LocationService locationService(Ref ref) => const DeviceLocationService();
-
-@riverpod
-Future<List<ListingCategory>> categories(Ref ref) => ref.watch(homeRepositoryProvider).categories();
 
 @riverpod
 Future<List<Promo>> promos(Ref ref) => ref.watch(homeRepositoryProvider).promos();

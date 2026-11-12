@@ -1,21 +1,45 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:valuex_mobile/core/constants/storage_keys.dart';
 import 'package:valuex_mobile/core/routing/route_names.dart';
+import 'package:valuex_mobile/core/widgets/category_icon.dart';
 import 'package:valuex_mobile/features/address/domain/saved_address.dart';
 import 'package:valuex_mobile/features/address/presentation/providers/address_providers.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
+import 'package:valuex_mobile/features/auth/presentation/screens/sign_in_mobile_screen.dart';
 import 'package:valuex_mobile/features/home/domain/entities/home_location.dart';
 import 'package:valuex_mobile/features/listing/presentation/create_listing_screen.dart';
+import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
+import 'package:valuex_mobile/features/listing/domain/category.dart';
+import 'package:valuex_mobile/features/search/data/search_repository.dart';
+import 'package:valuex_mobile/features/search/presentation/search_screen.dart';
 import 'package:valuex_mobile/features/home/domain/services/location_service.dart';
 import 'package:valuex_mobile/features/notifications/data/notifications_repository.dart';
 
 import '../../helpers/app_harness.dart';
 import '../../helpers/fonts.dart';
+import '../search/search_fixtures.dart';
 
 class _MockNotifications extends Mock implements NotificationsRepository {}
+
+class _MockCategories extends Mock implements ListingRepository {}
+
+final _roots = [
+  for (final (code, name) in const [
+    ('L1-MOBILES_TABLETS', 'Mobiles & Tablets'),
+    ('L1-COMPUTERS_IT', 'Computers & IT'),
+    ('L1-CAMERAS_PHOTOGRAPHY', 'Cameras & Photography'),
+    ('L1-FURNITURE', 'Furniture'),
+    ('L1-CARS', 'Cars'),
+    ('L1-REAL_ESTATE', 'Real Estate'),
+    ('L1-BOOKS_STATIONERY_EDUCATION', 'Books, Stationery & Education'),
+  ])
+    CategoryNode(code: code, name: name, level: 1, hasChildren: true),
+];
 
 const _home = SavedAddress(
   id: 'a-1',
@@ -38,7 +62,41 @@ const _office = SavedAddress(
 );
 
 void main() {
-  setUpAll(loadBrandFonts);
+  setUpAll(() async {
+    registerFallbackValue(CategoryScope.all);
+    await loadBrandFonts();
+  });
+
+  late _MockCategories taxonomy;
+  late FakeSearchRepository search;
+  setUp(() {
+    taxonomy = _MockCategories();
+    search = FakeSearchRepository((criteria, page) async => listingsPage(0, 0, hasNext: false));
+    when(() => taxonomy.categoryChildren(
+          parentCode: any(named: 'parentCode'),
+          scope: any(named: 'scope'),
+        )).thenAnswer((call) async {
+      final parent = call.namedArguments[#parentCode] as String?;
+      final scope = call.namedArguments[#scope] as CategoryScope?;
+      return switch ((parent, scope)) {
+        (null, CategoryScope.popular) => _roots.take(5).toList(),
+        (null, CategoryScope.others) => _roots.skip(5).toList(),
+        (null, CategoryScope.all) => _roots,
+        ('L1-MOBILES_TABLETS', CategoryScope.all) => [
+            const CategoryNode(
+                code: 'L2-MOBILES_TABLETS-PHONES',
+                name: 'Mobile Phones',
+                level: 2,
+                hasChildren: true),
+          ],
+        ('L1-REAL_ESTATE', CategoryScope.all) => [
+            const CategoryNode(
+                code: 'L2-REAL_ESTATE-HOMES', name: 'Homes', level: 2, hasChildren: true),
+          ],
+        _ => <CategoryNode>[],
+      };
+    });
+  });
 
   Finder inDialog(String text) =>
       find.descendant(of: find.byType(AlertDialog), matching: find.text(text));
@@ -72,17 +130,20 @@ void main() {
     LocationAccess afterRequest = LocationAccess.granted,
     List<SavedAddress> saved = const [],
     Future<List<SavedAddress>> Function()? savedLoader,
+    bool signedIn = true,
   }) async {
     final notifications = _MockNotifications();
     when(notifications.unreadCount).thenAnswer((_) async => 3);
     final harness = AppHarness(
       tester,
       extraOverrides: [
+        listingRepositoryProvider.overrideWithValue(taxonomy),
+        searchRepositoryProvider.overrideWithValue(search),
         notificationsRepositoryProvider.overrideWithValue(notifications),
         savedAddressesProvider.overrideWith((ref) => (savedLoader ?? () async => saved)()),
       ],
     );
-    harness.signedInAs(AccountStatus.active, aadhaarVerified: aadhaarVerified);
+    if (signedIn) harness.signedInAs(AccountStatus.active, aadhaarVerified: aadhaarVerified);
     harness.locationService
       ..state = access
       ..afterRequest = afterRequest;
@@ -99,7 +160,8 @@ void main() {
     expect(find.text('Unlock AI Photo Search'), findsOneWidget);
     expect(find.text('Claim Voucher'), findsOneWidget);
     expect(find.text('Browse'), findsOneWidget);
-    expect(find.text('Electronic'), findsOneWidget);
+    expect(find.text('Mobiles & Tablets'), findsOneWidget);
+    expect(find.text('Electronic'), findsNothing);
     expect(find.text('More'), findsOneWidget);
     expect(find.text('Featured Deals Near You'), findsOneWidget);
     expect(find.text('Sony A7 IV Camera'), findsOneWidget);
@@ -116,6 +178,21 @@ void main() {
     expect(find.bySemanticsLabel('Cart, 2 items'), findsOneWidget);
     expect(find.bySemanticsLabel('Notifications, 3 unread'), findsOneWidget);
     handle.dispose();
+    await harness.dispose();
+  });
+
+  testWidgets('Home and its category list share the category icon component', (tester) async {
+    final harness = await openHome(tester);
+    expect(find.byType(CategoryIcon), findsNWidgets(5));
+    final first = tester.widget<CategoryIcon>(find.byType(CategoryIcon).first);
+    expect(first.code, 'L1-MOBILES_TABLETS');
+    await tapText(tester, 'More');
+    await harness.settle();
+    expect(find.byType(CategoryIcon), findsWidgets);
+    expect(
+      tester.widgetList<CategoryIcon>(find.byType(CategoryIcon)).map((icon) => icon.code),
+      containsAll(['L1-MOBILES_TABLETS', 'L1-COMPUTERS_IT', 'L1-CAMERAS_PHOTOGRAPHY']),
+    );
     await harness.dispose();
   });
 
@@ -300,6 +377,106 @@ void main() {
   });
 
   group('navigation', () {
+    testWidgets('guests browse categories but must sign in before opening listings',
+        (tester) async {
+      final harness = await openHome(tester, signedIn: false);
+      await tapText(tester, 'Mobiles & Tablets');
+      await harness.settle();
+      expect(find.text('Mobile Phones'), findsOneWidget);
+      expect(search.calls, isEmpty);
+      expect(search.suggestCalls, isEmpty);
+      await tapText(tester, 'View all in Mobiles & Tablets');
+      await harness.settle();
+      expect(find.byType(SignInMobileScreen), findsOneWidget);
+      expect(search.calls, isEmpty);
+      await harness.dispose();
+    });
+
+    testWidgets('guest category browser search field requests sign-in without calling search',
+        (tester) async {
+      final harness = await openHome(tester, signedIn: false);
+      await tapText(tester, 'Mobiles & Tablets');
+      await harness.settle();
+      expect(tester.widget<TextField>(find.byType(TextField)).readOnly, isTrue);
+      await tester.tap(find.byType(TextField));
+      await harness.settle();
+      expect(find.byType(SignInMobileScreen), findsOneWidget);
+      expect(search.calls, isEmpty);
+      expect(search.suggestCalls, isEmpty);
+      await harness.dispose();
+    });
+
+    testWidgets('a Home shortcut opens the same root expanded, without a keyword search',
+        (tester) async {
+      final harness = await openHome(tester);
+      await tapText(tester, 'Mobiles & Tablets');
+      await harness.settle();
+
+      final screen = tester.widget<SearchScreen>(find.byType(SearchScreen));
+      expect(screen.browseParent?.code, 'L1-MOBILES_TABLETS');
+      expect(screen.browseParent?.name, 'Mobiles & Tablets');
+      expect(screen.browseParent?.level, 1);
+      expect(find.text('Mobile Phones'), findsOneWidget);
+      expect(tester.widget<TextField>(find.byType(TextField)).controller!.text, isEmpty);
+      expect(search.calls, isEmpty);
+      verify(() =>
+              taxonomy.categoryChildren(parentCode: 'L1-MOBILES_TABLETS', scope: CategoryScope.all))
+          .called(1);
+      expect(screen.initial.query, isEmpty);
+      await harness.dispose();
+    });
+
+    testWidgets('Home and Search reuse the popular taxonomy request', (tester) async {
+      final harness = await openHome(tester);
+      await tapText(tester, 'Search here ...');
+      await harness.settle();
+
+      expect(find.text('Mobiles & Tablets'), findsOneWidget);
+      verify(() => taxonomy.categoryChildren(parentCode: null, scope: CategoryScope.popular))
+          .called(1);
+      await harness.dispose();
+    });
+
+    testWidgets('More shows all 39 server roots, including non-popular categories', (tester) async {
+      final all = [
+        ..._roots,
+        for (var i = 7; i < 39; i++)
+          CategoryNode(code: 'L1-EXTRA_$i', name: 'Extra root $i', level: 1, hasChildren: true),
+      ];
+      when(() => taxonomy.categoryChildren(parentCode: null, scope: CategoryScope.all))
+          .thenAnswer((_) async => all);
+      final harness = await openHome(tester);
+      expect(find.text('Real Estate'), findsNothing);
+      await tapText(tester, 'More');
+      await harness.settle();
+      await tester.scrollUntilVisible(find.text('Extra root 38'), 400);
+      expect(find.text('Extra root 38'), findsOneWidget);
+      verify(() => taxonomy.categoryChildren(parentCode: null, scope: CategoryScope.all)).called(1);
+      await harness.dispose();
+    });
+
+    testWidgets('More opens Real Estate expanded and preserves the intent requirement',
+        (tester) async {
+      final harness = await openHome(tester);
+      await tapText(tester, 'More');
+      await harness.settle();
+      await tapText(tester, 'Real Estate');
+      await harness.settle();
+
+      final screen = tester.widget<SearchScreen>(find.byType(SearchScreen));
+      expect(screen.browseParent?.code, 'L1-REAL_ESTATE');
+      expect(screen.browseRealEstate, isTrue);
+      expect(find.text('Homes'), findsOneWidget);
+      expect(search.calls, isEmpty);
+      await tapText(tester, 'View all in Real Estate');
+      await harness.settle();
+      expect(find.text('Buy'), findsWidgets);
+      expect(find.text('Rent'), findsWidgets);
+      expect(find.text('Lease'), findsWidgets);
+      expect(search.calls, isEmpty);
+      await harness.dispose();
+    });
+
     testWidgets('More opens every category and Back returns to Home', (tester) async {
       final harness = await openHome(tester);
 
@@ -343,6 +520,82 @@ void main() {
       await harness.settle();
 
       expect(find.text('Create an Account'), findsWidgets);
+      await harness.dispose();
+    });
+  });
+
+  group('taxonomy states', () {
+    testWidgets('Home loads without showing sample categories', (tester) async {
+      final pending = Completer<List<CategoryNode>>();
+      when(() => taxonomy.categoryChildren(parentCode: null, scope: CategoryScope.popular))
+          .thenAnswer((_) => pending.future);
+      final harness = await openHome(tester);
+      expect(find.byType(CategoryIcon), findsNothing);
+      expect(find.text('Electronic'), findsNothing);
+      pending.complete(_roots.take(5).toList());
+      await harness.settle();
+      expect(find.text('Mobiles & Tablets'), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('Home exposes failure and retries the shared taxonomy', (tester) async {
+      var calls = 0;
+      when(() => taxonomy.categoryChildren(parentCode: null, scope: CategoryScope.popular))
+          .thenAnswer((_) async {
+        if (++calls == 1) throw Exception('offline');
+        return _roots.take(5).toList();
+      });
+      final harness = await openHome(tester);
+      expect(find.byType(CategoryIcon), findsNothing);
+      await tapText(tester, 'Retry');
+      await harness.settle();
+      expect(calls, 2);
+      expect(find.text('Mobiles & Tablets'), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('empty popular categories retain More and never use mock roots', (tester) async {
+      when(() => taxonomy.categoryChildren(parentCode: null, scope: CategoryScope.popular))
+          .thenAnswer((_) async => []);
+      final harness = await openHome(tester);
+      expect(find.byType(CategoryIcon), findsNothing);
+      await tapText(tester, 'More');
+      await harness.settle();
+      expect(find.text('Real Estate'), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('More has loading, retry and empty states', (tester) async {
+      final pending = Completer<List<CategoryNode>>();
+      var calls = 0;
+      when(() => taxonomy.categoryChildren(parentCode: null, scope: CategoryScope.all))
+          .thenAnswer((_) {
+        calls++;
+        return calls == 1 ? pending.future : Future.value([]);
+      });
+      final harness = await openHome(tester);
+      await tapText(tester, 'More');
+      await harness.settle();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      pending.completeError(Exception('offline'));
+      await harness.settle();
+      await tapText(tester, 'Retry');
+      await harness.settle();
+      expect(calls, 2);
+      expect(find.byType(ListTile), findsNothing);
+      expect(find.text('Electronic'), findsNothing);
+      expect(tester.takeException(), isNull);
+      await harness.dispose();
+    });
+
+    testWidgets('pull to refresh reloads the popular taxonomy', (tester) async {
+      final harness = await openHome(tester);
+      clearInteractions(taxonomy);
+      await tester.drag(find.byType(CustomScrollView), const Offset(0, 500));
+      await tester.pump(const Duration(seconds: 1));
+      await harness.settle();
+      verify(() => taxonomy.categoryChildren(parentCode: null, scope: CategoryScope.popular))
+          .called(1);
       await harness.dispose();
     });
   });

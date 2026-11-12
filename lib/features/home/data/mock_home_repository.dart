@@ -2,34 +2,12 @@ import '../../../../core/constants/app_assets.dart';
 import '../domain/entities/home_badges.dart';
 import '../domain/entities/home_location.dart';
 import '../domain/entities/listing.dart';
-import '../domain/entities/listing_category.dart';
 import '../domain/entities/promo.dart';
 import '../domain/repositories/home_repository.dart';
 
-/// Sample content standing in for the backend, which has no category, listing or promo
-/// endpoints yet. Replace with a repository that calls the API.
+/// Sample promos, featured listings and cart counts; categories use the real taxonomy.
 class MockHomeRepository implements HomeRepository {
   const MockHomeRepository();
-
-  @override
-  Future<List<ListingCategory>> categories() async => const [
-        ListingCategory(
-          id: 'electronics',
-          name: 'Electronic',
-          image: AppAssets.sampleCategoryElectronic,
-        ),
-        ListingCategory(id: 'laptops', name: 'Laptops', image: AppAssets.sampleCategoryLaptops),
-        ListingCategory(id: 'mobiles', name: 'Mobiles', image: AppAssets.sampleCategoryMobiles),
-        ListingCategory(id: 'cameras', name: 'Cameras', image: AppAssets.sampleCategoryCameras),
-        ListingCategory(id: 'vehicles', name: 'Vehicles', image: AppAssets.sampleCategoryVehicles),
-        ListingCategory(id: 'furniture', name: 'Furniture'),
-        ListingCategory(id: 'fashion', name: 'Fashion'),
-        ListingCategory(id: 'appliances', name: 'Home Appliances'),
-        ListingCategory(id: 'books', name: 'Books'),
-        ListingCategory(id: 'sports', name: 'Sports'),
-        ListingCategory(id: 'toys', name: 'Toys'),
-        ListingCategory(id: 'music', name: 'Musical Instruments'),
-      ];
 
   @override
   Future<List<Promo>> promos() async => const [

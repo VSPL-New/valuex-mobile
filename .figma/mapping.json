@@ -4,6 +4,65 @@
   "entries": [
     {
       "figma": {
+        "fileKey": "MBdXT0qyBFGa6kJRoZHDpD",
+        "nodeId": "3:2",
+        "nodeName": "Generated Image"
+      },
+      "local": {
+        "components": [
+          { "path": "lib/core/widgets/category_icon.dart", "tier": "atom" }
+        ],
+        "tokens": ["lib/core/theme/spacing.dart", "lib/core/theme/colors.dart"],
+        "assets": ["assets/images/categories/l3/CAT-0001.webp"],
+        "assetOptimization": {
+          "format": "webp",
+          "pixelSize": 256,
+          "quality": 85,
+          "method": 6,
+          "approval": "User approved the L3 pilot and production rollout in reviewed batches."
+        },
+        "artworkManifest": ".figma/l3-artwork.json",
+        "catalog": "lib/core/constants/l3_category_artwork.g.dart",
+        "tests": ["test/core/widgets/l3_category_artwork_test.dart"]
+      },
+      "sync": {
+        "contentHash": "sha256:3b13c9a398fd2ead031c6ac3215284b73f4ae3503b8320310078ca279dc24144",
+        "lastSyncedAt": "2026-11-12T02:33:41Z",
+        "status": "in-sync"
+      }
+    },
+    {
+      "figma": {
+        "fileKey": "MBdXT0qyBFGa6kJRoZHDpD",
+        "nodeId": "1:2",
+        "nodeName": "Generated Image"
+      },
+      "local": {
+        "components": [
+          { "path": "lib/core/widgets/category_icon.dart", "tier": "atom" }
+        ],
+        "tokens": ["lib/core/theme/spacing.dart", "lib/core/theme/colors.dart"],
+        "assets": ["assets/images/categories/l1/mobiles.webp"],
+        "assetOptimization": {
+          "format": "webp",
+          "pixelSize": 256,
+          "quality": 85,
+          "method": 6,
+          "sourceCommit": "ebbf6ed",
+          "approval": "User approved L1 compression to match the L3 pilot; source artwork unchanged."
+        },
+        "artworkManifest": ".figma/l1-artwork.csv",
+        "catalog": "lib/core/constants/app_assets.dart",
+        "tests": ["test/core/widgets/l1_category_artwork_test.dart"]
+      },
+      "sync": {
+        "contentHash": "sha256:c6a7b1648565939014110550d89e7c15fbdd3152d88cd10094bddf8bd16cce12",
+        "lastSyncedAt": "2026-11-11T18:22:24Z",
+        "status": "in-sync"
+      }
+    },
+    {
+      "figma": {
         "fileKey": "3LUBiPqzccGNMi3RIHd59d",
         "nodeId": "4:176",
         "nodeName": "C  /  Sectioned review"

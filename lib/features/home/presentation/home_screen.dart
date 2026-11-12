@@ -11,7 +11,10 @@ import '../../../core/widgets/brand_bottom_nav.dart';
 import '../../../core/widgets/field_error.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../notifications/presentation/providers/notifications_providers.dart';
+import '../../listing/domain/category.dart';
+import '../../listing/presentation/providers/category_providers.dart';
 import '../domain/entities/home_badges.dart';
+import '../../search/presentation/search_routes.dart';
 import '../domain/entities/listing.dart';
 import 'main_nav.dart';
 import 'providers/home_providers.dart';
@@ -29,10 +32,13 @@ import 'widgets/section_header.dart';
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
+  static const CategoryQuery _categoryQuery = (parentCode: null, scope: CategoryScope.popular);
+
   Future<void> _refresh(WidgetRef ref) async {
     ref
       ..invalidate(promosProvider)
-      ..invalidate(categoriesProvider)
+      ..invalidate(categoryChildrenProvider(_categoryQuery))
+      ..invalidate(categoryChildrenProvider((parentCode: null, scope: CategoryScope.all)))
       ..invalidate(homeBadgesProvider)
       ..invalidate(unreadNotificationsProvider)
       ..invalidate(featuredListingsProvider);
@@ -54,7 +60,7 @@ class HomeScreen extends ConsumerWidget {
       unreadNotifications: ref.watch(unreadNotificationsProvider).value ?? 0,
     );
     final promos = ref.watch(promosProvider).value ?? const [];
-    final categories = ref.watch(categoriesProvider);
+    final categories = ref.watch(categoryChildrenProvider(_categoryQuery));
     final listings = ref.watch(featuredListingsProvider);
     final controller = ref.read(homeLocationControllerProvider.notifier);
 
@@ -82,7 +88,7 @@ class HomeScreen extends ConsumerWidget {
                 onLocation: () => showLocationSheet(context),
                 onCart: () => showComingSoon(context),
                 onNotifications: () => context.push(RouteNames.notifications),
-                onSearch: () => showComingSoon(context),
+                onSearch: () => context.push(RouteNames.search),
                 onPhotoSearch: () => showComingSoon(context),
               ),
             ),
@@ -107,15 +113,22 @@ class HomeScreen extends ConsumerWidget {
                   if (promos.isNotEmpty) const SizedBox(height: AppSpacing.md),
                   SectionHeader(title: l10n.homeBrowse),
                   categories.when(
-                    data: (items) => CategoryRow(
-                      categories: items,
-                      onSelect: (_) => showComingSoon(context),
-                      onMore: () => context.push(RouteNames.categories),
+                    data: (items) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (items.isEmpty)
+                          Text(l10n.searchCategoriesEmpty, style: AppTextStyles.hint),
+                        CategoryRow(
+                          categories: items,
+                          onSelect: (category) => openCategory(context, category),
+                          onMore: () => context.push(RouteNames.categories),
+                        ),
+                      ],
                     ),
                     loading: () => const _Skeleton(height: 72),
                     error: (error, stack) => _SectionError(
                       message: l10n.homeCategoriesFailed,
-                      onRetry: () => ref.invalidate(categoriesProvider),
+                      onRetry: () => ref.invalidate(categoryChildrenProvider(_categoryQuery)),
                     ),
                   ),
                   if (needed == null) ...[
@@ -125,7 +138,7 @@ class HomeScreen extends ConsumerWidget {
                       actionLabel: known != null && (listings.value?.isNotEmpty ?? false)
                           ? l10n.homeSeeAll
                           : null,
-                      onAction: () => showComingSoon(context),
+                      onAction: () => context.push(searchLocation(browseAll: true)),
                     ),
                   ],
                 ]),

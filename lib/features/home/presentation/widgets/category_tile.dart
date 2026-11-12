@@ -4,14 +4,14 @@ import '../../../../core/constants/app_assets.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
-import '../../../../core/widgets/app_image.dart';
+import '../../../../core/widgets/category_icon.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../domain/entities/listing_category.dart';
+import '../../../listing/domain/category.dart';
 
-/// One category: a picture and its name. The whole tile is a 48 dp or larger tap area.
+/// One category: shared artwork and its name, with a 48 dp or larger tap area.
 class CategoryTile extends StatelessWidget {
   final String name;
-  final String? image;
+  final String? code;
   final bool isMore;
   final VoidCallback onTap;
 
@@ -19,7 +19,7 @@ class CategoryTile extends StatelessWidget {
     super.key,
     required this.name,
     required this.onTap,
-    this.image,
+    this.code,
     this.isMore = false,
   });
 
@@ -55,7 +55,7 @@ class CategoryTile extends StatelessWidget {
                                   SvgPicture.asset(AppAssets.homeMoreIcon, width: 22, height: 22),
                             ),
                           )
-                        : AppImage(source: image ?? '', cacheWidth: 160),
+                        : CategoryIcon(name: name, code: code, size: side),
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xs),
@@ -78,8 +78,8 @@ class CategoryTile extends StatelessWidget {
 /// The first five categories in a row that scrolls sideways, and a More tile that stays in view.
 /// Tiles are as wide as the text needs, so names are never cut or broken inside a word.
 class CategoryRow extends StatelessWidget {
-  final List<ListingCategory> categories;
-  final ValueChanged<ListingCategory> onSelect;
+  final List<CategoryNode> categories;
+  final ValueChanged<CategoryNode> onSelect;
   final VoidCallback onMore;
 
   const CategoryRow({
@@ -113,7 +113,7 @@ class CategoryRow extends StatelessWidget {
                     width: width,
                     child: CategoryTile(
                       name: category.name,
-                      image: category.image,
+                      code: category.code,
                       onTap: () => onSelect(category),
                     ),
                   ),

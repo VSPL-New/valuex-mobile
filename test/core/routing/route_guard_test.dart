@@ -204,12 +204,25 @@ void main() {
     });
   });
 
-  group('Account Security and Notifications routes', () {
+  group('Account Security, Notifications and Search routes', () {
+    test('guests can browse categories but cannot open listing search', () {
+      for (final route in [RouteNames.home, RouteNames.categories, RouteNames.searchCategories]) {
+        expect(redirectFor(session: _signedOut(), location: route), isNull);
+      }
+      expect(redirectFor(session: _signedOut(), location: RouteNames.search), RouteNames.signIn);
+      expect(
+        redirectFor(
+            session: _signedIn(AccountStatus.suspended), location: RouteNames.searchCategories),
+        RouteNames.accountBlocked,
+      );
+    });
+
     const routes = [
       RouteNames.accountSecurity,
       RouteNames.changeMobile,
       RouteNames.changeEmail,
       RouteNames.notifications,
+      RouteNames.search,
     ];
 
     test('signed-out users are sent to Sign In', () {

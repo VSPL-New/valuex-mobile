@@ -829,5 +829,145 @@
       }
     }
   },
-  "languageSheetTitle": "Choose your language"
+  "languageSheetTitle": "Choose your language",
+  "searchTitle": "Search items",
+  "searchFieldHint": "Search for items",
+  "searchFieldLabel": "Search for items",
+  "searchClearText": "Clear search text",
+  "searchFilters": "Filters",
+  "searchFiltersApplied": "Filters, {count} applied",
+  "@searchFiltersApplied": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "searchPopularCategories": "Popular categories",
+  "searchBrowseAll": "Browse all categories",
+  "searchStartHint": "Type what you are looking for, or pick a category",
+  "searchCategoriesTitle": "Browse categories",
+  "searchMoreCategories": "More categories",
+  "searchViewAll": "View all",
+  "searchCategoriesEmpty": "No more categories",
+  "searchCategoriesPopular": "Popular",
+  "searchCategoriesOthers": "Others",
+  "searchViewAllIn": "View all in {name}",
+  "@searchViewAllIn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "searchCategoriesFailed": "Unable to load categories. Try again",
+  "searchResultsCount": "{count, plural, =1{1 item found} other{{count} items found}}",
+  "@searchResultsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "searchNoResults": "No items found. Try different keywords",
+  "searchNoResultsFilters": "No items match your filters. Try fewer filters",
+  "searchClearFilters": "Clear filters",
+  "searchLoadMoreFailed": "Unable to load more items. Tap to try again",
+  "searchStartingFrom": "Starting from",
+  "searchFeatured": "Featured",
+  "searchErrorTooLong": "Search text is too long",
+  "searchErrorPriceRange": "Minimum price cannot be above maximum price",
+  "searchErrorInvalidFilters": "Invalid filter combination",
+  "searchErrorIntentRequired": "Choose Buy, Rent or Lease",
+  "searchErrorIntentNotSupported": "This option is not available for this property type",
+  "searchErrorUnavailable": "Search is not available right now. Try again",
+  "searchErrorRateLimit": "Too many searches. Wait a moment and try again",
+  "searchErrorCategoryUnavailable": "This category is not available",
+  "searchIntentTitle": "Choose Buy, Rent or Lease",
+  "searchIntentPrompt": "Choose Buy, Rent or Lease to see properties",
+  "searchIntentChoose": "Choose",
+  "searchIntentBuy": "Buy",
+  "searchIntentRent": "Rent",
+  "searchIntentLease": "Lease",
+  "searchIntentChange": "{intent}. Change",
+  "@searchIntentChange": {
+    "placeholders": {
+      "intent": {
+        "type": "String"
+      }
+    }
+  },
+  "searchSuggestionsLabel": "Search suggestions",
+  "searchSuggestionListingLabel": "Search for {text}",
+  "@searchSuggestionListingLabel": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "searchSuggestionCategoryLabel": "Browse category {name}",
+  "@searchSuggestionCategoryLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "searchSuggestionCategoryTag": "in Category",
+  "filterTitle": "Filters",
+  "filterReset": "Reset",
+  "filterApply": "Apply",
+  "filterClose": "Close filters",
+  "filterSortTitle": "Sort by",
+  "filterSortRelevance": "Most relevant",
+  "filterSortNewest": "Newest first",
+  "filterSortPriceAsc": "Price: low to high",
+  "filterSortPriceDesc": "Price: high to low",
+  "filterPriceTitle": "Price (₹)",
+  "filterPriceMin": "Minimum price",
+  "filterPriceMax": "Maximum price",
+  "filterConditionTitle": "Condition",
+  "filterLocationTitle": "Location",
+  "filterCity": "City",
+  "filterClearState": "Clear state",
+  "filterRangeMin": "{label}, minimum",
+  "@filterRangeMin": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "filterRangeMax": "{label}, maximum",
+  "@filterRangeMax": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "filterRangeAvailable": "Available: {min} to {max}",
+  "@filterRangeAvailable": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "filterRangeError": "Minimum cannot be above maximum",
+  "filterBucketLabel": "{label} ({count})",
+  "@filterBucketLabel": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
