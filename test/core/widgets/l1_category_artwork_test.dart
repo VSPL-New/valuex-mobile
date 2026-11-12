@@ -12,7 +12,7 @@ import 'package:valuex_mobile/core/widgets/category_icon.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('all 39 roots have distinct, decodable bundled originals and provenance', () async {
+  test('all 39 roots have compact WebP artwork and original provenance', () async {
     final roots = categoryIconsByCode.keys.where((code) => code.startsWith('L1-')).toSet();
     expect(AppAssets.l1CategoryArtwork.keys.toSet(), roots);
     expect(AppAssets.l1CategoryArtwork.values.toSet(), hasLength(39));
@@ -21,15 +21,22 @@ void main() {
     expect(manifest.map((line) => line.split(',').first).toSet(), roots);
     for (final line in manifest) {
       final fields = line.split(',');
-      expect(AppAssets.l1CategoryArtwork[fields[0]], endsWith('/${fields[1]}.png'));
+      expect(AppAssets.l1CategoryArtwork[fields[0]], endsWith('/${fields[1]}.webp'));
+      expect(fields[4], matches(RegExp(r'^[a-f0-9]{64}$')));
+      expect(fields[5], matches(RegExp(r'^[a-f0-9]{64}$')));
+      expect(fields[6], '256');
+      expect(fields[7], '85');
+      expect(File('assets/images/categories/l1/${fields[1]}.png').existsSync(), isFalse);
     }
     for (final entry in AppAssets.l1CategoryArtwork.entries) {
       expect(categoryArtworkFor(code: entry.key), entry.value);
       final data = await rootBundle.load(entry.value);
+      expect(data.lengthInBytes, lessThanOrEqualTo(30 * 1024), reason: entry.key);
+      expect(String.fromCharCodes(data.buffer.asUint8List(0, 4)), 'RIFF');
+      expect(String.fromCharCodes(data.buffer.asUint8List(8, 4)), 'WEBP');
       final buffer = await ui.ImmutableBuffer.fromUint8List(data.buffer.asUint8List());
       final descriptor = await ui.ImageDescriptor.encoded(buffer);
-      expect(
-          Size(descriptor.width.toDouble(), descriptor.height.toDouble()), const Size(1024, 1024),
+      expect(Size(descriptor.width.toDouble(), descriptor.height.toDouble()), const Size(256, 256),
           reason: entry.key);
       descriptor.dispose();
       buffer.dispose();
@@ -41,6 +48,20 @@ void main() {
     }
   });
 
+  testWidgets('artwork decode dimensions stay within the source pixel bounds', (tester) async {
+    for (final (ratio, expected) in [(0.001, 1), (8.0, 256)]) {
+      await tester.pumpWidget(MaterialApp(
+        home: MediaQuery(
+          data: MediaQueryData(devicePixelRatio: ratio),
+          child: const Center(child: CategoryIcon(name: 'Cars', code: 'L1-CARS', size: 64)),
+        ),
+      ));
+      final provider = tester.widget<Image>(find.byType(Image)).image as ResizeImage;
+      expect(provider.width, expected);
+      expect(provider.height, expected);
+    }
+  });
+
   test('legacy Home IDs remain compatible with root images', () {
     expect(AppAssets.homeCategoryArtworkCodes, hasLength(12));
     for (final code in AppAssets.homeCategoryArtworkCodes.keys) {
@@ -49,12 +70,13 @@ void main() {
     }
   });
 
-  test('all L2/L3 codes and unknown IDs stay on the existing glyph path', () {
+  test('L2 and L3 codes never inherit L1 artwork', () {
     final children =
         categoryIconsByCode.keys.where((code) => code.startsWith('L2-') || code.startsWith('CAT-'));
     expect(children, hasLength(1064));
     for (final code in children) {
-      expect(categoryArtworkFor(code: code), isNull, reason: code);
+      expect(categoryArtworkFor(code: code), AppAssets.l3CategoryArtwork[code], reason: code);
+      expect(AppAssets.l1CategoryArtwork.values, isNot(contains(categoryArtworkFor(code: code))));
       expect(categoryIconFor(name: 'Toys', code: code), categoryIconsByCode[code]);
     }
     for (final code in [null, '', 'L1-FUTURE', 'CAT-FUTURE', 'L2-FUTURE', 'unknown']) {
@@ -87,10 +109,10 @@ void main() {
     expect(find.byType(Icon), findsNothing);
   });
 
-  testWidgets('a leaf or name-only category never receives L1 artwork', (tester) async {
+  testWidgets('a future leaf or name-only category never receives L1 artwork', (tester) async {
     await tester.pumpWidget(const MaterialApp(
       home: Column(children: [
-        CategoryIcon(name: 'Toys', code: 'CAT-0001'),
+        CategoryIcon(name: 'Toys', code: 'CAT-FUTURE'),
         CategoryIcon(name: 'Furniture', code: 'L2-FUTURE'),
         CategoryIcon(name: 'Mobiles & Tablets'),
       ]),

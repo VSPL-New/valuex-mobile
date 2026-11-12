@@ -12,6 +12,8 @@ import 'package:valuex_mobile/features/auth/presentation/screens/sign_in_mobile_
 import 'package:valuex_mobile/features/auth/presentation/screens/signup_mobile_screen.dart';
 import 'package:valuex_mobile/features/home/presentation/home_screen.dart';
 import 'package:valuex_mobile/features/home/presentation/providers/home_providers.dart';
+import 'package:valuex_mobile/features/listing/domain/category.dart';
+import 'package:valuex_mobile/features/listing/presentation/providers/category_providers.dart';
 import 'package:valuex_mobile/l10n/app_localizations.dart';
 
 import '../helpers/fake_location_service.dart';
@@ -146,15 +148,24 @@ void main() {
           _app(
             locale,
             const HomeScreen(),
-            overrides: [locationServiceProvider.overrideWithValue(FakeLocationService())],
+            overrides: [
+              locationServiceProvider.overrideWithValue(FakeLocationService()),
+              categoryChildrenProvider((parentCode: null, scope: CategoryScope.popular))
+                  .overrideWith((_) async => const <CategoryNode>[]),
+            ],
           ),
         );
         await tester.pump();
         await tester.pump();
         final l10n = AppLocalizations.of(tester.element(find.byType(HomeScreen)));
 
-        expect(find.text(l10n.homeFeaturedTitle), findsOneWidget);
         expect(find.text(l10n.homeBrowse), findsOneWidget);
+        await tester.scrollUntilVisible(
+          find.text(l10n.homeFeaturedTitle),
+          200,
+          scrollable: find.byType(Scrollable).first,
+        );
+        expect(find.text(l10n.homeFeaturedTitle), findsOneWidget);
         expect(l10n.homeCartLabel(2), isNotEmpty);
         expect(l10n.homeNotificationsLabel(0), isNotEmpty);
       });

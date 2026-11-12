@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:valuex_mobile/core/routing/route_names.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
+import 'package:valuex_mobile/features/listing/domain/category.dart';
+import 'package:valuex_mobile/features/listing/presentation/providers/category_providers.dart';
 
 import 'helpers/app_harness.dart';
 
@@ -23,13 +26,25 @@ void main() {
   for (final entry in titles.entries) {
     testWidgets('${entry.key} marks its title as a heading', (tester) async {
       final handle = tester.ensureSemantics();
-      final harness = AppHarness(tester);
-      if (entry.value.$2 != null) harness.signedInAs(entry.value.$2!);
-      await harness.launch(location: entry.key);
-
-      expect(tester.getSemantics(find.text(entry.value.$1).first), isSemantics(isHeader: true));
-      handle.dispose();
-      await harness.dispose();
+      final harness = AppHarness(tester, extraOverrides: [
+        categoryChildrenProvider((parentCode: null, scope: CategoryScope.popular))
+            .overrideWith((_) async => const <CategoryNode>[]),
+      ]);
+      try {
+        if (entry.value.$2 != null) harness.signedInAs(entry.value.$2!);
+        await harness.launch(location: entry.key);
+        if (entry.key == RouteNames.home) {
+          await tester.scrollUntilVisible(
+            find.text(entry.value.$1),
+            200,
+            scrollable: find.byType(Scrollable).first,
+          );
+        }
+        expect(tester.getSemantics(find.text(entry.value.$1).first), isSemantics(isHeader: true));
+      } finally {
+        handle.dispose();
+        await harness.dispose();
+      }
     });
   }
 }

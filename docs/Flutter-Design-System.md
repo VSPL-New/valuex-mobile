@@ -106,7 +106,8 @@ Figma's 55 and 60 px buttons are normalised to 56. The onboarding Next button ke
 - SVG icons render with `flutter_svg`.
 - Approved L1 artwork (2026-11-11): all 39 root categories use full-color, photorealistic
   product illustrations through the shared `CategoryIcon` atom. Search, Home and the Home
-  category list use the same bundled assets. L2/L3 retain curated Flutter Material glyphs.
+  category list use the same bundled assets. All 907 L3 categories have reviewed product
+  artwork; L2 and unmapped future categories retain curated Flutter Material glyphs.
   Listing photos and non-category Figma assets are unchanged.
 
 ### Category icon maintenance
@@ -114,19 +115,29 @@ Figma's 55 and 60 px buttons are normalised to 56. The onboarding Next button ke
 L1 paths and Home alias mappings live in `AppAssets.l1CategoryArtwork` and
 `AppAssets.homeCategoryArtworkCodes`. Only explicit root codes or Home IDs select an image;
 names never opt into L1 artwork, so a leaf named "Toys" cannot inherit a root illustration.
+L3 artwork is selected only by an exact leaf code from `AppAssets.l3CategoryArtwork`;
+names and parent IDs never substitute an L1 or another leaf's illustration.
 Unknown IDs keep the existing glyph resolution and parent fallback.
 
-Original 1024px PNGs live in `assets/images/categories/l1/` and work offline.
-Keep the exact exported bytes; `CategoryIcon` bounds decoding to the tile's physical pixel
-size (maximum 1024px) rather than holding full-size decoded images for 48dp tiles.
+User-approved 256px WebP derivatives (quality 85, method 6) live in
+`assets/images/categories/l1/` and work offline. They are generated from the approved
+1024px PNGs with Lanczos downsampling, without cropping, recoloring or changing subjects.
+This explicitly supersedes the original exact-PNG bundling policy for L1 artwork only.
+The 39 bundled derivatives total 251,532 bytes (245.64 KiB), down from
+47,892,853 bytes (45.67 MiB); originals are retained outside the runtime bundle.
+`CategoryIcon` bounds decoding to the tile's physical pixel size (maximum 256px)
+rather than holding full-size decoded images for 48dp tiles.
 Artwork fills the existing rounded square without tinting. Flutter reports missing/invalid
 assets normally; do not hide packaging failures behind a silent fallback.
 
 Source: [approved Figma artwork](https://www.figma.com/design/MBdXT0qyBFGa6kJRoZHDpD).
-[Provenance CSV](../.figma/l1-artwork.csv) maps every taxonomy code to its PNG basename,
-Figma node and generated asset ID. [Figma mapping](../.figma/mapping.json) records the
+[Provenance CSV](../.figma/l1-artwork.csv) maps every taxonomy code to its asset basename,
+Figma node, generated asset ID, original/derivative SHA-256 hashes and compression metadata.
+[Figma mapping](../.figma/mapping.json) records the
 representative image atom (`1:2`) used for implementation; the other nodes share that
-rendering pattern. Asset URLs expire; the bundled originals are the durable copies.
+rendering pattern. Asset URLs expire. Exact originals are preserved in the separate
+L1 original archive and in repository history at commit `ebbf6ed`, under
+`assets/images/categories/l1/<basename>.png`; do not re-add them to the app bundle.
 To reconstruct a download URL while valid, use
 `https://www.figma.com/api/mcp/asset/<assetId>.png`.
 
@@ -163,7 +174,8 @@ flutter test test/core/widgets/category_icon_test.dart
 flutter test test/core/widgets/l1_category_artwork_test.dart
 ```
 
-The artwork test checks all 39 files and Home aliases, rejects L2/L3 image leakage, and
+The artwork test checks all 39 WebP files (256px, at most 30 KiB each), source provenance
+and Home aliases, rejects duplicate original PNG packaging and L2/L3 image leakage, and
 compares a 48dp tile contact sheet against its golden. After an approved artwork change,
 update that golden with `flutter test --update-goldens test/core/widgets/l1_category_artwork_test.dart`
 and inspect it before accepting.
@@ -171,6 +183,51 @@ and inspect it before accepting.
 The generated catalog is committed, so normal app builds do not need Python or Documents.
 Unknown future leaves inherit a parent glyph; unknown roots use a neutral category symbol.
 Icons are decorative; accessible category names and tap targets belong to their surrounding tiles.
+
+### L3 artwork rollout
+
+Completed on 2026-11-12: **907/907** taxonomy leaves have distinct bundled artwork,
+with zero pending entries. The WebPs total **4,559,130 bytes (4.35 MiB)**;
+the largest is **14,870 bytes**, below the 30 KiB per-image limit.
+
+The approved L3 style uses product-specific, photorealistic cutouts on pale pastel
+backgrounds, with the same 256px WebP quality 85/method 6 encoding as L1.
+Only reviewed assets are bundled in `assets/images/categories/l3/`.
+The shared `CategoryIcon` atom is reused; no new UI primitive or navigation is introduced.
+Search leaf images are **64dp** (192 physical pixels at 3x), while Home L1 shortcuts are
+48dp. Decode dimensions remain bounded by the 256px source.
+
+[L3 provenance and coverage](../.figma/l3-artwork.json) records exact taxonomy paths,
+marketplace restrictions, admin flags, Figma nodes, original/derivative hashes,
+encoding and review notes. Its `readyCount` and `pendingCodes` are authoritative
+rollout progress: do not claim all 907 categories are illustrated until the completion
+check passes. Pending entries intentionally retain existing product glyphs.
+This manifest is asset metadata, not permission to display disabled/restricted categories;
+the backend still supplies the category tree.
+
+Original PNGs stay in the separately preserved artwork archive, not the app bundle.
+Similar categories still need visible/accessibility labels; broad "Other" subjects
+are representative, not exhaustive. The approved foldable sample is clamshell-style.
+Clear/ivory products and thin silver tools have lower contrast at small sizes.
+Real-estate miniatures and service/land-use categories rely on labels; artwork does not
+represent actual listings, zoning, or floor plans. Medical and machinery illustrations
+are not clinical, engineering, or safety specifications.
+Figma asset URLs in provenance are download records only, never runtime requests.
+
+Import each verified production batch and validate from the mobile repository:
+
+```bash
+python3 tool/generate_category_artwork.py --import-manifest /path/to/production-manifest.json
+python3 tool/generate_category_artwork.py --check
+flutter test --no-pub test/core/widgets/l3_category_artwork_test.dart
+```
+
+The importer verifies original and derivative hashes before copying, rejects conflicting
+replacements, duplicate images, unreviewed entries, unknown codes and wrong taxonomy paths,
+and generates `lib/core/constants/l3_category_artwork.g.dart`. Every asset must be at most
+30 KiB. Flutter tests decode every bundled derivative at 256px and 192px, test the actual
+64dp Search grid with large text, labels and taps, and compare the approved 24-image golden.
+Use `--check --require-complete` as the final 907-category completion gate.
 
 ### 3.1 Logo — one place to change
 

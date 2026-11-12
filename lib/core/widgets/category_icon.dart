@@ -11,9 +11,10 @@ IconData categoryIconFor({required String name, String? code, IconData? fallback
     fallback ??
     Icons.category_outlined;
 
-/// Only explicit root codes and Home IDs opt in; names can also belong to leaves.
+/// Artwork uses exact taxonomy codes; names and parents never select leaf images.
 String? categoryArtworkFor({String? code}) =>
-    AppAssets.l1CategoryArtwork[AppAssets.homeCategoryArtworkCodes[code] ?? code];
+    AppAssets.l1CategoryArtwork[AppAssets.homeCategoryArtworkCodes[code] ?? code] ??
+    AppAssets.l3CategoryArtwork[code];
 
 /// Decorative artwork; the surrounding tile supplies the accessible category label.
 class CategoryIcon extends StatelessWidget {
@@ -33,7 +34,9 @@ class CategoryIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final artwork = categoryArtworkFor(code: code);
-    final decodeSize = (size * MediaQuery.devicePixelRatioOf(context)).ceil().clamp(1, 1024);
+    final decodeSize = (size * MediaQuery.devicePixelRatioOf(context))
+        .ceil()
+        .clamp(1, AppAssets.categoryArtworkPixelSize);
     return ExcludeSemantics(
       child: Container(
         width: size,
