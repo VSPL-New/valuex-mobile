@@ -1,0 +1,1 @@
+enum SearchSource { typed, voice }

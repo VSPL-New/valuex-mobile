@@ -9,6 +9,7 @@ import 'package:valuex_mobile/features/home/presentation/providers/home_provider
 import 'package:valuex_mobile/features/search/data/search_repository.dart';
 import 'package:valuex_mobile/features/search/domain/search_criteria.dart';
 import 'package:valuex_mobile/features/search/domain/search_page.dart';
+import 'package:valuex_mobile/features/search/domain/search_source.dart';
 import 'package:valuex_mobile/features/search/domain/transaction_intent.dart';
 import 'package:valuex_mobile/features/search/presentation/providers/search_results_controller.dart';
 
@@ -215,6 +216,60 @@ void main() {
         expect(repository.calls, hasLength(1));
         expect(state().criteria.isBlank, isTrue);
         expect(state().items, isEmpty);
+      });
+    });
+
+    group('voice search source', () {
+      test('preserves criteria and marks only the first page as voice', () {
+        fakeAsync((async) {
+          const initial = SearchCriteria(
+            query: 'old',
+            categoryCode: 'CAT-1',
+            categoryName: 'Phones',
+            categoryLevel: 3,
+            priceMin: 100,
+            intent: TransactionIntent.sale,
+          );
+          final container = makeContainer();
+          final state = open(async, container, initial);
+          final controller = container.read(searchResultsControllerProvider(initial).notifier);
+          final before = repository.calls.length;
+
+          unawaited(controller.applyVoiceQuery('new spoken query'));
+          async.flushMicrotasks();
+
+          expect(state().criteria.query, 'new spoken query');
+          expect(state().criteria.categoryCode, 'CAT-1');
+          expect(state().criteria.priceMin, 100);
+          expect(state().criteria.intent, TransactionIntent.sale);
+          expect(repository.calls[before].source, SearchSource.voice);
+
+          unawaited(controller.loadMore());
+          async.flushMicrotasks();
+          expect(repository.calls.last.page, 1);
+          expect(repository.calls.last.source, SearchSource.typed);
+
+          unawaited(controller.refresh());
+          async.flushMicrotasks();
+          expect(repository.calls.last.page, 0);
+          expect(repository.calls.last.source, SearchSource.typed);
+        });
+      });
+
+      test('ordinary edits and saved-search criteria never include the source', () {
+        const criteria = SearchCriteria(query: 'phone');
+        expect(criteria.toQueryParameters().containsKey('source'), isFalse);
+        fakeAsync((async) {
+          final container = makeContainer();
+          open(async, container, const SearchCriteria());
+          final controller =
+              container.read(searchResultsControllerProvider(const SearchCriteria()).notifier);
+          unawaited(controller.applyVoiceQuery('phone'));
+          async.flushMicrotasks();
+          controller.setQuery('phones');
+          async.elapse(const Duration(milliseconds: 401));
+          expect(repository.calls.last.source, SearchSource.typed);
+        });
       });
     });
   });

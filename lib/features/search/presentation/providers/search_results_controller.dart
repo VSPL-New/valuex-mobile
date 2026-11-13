@@ -8,6 +8,7 @@ import '../../domain/search_criteria.dart';
 import '../../domain/search_facet.dart';
 import '../../domain/search_listing.dart';
 import '../../domain/search_page.dart';
+import '../../domain/search_source.dart';
 import '../../domain/transaction_intent.dart';
 
 class SearchState {
@@ -93,6 +94,7 @@ class SearchResultsController extends Notifier<SearchState> {
 
   Timer? _timer;
   int _request = 0;
+  bool _voiceNextRequest = false;
 
   SearchRepository get _repository => ref.read(searchRepositoryProvider);
 
@@ -111,6 +113,7 @@ class SearchResultsController extends Notifier<SearchState> {
 
   /// The text changed: searches after a short pause, or goes back to the start page when empty.
   void setQuery(String text) {
+    _voiceNextRequest = false;
     final criteria = state.criteria.copyWith(query: text);
     state = state.copyWith(criteria: criteria);
     _timer?.cancel();
@@ -121,12 +124,23 @@ class SearchResultsController extends Notifier<SearchState> {
   Future<void> submit() => load();
 
   Future<void> applyCriteria(SearchCriteria criteria) {
+    _voiceNextRequest = false;
     state = state.copyWith(criteria: criteria);
     return load();
   }
 
-  Future<void> chooseIntent(TransactionIntent intent) =>
-      applyCriteria(state.criteria.copyWith(intent: intent));
+  /// Applies a spoken query while preserving category, filters and intent. Only the resulting
+  /// first-page request is tagged as voice; all later requests use the normal typed source.
+  Future<void> applyVoiceQuery(String text) {
+    _voiceNextRequest = true;
+    state = state.copyWith(criteria: state.criteria.copyWith(query: text));
+    return load();
+  }
+
+  Future<void> chooseIntent(TransactionIntent intent) {
+    state = state.copyWith(criteria: state.criteria.copyWith(intent: intent));
+    return load();
+  }
 
   Future<void> clearFilters() => applyCriteria(state.criteria.withoutFilters());
 
@@ -151,6 +165,8 @@ class SearchResultsController extends Notifier<SearchState> {
       return;
     }
 
+    final source = _voiceNextRequest ? SearchSource.voice : SearchSource.typed;
+    _voiceNextRequest = false;
     state = state.copyWith(
       items: keepItems ? null : const [],
       facets: keepItems ? null : const [],
@@ -162,7 +178,7 @@ class SearchResultsController extends Notifier<SearchState> {
       clearError: true,
     );
     try {
-      final page = await _search(criteria, 0);
+      final page = await _search(criteria, 0, source: source);
       if (!ref.mounted || request != _request) return;
       state = state.copyWith(
         items: page.items,
@@ -215,10 +231,20 @@ class SearchResultsController extends Notifier<SearchState> {
     }
   }
 
-  Future<SearchPage> _search(SearchCriteria criteria, int page) {
+  Future<SearchPage> _search(
+    SearchCriteria criteria,
+    int page, {
+    SearchSource source = SearchSource.typed,
+  }) {
     final place = ref.read(homeLocationControllerProvider).value;
     final near = place is LocationKnown ? place.location : null;
-    return _repository.search(criteria, page: page, nearCity: near?.city, nearState: near?.state);
+    return _repository.search(
+      criteria,
+      page: page,
+      nearCity: near?.city,
+      nearState: near?.state,
+      source: source,
+    );
   }
 }
 

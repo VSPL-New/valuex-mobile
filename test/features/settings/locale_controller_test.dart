@@ -46,6 +46,27 @@ void main() {
       expect(await service.getAppLanguage(), 'hi');
       expect((await SharedPreferences.getInstance()).getString(StorageKeys.appLanguage), 'hi');
     });
+
+    test('reads and writes boolean preferences and supports removal and clearing', () async {
+      SharedPreferences.setMockInitialValues({});
+      final service = PreferencesService();
+
+      expect(await service.isOnboardingComplete(), isFalse);
+      expect(await service.setOnboardingComplete(true), isTrue);
+      expect(await service.isOnboardingComplete(), isTrue);
+      expect(await service.setOnboardingComplete(false), isTrue);
+      expect(await service.isOnboardingComplete(), isFalse);
+
+      expect(await service.getBool('voice_notice'), isNull);
+      expect(await service.setBool('voice_notice', true), isTrue);
+      expect(await service.getBool('voice_notice'), isTrue);
+      expect(await service.setString('temporary', 'value'), isTrue);
+      expect(await service.getString('temporary'), 'value');
+      expect(await service.remove('temporary'), isTrue);
+      expect(await service.getString('temporary'), isNull);
+      expect(await service.clear(), isTrue);
+      expect(await service.getBool('voice_notice'), isNull);
+    });
   });
 
   group('LocaleController', () {
