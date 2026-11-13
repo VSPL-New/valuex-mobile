@@ -30,7 +30,7 @@ const _capabilities = {
   'buyNow': {'available': false, 'reason': 'COMING_SOON'},
 };
 
-const _realEstateCapabilities = {
+final _realEstateCapabilities = {
   ..._capabilities,
   'cart': {'available': false, 'reason': 'NOT_APPLICABLE'},
   'buyNow': {'available': false, 'reason': 'NOT_APPLICABLE'},
@@ -594,7 +594,8 @@ void main() {
             reason: path);
         expect(
           redirectFor(
-            session: const AsyncData(Authenticated(status: AccountStatus.active)),
+            session:
+                const AsyncData(Authenticated(status: AccountStatus.active, aadhaarVerified: true)),
             location: path,
           ),
           isNull,
