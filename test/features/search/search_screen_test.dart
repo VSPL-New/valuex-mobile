@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:valuex_mobile/core/storage/preferences_service.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/presentation/screens/sign_in_mobile_screen.dart';
@@ -10,9 +11,12 @@ import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
 import 'package:valuex_mobile/features/listing/domain/category.dart';
 import 'package:valuex_mobile/features/notifications/data/notifications_repository.dart';
 import 'package:valuex_mobile/features/search/data/search_repository.dart';
+import 'package:valuex_mobile/features/search/domain/search_criteria.dart';
 import 'package:valuex_mobile/features/search/domain/search_page.dart';
 import 'package:valuex_mobile/features/search/domain/search_sort.dart';
+import 'package:valuex_mobile/features/search/domain/search_source.dart';
 import 'package:valuex_mobile/features/search/domain/transaction_intent.dart';
+import 'package:valuex_mobile/features/search/presentation/providers/search_results_controller.dart';
 import 'package:valuex_mobile/features/search/presentation/category_browse_screen.dart';
 import 'package:valuex_mobile/features/search/presentation/search_screen.dart';
 import 'package:valuex_mobile/features/search/presentation/widgets/category_browser.dart';
@@ -20,6 +24,11 @@ import 'package:valuex_mobile/features/search/presentation/widgets/category_brow
 import 'package:valuex_mobile/features/search/presentation/widgets/filter_sheet.dart';
 import 'package:valuex_mobile/features/search/presentation/widgets/intent_sheet.dart';
 import 'package:valuex_mobile/features/search/presentation/widgets/search_skeleton.dart';
+import 'package:valuex_mobile/features/voice_search/data/voice_preferences.dart';
+import 'package:valuex_mobile/features/voice_search/domain/speech_event.dart';
+import 'package:valuex_mobile/features/voice_search/domain/speech_recognizer.dart';
+import 'package:valuex_mobile/features/voice_search/domain/voice_language.dart';
+import 'package:valuex_mobile/features/voice_search/presentation/providers/voice_search_controller.dart';
 
 import '../../helpers/accessibility.dart';
 import '../../helpers/app_harness.dart';
@@ -29,6 +38,45 @@ import 'search_fixtures.dart';
 class _MockListingRepository extends Mock implements ListingRepository {}
 
 class _MockNotifications extends Mock implements NotificationsRepository {}
+
+class _FakeVoicePreferences extends VoicePreferences {
+  _FakeVoicePreferences() : super(PreferencesService());
+
+  @override
+  Future<VoiceLanguage?> getLanguage() async => VoiceLanguage.english;
+
+  @override
+  Future<bool> noticeShown() async => true;
+}
+
+class _SearchSpeechRecognizer implements SpeechRecognizer {
+  final List<StreamController<SpeechEvent>> sessions = [];
+  final List<String> requestedLocales = [];
+
+  @override
+  Future<bool> availability() async => true;
+
+  @override
+  Future<List<String>> languages() async => ['en_IN'];
+
+  @override
+  Stream<SpeechEvent> listen(String localeId) {
+    requestedLocales.add(localeId);
+    final controller = StreamController<SpeechEvent>.broadcast(sync: true);
+    sessions.add(controller);
+    return controller.stream;
+  }
+
+  @override
+  Future<void> stop() async {}
+
+  @override
+  Future<void> cancel() async {
+    for (final session in sessions) {
+      await session.close();
+    }
+  }
+}
 
 const _mobiles = CategoryNode(
   code: 'L1-M',
@@ -118,6 +166,7 @@ void main() {
     WidgetTester tester,
     String location, {
     bool signedIn = true,
+    _SearchSpeechRecognizer? voiceRecognizer,
   }) async {
     final notifications = _MockNotifications();
     when(notifications.unreadCount).thenAnswer((_) async => 0);
@@ -127,6 +176,10 @@ void main() {
         searchRepositoryProvider.overrideWithValue(search),
         listingRepositoryProvider.overrideWithValue(categories),
         notificationsRepositoryProvider.overrideWithValue(notifications),
+        if (voiceRecognizer != null) ...[
+          speechRecognizerProvider.overrideWithValue(voiceRecognizer),
+          voicePreferencesProvider.overrideWithValue(_FakeVoicePreferences()),
+        ],
       ],
     );
     if (signedIn) harness.signedInAs(AccountStatus.active);
@@ -167,6 +220,49 @@ void main() {
       expect(search.calls, isEmpty);
       handle.dispose();
       await harness.dispose();
+    });
+
+    testWidgets('voice search hands off once as VOICE and later edits use TYPED', (tester) async {
+      final voiceRecognizer = _SearchSpeechRecognizer();
+      await openAt(tester, '/search', voiceRecognizer: voiceRecognizer);
+      final screenState = tester.state<State>(find.byType(SearchScreen));
+
+      final microphone = find.byTooltip('Search by voice');
+      expect(microphone, findsOneWidget);
+      await tester.tap(microphone);
+      await harness.settle();
+      expect(voiceRecognizer.requestedLocales, ['en_IN']);
+
+      voiceRecognizer.sessions.single.add(const SpeechFinal('find me laptop'));
+      expect(harness.container.read(voiceSearchControllerProvider).result, 'laptop');
+      await tester.pump();
+      await harness.settle();
+
+      expect(find.byType(SearchScreen), findsOneWidget);
+      expect(identical(screenState, tester.state<State>(find.byType(SearchScreen))), isTrue);
+      expect(find.text('Cancel'), findsNothing);
+      expect(find.text('Listening…'), findsNothing);
+      expect(
+        harness.container
+            .read(searchResultsControllerProvider(const SearchCriteria()))
+            .criteria
+            .query,
+        'laptop',
+      );
+      expect(tester.widget<TextField>(find.byType(TextField)).controller!.text, 'laptop');
+      expect(search.calls, hasLength(1));
+      expect(search.calls.single.criteria.query, 'laptop');
+      expect(search.calls.single.source, SearchSource.voice);
+      expect(search.suggestCalls, isEmpty);
+      expect(find.text('laptop'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), 'tablet');
+      await tester.pump(const Duration(milliseconds: 450));
+      await harness.settle();
+
+      expect(search.calls, hasLength(2));
+      expect(search.calls.last.criteria.query, 'tablet');
+      expect(search.calls.last.source, SearchSource.typed);
     });
 
     testWidgets('a failure to load the categories offers Retry', (tester) async {

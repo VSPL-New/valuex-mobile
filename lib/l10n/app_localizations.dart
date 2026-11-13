@@ -4190,6 +4190,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{label} ({count})'**
   String filterBucketLabel(String label, int count);
+
+  /// No description provided for @voiceButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by voice'**
+  String get voiceButtonLabel;
+
+  /// No description provided for @voiceNoticeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice search'**
+  String get voiceNoticeTitle;
+
+  /// No description provided for @voiceNoticeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your phone\'s speech service turns your voice into text. Depending on your phone and language, it may send your voice to Apple or Google to do this. JustQlic does not record or keep your voice.'**
+  String get voiceNoticeBody;
+
+  /// No description provided for @voiceContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get voiceContinue;
+
+  /// No description provided for @voiceNotNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get voiceNotNow;
+
+  /// No description provided for @voicePanelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice search'**
+  String get voicePanelTitle;
+
+  /// No description provided for @voiceStarting.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting ready to listen…'**
+  String get voiceStarting;
+
+  /// No description provided for @voiceListening.
+  ///
+  /// In en, this message translates to:
+  /// **'Listening…'**
+  String get voiceListening;
+
+  /// No description provided for @voiceStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get voiceStop;
+
+  /// No description provided for @voiceCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get voiceCancel;
+
+  /// No description provided for @voiceTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get voiceTryAgain;
+
+  /// No description provided for @voiceOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get voiceOpenSettings;
+
+  /// No description provided for @voiceSwitchLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch language'**
+  String get voiceSwitchLanguage;
+
+  /// No description provided for @voiceTypeInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Type instead'**
+  String get voiceTypeInstead;
+
+  /// No description provided for @voiceEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get voiceEnglish;
+
+  /// No description provided for @voiceHindi.
+  ///
+  /// In en, this message translates to:
+  /// **'हिन्दी'**
+  String get voiceHindi;
+
+  /// No description provided for @voicePermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone or speech permission was not granted. You can try again or type your search.'**
+  String get voicePermissionDenied;
+
+  /// No description provided for @voicePermissionBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone or speech access is blocked. Allow it in your phone settings, or type your search.'**
+  String get voicePermissionBlocked;
+
+  /// No description provided for @voiceUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Speech recognition is not available on this phone. You can type your search instead.'**
+  String get voiceUnavailable;
+
+  /// No description provided for @voiceLanguageUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Speech recognition is not available in this language on this phone.'**
+  String get voiceLanguageUnavailable;
+
+  /// No description provided for @voiceNoSpeech.
+  ///
+  /// In en, this message translates to:
+  /// **'Didn\'t catch that. Try again or type your search.'**
+  String get voiceNoSpeech;
+
+  /// No description provided for @voiceNetworkRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This language needs a network connection or an installed speech pack.'**
+  String get voiceNetworkRequired;
+
+  /// No description provided for @voiceBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'The microphone is busy. Try again when it is available.'**
+  String get voiceBusy;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

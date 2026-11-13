@@ -14,6 +14,8 @@ import '../../auth/presentation/providers/session_state.dart';
 import '../../listing/domain/category.dart';
 import '../domain/search_criteria.dart';
 import '../domain/search_suggestion.dart';
+import '../../voice_search/presentation/widgets/voice_listening_sheet.dart';
+import '../../voice_search/presentation/widgets/voice_search_button.dart';
 import 'providers/search_results_controller.dart';
 import 'providers/search_suggestions_controller.dart';
 import 'search_labels.dart';
@@ -130,6 +132,23 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       facets: state.facets,
     );
     if (result != null && mounted) await _controller.applyCriteria(result);
+  }
+
+  Future<void> _startVoiceSearch() async {
+    final result = await showVoiceListeningSheet(context);
+    if (!mounted) return;
+    if (result == null) return;
+    if (result == voiceTypeInsteadResult) {
+      _focus.requestFocus();
+      return;
+    }
+    _suggestions.onSubmitted();
+    _focus.unfocus();
+    _text.value = TextEditingValue(
+      text: result,
+      selection: TextSelection.collapsed(offset: result.length),
+    );
+    await _controller.applyVoiceQuery(result);
   }
 
   @override
@@ -258,9 +277,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           prefixIcon: const ExcludeSemantics(child: Icon(Icons.search_rounded)),
           suffixIcon: ValueListenableBuilder<TextEditingValue>(
             valueListenable: _text,
-            builder: (context, value, child) => value.text.isEmpty
-                ? const SizedBox.shrink()
-                : IconButton(
+            builder: (context, value, child) => Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (value.text.isNotEmpty)
+                  IconButton(
                     tooltip: l10n.searchClearText,
                     constraints: const BoxConstraints(
                       minWidth: AppSizes.minTouchTarget,
@@ -272,6 +293,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     },
                     icon: const Icon(Icons.close_rounded),
                   ),
+                VoiceSearchButton(onPressed: _startVoiceSearch),
+              ],
+            ),
           ),
         ),
       ),
