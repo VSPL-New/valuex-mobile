@@ -93,6 +93,11 @@ class AppAssets {
 
   // Sample content until the backend supplies it
   static const String samplePromoImage = 'assets/images/home_promo_1.png';
+
+  /// Bundled promo artwork by the `imageKey` a promo row carries. A key not listed here shows the
+  /// neutral placeholder, so a promo with new artwork waits for an app release that bundles it.
+  static const Map<String, String> promoArtwork = {'home_promo_1': samplePromoImage};
+
   static const String sampleCategoryElectronic = 'assets/images/home_cat_electronic.png';
   static const String sampleCategoryLaptops = 'assets/images/home_cat_laptops.png';
   static const String sampleCategoryMobiles = 'assets/images/home_cat_mobiles.png';

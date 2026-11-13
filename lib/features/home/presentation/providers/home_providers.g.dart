@@ -48,7 +48,7 @@ final class HomeRepositoryProvider
   }
 }
 
-String _$homeRepositoryHash() => r'fb4f0de04e88837063c9071e5a6bbf03f219acd6';
+String _$homeRepositoryHash() => r'2b8375cb614157cbbaa28ed1a7dde1a907e5b057';
 
 @ProviderFor(locationService)
 final locationServiceProvider = LocationServiceProvider._();

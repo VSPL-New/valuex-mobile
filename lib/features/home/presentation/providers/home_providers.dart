@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../core/constants/storage_keys.dart';
+import '../../../../core/network/api_client.dart';
 import '../../../../core/storage/preferences_service.dart';
 import '../../../address/domain/saved_address.dart';
+import '../../data/api_home_repository.dart';
 import '../../data/device_location_service.dart';
-import '../../data/mock_home_repository.dart';
 import '../../domain/entities/home_badges.dart';
 import '../../domain/entities/home_location.dart';
 import '../../domain/entities/listing.dart';
@@ -16,7 +17,7 @@ import '../../domain/services/location_service.dart';
 part 'home_providers.g.dart';
 
 @Riverpod(keepAlive: true)
-HomeRepository homeRepository(Ref ref) => const MockHomeRepository();
+HomeRepository homeRepository(Ref ref) => ApiHomeRepository(ref.watch(apiClientProvider));
 
 @Riverpod(keepAlive: true)
 LocationService locationService(Ref ref) => const DeviceLocationService();

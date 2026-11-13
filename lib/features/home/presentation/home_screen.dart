@@ -17,6 +17,7 @@ import '../domain/entities/home_badges.dart';
 import '../../search/presentation/search_routes.dart';
 import '../domain/entities/listing.dart';
 import 'main_nav.dart';
+import 'promo_routes.dart';
 import 'providers/home_providers.dart';
 import 'widgets/category_tile.dart';
 import 'widgets/home_header.dart';
@@ -107,7 +108,7 @@ class HomeScreen extends ConsumerWidget {
                   ],
                   PromoCarousel(
                     promos: promos,
-                    onPromoTap: (_) => showComingSoon(context),
+                    onPromoTap: (promo) => openPromo(context, promo),
                     onSeeAll: () => showComingSoon(context),
                   ),
                   if (promos.isNotEmpty) const SizedBox(height: AppSpacing.md),

@@ -365,4 +365,43 @@ void main() {
       expect(storage.refreshToken, 'refresh-1');
     });
   });
+
+  group('language header', () {
+    test('sends the app language with every request', () async {
+      final adapter = FakeHttpAdapter((_) async => FakeHttpAdapter.ok({'ok': true}));
+      final client =
+          ApiClient(FakeSecureStorage(), _config, adapter: adapter, languageCode: () => 'hi');
+
+      await client.get<Object?>('/home/promos', authenticated: false);
+      await client.post<Object?>('/x', authenticated: false);
+
+      expect(adapter.requests.map((r) => r.headers['Accept-Language']), ['hi', 'hi']);
+    });
+
+    test('follows a language change made after the client was built', () async {
+      var language = 'en';
+      final adapter = FakeHttpAdapter((_) async => FakeHttpAdapter.ok({'ok': true}));
+      final client = ApiClient(
+        FakeSecureStorage(),
+        _config,
+        adapter: adapter,
+        languageCode: () => language,
+      );
+
+      await client.get<Object?>('/home/promos', authenticated: false);
+      language = 'hi';
+      await client.get<Object?>('/home/promos', authenticated: false);
+
+      expect(adapter.requests.map((r) => r.headers['Accept-Language']), ['en', 'hi']);
+    });
+
+    test('sends no language header when none is given', () async {
+      final adapter = FakeHttpAdapter((_) async => FakeHttpAdapter.ok({'ok': true}));
+      final client = _client(FakeSecureStorage(), adapter);
+
+      await client.get<Object?>('/home/promos', authenticated: false);
+
+      expect(adapter.requests.single.headers.containsKey('Accept-Language'), isFalse);
+    });
+  });
 }
