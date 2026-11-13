@@ -34,6 +34,8 @@ import '../../features/listing/presentation/listing_submitted_screen.dart';
 import '../../features/listing/presentation/my_listings_screen.dart';
 import '../../features/listing/presentation/review_listing_screen.dart';
 import '../../features/listing/presentation/providers/item_details_controller.dart';
+import '../../features/listing_view/presentation/listing_view_screen.dart';
+import '../../features/listing_view/presentation/seller_profile_screen.dart';
 import '../../features/profile/presentation/profile_details_screen.dart';
 import '../../features/search/presentation/category_browse_screen.dart';
 import '../../features/search/presentation/search_routes.dart';
@@ -104,6 +106,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         // Top level, so a fresh open loads the listing by id without building Profile underneath.
         builder: (context, state) =>
             ListingPreviewScreen(listingId: state.pathParameters['listingId']!),
+      ),
+      GoRoute(
+        path: RouteNames.listingViewPattern,
+        name: 'listingView',
+        builder: (context, state) =>
+            ListingViewScreen(listingId: state.pathParameters['listingId']!),
+      ),
+      GoRoute(
+        path: RouteNames.sellerProfilePattern,
+        name: 'sellerProfile',
+        builder: (context, state) =>
+            SellerProfileScreen(sellerId: state.pathParameters['sellerId']!),
       ),
       GoRoute(
         path: '/',

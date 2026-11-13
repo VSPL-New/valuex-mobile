@@ -2011,6 +2011,127 @@ class AppLocalizationsHi extends AppLocalizations {
   String get previewBuyNow => 'अभी खरीदें';
 
   @override
+  String get listingViewTitle => 'लिस्टिंग विवरण';
+
+  @override
+  String get listingViewNotAvailable => 'यह लिस्टिंग अब उपलब्ध नहीं है';
+
+  @override
+  String get listingViewSellerSuspended => 'इस विक्रेता की लिस्टिंग अभी उपलब्ध नहीं हैं';
+
+  @override
+  String get listingViewSellerNotFound => 'यह विक्रेता नहीं मिला';
+
+  @override
+  String listingViewPosted(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days दिन पहले पोस्ट किया गया',
+      one: '1 दिन पहले पोस्ट किया गया',
+      zero: 'आज पोस्ट किया गया',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String listingViewStartingFrom(String price) {
+    return '$price से शुरू';
+  }
+
+  @override
+  String get listingViewIntentSale => 'बिक्री के लिए';
+
+  @override
+  String get listingViewIntentRent => 'किराए के लिए';
+
+  @override
+  String get listingViewIntentLease => 'लीज़ के लिए';
+
+  @override
+  String get listingViewDescription => 'विवरण';
+
+  @override
+  String get listingViewRefreshPhotos => 'फ़ोटो लोड नहीं हो रहीं? रिफ़्रेश करें';
+
+  @override
+  String listingViewShowPhoto(int index) {
+    return 'फ़ोटो $index दिखाएँ';
+  }
+
+  @override
+  String get listingViewSeller => 'विक्रेता';
+
+  @override
+  String listingViewSellerJoined(String date) {
+    return '$date को जुड़े';
+  }
+
+  @override
+  String listingViewRating(String rating, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count समीक्षाएँ',
+      one: '1 समीक्षा',
+    );
+    return '5 में से $rating रेटिंग, $_temp0';
+  }
+
+  @override
+  String get listingViewNoRating => 'अभी तक कोई रेटिंग नहीं';
+
+  @override
+  String listingViewOtherListings(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count अन्य लिस्टिंग',
+      one: '1 अन्य लिस्टिंग',
+      zero: 'कोई अन्य लिस्टिंग नहीं',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get listingViewViewSeller => 'विक्रेता प्रोफ़ाइल देखें';
+
+  @override
+  String get listingViewComingSoon => 'जल्द आ रहा है';
+
+  @override
+  String get listingViewOwnListing => 'आपकी लिस्टिंग';
+
+  @override
+  String get listingViewAddToCart => 'कार्ट में जोड़ें';
+
+  @override
+  String listingViewActionLabel(String action, String status) {
+    return '$action, $status';
+  }
+
+  @override
+  String get sellerProfileTitle => 'विक्रेता प्रोफ़ाइल';
+
+  @override
+  String get sellerProfileListings => 'लिस्टिंग';
+
+  @override
+  String get sellerProfileReviews => 'समीक्षाएँ';
+
+  @override
+  String get sellerProfileNoListings => 'इस विक्रेता की कोई अन्य लिस्टिंग नहीं है';
+
+  @override
+  String get sellerProfileReviewsSoon => 'विक्रेता समीक्षाएँ जल्द आ रही हैं';
+
+  @override
+  String get sellerProfileNoReviews => 'अभी तक कोई समीक्षा नहीं';
+
+  @override
+  String get sellerProfileLoadMore => 'और लोड करें';
+
+  @override
   String get sellErrorNotDeletable =>
       'इस लिस्टिंग को अभी हटाया नहीं जा सकता। समीक्षा पूरी होने के बाद फिर कोशिश करें';
 

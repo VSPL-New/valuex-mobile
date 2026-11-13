@@ -56,6 +56,9 @@ class ApiConstants {
       '/listings/$listingId/restricted-check/$checkId/compliance-acceptance';
   static String listingRestrictedAppeal(String listingId, String checkId) =>
       '/listings/$listingId/restricted-check/$checkId/appeal';
+  static String listingPublic(String listingId) => '/listings/$listingId/public';
+  static String sellerListings(String sellerId) => '/sellers/$sellerId/listings';
+  static String sellerReviews(String sellerId) => '/sellers/$sellerId/reviews';
   static const String searchListings = '/search/listings';
   static const String searchSuggestions = '/search/suggestions';
   static const String categoryChildren = '/categories/children';
