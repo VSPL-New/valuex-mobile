@@ -8,6 +8,9 @@ import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart'
 import 'package:valuex_mobile/features/auth/presentation/screens/sign_in_mobile_screen.dart';
 import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
 import 'package:valuex_mobile/features/listing/domain/category.dart';
+import 'package:valuex_mobile/features/listing_view/data/listing_view_repository.dart';
+import 'package:valuex_mobile/features/listing_view/domain/public_listing.dart';
+import 'package:valuex_mobile/features/listing_view/presentation/listing_view_screen.dart';
 import 'package:valuex_mobile/features/notifications/data/notifications_repository.dart';
 import 'package:valuex_mobile/features/search/data/search_repository.dart';
 import 'package:valuex_mobile/features/search/domain/search_page.dart';
@@ -29,6 +32,8 @@ import 'search_fixtures.dart';
 class _MockListingRepository extends Mock implements ListingRepository {}
 
 class _MockNotifications extends Mock implements NotificationsRepository {}
+
+class _MockListingView extends Mock implements ListingViewRepository {}
 
 const _mobiles = CategoryNode(
   code: 'L1-M',
@@ -121,12 +126,15 @@ void main() {
   }) async {
     final notifications = _MockNotifications();
     when(notifications.unreadCount).thenAnswer((_) async => 0);
+    final listingView = _MockListingView();
+    when(() => listingView.view(any())).thenAnswer((_) => Completer<PublicListing>().future);
     harness = AppHarness(
       tester,
       extraOverrides: [
         searchRepositoryProvider.overrideWithValue(search),
         listingRepositoryProvider.overrideWithValue(categories),
         notificationsRepositoryProvider.overrideWithValue(notifications),
+        listingViewRepositoryProvider.overrideWithValue(listingView),
       ],
     );
     if (signedIn) harness.signedInAs(AccountStatus.active);
@@ -336,13 +344,15 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('tapping a card says details are coming soon', (tester) async {
+    testWidgets('tapping a card opens the listing details', (tester) async {
       await openAt(tester, '/search?q=flat');
 
       await tester.tap(find.text('Old bike'));
       await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
 
-      expect(find.text('This is coming soon'), findsOneWidget);
+      final screen = tester.widget<ListingViewScreen>(find.byType(ListingViewScreen));
+      expect(screen.listingId, 'l3');
       await harness.dispose();
     });
   });
