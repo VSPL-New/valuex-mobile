@@ -11,7 +11,13 @@ import 'package:valuex_mobile/features/address/domain/saved_address.dart';
 import 'package:valuex_mobile/features/address/presentation/providers/address_providers.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/presentation/screens/sign_in_mobile_screen.dart';
+import 'package:valuex_mobile/features/home/data/mock_home_repository.dart';
+import 'package:valuex_mobile/features/home/domain/entities/home_badges.dart';
 import 'package:valuex_mobile/features/home/domain/entities/home_location.dart';
+import 'package:valuex_mobile/features/home/domain/entities/listing.dart';
+import 'package:valuex_mobile/features/home/domain/entities/promo.dart';
+import 'package:valuex_mobile/features/home/domain/repositories/home_repository.dart';
+import 'package:valuex_mobile/features/home/presentation/providers/home_providers.dart';
 import 'package:valuex_mobile/features/listing/presentation/create_listing_screen.dart';
 import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
 import 'package:valuex_mobile/features/listing/domain/category.dart';
@@ -27,6 +33,42 @@ import '../search/search_fixtures.dart';
 class _MockNotifications extends Mock implements NotificationsRepository {}
 
 class _MockCategories extends Mock implements ListingRepository {}
+
+/// Home content whose answers a test decides; whatever it is not given comes from the sample
+/// repository, so a test changes only the part it is about.
+class _ScriptedHome implements HomeRepository {
+  static const HomeRepository _sample = MockHomeRepository();
+
+  Future<List<Promo>> Function()? onPromos;
+  Future<List<Listing>> Function(HomeLocation location)? onFeatured;
+  int promoCalls = 0;
+  int featuredCalls = 0;
+
+  @override
+  Future<List<Promo>> promos() {
+    promoCalls++;
+    return (onPromos ?? _sample.promos)();
+  }
+
+  @override
+  Future<List<Listing>> featuredListings(HomeLocation location) {
+    featuredCalls++;
+    return (onFeatured ?? _sample.featuredListings)(location);
+  }
+
+  @override
+  Future<HomeBadges> badges() => _sample.badges();
+}
+
+const _carsPromo = Promo(
+  id: 'promo-cars',
+  badge: 'This week',
+  title: 'Used cars sale',
+  body: 'Find your next car',
+  ctaLabel: 'Shop cars',
+  image: '',
+  target: PromoTarget(type: PromoTargetType.category, value: 'L1-CARS'),
+);
 
 final _roots = [
   for (final (code, name) in const [
@@ -69,7 +111,9 @@ void main() {
 
   late _MockCategories taxonomy;
   late FakeSearchRepository search;
+  late HomeRepository content;
   setUp(() {
+    content = const MockHomeRepository();
     taxonomy = _MockCategories();
     search = FakeSearchRepository((criteria, page) async => listingsPage(0, 0, hasNext: false));
     when(() => taxonomy.categoryChildren(
@@ -137,6 +181,7 @@ void main() {
     final harness = AppHarness(
       tester,
       extraOverrides: [
+        homeRepositoryProvider.overrideWithValue(content),
         listingRepositoryProvider.overrideWithValue(taxonomy),
         searchRepositoryProvider.overrideWithValue(search),
         notificationsRepositoryProvider.overrideWithValue(notifications),
@@ -513,7 +558,10 @@ void main() {
     });
 
     testWidgets('a signed-out visitor who taps Sell is sent to create an account', (tester) async {
-      final harness = AppHarness(tester);
+      final harness = AppHarness(
+        tester,
+        extraOverrides: [homeRepositoryProvider.overrideWithValue(content)],
+      );
       await harness.launch(location: RouteNames.home);
 
       await tester.tap(find.text('Sell'));
@@ -596,6 +644,149 @@ void main() {
       await harness.settle();
       verify(() => taxonomy.categoryChildren(parentCode: null, scope: CategoryScope.popular))
           .called(1);
+      await harness.dispose();
+    });
+  });
+
+  group('content from the server', () {
+    late _ScriptedHome home;
+    setUp(() {
+      home = _ScriptedHome();
+      content = home;
+    });
+
+    testWidgets('a failed promo call hides only the promo card', (tester) async {
+      home.onPromos = () async => throw Exception('offline');
+      final harness = await openHome(tester);
+
+      expect(find.text('Unlock AI Photo Search'), findsNothing);
+      expect(find.text('Mobiles & Tablets'), findsOneWidget);
+      expect(find.text('Sony A7 IV Camera'), findsOneWidget);
+      expect(find.text('Unable to load Home. Pull down or tap Retry'), findsNothing);
+      await harness.dispose();
+    });
+
+    testWidgets('a failed featured call shows the error with Retry and Retry loads again',
+        (tester) async {
+      const sample = MockHomeRepository();
+      var offline = true;
+      home.onFeatured = (location) async {
+        if (offline) throw Exception('offline');
+        return sample.featuredListings(location);
+      };
+      final harness = await openHome(tester);
+      const message = 'Unable to load Home. Pull down or tap Retry';
+
+      // The other sections are not affected by the failed featured call.
+      expect(find.text('Unlock AI Photo Search'), findsOneWidget);
+      expect(find.text('Mobiles & Tablets'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text(message),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(find.text(message), findsOneWidget);
+      expect(find.text('Sony A7 IV Camera'), findsNothing);
+
+      offline = false;
+      final callsBeforeRetry = home.featuredCalls;
+      await tapText(tester, 'Retry');
+      await harness.settle();
+
+      expect(home.featuredCalls, greaterThan(callsBeforeRetry));
+      expect(find.text(message), findsNothing);
+      await tester.scrollUntilVisible(
+        find.text('Sony A7 IV Camera'),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(find.text('Sony A7 IV Camera'), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('no listings near the place says so', (tester) async {
+      home.onFeatured = (_) async => const [];
+      final harness = await openHome(tester);
+
+      expect(find.text('No items near you yet. Try another location'), findsOneWidget);
+      expect(find.text('Sony A7 IV Camera'), findsNothing);
+      await harness.dispose();
+    });
+
+    testWidgets('no active promo shows no promo section', (tester) async {
+      home.onPromos = () async => const [];
+      final harness = await openHome(tester);
+
+      expect(find.text('Unlock AI Photo Search'), findsNothing);
+      expect(find.text('Claim Voucher'), findsNothing);
+      expect(find.text('Featured Deals Near You'), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('a promo for a category opens the listings of that category', (tester) async {
+      home.onPromos = () async => const [_carsPromo];
+      final harness = await openHome(tester);
+
+      await tapText(tester, 'Shop cars');
+      await harness.settle();
+
+      expect(find.byType(SearchScreen), findsOneWidget);
+      expect(search.calls.last.criteria.categoryCode, 'L1-CARS');
+      await harness.dispose();
+    });
+
+    testWidgets('a promo for a search text opens search for that text', (tester) async {
+      home.onPromos = () async => const [
+            Promo(
+              id: 'promo-chairs',
+              badge: 'Deal',
+              title: 'Chairs for less',
+              body: 'Sit well',
+              ctaLabel: 'Shop chairs',
+              image: '',
+              target: PromoTarget(type: PromoTargetType.search, value: 'office chair'),
+            ),
+          ];
+      final harness = await openHome(tester);
+
+      await tapText(tester, 'Shop chairs');
+      await harness.settle();
+
+      expect(find.byType(SearchScreen), findsOneWidget);
+      expect(search.calls.last.criteria.query, 'office chair');
+      await harness.dispose();
+    });
+
+    testWidgets('a promo for a listing says it is coming soon until listing details exist',
+        (tester) async {
+      home.onPromos = () async => const [
+            Promo(
+              id: 'promo-listing',
+              badge: 'Pick',
+              title: 'Editor pick',
+              body: 'A good one',
+              ctaLabel: 'See it',
+              image: '',
+              target: PromoTarget(type: PromoTargetType.listing, value: 'listing-1'),
+            ),
+          ];
+      final harness = await openHome(tester);
+
+      await tapText(tester, 'See it');
+      await tester.pump();
+
+      expect(find.text('This is coming soon'), findsOneWidget);
+      expect(find.byType(SearchScreen), findsNothing);
+      await harness.dispose();
+    });
+
+    testWidgets('a sample promo with no target says it is coming soon', (tester) async {
+      final harness = await openHome(tester);
+
+      await tapText(tester, 'Claim Voucher');
+      await tester.pump();
+
+      expect(find.text('This is coming soon'), findsOneWidget);
       await harness.dispose();
     });
   });

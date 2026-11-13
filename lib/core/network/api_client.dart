@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import '../config/app_config.dart';
 import '../constants/api_constants.dart';
 import '../constants/app_constants.dart';
+import '../../features/settings/presentation/providers/locale_controller.dart';
 import '../security/secure_storage_service.dart';
 import 'api_error.dart';
 import 'api_error_mapper.dart';
@@ -19,6 +20,7 @@ final apiClientProvider = Provider<ApiClient>((ref) {
   final client = ApiClient(
     ref.watch(secureStorageServiceProvider),
     ref.watch(appConfigProvider),
+    languageCode: () => ref.read(localeControllerProvider).languageCode,
   );
   ref.onDispose(client.dispose);
   return client;
@@ -32,10 +34,13 @@ class ApiClient {
   late final Dio dio;
   late final TokenRefresher _refresher;
 
+  /// [languageCode] reads the app language at each request, so a language change applies at once;
+  /// it goes out as `Accept-Language` so the server can answer in that language.
   ApiClient(
     SecureStorageService storage,
     AppConfig config, {
     HttpClientAdapter? adapter,
+    String Function()? languageCode,
   }) {
     final options = BaseOptions(
       baseUrl: config.apiBaseUrl,
@@ -63,6 +68,7 @@ class ApiClient {
       InterceptorsWrapper(
         onRequest: (options, handler) {
           options.headers['X-Correlation-Id'] = _uuid.v4();
+          if (languageCode != null) options.headers['Accept-Language'] = languageCode();
           handler.next(options);
         },
       ),

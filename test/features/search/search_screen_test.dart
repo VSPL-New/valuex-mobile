@@ -22,6 +22,8 @@ import 'package:valuex_mobile/features/search/presentation/search_screen.dart';
 import 'package:valuex_mobile/features/search/presentation/widgets/category_browser.dart';
 import 'package:valuex_mobile/features/search/presentation/widgets/category_browser_tiles.dart';
 import 'package:valuex_mobile/features/search/presentation/widgets/filter_sheet.dart';
+import 'package:valuex_mobile/features/home/data/mock_home_repository.dart';
+import 'package:valuex_mobile/features/home/presentation/providers/home_providers.dart';
 import 'package:valuex_mobile/features/search/presentation/widgets/intent_sheet.dart';
 import 'package:valuex_mobile/features/search/presentation/widgets/search_skeleton.dart';
 import 'package:valuex_mobile/features/voice_search/data/voice_preferences.dart';
@@ -173,6 +175,7 @@ void main() {
     harness = AppHarness(
       tester,
       extraOverrides: [
+        homeRepositoryProvider.overrideWithValue(const MockHomeRepository()),
         searchRepositoryProvider.overrideWithValue(search),
         listingRepositoryProvider.overrideWithValue(categories),
         notificationsRepositoryProvider.overrideWithValue(notifications),

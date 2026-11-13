@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:valuex_mobile/core/constants/storage_keys.dart';
 import 'package:valuex_mobile/core/storage/preferences_service.dart';
 import 'package:valuex_mobile/features/address/domain/saved_address.dart';
+import 'package:valuex_mobile/features/home/data/mock_home_repository.dart';
 import 'package:valuex_mobile/features/home/domain/entities/home_location.dart';
 import 'package:valuex_mobile/features/home/domain/services/location_service.dart';
 import 'package:valuex_mobile/features/home/presentation/providers/home_providers.dart';
@@ -25,7 +26,10 @@ void main() {
 
   ProviderContainer containerWith(FakeLocationService service) {
     final container = ProviderContainer(
-      overrides: [locationServiceProvider.overrideWithValue(service)],
+      overrides: [
+        locationServiceProvider.overrideWithValue(service),
+        homeRepositoryProvider.overrideWithValue(const MockHomeRepository()),
+      ],
     );
     addTearDown(container.dispose);
     return container;
