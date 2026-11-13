@@ -41,7 +41,7 @@ final class VoiceSearchControllerProvider
   }
 }
 
-String _$voiceSearchControllerHash() => r'22dc9d01499d1113bf2c8217722a8a06ede75fbb';
+String _$voiceSearchControllerHash() => r'04675ad57a5cb6c81807073b3855598b6a1186fe';
 
 abstract class _$VoiceSearchController extends $Notifier<VoiceSearchState> {
   VoiceSearchState build();
