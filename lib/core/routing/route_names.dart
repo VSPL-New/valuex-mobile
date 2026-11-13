@@ -30,6 +30,12 @@ class RouteNames {
   static const String categories = '/home/categories';
   static const String search = '/search';
   static const String searchCategories = '/search/categories';
+  static const String listingViewBase = '/listing';
+  static String listingView(String listingId) => '$listingViewBase/$listingId';
+  static const String listingViewPattern = '$listingViewBase/:listingId';
+  static const String sellerProfileBase = '/seller';
+  static String sellerProfile(String sellerId) => '$sellerProfileBase/$sellerId';
+  static const String sellerProfilePattern = '$sellerProfileBase/:sellerId';
   static const String notifications = '/notifications';
   static const String sell = '/sell';
   static const String sellDetails = '/sell/details';

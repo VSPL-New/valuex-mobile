@@ -2019,6 +2019,127 @@ class AppLocalizationsEn extends AppLocalizations {
   String get previewBuyNow => 'Buy Now';
 
   @override
+  String get listingViewTitle => 'Listing details';
+
+  @override
+  String get listingViewNotAvailable => 'This listing is no longer available';
+
+  @override
+  String get listingViewSellerSuspended => 'This seller\'s listings are not available right now';
+
+  @override
+  String get listingViewSellerNotFound => 'This seller could not be found';
+
+  @override
+  String listingViewPosted(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Posted $days days ago',
+      one: 'Posted 1 day ago',
+      zero: 'Posted today',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String listingViewStartingFrom(String price) {
+    return 'Starting from $price';
+  }
+
+  @override
+  String get listingViewIntentSale => 'For sale';
+
+  @override
+  String get listingViewIntentRent => 'For rent';
+
+  @override
+  String get listingViewIntentLease => 'For lease';
+
+  @override
+  String get listingViewDescription => 'Description';
+
+  @override
+  String get listingViewRefreshPhotos => 'Photos not loading? Refresh';
+
+  @override
+  String listingViewShowPhoto(int index) {
+    return 'Show photo $index';
+  }
+
+  @override
+  String get listingViewSeller => 'Seller';
+
+  @override
+  String listingViewSellerJoined(String date) {
+    return 'Joined $date';
+  }
+
+  @override
+  String listingViewRating(String rating, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count reviews',
+      one: '1 review',
+    );
+    return 'Rated $rating out of 5, $_temp0';
+  }
+
+  @override
+  String get listingViewNoRating => 'No ratings yet';
+
+  @override
+  String listingViewOtherListings(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count other listings',
+      one: '1 other listing',
+      zero: 'No other listings',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get listingViewViewSeller => 'View seller profile';
+
+  @override
+  String get listingViewComingSoon => 'Coming soon';
+
+  @override
+  String get listingViewOwnListing => 'Your listing';
+
+  @override
+  String get listingViewAddToCart => 'Add to Cart';
+
+  @override
+  String listingViewActionLabel(String action, String status) {
+    return '$action, $status';
+  }
+
+  @override
+  String get sellerProfileTitle => 'Seller profile';
+
+  @override
+  String get sellerProfileListings => 'Listings';
+
+  @override
+  String get sellerProfileReviews => 'Reviews';
+
+  @override
+  String get sellerProfileNoListings => 'This seller has no other listings';
+
+  @override
+  String get sellerProfileReviewsSoon => 'Seller reviews are coming soon';
+
+  @override
+  String get sellerProfileNoReviews => 'No reviews yet';
+
+  @override
+  String get sellerProfileLoadMore => 'Load more';
+
+  @override
   String get sellErrorNotDeletable =>
       'This listing can\'t be deleted right now. Try again after the review is done';
 

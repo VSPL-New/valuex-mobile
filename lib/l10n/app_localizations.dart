@@ -3621,6 +3621,180 @@ abstract class AppLocalizations {
   /// **'Buy Now'**
   String get previewBuyNow;
 
+  /// No description provided for @listingViewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing details'**
+  String get listingViewTitle;
+
+  /// No description provided for @listingViewNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing is no longer available'**
+  String get listingViewNotAvailable;
+
+  /// No description provided for @listingViewSellerSuspended.
+  ///
+  /// In en, this message translates to:
+  /// **'This seller\'s listings are not available right now'**
+  String get listingViewSellerSuspended;
+
+  /// No description provided for @listingViewSellerNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This seller could not be found'**
+  String get listingViewSellerNotFound;
+
+  /// No description provided for @listingViewPosted.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =0{Posted today} =1{Posted 1 day ago} other{Posted {days} days ago}}'**
+  String listingViewPosted(int days);
+
+  /// No description provided for @listingViewStartingFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting from {price}'**
+  String listingViewStartingFrom(String price);
+
+  /// No description provided for @listingViewIntentSale.
+  ///
+  /// In en, this message translates to:
+  /// **'For sale'**
+  String get listingViewIntentSale;
+
+  /// No description provided for @listingViewIntentRent.
+  ///
+  /// In en, this message translates to:
+  /// **'For rent'**
+  String get listingViewIntentRent;
+
+  /// No description provided for @listingViewIntentLease.
+  ///
+  /// In en, this message translates to:
+  /// **'For lease'**
+  String get listingViewIntentLease;
+
+  /// No description provided for @listingViewDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get listingViewDescription;
+
+  /// No description provided for @listingViewRefreshPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos not loading? Refresh'**
+  String get listingViewRefreshPhotos;
+
+  /// No description provided for @listingViewShowPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Show photo {index}'**
+  String listingViewShowPhoto(int index);
+
+  /// No description provided for @listingViewSeller.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller'**
+  String get listingViewSeller;
+
+  /// No description provided for @listingViewSellerJoined.
+  ///
+  /// In en, this message translates to:
+  /// **'Joined {date}'**
+  String listingViewSellerJoined(String date);
+
+  /// No description provided for @listingViewRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Rated {rating} out of 5, {count, plural, =1{1 review} other{{count} reviews}}'**
+  String listingViewRating(String rating, int count);
+
+  /// No description provided for @listingViewNoRating.
+  ///
+  /// In en, this message translates to:
+  /// **'No ratings yet'**
+  String get listingViewNoRating;
+
+  /// No description provided for @listingViewOtherListings.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No other listings} =1{1 other listing} other{{count} other listings}}'**
+  String listingViewOtherListings(int count);
+
+  /// No description provided for @listingViewViewSeller.
+  ///
+  /// In en, this message translates to:
+  /// **'View seller profile'**
+  String get listingViewViewSeller;
+
+  /// No description provided for @listingViewComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get listingViewComingSoon;
+
+  /// No description provided for @listingViewOwnListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing'**
+  String get listingViewOwnListing;
+
+  /// No description provided for @listingViewAddToCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Cart'**
+  String get listingViewAddToCart;
+
+  /// No description provided for @listingViewActionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{action}, {status}'**
+  String listingViewActionLabel(String action, String status);
+
+  /// No description provided for @sellerProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller profile'**
+  String get sellerProfileTitle;
+
+  /// No description provided for @sellerProfileListings.
+  ///
+  /// In en, this message translates to:
+  /// **'Listings'**
+  String get sellerProfileListings;
+
+  /// No description provided for @sellerProfileReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviews'**
+  String get sellerProfileReviews;
+
+  /// No description provided for @sellerProfileNoListings.
+  ///
+  /// In en, this message translates to:
+  /// **'This seller has no other listings'**
+  String get sellerProfileNoListings;
+
+  /// No description provided for @sellerProfileReviewsSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller reviews are coming soon'**
+  String get sellerProfileReviewsSoon;
+
+  /// No description provided for @sellerProfileNoReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'No reviews yet'**
+  String get sellerProfileNoReviews;
+
+  /// No description provided for @sellerProfileLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get sellerProfileLoadMore;
+
   /// No description provided for @sellErrorNotDeletable.
   ///
   /// In en, this message translates to:

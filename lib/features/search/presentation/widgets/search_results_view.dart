@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_error_messages.dart';
+import '../../../../core/routing/route_names.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/error_view.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../home/presentation/main_nav.dart';
 import '../../../home/presentation/widgets/listing_card.dart';
 import '../../domain/search_criteria.dart';
 import '../providers/search_results_controller.dart';
@@ -115,7 +116,7 @@ class _SearchResultsViewState extends ConsumerState<SearchResultsView> {
                         Expanded(
                           child: ListingCard(
                             listing: first.toCardListing(),
-                            onTap: () => showComingSoon(context),
+                            onTap: () => context.push(RouteNames.listingView(first.id)),
                           ),
                         ),
                         const SizedBox(width: AppSpacing.md - 4),
@@ -124,7 +125,7 @@ class _SearchResultsViewState extends ConsumerState<SearchResultsView> {
                               ? const SizedBox.shrink()
                               : ListingCard(
                                   listing: second.toCardListing(),
-                                  onTap: () => showComingSoon(context),
+                                  onTap: () => context.push(RouteNames.listingView(second.id)),
                                 ),
                         ),
                       ],

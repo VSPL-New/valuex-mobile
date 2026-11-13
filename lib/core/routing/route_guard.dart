@@ -41,6 +41,8 @@ const Map<String, Set<RegistrationStep>> _gatedRoutes = {
   RouteNames.sell: {RegistrationStep.home},
   RouteNames.sellDetails: {RegistrationStep.home},
   RouteNames.sellPlan: {RegistrationStep.home},
+  RouteNames.listingViewBase: {RegistrationStep.home},
+  RouteNames.sellerProfileBase: {RegistrationStep.home},
 };
 
 const Set<String> _signedInOnlyRoutes = {
@@ -56,9 +58,23 @@ const Set<String> _signedInOnlyRoutes = {
   RouteNames.changeEmail,
   RouteNames.notifications,
   RouteNames.search,
+  RouteNames.listingViewBase,
+  RouteNames.sellerProfileBase,
 };
 
 const Set<String> _aadhaarRoutes = {RouteNames.signupAadhaar, RouteNames.devAadhaarOtp};
+
+/// Routes with an id in the path are guarded as their base route.
+String _gatedBase(String location) {
+  for (final base in [
+    RouteNames.myListings,
+    RouteNames.listingViewBase,
+    RouteNames.sellerProfileBase
+  ]) {
+    if (location.startsWith('$base/')) return base;
+  }
+  return location;
+}
 
 String routeForStep(RegistrationStep step) {
   return switch (step) {
@@ -94,7 +110,7 @@ String? redirectFor({
   // The OTP screen exists only for the sandbox provider; production uses the third-party flow.
   if (location == RouteNames.devAadhaarOtp && !aadhaarSandbox) return RouteNames.signupAadhaar;
 
-  final gated = location.startsWith('${RouteNames.myListings}/') ? RouteNames.myListings : location;
+  final gated = _gatedBase(location);
   final allowedSteps = _gatedRoutes[gated];
   if (allowedSteps == null) return null;
 
