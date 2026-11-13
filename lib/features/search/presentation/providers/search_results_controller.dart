@@ -35,6 +35,10 @@ class SearchState {
   /// A Real Estate search waits for Buy, Rent or Lease.
   final bool needsIntent;
 
+  /// Intents the server refused for this category (`ERROR_INTENT_NOT_SUPPORTED`); the chooser stops
+  /// offering them (US-118).
+  final Set<TransactionIntent> unsupportedIntents;
+
   const SearchState({
     this.criteria = const SearchCriteria(),
     this.items = const [],
@@ -48,6 +52,7 @@ class SearchState {
     this.loadMoreFailed = false,
     this.noResults = false,
     this.needsIntent = false,
+    this.unsupportedIntents = const {},
   });
 
   SearchState copyWith({
@@ -64,6 +69,7 @@ class SearchState {
     bool? loadMoreFailed,
     bool? noResults,
     bool? needsIntent,
+    Set<TransactionIntent>? unsupportedIntents,
   }) {
     return SearchState(
       criteria: criteria ?? this.criteria,
@@ -78,6 +84,7 @@ class SearchState {
       loadMoreFailed: loadMoreFailed ?? this.loadMoreFailed,
       noResults: noResults ?? this.noResults,
       needsIntent: needsIntent ?? this.needsIntent,
+      unsupportedIntents: unsupportedIntents ?? this.unsupportedIntents,
     );
   }
 }
@@ -137,8 +144,18 @@ class SearchResultsController extends Notifier<SearchState> {
     return load();
   }
 
+  /// Buy, Rent and Lease prices are never mixed, so a price range typed for one intent is dropped
+  /// when the buyer switches to another.
   Future<void> chooseIntent(TransactionIntent intent) {
-    state = state.copyWith(criteria: state.criteria.copyWith(intent: intent));
+    final criteria = state.criteria;
+    final switched = criteria.intent != null && criteria.intent != intent;
+    state = state.copyWith(
+      criteria: criteria.copyWith(
+        intent: intent,
+        priceMin: switched ? null : criteria.priceMin,
+        priceMax: switched ? null : criteria.priceMax,
+      ),
+    );
     return load();
   }
 
@@ -198,6 +215,19 @@ class SearchResultsController extends Notifier<SearchState> {
           needsIntent: true,
         );
         return;
+      }
+      final refused = criteria.intent;
+      if (error.code == 'ERROR_INTENT_NOT_SUPPORTED' && refused != null) {
+        final unsupported = {...state.unsupportedIntents, refused};
+        if (unsupported.length < TransactionIntent.values.length) {
+          // This property type does not offer that option: ask again without it.
+          state = SearchState(
+            criteria: criteria.copyWith(intent: null, priceMin: null, priceMax: null),
+            needsIntent: true,
+            unsupportedIntents: unsupported,
+          );
+          return;
+        }
       }
       state = state.copyWith(isLoading: false, error: error);
     }

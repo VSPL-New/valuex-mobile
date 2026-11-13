@@ -21,6 +21,9 @@ class MyListingCard extends StatelessWidget {
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
 
+  /// Marks a property Sold, Rented or Leased; shown only when the server offers [MyListingItem.closeOutcome].
+  final VoidCallback? onClose;
+
   const MyListingCard({
     super.key,
     required this.item,
@@ -28,6 +31,7 @@ class MyListingCard extends StatelessWidget {
     this.onPreview,
     this.onEdit,
     this.onDelete,
+    this.onClose,
   });
 
   @override
@@ -63,7 +67,14 @@ class MyListingCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: AppSpacing.md),
-                        Expanded(child: _Details(item: item, title: title, onPreview: onPreview)),
+                        Expanded(
+                          child: _Details(
+                            item: item,
+                            title: title,
+                            onPreview: onPreview,
+                            onClose: onClose,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -105,8 +116,14 @@ class _Details extends StatelessWidget {
   final MyListingItem item;
   final String title;
   final VoidCallback? onPreview;
+  final VoidCallback? onClose;
 
-  const _Details({required this.item, required this.title, this.onPreview});
+  const _Details({
+    required this.item,
+    required this.title,
+    this.onPreview,
+    this.onClose,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +140,7 @@ class _Details extends StatelessWidget {
           children: [
             if (planName != null && planName.isNotEmpty)
               Text(l10n.myListingsPlan(planName), style: AppTextStyles.caption),
-            ListingStatusBadge(badge: item.badge),
+            ListingStatusBadge(badge: item.badge, closedOutcome: item.closedOutcome),
           ],
         ),
         const SizedBox(height: AppSpacing.xs),
@@ -140,6 +157,12 @@ class _Details extends StatelessWidget {
                 text: l10n.myListingsChats(item.chatCount)),
           ],
         ),
+        if (onClose != null && item.closeOutcome != null)
+          _CloseLink(
+            title: title,
+            outcome: closedOutcomeLabel(l10n, item.closeOutcome!),
+            onPressed: onClose!,
+          ),
         if (onPreview != null)
           Semantics(
             button: true,
@@ -176,6 +199,35 @@ class _Count extends StatelessWidget {
         const SizedBox(width: AppSpacing.xs),
         Flexible(child: Text(text, style: AppTextStyles.hint)),
       ],
+    );
+  }
+}
+
+/// "Mark as Sold, Rented or Leased" for a published property (US-118).
+class _CloseLink extends StatelessWidget {
+  final String title;
+  final String outcome;
+  final VoidCallback onPressed;
+
+  const _CloseLink({required this.title, required this.outcome, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Semantics(
+      button: true,
+      label: l10n.myListingsMarkClosed(title, outcome),
+      excludeSemantics: true,
+      child: InkWell(
+        onTap: onPressed,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: AppSizes.minTouchTarget),
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: Text(l10n.myListingsCloseConfirm(outcome), style: AppTextStyles.linkSmall),
+          ),
+        ),
+      ),
     );
   }
 }

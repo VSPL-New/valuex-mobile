@@ -18,12 +18,22 @@ String listingBadgeLabel(AppLocalizations l10n, ListingBadge badge) => switch (b
       ListingBadge.unavailable => l10n.myListingsBadgeUnavailable,
     };
 
+/// Sold, Rented or Leased, for a property the owner closed (US-118).
+String closedOutcomeLabel(AppLocalizations l10n, ClosedOutcome outcome) => switch (outcome) {
+      ClosedOutcome.sold => l10n.myListingsOutcomeSold,
+      ClosedOutcome.rented => l10n.myListingsOutcomeRented,
+      ClosedOutcome.leased => l10n.myListingsOutcomeLeased,
+    };
+
 /// The pill that names a listing's status. The words carry the meaning; the colour only supports
 /// them.
 class ListingStatusBadge extends StatelessWidget {
   final ListingBadge badge;
 
-  const ListingStatusBadge({super.key, required this.badge});
+  /// How a closed property ended; replaces "Sold" on a property that was rented or leased.
+  final ClosedOutcome? closedOutcome;
+
+  const ListingStatusBadge({super.key, required this.badge, this.closedOutcome});
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +46,17 @@ class ListingStatusBadge extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
         child: Text(
-          listingBadgeLabel(AppLocalizations.of(context), badge),
+          _label(AppLocalizations.of(context)),
           style: AppTextStyles.caption.copyWith(color: foreground, fontSize: 12, height: 16 / 12),
         ),
       ),
     );
+  }
+
+  String _label(AppLocalizations l10n) {
+    final outcome = closedOutcome;
+    if (badge == ListingBadge.sold && outcome != null) return closedOutcomeLabel(l10n, outcome);
+    return listingBadgeLabel(l10n, badge);
   }
 
   static (Color, Color) _colors(ListingBadge badge) => switch (badge) {

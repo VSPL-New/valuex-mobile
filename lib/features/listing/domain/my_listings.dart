@@ -13,6 +13,25 @@ enum MyListingsFilter {
       };
 }
 
+/// How a property deal ended (US-118); [apiValue] is the server's code. Each belongs to one intent:
+/// sold to Buy, rented to Rent, leased to Lease.
+enum ClosedOutcome {
+  sold('SOLD'),
+  rented('RENTED'),
+  leased('LEASED');
+
+  final String apiValue;
+
+  const ClosedOutcome(this.apiValue);
+
+  static ClosedOutcome? fromApi(String? value) {
+    for (final outcome in values) {
+      if (outcome.apiValue == value) return outcome;
+    }
+    return null;
+  }
+}
+
 /// How a listing's server status reads to the seller on its card.
 enum ListingBadge {
   active,
@@ -83,6 +102,13 @@ class MyListingItem {
   final bool canEdit;
   final bool canDelete;
 
+  /// How the owner can close this published property (Sold, Rented or Leased); null when the
+  /// server does not offer it, which is always so for goods (US-118).
+  final ClosedOutcome? closeOutcome;
+
+  /// How a closed property ended, so a rented one does not read as sold; null otherwise.
+  final ClosedOutcome? closedOutcome;
+
   const MyListingItem({
     required this.id,
     required this.status,
@@ -94,6 +120,8 @@ class MyListingItem {
     this.thumbnailUrl,
     this.canEdit = false,
     this.canDelete = false,
+    this.closeOutcome,
+    this.closedOutcome,
   });
 
   factory MyListingItem.fromJson(Map<String, dynamic> json) => MyListingItem(
@@ -107,6 +135,8 @@ class MyListingItem {
         thumbnailUrl: json['thumbnailUrl'] as String?,
         canEdit: json['canEdit'] as bool? ?? false,
         canDelete: json['canDelete'] as bool? ?? false,
+        closeOutcome: ClosedOutcome.fromApi(json['closeOutcome'] as String?),
+        closedOutcome: ClosedOutcome.fromApi(json['closedOutcome'] as String?),
       );
 
   ListingBadge get badge => ListingBadge.forStatus(status);

@@ -149,6 +149,12 @@ class ListingRepository {
   Future<void> deleteListing(String listingId) =>
       _client.delete<void>(ApiConstants.listing(listingId));
 
+  /// Marks a published property Sold, Rented or Leased (US-118). Only the outcome is sent.
+  Future<void> closeListing(String listingId, ClosedOutcome outcome) => _client.post<void>(
+        ApiConstants.listingClose(listingId),
+        data: {'outcome': outcome.apiValue},
+      );
+
   /// A short-lived link to show one of the listing's photos.
   Future<String> photoUrl(String mediaId) => _client.post(
         ApiConstants.mediaAccess(mediaId),

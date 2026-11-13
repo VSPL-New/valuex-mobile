@@ -120,7 +120,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   Future<void> _askIntent() async {
     if (_choosingIntent) return;
     _choosingIntent = true;
-    final intent = await showIntentSheet(context);
+    final provider = searchResultsControllerProvider(widget.initial);
+    final intent = await showIntentSheet(
+      context,
+      unavailable: ref.read(provider).unsupportedIntents,
+    );
     _choosingIntent = false;
     if (intent != null && mounted) await _controller.chooseIntent(intent);
   }

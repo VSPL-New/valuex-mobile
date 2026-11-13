@@ -2367,6 +2367,12 @@ abstract class AppLocalizations {
   /// **'Enter a valid price'**
   String get itemPriceInvalid;
 
+  /// No description provided for @itemPriceRequiredForIntent.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the price for your option'**
+  String get itemPriceRequiredForIntent;
+
   /// No description provided for @itemCategoryChoose.
   ///
   /// In en, this message translates to:
@@ -3399,6 +3405,54 @@ abstract class AppLocalizations {
   /// **'Undo'**
   String get myListingsUndo;
 
+  /// No description provided for @myListingsOutcomeSold.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold'**
+  String get myListingsOutcomeSold;
+
+  /// No description provided for @myListingsOutcomeRented.
+  ///
+  /// In en, this message translates to:
+  /// **'Rented'**
+  String get myListingsOutcomeRented;
+
+  /// No description provided for @myListingsOutcomeLeased.
+  ///
+  /// In en, this message translates to:
+  /// **'Leased'**
+  String get myListingsOutcomeLeased;
+
+  /// No description provided for @myListingsMarkClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark {title} as {outcome}'**
+  String myListingsMarkClosed(String title, String outcome);
+
+  /// No description provided for @myListingsCloseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark this property as {outcome}?'**
+  String myListingsCloseTitle(String outcome);
+
+  /// No description provided for @myListingsCloseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" will be removed from search for good. This works for a deal made inside or outside JustQlic, and it cannot be undone.'**
+  String myListingsCloseBody(String title);
+
+  /// No description provided for @myListingsCloseConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as {outcome}'**
+  String myListingsCloseConfirm(String outcome);
+
+  /// No description provided for @myListingsClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Property marked as {outcome}'**
+  String myListingsClosed(String outcome);
+
   /// No description provided for @myListingsSaleDetailsSoon.
   ///
   /// In en, this message translates to:
@@ -3800,6 +3854,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This listing can\'t be deleted right now. Try again after the review is done'**
   String get sellErrorNotDeletable;
+
+  /// No description provided for @sellErrorNotClosable.
+  ///
+  /// In en, this message translates to:
+  /// **'This property can\'t be marked as sold, rented or leased right now'**
+  String get sellErrorNotClosable;
+
+  /// No description provided for @sellErrorNotProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'Only a published property can be marked as sold, rented or leased'**
+  String get sellErrorNotProperty;
 
   /// No description provided for @sellErrorCategoryLocked.
   ///

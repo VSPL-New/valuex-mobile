@@ -1181,6 +1181,37 @@ void main() {
       },
     );
 
+    testWidgets(
+      'an intent the property type does not support is explained and not offered again',
+      (tester) async {
+        search.handler = (criteria, page) async => criteria.intent == TransactionIntent.lease
+            ? throw _coded('ERROR_INTENT_NOT_SUPPORTED')
+            : SearchPage.fromJson(
+                pageJson([listingJson('l1', title: 'Flat for sale')]),
+              );
+        await openAt(tester, realEstateLocation);
+
+        await tester.tap(find.text('Lease'));
+        await harness.settle();
+
+        expect(find.byType(IntentSheet), findsOneWidget);
+        expect(
+          find.text('This option is not available for this property type'),
+          findsOneWidget,
+        );
+        expect(find.text('Lease'), findsNothing);
+        expect(find.text('Buy'), findsOneWidget);
+        expect(find.text('Rent'), findsOneWidget);
+
+        await tester.tap(find.text('Buy'));
+        await harness.settle();
+
+        expect(search.calls.last.criteria.intent, TransactionIntent.sale);
+        expect(find.text('Flat for sale'), findsOneWidget);
+        await harness.dispose();
+      },
+    );
+
     testWidgets('the condition filter is not offered for properties', (
       tester,
     ) async {

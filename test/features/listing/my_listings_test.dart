@@ -51,6 +51,8 @@ Map<String, dynamic> _item(
   String? planName = 'Basic',
   bool canEdit = true,
   bool canDelete = true,
+  String? closeOutcome,
+  String? closedOutcome,
 }) =>
     {
       'id': id,
@@ -63,6 +65,8 @@ Map<String, dynamic> _item(
       'thumbnailUrl': null,
       'canEdit': canEdit,
       'canDelete': canDelete,
+      'closeOutcome': closeOutcome,
+      'closedOutcome': closedOutcome,
     };
 
 Map<String, dynamic> _pageJson(
@@ -125,6 +129,7 @@ ExistingListing _existing(String status) => ExistingListing(
 void main() {
   setUpAll(() {
     registerFallbackValue(MyListingsFilter.all);
+    registerFallbackValue(ClosedOutcome.sold);
     loadBrandFonts();
   });
 
@@ -254,6 +259,27 @@ void main() {
       await expectLater(
         repository.deleteListing('l1'),
         throwsA(isA<ApiError>().having((e) => e.code, 'code', 'ERROR_LISTING_NOT_DELETABLE')),
+      );
+    });
+
+    test('closing a property sends only the outcome', () async {
+      use((_) async =>
+          FakeHttpAdapter.ok({'listingId': 'l1', 'status': 'SOLD', 'outcome': 'RENTED'}));
+
+      await repository.closeListing('l1', ClosedOutcome.rented);
+
+      final request = api.requests.single;
+      expect(request.method, 'POST');
+      expect(request.path, '/listings/l1/close');
+      expect(request.data, {'outcome': 'RENTED'});
+    });
+
+    test('a refused close is thrown with its code', () async {
+      use((_) async => FakeHttpAdapter.error(400, 'ERROR_LISTING_NOT_CLOSABLE', 'no'));
+
+      await expectLater(
+        repository.closeListing('l1', ClosedOutcome.sold),
+        throwsA(isA<ApiError>().having((e) => e.code, 'code', 'ERROR_LISTING_NOT_CLOSABLE')),
       );
     });
 
@@ -513,6 +539,81 @@ void main() {
 
       expect(state().visibleItems, hasLength(3));
       expect(state().summary.total, 3);
+    });
+
+    test('closing a property reloads the page so the card shows its new status', () async {
+      final property = _item('p1', title: '2 BHK', closeOutcome: 'RENTED');
+      final closed = _item('p1',
+          title: '2 BHK',
+          status: 'SOLD',
+          closedOutcome: 'RENTED',
+          canEdit: false,
+          canDelete: false);
+      var reloads = 0;
+      when(() => repository.myListings(
+            filter: any(named: 'filter'),
+            page: any(named: 'page'),
+            size: any(named: 'size'),
+          )).thenAnswer((_) async => _page([reloads++ == 0 ? property : closed]));
+      when(() => repository.closeListing('p1', ClosedOutcome.rented)).thenAnswer((_) async {});
+      await controller().load();
+      expect(state().items.single.closeOutcome, ClosedOutcome.rented);
+
+      expect(await controller().close('p1', ClosedOutcome.rented), isNull);
+
+      expect(state().items.single.status, 'SOLD');
+      expect(state().items.single.closedOutcome, ClosedOutcome.rented);
+      expect(state().items.single.closeOutcome, isNull);
+    });
+
+    test('a refused close returns the error and does not reload', () async {
+      stubPages({
+        MyListingsFilter.all: [_page(_all)]
+      });
+      const refused =
+          ApiError(type: ApiErrorType.business, message: 'no', code: 'ERROR_LISTING_NOT_CLOSABLE');
+      when(() => repository.closeListing('l1', ClosedOutcome.sold)).thenThrow(refused);
+      await controller().load();
+
+      expect(await controller().close('l1', ClosedOutcome.sold), refused);
+
+      verify(() => repository.myListings(
+            filter: any(named: 'filter'),
+            page: any(named: 'page'),
+            size: any(named: 'size'),
+          )).called(1);
+    });
+  });
+
+  group('closed outcome', () {
+    test('reads the server codes and nothing else', () {
+      expect(ClosedOutcome.fromApi('SOLD'), ClosedOutcome.sold);
+      expect(ClosedOutcome.fromApi('RENTED'), ClosedOutcome.rented);
+      expect(ClosedOutcome.fromApi('LEASED'), ClosedOutcome.leased);
+      expect(ClosedOutcome.fromApi('GONE'), isNull);
+      expect(ClosedOutcome.fromApi(null), isNull);
+    });
+
+    test('a card has an outcome to offer only when the server sends one', () {
+      final goods = MyListingItem.fromJson(_item('g1'));
+      final property = MyListingItem.fromJson(_item('p1', closeOutcome: 'LEASED'));
+      final closed = MyListingItem.fromJson(_item('p2', status: 'SOLD', closedOutcome: 'RENTED'));
+
+      expect(goods.closeOutcome, isNull);
+      expect(property.closeOutcome, ClosedOutcome.leased);
+      expect(closed.closedOutcome, ClosedOutcome.rented);
+      expect(closed.isSold, isTrue);
+    });
+
+    test('says each outcome in English and Hindi', () {
+      final en = AppLocalizationsEn();
+      final hi = AppLocalizationsHi();
+
+      expect([for (final o in ClosedOutcome.values) closedOutcomeLabel(en, o)],
+          ['Sold', 'Rented', 'Leased']);
+      for (final o in ClosedOutcome.values) {
+        expect(closedOutcomeLabel(hi, o), isNotEmpty);
+      }
     });
   });
 
@@ -867,6 +968,129 @@ void main() {
       expect(find.byType(ItemDetailsScreen), findsNothing);
       expect(find.byType(SnackBar), findsOneWidget);
       await harness.dispose();
+    });
+
+    group('close a property', () {
+      final rentable = _item('p1', title: '2 BHK flat', price: 25000, closeOutcome: 'RENTED');
+      final leasable = _item('p2', title: 'Shop floor', price: 90000, closeOutcome: 'LEASED');
+      final rented = _item('p1',
+          title: '2 BHK flat',
+          status: 'SOLD',
+          price: 25000,
+          canEdit: false,
+          canDelete: false,
+          closedOutcome: 'RENTED');
+
+      setUp(() {
+        when(() => repository.closeListing(any(), any())).thenAnswer((_) async {});
+      });
+
+      testWidgets('is offered only on a property the server says can be closed', (tester) async {
+        await launch(tester, items: [rentable, leasable]);
+
+        expect(find.text('Mark as Rented'), findsOneWidget);
+        expect(find.text('Mark as Leased'), findsOneWidget);
+        expect(find.text('Mark as Sold'), findsNothing);
+        await harness.dispose();
+      });
+
+      testWidgets('asks first and says it also works for a deal made outside JustQlic',
+          (tester) async {
+        await launch(tester, items: [rentable]);
+
+        await tester.tap(find.text('Mark as Rented'));
+        await harness.settle();
+
+        expect(find.text('Mark this property as Rented?'), findsOneWidget);
+        expect(find.textContaining('inside or outside JustQlic'), findsOneWidget);
+        expect(find.textContaining('cannot be undone'), findsOneWidget);
+        verifyNever(() => repository.closeListing(any(), any()));
+        await harness.dispose();
+      });
+
+      testWidgets('Cancel sends nothing and keeps the card as it was', (tester) async {
+        await launch(tester, items: [rentable]);
+        await tester.tap(find.text('Mark as Rented'));
+        await harness.settle();
+
+        await tester.tap(find.text('Cancel'));
+        await harness.settle();
+
+        verifyNever(() => repository.closeListing(any(), any()));
+        expect(find.text('Mark as Rented'), findsOneWidget);
+        await harness.dispose();
+      });
+
+      testWidgets('confirming sends the outcome and refreshes the card', (tester) async {
+        await launch(tester, items: [rentable]);
+        // What the server answers once the property is closed.
+        when(() => repository.myListings(
+              filter: any(named: 'filter'),
+              page: any(named: 'page'),
+              size: any(named: 'size'),
+            )).thenAnswer((_) async => _page([rented]));
+        await tester.tap(find.text('Mark as Rented'));
+        await harness.settle();
+
+        await tester.tap(find.text('Mark as Rented').last);
+        await harness.settle();
+
+        verify(() => repository.closeListing('p1', ClosedOutcome.rented)).called(1);
+        expect(find.text('Property marked as Rented'), findsOneWidget);
+        expect(find.text('Mark as Rented'), findsNothing);
+        expect(find.widgetWithText(ListingStatusBadge, 'Rented'), findsOneWidget);
+        expect(find.widgetWithText(ListingStatusBadge, 'Sold'), findsNothing);
+        await harness.dispose();
+      });
+
+      testWidgets('a refusal says why and keeps the action', (tester) async {
+        when(() => repository.closeListing(any(), any())).thenThrow(const ApiError(
+            type: ApiErrorType.business,
+            message: 'no',
+            code: 'ERROR_LISTING_NOT_CLOSABLE',
+            statusCode: 400));
+        await launch(tester, items: [rentable]);
+        await tester.tap(find.text('Mark as Rented'));
+        await harness.settle();
+
+        await tester.tap(find.text('Mark as Rented').last);
+        await harness.settle();
+
+        expect(find.textContaining("can't be marked as sold, rented or leased"), findsOneWidget);
+        expect(find.text('Mark as Rented'), findsOneWidget);
+        await harness.dispose();
+      });
+
+      testWidgets('an offline failure says so and can be tried again', (tester) async {
+        when(() => repository.closeListing(any(), any())).thenThrow(_offline);
+        await launch(tester, items: [rentable]);
+        await tester.tap(find.text('Mark as Rented'));
+        await harness.settle();
+
+        await tester.tap(find.text('Mark as Rented').last);
+        await harness.settle();
+
+        expect(find.byType(SnackBar), findsOneWidget);
+        expect(find.text('Mark as Rented'), findsOneWidget);
+        await harness.dispose();
+      });
+
+      testWidgets('the action is read aloud with the property name', (tester) async {
+        final handle = tester.ensureSemantics();
+        await launch(tester, items: [rentable]);
+
+        expect(find.bySemanticsLabel('Mark 2 BHK flat as Rented'), findsOneWidget);
+        handle.dispose();
+      });
+
+      testWidgets('a rented property reads Rented, not Sold, on its card', (tester) async {
+        await launch(tester, items: [rented]);
+
+        expect(find.widgetWithText(ListingStatusBadge, 'Rented'), findsOneWidget);
+        expect(find.widgetWithText(ListingStatusBadge, 'Sold'), findsNothing);
+        expect(find.text('Mark as Rented'), findsNothing);
+        await harness.dispose();
+      });
     });
 
     group('delete', () {
