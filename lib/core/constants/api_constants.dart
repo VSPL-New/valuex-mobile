@@ -73,6 +73,6 @@ class ApiConstants {
   static const Duration connectTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
 
-  /// AI looks at the photos for up to 20 s on the server (US-005).
-  static const Duration aiSuggestionTimeout = Duration(seconds: 25);
+  /// Allow the server's 45-second AI gateway limit plus transport overhead.
+  static const Duration aiSuggestionTimeout = Duration(seconds: 50);
 }

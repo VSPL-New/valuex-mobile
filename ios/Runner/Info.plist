@@ -45,6 +45,10 @@
 	<string>JustQlic uses the camera to take photos of items you sell.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>JustQlic lets you choose photos of items you sell from your library.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>JustQlic uses the microphone only while you search by voice.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>JustQlic uses your phone's speech service to turn a spoken search into text.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

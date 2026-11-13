@@ -33,6 +33,16 @@ class PreferencesService {
     return prefs.setString(key, value);
   }
 
+  Future<bool> setBool(String key, bool value) async {
+    final prefs = await _instance;
+    return prefs.setBool(key, value);
+  }
+
+  Future<bool?> getBool(String key) async {
+    final prefs = await _instance;
+    return prefs.getBool(key);
+  }
+
   Future<String?> getString(String key) async {
     final prefs = await _instance;
     return prefs.getString(key);

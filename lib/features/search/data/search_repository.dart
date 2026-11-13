@@ -3,6 +3,7 @@ import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
 import '../domain/search_criteria.dart';
 import '../domain/search_page.dart';
+import '../domain/search_source.dart';
 import '../domain/search_suggestion.dart';
 
 /// Search over the published listings (US-011). Only the city and state of the Home place go
@@ -22,11 +23,13 @@ class SearchRepository {
     int size = pageSize,
     String? nearCity,
     String? nearState,
+    SearchSource source = SearchSource.typed,
   }) =>
       _client.get(
         ApiConstants.searchListings,
         queryParameters: {
           ...criteria.toQueryParameters(),
+          if (source == SearchSource.voice) 'source': 'VOICE',
           'page': page,
           'size': size,
           if (page == 0 && criteria.isLeafCategory) 'includeFacets': true,

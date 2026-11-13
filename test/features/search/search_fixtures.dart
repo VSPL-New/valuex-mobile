@@ -1,6 +1,7 @@
 import 'package:valuex_mobile/features/search/data/search_repository.dart';
 import 'package:valuex_mobile/features/search/domain/search_criteria.dart';
 import 'package:valuex_mobile/features/search/domain/search_page.dart';
+import 'package:valuex_mobile/features/search/domain/search_source.dart';
 import 'package:valuex_mobile/features/search/domain/search_suggestion.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -85,8 +86,9 @@ class SearchCall {
   final int page;
   final String? nearCity;
   final String? nearState;
+  final SearchSource source;
 
-  const SearchCall(this.criteria, this.page, this.nearCity, this.nearState);
+  const SearchCall(this.criteria, this.page, this.nearCity, this.nearState, this.source);
 }
 
 typedef SearchHandler = Future<SearchPage> Function(SearchCriteria criteria, int page);
@@ -118,8 +120,9 @@ class FakeSearchRepository extends Fake implements SearchRepository {
     int size = SearchRepository.pageSize,
     String? nearCity,
     String? nearState,
+    SearchSource source = SearchSource.typed,
   }) {
-    calls.add(SearchCall(criteria, page, nearCity, nearState));
+    calls.add(SearchCall(criteria, page, nearCity, nearState, source));
     return handler(criteria, page);
   }
 }

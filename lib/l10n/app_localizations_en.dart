@@ -2459,4 +2459,79 @@ class AppLocalizationsEn extends AppLocalizations {
   String filterBucketLabel(String label, int count) {
     return '$label ($count)';
   }
+
+  @override
+  String get voiceButtonLabel => 'Search by voice';
+
+  @override
+  String get voiceNoticeTitle => 'Voice search';
+
+  @override
+  String get voiceNoticeBody =>
+      'Your phone\'s speech service turns your voice into text. Depending on your phone and language, it may send your voice to Apple or Google to do this. JustQlic does not record or keep your voice.';
+
+  @override
+  String get voiceContinue => 'Continue';
+
+  @override
+  String get voiceNotNow => 'Not now';
+
+  @override
+  String get voicePanelTitle => 'Voice search';
+
+  @override
+  String get voiceStarting => 'Getting ready to listen…';
+
+  @override
+  String get voiceListening => 'Listening…';
+
+  @override
+  String get voiceStop => 'Stop';
+
+  @override
+  String get voiceCancel => 'Cancel';
+
+  @override
+  String get voiceTryAgain => 'Try again';
+
+  @override
+  String get voiceOpenSettings => 'Open Settings';
+
+  @override
+  String get voiceSwitchLanguage => 'Switch language';
+
+  @override
+  String get voiceTypeInstead => 'Type instead';
+
+  @override
+  String get voiceEnglish => 'English';
+
+  @override
+  String get voiceHindi => 'हिन्दी';
+
+  @override
+  String get voicePermissionDenied =>
+      'Microphone or speech permission was not granted. You can try again or type your search.';
+
+  @override
+  String get voicePermissionBlocked =>
+      'Microphone or speech access is blocked. Allow it in your phone settings, or type your search.';
+
+  @override
+  String get voiceUnavailable =>
+      'Speech recognition is not available on this phone. You can type your search instead.';
+
+  @override
+  String get voiceLanguageUnavailable =>
+      'Speech recognition is not available in this language on this phone.';
+
+  @override
+  String get voiceNoSpeech => 'Didn\'t catch that. Try again or type your search.';
+
+  @override
+  String get voiceNetworkRequired =>
+      'This language needs a network connection or an installed speech pack.';
+
+  @override
+  String get voiceBusy => 'The microphone is busy. Try again when it is available.';
 }

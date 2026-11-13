@@ -2452,4 +2452,77 @@ class AppLocalizationsHi extends AppLocalizations {
   String filterBucketLabel(String label, int count) {
     return '$label ($count)';
   }
+
+  @override
+  String get voiceButtonLabel => 'आवाज़ से खोजें';
+
+  @override
+  String get voiceNoticeTitle => 'आवाज़ से खोज';
+
+  @override
+  String get voiceNoticeBody =>
+      'आपके फ़ोन की वाक् सेवा आपकी आवाज़ को टेक्स्ट में बदलती है। फ़ोन और भाषा के अनुसार, इसके लिए आपकी आवाज़ Apple या Google को भेजी जा सकती है। JustQlic आपकी आवाज़ रिकॉर्ड या सहेजता नहीं है।';
+
+  @override
+  String get voiceContinue => 'जारी रखें';
+
+  @override
+  String get voiceNotNow => 'अभी नहीं';
+
+  @override
+  String get voicePanelTitle => 'आवाज़ से खोज';
+
+  @override
+  String get voiceStarting => 'सुनने की तैयारी हो रही है…';
+
+  @override
+  String get voiceListening => 'सुन रहे हैं…';
+
+  @override
+  String get voiceStop => 'रोकें';
+
+  @override
+  String get voiceCancel => 'रद्द करें';
+
+  @override
+  String get voiceTryAgain => 'फिर कोशिश करें';
+
+  @override
+  String get voiceOpenSettings => 'सेटिंग खोलें';
+
+  @override
+  String get voiceSwitchLanguage => 'भाषा बदलें';
+
+  @override
+  String get voiceTypeInstead => 'इसके बजाय टाइप करें';
+
+  @override
+  String get voiceEnglish => 'English';
+
+  @override
+  String get voiceHindi => 'हिन्दी';
+
+  @override
+  String get voicePermissionDenied =>
+      'माइक्रोफ़ोन या वाक् की अनुमति नहीं मिली। फिर कोशिश करें या खोज टाइप करें।';
+
+  @override
+  String get voicePermissionBlocked =>
+      'माइक्रोफ़ोन या वाक् की पहुँच बंद है। फ़ोन की सेटिंग में अनुमति दें या खोज टाइप करें।';
+
+  @override
+  String get voiceUnavailable => 'इस फ़ोन पर वाक् पहचान उपलब्ध नहीं है। आप खोज टाइप कर सकते हैं।';
+
+  @override
+  String get voiceLanguageUnavailable => 'इस फ़ोन पर इस भाषा में वाक् पहचान उपलब्ध नहीं है।';
+
+  @override
+  String get voiceNoSpeech => 'समझ नहीं आया। फिर कोशिश करें या खोज टाइप करें।';
+
+  @override
+  String get voiceNetworkRequired =>
+      'इस भाषा के लिए इंटरनेट कनेक्शन या इंस्टॉल किया हुआ वाक् पैक चाहिए।';
+
+  @override
+  String get voiceBusy => 'माइक्रोफ़ोन व्यस्त है। उपलब्ध होने पर फिर कोशिश करें।';
 }

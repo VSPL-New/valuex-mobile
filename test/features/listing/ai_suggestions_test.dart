@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:valuex_mobile/core/constants/api_constants.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
 import 'package:valuex_mobile/core/routing/app_router.dart';
@@ -227,14 +228,15 @@ void main() {
       );
     }
 
-    test('posts to the listing with a 25 s receive timeout and parses a suggestion', () async {
+    test('posts to the listing with the AI suggestion receive timeout and parses a suggestion',
+        () async {
       useAnswer(_answer());
 
       final suggestion = await repository.generateAiSuggestions('l1');
 
       expect(api.requests.single.method, 'POST');
       expect(api.requests.single.path, '/listings/l1/ai-suggestions');
-      expect(api.requests.single.receiveTimeout, const Duration(seconds: 25));
+      expect(api.requests.single.receiveTimeout, ApiConstants.aiSuggestionTimeout);
       expect(suggestion!.categoryCode, 'CAT-1');
       expect(suggestion.attributes['brand'], 'Sony');
     });
