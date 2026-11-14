@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:valuex_mobile/core/constants/storage_keys.dart';
+import 'package:valuex_mobile/core/routing/app_router.dart';
 import 'package:valuex_mobile/core/routing/route_names.dart';
 import 'package:valuex_mobile/core/widgets/category_icon.dart';
 import 'package:valuex_mobile/features/address/domain/saved_address.dart';
@@ -21,6 +22,9 @@ import 'package:valuex_mobile/features/home/presentation/providers/home_provider
 import 'package:valuex_mobile/features/listing/presentation/create_listing_screen.dart';
 import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
 import 'package:valuex_mobile/features/listing/domain/category.dart';
+import 'package:valuex_mobile/features/listing_view/data/listing_view_repository.dart';
+import 'package:valuex_mobile/features/listing_view/domain/public_listing.dart';
+import 'package:valuex_mobile/features/listing_view/presentation/listing_view_screen.dart';
 import 'package:valuex_mobile/features/search/data/search_repository.dart';
 import 'package:valuex_mobile/features/search/presentation/search_screen.dart';
 import 'package:valuex_mobile/features/home/domain/services/location_service.dart';
@@ -33,6 +37,8 @@ import '../search/search_fixtures.dart';
 class _MockNotifications extends Mock implements NotificationsRepository {}
 
 class _MockCategories extends Mock implements ListingRepository {}
+
+class _MockListingView extends Mock implements ListingViewRepository {}
 
 /// Home content whose answers a test decides; whatever it is not given comes from the sample
 /// repository, so a test changes only the part it is about.
@@ -110,11 +116,20 @@ void main() {
   });
 
   late _MockCategories taxonomy;
+  late _MockListingView listingView;
   late FakeSearchRepository search;
   late HomeRepository content;
   setUp(() {
     content = const MockHomeRepository();
     taxonomy = _MockCategories();
+    listingView = _MockListingView();
+    when(() => listingView.view(any())).thenAnswer(
+      (call) async => PublicListing.fromJson({
+        'listingId': call.positionalArguments.single,
+        'title': 'Opened listing',
+        'seller': {'sellerId': 's1', 'displayName': 'Asha K'},
+      }),
+    );
     search = FakeSearchRepository((criteria, page) async => listingsPage(0, 0, hasNext: false));
     when(() => taxonomy.categoryChildren(
           parentCode: any(named: 'parentCode'),
@@ -183,6 +198,7 @@ void main() {
       extraOverrides: [
         homeRepositoryProvider.overrideWithValue(content),
         listingRepositoryProvider.overrideWithValue(taxonomy),
+        listingViewRepositoryProvider.overrideWithValue(listingView),
         searchRepositoryProvider.overrideWithValue(search),
         notificationsRepositoryProvider.overrideWithValue(notifications),
         savedAddressesProvider.overrideWith((ref) => (savedLoader ?? () async => saved)()),
@@ -252,6 +268,34 @@ void main() {
       findsOneWidget,
     );
     handle.dispose();
+    await harness.dispose();
+  });
+
+  testWidgets('tapping a featured listing card opens that listing, not a coming soon message', (
+    tester,
+  ) async {
+    final harness = await openHome(tester);
+
+    await tapText(tester, 'Sony A7 IV Camera');
+    await harness.settle();
+
+    expect(find.byType(ListingViewScreen), findsOneWidget);
+    expect(find.text('Opened listing'), findsOneWidget);
+    verify(() => listingView.view('sony-a7-iv')).called(1);
+    expect(find.text('This is coming soon'), findsNothing);
+    await harness.dispose();
+  });
+
+  testWidgets('going back from a listing returns to Home', (tester) async {
+    final harness = await openHome(tester);
+
+    await tapText(tester, 'Sony A7 IV Camera');
+    await harness.settle();
+    harness.container.read(appRouterProvider).pop();
+    await harness.settle();
+
+    expect(find.byType(ListingViewScreen), findsNothing);
+    expect(find.text('Sony A7 IV Camera'), findsOneWidget);
     await harness.dispose();
   });
 
@@ -757,8 +801,7 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('a promo for a listing says it is coming soon until listing details exist',
-        (tester) async {
+    testWidgets('a promo for a listing opens that listing', (tester) async {
       home.onPromos = () async => const [
             Promo(
               id: 'promo-listing',
@@ -773,10 +816,12 @@ void main() {
       final harness = await openHome(tester);
 
       await tapText(tester, 'See it');
-      await tester.pump();
+      await harness.settle();
 
-      expect(find.text('This is coming soon'), findsOneWidget);
-      expect(find.byType(SearchScreen), findsNothing);
+      expect(find.byType(ListingViewScreen), findsOneWidget);
+      expect(find.text('Opened listing'), findsOneWidget);
+      verify(() => listingView.view('listing-1')).called(1);
+      expect(find.text('This is coming soon'), findsNothing);
       await harness.dispose();
     });
 

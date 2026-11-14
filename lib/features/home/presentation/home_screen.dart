@@ -215,12 +215,19 @@ class HomeScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(
-                          child: ListingCard(listing: first, onTap: () => showComingSoon(context))),
+                        child: ListingCard(
+                          listing: first,
+                          onTap: () => context.push(RouteNames.listingView(first.id)),
+                        ),
+                      ),
                       const SizedBox(width: AppSpacing.md - 4),
                       Expanded(
                         child: second == null
                             ? const SizedBox.shrink()
-                            : ListingCard(listing: second, onTap: () => showComingSoon(context)),
+                            : ListingCard(
+                                listing: second,
+                                onTap: () => context.push(RouteNames.listingView(second.id)),
+                              ),
                       ),
                     ],
                   ),
