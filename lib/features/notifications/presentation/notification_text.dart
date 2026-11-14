@@ -13,8 +13,25 @@ String notificationTitle(AppLocalizations l10n, AppNotification notification) {
     'LISTING_PAYMENT_FAILED' => l10n.notifListingPaymentFailedTitle,
     'LISTING_EXPIRED' => l10n.notifListingExpiredTitle,
     'LISTING_REMOVED_BY_ADMIN' => l10n.notifListingRemovedTitle,
+    'SAVED_SEARCH_MATCHES' => l10n.notifSavedSearchTitle,
     _ => notification.title,
   };
+}
+
+/// "N new items match "name": title; title and more." from the digest's values; null when the
+/// count or name are missing, so the server's English text shows instead.
+String? _savedSearchBody(AppLocalizations l10n, Map<String, dynamic> params) {
+  final count = params['count'] is num ? (params['count'] as num).toInt() : null;
+  final name = _text(params['name']);
+  if (count == null || count < 1 || name == null) return null;
+  final titles = [
+    for (final title in params['titles'] as List<dynamic>? ?? const [])
+      if (_text(title) != null) title as String,
+  ];
+  final head = l10n.notifSavedSearchBody(count, name);
+  if (titles.isEmpty) return '$head.';
+  final more = count > titles.length ? ' ${l10n.notifSavedSearchAndMore}' : '';
+  return '$head: ${titles.join('; ')}$more.';
 }
 
 String notificationBody(AppLocalizations l10n, AppNotification notification) {
@@ -40,6 +57,7 @@ String notificationBody(AppLocalizations l10n, AppNotification notification) {
     'LISTING_PAYMENT_FAILED' => l10n.notifListingPaymentFailedBody,
     'LISTING_EXPIRED' => title == null ? null : l10n.notifListingExpiredBody(title),
     'LISTING_REMOVED_BY_ADMIN' => title == null ? null : l10n.notifListingRemovedBody(title),
+    'SAVED_SEARCH_MATCHES' => _savedSearchBody(l10n, params),
     _ => null,
   };
   return localized ?? notification.body;

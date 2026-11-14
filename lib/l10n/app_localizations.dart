@@ -4502,6 +4502,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The microphone is busy. Try again when it is available.'**
   String get voiceBusy;
+
+  /// No description provided for @savedSearchesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved searches'**
+  String get savedSearchesTitle;
+
+  /// No description provided for @savedSearchesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved searches yet'**
+  String get savedSearchesEmpty;
+
+  /// No description provided for @savedSearchesEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for something, then tap Save search to get a daily alert about new items.'**
+  String get savedSearchesEmptyHint;
+
+  /// No description provided for @savedSearchesLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load your saved searches. Try again'**
+  String get savedSearchesLoadFailed;
+
+  /// No description provided for @savedSearchAlerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts'**
+  String get savedSearchAlerts;
+
+  /// No description provided for @savedSearchAlertsFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts for {name}'**
+  String savedSearchAlertsFor(String name);
+
+  /// No description provided for @savedSearchAlertsFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to change alerts. Try again'**
+  String get savedSearchAlertsFailed;
+
+  /// No description provided for @savedSearchDeleteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete saved search {name}'**
+  String savedSearchDeleteLabel(String name);
+
+  /// No description provided for @savedSearchDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved search deleted'**
+  String get savedSearchDeleted;
+
+  /// No description provided for @savedSearchUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get savedSearchUndo;
+
+  /// No description provided for @savedSearchDeleteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to delete the saved search. It was put back'**
+  String get savedSearchDeleteFailed;
+
+  /// No description provided for @savedSearchInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Search criteria no longer valid'**
+  String get savedSearchInvalid;
+
+  /// No description provided for @savedSearchOpenLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Open saved search {name}'**
+  String savedSearchOpenLabel(String name);
+
+  /// No description provided for @savedSearchSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save search'**
+  String get savedSearchSave;
+
+  /// No description provided for @savedSearchSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Search saved. You will get a daily alert about new items'**
+  String get savedSearchSaved;
+
+  /// No description provided for @savedSearchAlreadySaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Already saved'**
+  String get savedSearchAlreadySaved;
+
+  /// No description provided for @savedSearchLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum {count} saved searches allowed'**
+  String savedSearchLimit(int count);
+
+  /// No description provided for @savedSearchLimitUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'You have reached the maximum number of saved searches'**
+  String get savedSearchLimitUnknown;
+
+  /// No description provided for @savedSearchSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to save this search. Try again'**
+  String get savedSearchSaveFailed;
+
+  /// No description provided for @savedSearchNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This saved search no longer exists'**
+  String get savedSearchNotFound;
+
+  /// No description provided for @savedSearchViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View saved searches'**
+  String get savedSearchViewAll;
+
+  /// No description provided for @savedSearchSummaryPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'₹{min} – ₹{max}'**
+  String savedSearchSummaryPrice(String min, String max);
+
+  /// No description provided for @savedSearchSummaryPriceFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From ₹{min}'**
+  String savedSearchSummaryPriceFrom(String min);
+
+  /// No description provided for @savedSearchSummaryPriceUpTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to ₹{max}'**
+  String savedSearchSummaryPriceUpTo(String max);
+
+  /// No description provided for @savedSearchSummaryFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 filter} other{{count} filters}}'**
+  String savedSearchSummaryFilters(int count);
+
+  /// No description provided for @notifSavedSearchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New matches for your saved search'**
+  String get notifSavedSearchTitle;
+
+  /// No description provided for @notifSavedSearchBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 new item matches \"{name}\"} other{{count} new items match \"{name}\"}}'**
+  String notifSavedSearchBody(int count, String name);
+
+  /// No description provided for @notifSavedSearchAndMore.
+  ///
+  /// In en, this message translates to:
+  /// **'and more'**
+  String get notifSavedSearchAndMore;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

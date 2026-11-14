@@ -61,6 +61,9 @@ class ApiConstants {
   static String sellerReviews(String sellerId) => '/sellers/$sellerId/reviews';
   static const String searchListings = '/search/listings';
   static const String searchSuggestions = '/search/suggestions';
+  static const String savedSearches = '/search/saved';
+
+  static String savedSearch(String id) => '/search/saved/$id';
   static const String categoryChildren = '/categories/children';
   static const String categorySearch = '/categories/search';
   static String categoryListingSchema(String code) => '/categories/$code/listing-schema';

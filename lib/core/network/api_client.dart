@@ -146,6 +146,20 @@ class ApiClient {
     );
   }
 
+  /// Like [post], and also returns the HTTP status (a create answers 201, or 200 when the thing
+  /// already existed).
+  Future<(T, int?)> postWithStatus<T>(
+    String path, {
+    Object? data,
+    T Function(Object? data)? parse,
+  }) async {
+    final (value, response) = await _sendWithResponse(
+      () => dio.post<dynamic>(path, data: data, options: _options(true)),
+      parse,
+    );
+    return (value, response.statusCode);
+  }
+
   Future<T> put<T>(
     String path, {
     Object? data,

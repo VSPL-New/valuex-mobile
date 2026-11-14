@@ -2525,4 +2525,119 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get voiceBusy => 'माइक्रोफ़ोन व्यस्त है। उपलब्ध होने पर फिर कोशिश करें।';
+
+  @override
+  String get savedSearchesTitle => 'सहेजी गई खोजें';
+
+  @override
+  String get savedSearchesEmpty => 'अभी कोई सहेजी गई खोज नहीं है';
+
+  @override
+  String get savedSearchesEmptyHint =>
+      'कुछ खोजें, फिर \"खोज सहेजें\" दबाएँ ताकि नई वस्तुओं की रोज़ाना सूचना मिले।';
+
+  @override
+  String get savedSearchesLoadFailed => 'आपकी सहेजी गई खोजें लोड नहीं हो सकीं। फिर कोशिश करें';
+
+  @override
+  String get savedSearchAlerts => 'सूचनाएँ';
+
+  @override
+  String savedSearchAlertsFor(String name) {
+    return '$name के लिए सूचनाएँ';
+  }
+
+  @override
+  String get savedSearchAlertsFailed => 'सूचनाएँ बदली नहीं जा सकीं। फिर कोशिश करें';
+
+  @override
+  String savedSearchDeleteLabel(String name) {
+    return 'सहेजी गई खोज $name हटाएँ';
+  }
+
+  @override
+  String get savedSearchDeleted => 'सहेजी गई खोज हटा दी गई';
+
+  @override
+  String get savedSearchUndo => 'पूर्ववत करें';
+
+  @override
+  String get savedSearchDeleteFailed => 'सहेजी गई खोज हटाई नहीं जा सकी। उसे वापस रख दिया गया';
+
+  @override
+  String get savedSearchInvalid => 'खोज की शर्तें अब मान्य नहीं हैं';
+
+  @override
+  String savedSearchOpenLabel(String name) {
+    return 'सहेजी गई खोज $name खोलें';
+  }
+
+  @override
+  String get savedSearchSave => 'खोज सहेजें';
+
+  @override
+  String get savedSearchSaved => 'खोज सहेज ली गई। नई वस्तुओं की रोज़ाना सूचना मिलेगी';
+
+  @override
+  String get savedSearchAlreadySaved => 'पहले से सहेजी हुई है';
+
+  @override
+  String savedSearchLimit(int count) {
+    return 'अधिकतम $count सहेजी गई खोजें ही रखी जा सकती हैं';
+  }
+
+  @override
+  String get savedSearchLimitUnknown => 'आप सहेजी गई खोजों की अधिकतम संख्या तक पहुँच चुके हैं';
+
+  @override
+  String get savedSearchSaveFailed => 'यह खोज सहेजी नहीं जा सकी। फिर कोशिश करें';
+
+  @override
+  String get savedSearchNotFound => 'यह सहेजी गई खोज अब मौजूद नहीं है';
+
+  @override
+  String get savedSearchViewAll => 'सहेजी गई खोजें देखें';
+
+  @override
+  String savedSearchSummaryPrice(String min, String max) {
+    return '₹$min – ₹$max';
+  }
+
+  @override
+  String savedSearchSummaryPriceFrom(String min) {
+    return '₹$min से';
+  }
+
+  @override
+  String savedSearchSummaryPriceUpTo(String max) {
+    return '₹$max तक';
+  }
+
+  @override
+  String savedSearchSummaryFilters(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count फ़िल्टर',
+      one: '1 फ़िल्टर',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifSavedSearchTitle => 'आपकी सहेजी गई खोज के नए नतीजे';
+
+  @override
+  String notifSavedSearchBody(int count, String name) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '\"$name\" से मेल खाती $count नई वस्तुएँ',
+      one: '\"$name\" से मेल खाती 1 नई वस्तु',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifSavedSearchAndMore => 'और भी';
 }

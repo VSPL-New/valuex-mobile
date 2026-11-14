@@ -2534,4 +2534,119 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get voiceBusy => 'The microphone is busy. Try again when it is available.';
+
+  @override
+  String get savedSearchesTitle => 'Saved searches';
+
+  @override
+  String get savedSearchesEmpty => 'No saved searches yet';
+
+  @override
+  String get savedSearchesEmptyHint =>
+      'Search for something, then tap Save search to get a daily alert about new items.';
+
+  @override
+  String get savedSearchesLoadFailed => 'Unable to load your saved searches. Try again';
+
+  @override
+  String get savedSearchAlerts => 'Alerts';
+
+  @override
+  String savedSearchAlertsFor(String name) {
+    return 'Alerts for $name';
+  }
+
+  @override
+  String get savedSearchAlertsFailed => 'Unable to change alerts. Try again';
+
+  @override
+  String savedSearchDeleteLabel(String name) {
+    return 'Delete saved search $name';
+  }
+
+  @override
+  String get savedSearchDeleted => 'Saved search deleted';
+
+  @override
+  String get savedSearchUndo => 'Undo';
+
+  @override
+  String get savedSearchDeleteFailed => 'Unable to delete the saved search. It was put back';
+
+  @override
+  String get savedSearchInvalid => 'Search criteria no longer valid';
+
+  @override
+  String savedSearchOpenLabel(String name) {
+    return 'Open saved search $name';
+  }
+
+  @override
+  String get savedSearchSave => 'Save search';
+
+  @override
+  String get savedSearchSaved => 'Search saved. You will get a daily alert about new items';
+
+  @override
+  String get savedSearchAlreadySaved => 'Already saved';
+
+  @override
+  String savedSearchLimit(int count) {
+    return 'Maximum $count saved searches allowed';
+  }
+
+  @override
+  String get savedSearchLimitUnknown => 'You have reached the maximum number of saved searches';
+
+  @override
+  String get savedSearchSaveFailed => 'Unable to save this search. Try again';
+
+  @override
+  String get savedSearchNotFound => 'This saved search no longer exists';
+
+  @override
+  String get savedSearchViewAll => 'View saved searches';
+
+  @override
+  String savedSearchSummaryPrice(String min, String max) {
+    return '₹$min – ₹$max';
+  }
+
+  @override
+  String savedSearchSummaryPriceFrom(String min) {
+    return 'From ₹$min';
+  }
+
+  @override
+  String savedSearchSummaryPriceUpTo(String max) {
+    return 'Up to ₹$max';
+  }
+
+  @override
+  String savedSearchSummaryFilters(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count filters',
+      one: '1 filter',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifSavedSearchTitle => 'New matches for your saved search';
+
+  @override
+  String notifSavedSearchBody(int count, String name) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count new items match \"$name\"',
+      one: '1 new item matches \"$name\"',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifSavedSearchAndMore => 'and more';
 }
