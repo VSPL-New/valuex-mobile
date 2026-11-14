@@ -228,6 +228,7 @@ void main() {
       expect(saved.attributes, {'brand': 'Sony', 'storage_gb': '64_GB'});
       expect(saved.negotiable, isTrue);
       expect(saved.locationState, 'MH');
+      expect(saved.locationArea, 'Baner');
       expect(find.byType(ListingPlanScreen), findsOneWidget);
       await harness.dispose();
     });
@@ -844,7 +845,7 @@ void main() {
       await pending;
       expect(stateOf(container).canContinue, isTrue);
     });
-    test('save sends the details with only the chosen city', () async {
+    test('save sends the chosen area and city without precise location', () async {
       final container = containerFor(
         args,
         location: const LocationKnown(HomeLocation(city: 'Pune', area: 'Baner')),
@@ -856,7 +857,14 @@ void main() {
       final result = await controller.save();
 
       expect(result.saved, isTrue);
-      verify(() => repository.saveDetails('l1', any(), phoneSchema, city: 'Pune')).called(1);
+      final draft = verify(
+        () => repository.saveDetails('l1', captureAny(), phoneSchema, city: 'Pune'),
+      ).captured.single as ListingDetailsDraft;
+      final payload = draft.toJson(phoneSchema, city: 'Pune');
+      expect(payload['locationArea'], 'Baner');
+      expect(payload['location'], 'Pune');
+      expect(payload.keys, isNot(contains('pincode')));
+      expect(payload.keys, isNot(contains('latitude')));
       verifyNever(() => repository.sendSuggestionFeedback(any(), any(), any()));
       expect(stateOf(container).isSaving, isFalse);
     });

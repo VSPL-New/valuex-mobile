@@ -8,6 +8,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
 import 'package:valuex_mobile/core/routing/route_guard.dart';
 import 'package:valuex_mobile/core/routing/route_names.dart';
+import 'package:valuex_mobile/core/theme/app_theme.dart';
+import 'package:valuex_mobile/core/theme/colors.dart';
 import 'package:valuex_mobile/core/widgets/square_back_button.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/presentation/providers/session_state.dart';
@@ -15,6 +17,7 @@ import 'package:valuex_mobile/features/listing_view/data/listing_view_repository
 import 'package:valuex_mobile/features/listing_view/domain/public_listing.dart';
 import 'package:valuex_mobile/features/listing_view/presentation/listing_view_screen.dart';
 import 'package:valuex_mobile/features/listing_view/presentation/seller_profile_screen.dart';
+import 'package:valuex_mobile/features/listing_view/presentation/widgets/listing_gallery.dart';
 import 'package:valuex_mobile/features/search/domain/search_page.dart';
 import 'package:valuex_mobile/l10n/app_localizations.dart';
 
@@ -59,6 +62,7 @@ Map<String, dynamic> listingJson({
   double? rating,
   String description = 'Lightly used, with the original box.',
   String title = 'Apple Watch',
+  String? area,
 }) =>
     {
       'listingId': 'l1',
@@ -74,6 +78,7 @@ Map<String, dynamic> listingJson({
       'category': [
         {'code': 'L1', 'name': 'Electronics', 'level': 1},
         {'code': 'L2', 'name': 'Wearables', 'level': 2},
+        {'code': 'L3', 'name': 'Smart watches', 'level': 3},
       ],
       'attributes': attributes ??
           [
@@ -93,6 +98,7 @@ Map<String, dynamic> listingJson({
         'rating': rating,
         'ratingCount': rating == null ? 0 : 12,
         'city': 'Bengaluru',
+        'area': area,
         'joinedAt': '2025-03-04T00:00:00Z',
         'otherListingsCount': 2,
       },
@@ -165,6 +171,7 @@ void main() {
       ProviderScope(
         overrides: [listingViewRepositoryProvider.overrideWithValue(repository)],
         child: MaterialApp.router(
+          theme: AppTheme.lightTheme,
           routerConfig: router,
           locale: locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -195,7 +202,9 @@ void main() {
       await open(tester);
 
       expect(find.text('Listing details'), findsOneWidget);
-      expect(find.text('Electronics > Wearables'), findsOneWidget);
+      expect(find.textContaining('Electronics'), findsNothing);
+      expect(find.textContaining('Wearables'), findsNothing);
+      expect(find.textContaining('Smart watches'), findsNothing);
       expect(find.text('Apple Watch'), findsOneWidget);
       expect(find.text('Like New'), findsOneWidget);
       expect(find.text('₹14,500'), findsOneWidget);
@@ -205,10 +214,28 @@ void main() {
       expect(find.text('Lightly used, with the original box.'), findsOneWidget);
       expect(find.text('Asha K'), findsOneWidget);
       expect(find.text('No ratings yet'), findsOneWidget);
-      expect(find.text('Joined Mar 2025'), findsOneWidget);
-      expect(find.text('2 other listings'), findsOneWidget);
+      expect(find.text('A'), findsOneWidget);
+      expect(find.text('View Profile'), findsOneWidget);
+      expect(find.text('Joined Mar 2025'), findsNothing);
+      expect(find.text('2 other listings'), findsNothing);
       expect(find.text('1 / 3'), findsOneWidget);
       verify(() => repository.view('l1')).called(1);
+    });
+
+    testWidgets('shows area and city and groups the content into brand cards', (tester) async {
+      stubListing(listingJson(area: 'Whitefield'));
+      await open(tester);
+
+      expect(find.text('Whitefield, Bengaluru'), findsOneWidget);
+      for (final title in ['DESCRIPTION', 'ITEM DETAILS', 'SELLER']) {
+        final container = tester.widget<Container>(
+          find.ancestor(of: find.text(title), matching: find.byType(Container)).first,
+        );
+        final decoration = container.decoration! as BoxDecoration;
+        expect(decoration.color, AppColors.brandSurface);
+        expect(decoration.boxShadow, isNotEmpty);
+        expect(decoration.borderRadius, BorderRadius.circular(16));
+      }
     });
 
     testWidgets('lists the schema attributes with units and Yes/No', (tester) async {
@@ -227,7 +254,9 @@ void main() {
       stubListing(listingJson(rating: 4.5));
       await open(tester);
 
-      expect(find.text('Rated 4.5 out of 5, 12 reviews'), findsOneWidget);
+      expect(find.text('4.5'), findsOneWidget);
+      expect(find.bySemanticsLabel('Rated 4.5 out of 5, 12 reviews'), findsOneWidget);
+      expect(find.byIcon(Icons.star_rounded), findsOneWidget);
       expect(find.text('No ratings yet'), findsNothing);
     });
 
@@ -284,6 +313,15 @@ void main() {
       await open(tester);
       expect(find.text('No photo'), findsOneWidget);
       expect(find.text('1 / 3'), findsNothing);
+      expect(find.byTooltip('Refresh photos'), findsNothing);
+    });
+
+    testWidgets('empty sections stay hidden', (tester) async {
+      stubListing(listingJson(description: '', attributes: const []));
+      await open(tester);
+      expect(find.text('DESCRIPTION'), findsNothing);
+      expect(find.text('ITEM DETAILS'), findsNothing);
+      expect(find.text('SELLER'), findsOneWidget);
     });
 
     testWidgets('does not break at 320px wide with 200% text', (tester) async {
@@ -299,6 +337,17 @@ void main() {
       await open(tester, locale: const Locale('hi'));
       expect(find.text('लिस्टिंग विवरण'), findsOneWidget);
       expect(find.text('3 दिन पहले पोस्ट किया गया'), findsOneWidget);
+    });
+
+    testWidgets('long seller and location wrap in Hindi at 200% text', (tester) async {
+      final json = listingJson(area: 'Whitefield Extension Bengaluru East', rating: 4.6);
+      (json['seller'] as Map<String, dynamic>)['displayName'] = 'Asha Krishnamurthy Radhakrishnan';
+      stubListing(json);
+      await open(tester, locale: const Locale('hi'), size: const Size(320, 640), textScale: 2);
+      await tester.scrollUntilVisible(find.text('प्रोफ़ाइल देखें'), 250,
+          scrollable: find.byType(Scrollable).first);
+      expect(tester.takeException(), isNull);
+      expect(find.text('4.6'), findsOneWidget);
     });
 
     testWidgets('the back button returns to where the buyer came from', (tester) async {
@@ -402,16 +451,37 @@ void main() {
     testWidgets('Refresh is not offered for permanent photo links', (tester) async {
       await open(tester);
       expect(find.text('Photos not loading? Refresh'), findsNothing);
+      expect(find.byTooltip('Refresh photos'), findsNothing);
     });
 
     testWidgets('Refresh appears for expiring links and loads the listing again', (tester) async {
       stubListing(listingJson(photos: [photo(1, expiresAt: '2026-11-12T10:05:00Z')]));
       await open(tester);
-      expect(find.text('Photos not loading? Refresh'), findsOneWidget);
+      expect(find.text('Photos not loading? Refresh'), findsNothing);
+      final refresh = find.byTooltip('Refresh photos');
+      expect(refresh, findsOneWidget);
+      expect(tester.getRect(find.byType(PageView)).contains(tester.getCenter(refresh)), isTrue);
+      expect(tester.getSize(refresh).shortestSide, greaterThanOrEqualTo(48));
 
-      await tester.tap(find.text('Photos not loading? Refresh'));
+      await tester.tap(refresh);
       await tester.pumpAndSettle();
       verify(() => repository.view('l1')).called(2);
+    });
+
+    testWidgets('refresh failure shows an error and retry recovers', (tester) async {
+      stubListing(listingJson(photos: [photo(1, expiresAt: '2026-11-12T10:05:00Z')]));
+      await open(tester);
+      when(() => repository.view('l1')).thenThrow(
+        const ApiError(type: ApiErrorType.network, message: 'offline'),
+      );
+      await tester.tap(find.byTooltip('Refresh photos'));
+      await tester.pumpAndSettle();
+      expect(find.byType(ListingGallery), findsNothing);
+      expect(find.text('Retry'), findsOneWidget);
+      stubListing(listingJson());
+      await tester.tap(find.text('Retry'));
+      await tester.pumpAndSettle();
+      expect(find.text('Apple Watch'), findsOneWidget);
     });
   });
 
@@ -457,9 +527,9 @@ void main() {
   group('seller profile', () {
     testWidgets('opens from the seller card and lists the seller\'s listings', (tester) async {
       await open(tester);
-      await tester.scrollUntilVisible(find.text('Asha K'), 200,
+      await tester.scrollUntilVisible(find.text('View Profile'), 200,
           scrollable: find.byType(Scrollable).first);
-      await tester.tap(find.text('Asha K'));
+      await tester.tap(find.text('View Profile'));
       await tester.pumpAndSettle();
 
       expect(find.text('Seller profile'), findsOneWidget);

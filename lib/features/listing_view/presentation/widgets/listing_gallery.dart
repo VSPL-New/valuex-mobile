@@ -102,21 +102,28 @@ class _ListingGalleryState extends State<ListingGallery> {
                     ),
                   ),
                 ),
+              if (widget.onRefresh != null)
+                PositionedDirectional(
+                  end: AppSpacing.sm,
+                  top: AppSpacing.sm,
+                  child: IconButton.filled(
+                    tooltip: l10n.listingViewRefreshPhotos,
+                    style: IconButton.styleFrom(
+                      backgroundColor: AppColors.brandSurface,
+                      foregroundColor: AppColors.brandLink,
+                      minimumSize: const Size(
+                        AppSizes.minTouchTarget,
+                        AppSizes.minTouchTarget,
+                      ),
+                    ),
+                    onPressed: widget.onRefresh,
+                    icon: const Icon(Icons.refresh_rounded),
+                  ),
+                ),
             ],
           ),
         ),
         if (photos.length > 1) _thumbnails(l10n, photos),
-        if (widget.onRefresh != null)
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                minimumSize: const Size(AppSizes.minTouchTarget, AppSizes.minTouchTarget),
-              ),
-              onPressed: widget.onRefresh,
-              child: Text(l10n.listingViewRefreshPhotos, style: AppTextStyles.link),
-            ),
-          ),
       ],
     );
   }

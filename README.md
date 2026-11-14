@@ -91,6 +91,33 @@ Swagger UI (dev profile): `http://localhost:8080/swagger-ui.html`.
 
 Android note: cleartext HTTP is allowed in debug and profile builds only (needed for `10.0.2.2`). Release builds must use HTTPS. iOS allows local-network HTTP through `NSAllowsLocalNetworking`.
 
+## Listing details
+
+The buyer's Listing details page hides the category breadcrumb and uses white, rounded
+Description, Item Details and Seller cards on the brand background. The seller card shows
+an initial avatar, the actual rating (or "No ratings yet") and View Profile. No sales count
+is shown until the backend supplies one.
+
+The refresh icon sits on the main photo when signed links can expire; it reloads the public
+listing, and a failed refresh shows the standard error with Retry. Swipe, thumbnails and
+tap-to-zoom remain available.
+
+Listings now save the selected Home location's area separately as `locationArea`; the public
+response exposes it as `seller.area`. The heading shows **Area, City**, falling back to City
+for older listings. Deploy the backend migration `V30__listing_area.sql` with this change.
+Neither coordinates nor pincode are sent. Editing without a known Home location preserves
+the listing's stored area and city; choosing a city without an area clears the previous area.
+
+Manual checks:
+1. Choose an area on Home, create or edit a listing, then open it as a buyer after publication.
+   Confirm Area, City appears and no L1/L2/L3 breadcrumb is visible.
+2. Check an older city-only listing and a seller without ratings; no fabricated area or sales
+   count should appear.
+3. Swipe photos, select a thumbnail, open/close zoom, and use the on-photo refresh icon on a
+   listing with expiring photo URLs. Repeat offline and confirm Retry recovers after reconnecting.
+4. Open View Profile. Check Description and Item Details cards with long content, at 320 px
+   width and 200% text size, in English and Hindi.
+
 ## Profile Hub (US-103)
 
 The Profile tab is the account menu. It reads `GET /users/me/menu-summary` on every visit (and on

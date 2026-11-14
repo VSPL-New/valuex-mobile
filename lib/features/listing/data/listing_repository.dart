@@ -198,7 +198,7 @@ class ListingRepository {
       );
 
   /// Saves the item details of a draft (US-114, US-006): the common fields plus the values the
-  /// category asks for. Only the city is sent as the location.
+  /// category asks for. Location contains only area, city and state, never coordinates.
   Future<void> saveDetails(
     String listingId,
     ListingDetailsDraft details,

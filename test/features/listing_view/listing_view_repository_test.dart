@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:valuex_mobile/features/listing/domain/existing_listing.dart';
 import 'package:valuex_mobile/features/listing_view/data/listing_view_repository.dart';
 import 'package:valuex_mobile/features/listing_view/domain/public_listing.dart';
 import 'package:valuex_mobile/features/search/domain/search_page.dart';
@@ -7,6 +8,32 @@ import 'package:valuex_mobile/features/search/domain/search_page.dart';
 import '../../helpers/mocks.dart';
 
 void main() {
+  test('owner response preserves the saved area for later edits', () {
+    final listing = ExistingListing.fromJson({
+      'listingId': 'l1',
+      'location': 'Pune',
+      'locationArea': 'Baner',
+    });
+    expect(listing.city, 'Pune');
+    expect(listing.draft.locationArea, 'Baner');
+  });
+
+  group('public location label', () {
+    for (final (area, city, expected) in [
+      (' Whitefield ', ' Bengaluru ', 'Whitefield, Bengaluru'),
+      (null, 'Bengaluru', 'Bengaluru'),
+      ('  ', 'Bengaluru', 'Bengaluru'),
+      ('bengaluru', 'Bengaluru', 'Bengaluru'),
+      ('Whitefield', '', 'Whitefield'),
+      (null, '', ''),
+    ]) {
+      test('formats area=$area city=$city', () {
+        final seller = ListingSeller.fromJson({'area': area, 'city': city});
+        expect(seller.locationLabel, expected);
+      });
+    }
+  });
+
   late MockApiClient client;
   late ListingViewRepository repository;
 

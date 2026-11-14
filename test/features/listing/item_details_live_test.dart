@@ -8,6 +8,7 @@ import 'package:valuex_mobile/core/network/api_error.dart';
 import 'package:valuex_mobile/core/routing/app_router.dart';
 import 'package:valuex_mobile/core/routing/route_names.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
+import 'package:valuex_mobile/features/home/domain/entities/home_location.dart';
 import 'package:valuex_mobile/features/home/presentation/providers/home_providers.dart';
 import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
 import 'package:valuex_mobile/features/listing/data/photo_source.dart';
@@ -34,8 +35,12 @@ class _MockRepository extends Mock implements ListingRepository {}
 class _MockNotifications extends Mock implements NotificationsRepository {}
 
 class _FakeLocation extends HomeLocationController {
+  final HomeLocationState location;
+
+  _FakeLocation([this.location = const LocationNeeded(LocationNeed.notAsked)]);
+
   @override
-  Future<HomeLocationState> build() async => const LocationNeeded(LocationNeed.notAsked);
+  Future<HomeLocationState> build() async => location;
 }
 
 class _FakeDraft extends Fake implements ListingDetailsDraft {}
@@ -78,7 +83,7 @@ const _confirmation = ApiError(
 ExistingListing _existing({String status = 'PUBLISHED', int photos = 2}) => ExistingListing(
       listingId: 'l1',
       status: status,
-      draft: complete,
+      draft: complete.copyWith(locationArea: 'Baner'),
       category: const CategoryRef(
         code: 'CAT-1',
         name: 'Android Phones',
@@ -188,14 +193,17 @@ void main() {
           )).thenAnswer((_) async {});
     }
 
-    Future<void> open(WidgetTester tester, {ExistingListing? existing}) async {
+    Future<void> open(WidgetTester tester,
+        {ExistingListing? existing, HomeLocationState? location}) async {
       final notifications = _MockNotifications();
       when(notifications.unreadCount).thenAnswer((_) async => 0);
       harness = AppHarness(tester, extraOverrides: [
         notificationsRepositoryProvider.overrideWithValue(notifications),
         listingRepositoryProvider.overrideWithValue(repository),
         photoSourceProvider.overrideWithValue(source),
-        homeLocationControllerProvider.overrideWith(_FakeLocation.new),
+        homeLocationControllerProvider.overrideWith(
+          () => _FakeLocation(location ?? const LocationNeeded(LocationNeed.notAsked)),
+        ),
       ])
         ..signedInAs(AccountStatus.active, aadhaarVerified: true);
       await harness.launch(location: RouteNames.home);
@@ -310,15 +318,32 @@ void main() {
       await tester.tap(saveButton);
       await harness.settle();
 
-      verify(() => repository.editLiveListing('l1', any(), any(),
+      final draft = verify(() => repository.editLiveListing('l1', captureAny(), any(),
           city: 'Pune',
           addMediaIds: const <String>[],
           removeImageIds: const <String>[],
-          confirmRemoderation: false)).called(1);
+          confirmRemoderation: false)).captured.single as ListingDetailsDraft;
+      expect(draft.locationArea, 'Baner');
       expect(find.byType(ItemDetailsScreen), findsNothing);
       expect(find.text('Changes saved'), findsOneWidget);
       await harness.dispose();
     });
+
+    for (final area in ['Kothrud', null]) {
+      testWidgets('live edit uses the selected area $area, not the stored area', (tester) async {
+        await open(tester, location: LocationKnown(HomeLocation(city: 'Pune', area: area)));
+        await tester.tap(saveButton);
+        await harness.settle();
+
+        final draft = verify(() => repository.editLiveListing('l1', captureAny(), any(),
+            city: 'Pune',
+            addMediaIds: const <String>[],
+            removeImageIds: const <String>[],
+            confirmRemoderation: false)).captured.single as ListingDetailsDraft;
+        expect(draft.toJson(phoneSchema)['locationArea'], area ?? '');
+        await harness.dispose();
+      });
+    }
 
     testWidgets('a major edit asks first with every reason, and nothing is saved until confirmed',
         (tester) async {
