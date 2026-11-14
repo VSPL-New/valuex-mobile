@@ -111,6 +111,8 @@ class _Action extends StatelessWidget {
         : l10n.listingViewComingSoon;
     // An action the server offers has no flow behind it yet, so it only reports that.
     final onPressed = capability.available ? onUnbuilt : null;
+    // Disabled buttons stay quiet on screen; the reason is only spoken, except for your own listing.
+    final showStatus = onPressed == null && capability.reason == CapabilityReason.ownListing;
     return Semantics(
       container: true,
       enabled: onPressed != null,
@@ -121,7 +123,7 @@ class _Action extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           builder(label, onPressed),
-          if (onPressed == null)
+          if (showStatus)
             Padding(
               padding: const EdgeInsets.only(top: AppSpacing.xs),
               child: Text(
