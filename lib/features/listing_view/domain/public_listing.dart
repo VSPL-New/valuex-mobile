@@ -112,6 +112,7 @@ class ListingSeller {
   final double? rating;
   final int ratingCount;
   final String city;
+  final String? area;
   final DateTime? joinedAt;
   final int otherListingsCount;
 
@@ -121,6 +122,7 @@ class ListingSeller {
     this.rating,
     this.ratingCount = 0,
     this.city = '',
+    this.area,
     this.joinedAt,
     this.otherListingsCount = 0,
   });
@@ -131,9 +133,18 @@ class ListingSeller {
         rating: (json['rating'] as num?)?.toDouble(),
         ratingCount: (json['ratingCount'] as num?)?.toInt() ?? 0,
         city: json['city'] as String? ?? '',
+        area: json['area'] as String?,
         joinedAt: DateTime.tryParse(json['joinedAt'] as String? ?? ''),
         otherListingsCount: (json['otherListingsCount'] as num?)?.toInt() ?? 0,
       );
+
+  String get locationLabel {
+    final locality = area?.trim() ?? '';
+    final cityName = city.trim();
+    return locality.isEmpty || locality.toLowerCase() == cityName.toLowerCase()
+        ? cityName
+        : [locality, if (cityName.isNotEmpty) cityName].join(', ');
+  }
 }
 
 class CategoryStep {

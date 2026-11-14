@@ -2097,7 +2097,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get listingViewDescription => 'Description';
 
   @override
-  String get listingViewRefreshPhotos => 'Photos not loading? Refresh';
+  String get listingViewRefreshPhotos => 'Refresh photos';
 
   @override
   String listingViewShowPhoto(int index) {
@@ -2139,7 +2139,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get listingViewViewSeller => 'View seller profile';
+  String get listingViewViewSeller => 'View Profile';
 
   @override
   String get listingViewComingSoon => 'Coming soon';

@@ -2089,7 +2089,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get listingViewDescription => 'विवरण';
 
   @override
-  String get listingViewRefreshPhotos => 'फ़ोटो लोड नहीं हो रहीं? रिफ़्रेश करें';
+  String get listingViewRefreshPhotos => 'फ़ोटो रिफ़्रेश करें';
 
   @override
   String listingViewShowPhoto(int index) {
@@ -2131,7 +2131,7 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get listingViewViewSeller => 'विक्रेता प्रोफ़ाइल देखें';
+  String get listingViewViewSeller => 'प्रोफ़ाइल देखें';
 
   @override
   String get listingViewComingSoon => 'जल्द आ रहा है';

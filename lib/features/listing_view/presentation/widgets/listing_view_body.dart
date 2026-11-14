@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
@@ -35,7 +34,10 @@ class ListingViewBody extends StatelessWidget {
         if (listing.description.isNotEmpty)
           _Section(
             title: l10n.listingViewDescription,
-            child: Text(listing.description, style: AppTextStyles.body),
+            child: Text(
+              listing.description,
+              style: AppTextStyles.bodySecondary.copyWith(height: 1.7),
+            ),
           ),
         if (listing.attributes.isNotEmpty)
           _Section(
@@ -59,7 +61,6 @@ class _Summary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final path = listing.category.map((step) => step.name).join(' > ');
     final price = listing.price;
     final days = listing.ageInDays;
     final intent = _intentLabel(l10n, listing.transactionIntent);
@@ -70,8 +71,6 @@ class _Summary extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (path.isNotEmpty) Text(path, style: AppTextStyles.hint),
-          const SizedBox(height: AppSpacing.xs),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -112,8 +111,8 @@ class _Summary extends StatelessWidget {
             spacing: AppSpacing.md,
             runSpacing: AppSpacing.xs,
             children: [
-              if (listing.seller.city.isNotEmpty)
-                _IconText(icon: Icons.place_outlined, text: listing.seller.city),
+              if (listing.seller.locationLabel.isNotEmpty)
+                _IconText(icon: Icons.place_outlined, text: listing.seller.locationLabel),
               if (days != null)
                 _IconText(icon: Icons.schedule_rounded, text: l10n.listingViewPosted(days)),
             ],
@@ -157,13 +156,28 @@ class _Section extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding:
-          const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.md, AppSpacing.lg, AppSpacing.md),
+    return Container(
+      margin: const EdgeInsets.fromLTRB(AppSpacing.md, 0, AppSpacing.md, AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: AppColors.brandSurface,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        border: Border.all(color: AppColors.brandBorder),
+        boxShadow: const [
+          BoxShadow(
+            color: AppColors.brandBorder,
+            blurRadius: AppSpacing.sm,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Semantics(header: true, child: Text(title, style: AppTextStyles.sectionTitle)),
+          Semantics(
+            header: true,
+            child: Text(title.toUpperCase(), style: AppTextStyles.label),
+          ),
           const SizedBox(height: AppSpacing.sm),
           child,
         ],
@@ -222,59 +236,81 @@ class _SellerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final locale = Localizations.localeOf(context).toString();
-    final joined = seller.joinedAt;
     final rating = seller.rating;
+    final name = seller.displayName.trim();
+    final profileLink = TextButton(
+      style: TextButton.styleFrom(
+        minimumSize: const Size(AppSizes.minTouchTarget, AppSizes.minTouchTarget),
+        foregroundColor: AppColors.brandLink,
+      ),
+      onPressed: onOpen,
+      child: Text(l10n.listingViewViewSeller, style: AppTextStyles.linkSmall),
+    );
     return _Section(
       title: l10n.listingViewSeller,
-      child: Semantics(
-        button: true,
-        label: '${seller.displayName}. ${l10n.listingViewViewSeller}',
-        excludeSemantics: true,
-        child: InkWell(
-          onTap: onOpen,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: AppSizes.minTouchTarget),
-            child: Row(
-              children: [
-                const ExcludeSemantics(
-                  child: CircleAvatar(
-                    backgroundColor: AppColors.brandMuted,
-                    child: Icon(Icons.person_outline_rounded, color: AppColors.brandForeground),
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(seller.displayName, style: AppTextStyles.body),
-                      Text(
-                        rating == null
-                            ? l10n.listingViewNoRating
-                            : l10n.listingViewRating(rating.toStringAsFixed(1), seller.ratingCount),
-                        style: AppTextStyles.hint,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final stacked =
+              constraints.maxWidth < 280 || MediaQuery.textScalerOf(context).scale(14) > 20;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ExcludeSemantics(
+                    child: Container(
+                      width: AppSizes.minTouchTarget,
+                      height: AppSizes.minTouchTarget,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColors.brandSurfaceTint,
+                        borderRadius: BorderRadius.circular(AppRadius.xl),
+                        border: Border.all(color: AppColors.brandBorder),
                       ),
-                      if (seller.city.isNotEmpty) Text(seller.city, style: AppTextStyles.hint),
-                      if (joined != null)
-                        Text(
-                          l10n.listingViewSellerJoined(DateFormat.yMMM(locale).format(joined)),
-                          style: AppTextStyles.hint,
-                        ),
-                      Text(
-                        l10n.listingViewOtherListings(seller.otherListingsCount),
-                        style: AppTextStyles.hint,
-                      ),
-                    ],
+                      child: name.isEmpty
+                          ? const Icon(Icons.person_outline_rounded)
+                          : Text(name.characters.first.toUpperCase(), style: AppTextStyles.body),
+                    ),
                   ),
-                ),
-                const ExcludeSemantics(
-                  child: Icon(Icons.chevron_right_rounded, color: AppColors.brandMutedText),
-                ),
-              ],
-            ),
-          ),
-        ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(seller.displayName, style: AppTextStyles.cardTitle),
+                        const SizedBox(height: AppSpacing.xs),
+                        if (rating == null)
+                          Text(l10n.listingViewNoRating, style: AppTextStyles.hint)
+                        else
+                          Semantics(
+                            label: l10n.listingViewRating(
+                              rating.toStringAsFixed(1),
+                              seller.ratingCount,
+                            ),
+                            excludeSemantics: true,
+                            child: Row(
+                              children: [
+                                const Icon(Icons.star_rounded,
+                                    size: 16, color: AppColors.sellSparkle),
+                                const SizedBox(width: AppSpacing.xs),
+                                Flexible(
+                                  child: Text(rating.toStringAsFixed(1),
+                                      style: AppTextStyles.cardTitle),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  if (!stacked) profileLink,
+                ],
+              ),
+              if (stacked) Align(alignment: AlignmentDirectional.centerEnd, child: profileLink),
+            ],
+          );
+        },
       ),
     );
   }

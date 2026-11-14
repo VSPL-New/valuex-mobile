@@ -302,9 +302,14 @@ class ItemDetailsController extends Notifier<ItemDetailsState> {
     final schema = state.schema;
     if (schema == null || !state.canContinue) return (saved: false, error: null);
     state = state.copyWith(isSaving: true);
-    final draft = state.draft.copyWith(locationState: _state());
+    final draft = state.draft.copyWith(locationState: _state(), locationArea: _area());
     try {
-      await _repository.saveDetails(args.listingId, draft, schema, city: _city());
+      await _repository.saveDetails(
+        args.listingId,
+        draft,
+        schema,
+        city: _city() ?? args.existing?.city,
+      );
       await _sendFeedback(draft);
       return (saved: true, error: null);
     } on ApiError catch (error) {
@@ -328,7 +333,7 @@ class ItemDetailsController extends Notifier<ItemDetailsState> {
     try {
       await _repository.editLiveListing(
         args.listingId,
-        state.draft.copyWith(locationState: _state()),
+        state.draft.copyWith(locationState: _state(), locationArea: _area()),
         schema,
         // Keeps the stored city when the place chosen on Home is not known.
         city: _city() ?? args.existing?.city,
@@ -390,7 +395,7 @@ class ItemDetailsController extends Notifier<ItemDetailsState> {
     return fitted;
   }
 
-  /// Only the city and state of the place chosen on Home are sent; never coordinates.
+  /// Only the area, city and state of the place chosen on Home are sent; never coordinates.
   String? _city() {
     final location = ref.read(homeLocationControllerProvider).value;
     return location is LocationKnown ? location.location.city : null;
@@ -399,6 +404,11 @@ class ItemDetailsController extends Notifier<ItemDetailsState> {
   String? _state() {
     final location = ref.read(homeLocationControllerProvider).value;
     return location is LocationKnown ? location.location.state : null;
+  }
+
+  String? _area() {
+    final location = ref.read(homeLocationControllerProvider).value;
+    return location is LocationKnown ? location.location.area ?? '' : null;
   }
 
   Future<void> _sendFeedback(ListingDetailsDraft draft) async {

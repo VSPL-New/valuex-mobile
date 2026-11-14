@@ -69,6 +69,7 @@ class ListingDetailsDraft {
   /// The state of the place chosen on Home (US-120), so search can favour nearby listings. Set when
   /// saving; never typed by the seller.
   final String? locationState;
+  final String? locationArea;
 
   const ListingDetailsDraft({
     this.title = '',
@@ -81,6 +82,7 @@ class ListingDetailsDraft {
     this.quantity = '1',
     this.attributes = const {},
     this.locationState,
+    this.locationArea,
   });
 
   ListingDetailsDraft copyWith({
@@ -94,6 +96,7 @@ class ListingDetailsDraft {
     String? quantity,
     Map<String, Object?>? attributes,
     String? locationState,
+    String? locationArea,
   }) {
     return ListingDetailsDraft(
       title: title ?? this.title,
@@ -106,6 +109,7 @@ class ListingDetailsDraft {
       quantity: quantity ?? this.quantity,
       attributes: attributes ?? this.attributes,
       locationState: locationState ?? this.locationState,
+      locationArea: locationArea ?? this.locationArea,
     );
   }
 
@@ -189,6 +193,7 @@ class ListingDetailsDraft {
       if (common.quantityVisible) 'quantity': parsedQuantity,
       'attributes': attributePayload(schema),
       'location': city,
+      if (locationArea != null) 'locationArea': locationArea!.trim(),
       if (locationState != null && locationState!.trim().isNotEmpty)
         'locationState': locationState!.trim(),
     };

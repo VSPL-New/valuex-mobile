@@ -3738,7 +3738,7 @@ abstract class AppLocalizations {
   /// No description provided for @listingViewRefreshPhotos.
   ///
   /// In en, this message translates to:
-  /// **'Photos not loading? Refresh'**
+  /// **'Refresh photos'**
   String get listingViewRefreshPhotos;
 
   /// No description provided for @listingViewShowPhoto.
@@ -3780,7 +3780,7 @@ abstract class AppLocalizations {
   /// No description provided for @listingViewViewSeller.
   ///
   /// In en, this message translates to:
-  /// **'View seller profile'**
+  /// **'View Profile'**
   String get listingViewViewSeller;
 
   /// No description provided for @listingViewComingSoon.

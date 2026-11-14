@@ -53,6 +53,7 @@ class ExistingListing {
           ListingImageRef.fromJson(image as Map<String, dynamic>),
       ],
       draft: ListingDetailsDraft(
+        locationArea: json['locationArea'] as String?,
         title: json['title'] as String? ?? '',
         categoryCode: categoryRef?.code,
         condition: ListingCondition.fromApi(json['condition'] as String?),
