@@ -223,6 +223,7 @@ void main() {
       RouteNames.changeEmail,
       RouteNames.notifications,
       RouteNames.search,
+      RouteNames.savedSearches,
     ];
 
     test('signed-out users are sent to Sign In', () {

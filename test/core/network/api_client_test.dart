@@ -113,6 +113,38 @@ void main() {
 
       expect(error.type, ApiErrorType.server);
     });
+
+    test('postWithStatus returns the parsed data and the HTTP status', () async {
+      final adapter = FakeHttpAdapter((options) async {
+        return options.path == '/created'
+            ? FakeHttpAdapter.json(201, {
+                'success': true,
+                'data': {'id': 'n'},
+              })
+            : FakeHttpAdapter.ok({'id': 'old'});
+      });
+      final client = _client(FakeSecureStorage(), adapter);
+      String id(Object? data) => (data! as Map<String, dynamic>)['id'] as String;
+
+      final created = await client.postWithStatus<String>('/created', data: {'a': 1}, parse: id);
+      final existing = await client.postWithStatus<String>('/existing', parse: id);
+
+      expect(created, ('n', 201));
+      expect(existing, ('old', 200));
+      expect(adapter.requests.first.data, {'a': 1});
+    });
+
+    test('postWithStatus throws the typed error of a refused request', () async {
+      final adapter = FakeHttpAdapter(
+        (_) async => FakeHttpAdapter.error(409, 'ERROR_MAX_SAVED_SEARCHES', 'Maximum 10'),
+      );
+      final client = _client(FakeSecureStorage(), adapter);
+
+      final error = await _expectError(client.postWithStatus<Object?>('/x'));
+
+      expect(error.code, 'ERROR_MAX_SAVED_SEARCHES');
+      expect(error.statusCode, 409);
+    });
   });
 
   group('headers', () {

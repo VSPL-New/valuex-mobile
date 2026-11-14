@@ -35,6 +35,11 @@ NotificationTarget? notificationTargetFor(String? deepLink) {
   final path = uri.path.length > 1 && uri.path.endsWith('/')
       ? uri.path.substring(0, uri.path.length - 1)
       : uri.path;
+  if (path == RouteNames.savedSearches) {
+    // The daily saved-search alert (US-066): opens that search's results.
+    final id = uri.queryParameters['id'];
+    return id == null || id.isEmpty ? null : NotificationTarget(RouteNames.savedSearch(id));
+  }
   final listingRoute = _listingRoutes[path];
   if (listingRoute != null) {
     final listingId = uri.queryParameters['listingId'];

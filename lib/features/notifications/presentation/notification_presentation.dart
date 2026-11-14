@@ -29,6 +29,7 @@ IconData notificationIcon(AppNotification notification) {
     'LISTING_PAYMENT_FAILED' => Icons.credit_card_off_outlined,
     'LISTING_EXPIRED' => Icons.timer_off_outlined,
     'LISTING_REMOVED_BY_ADMIN' => Icons.remove_circle_outline,
+    'SAVED_SEARCH_MATCHES' => Icons.notifications_active_outlined,
     _ => switch (notification.category) {
         NotificationCategory.account => Icons.person_outline,
         NotificationCategory.orders => Icons.inventory_2_outlined,

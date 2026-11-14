@@ -37,6 +37,8 @@ import '../../features/listing/presentation/providers/item_details_controller.da
 import '../../features/listing_view/presentation/listing_view_screen.dart';
 import '../../features/listing_view/presentation/seller_profile_screen.dart';
 import '../../features/profile/presentation/profile_details_screen.dart';
+import '../../features/saved_searches/presentation/saved_search_results_screen.dart';
+import '../../features/saved_searches/presentation/saved_searches_screen.dart';
 import '../../features/search/presentation/category_browse_screen.dart';
 import '../../features/search/presentation/search_routes.dart';
 import '../../features/search/presentation/search_screen.dart';
@@ -228,6 +230,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             parentLevel: int.tryParse(params['level'] ?? ''),
             realEstate: params['realEstate'] == 'true',
           );
+        },
+      ),
+      GoRoute(
+        path: RouteNames.savedSearches,
+        name: 'savedSearches',
+        // With an id (an alert or a tap on a card) it opens that search's results; without, the list.
+        builder: (context, state) {
+          final id = state.uri.queryParameters['id'];
+          return id == null || id.isEmpty
+              ? const SavedSearchesScreen()
+              : SavedSearchResultsScreen(savedSearchId: id);
         },
       ),
       GoRoute(

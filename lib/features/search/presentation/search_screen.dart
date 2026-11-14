@@ -12,6 +12,7 @@ import '../../home/presentation/main_nav.dart';
 import '../../auth/presentation/providers/session_controller.dart';
 import '../../auth/presentation/providers/session_state.dart';
 import '../../listing/domain/category.dart';
+import '../../saved_searches/presentation/widgets/save_search_button.dart';
 import '../domain/search_criteria.dart';
 import '../domain/search_suggestion.dart';
 import '../../voice_search/presentation/widgets/voice_listening_sheet.dart';
@@ -222,6 +223,24 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   onPressed: _askIntent,
                   icon: const Icon(Icons.swap_horiz_rounded),
                   label: Text(l10n.searchIntentChange(intentLabel(l10n, criteria.intent!))),
+                ),
+              ),
+            if (signedIn && !browsing)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+                child: Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    SaveSearchButton(criteria: criteria),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(AppSizes.minTouchTarget, AppSizes.minTouchTarget),
+                      ),
+                      onPressed: () => context.push(RouteNames.savedSearches),
+                      child: Text(l10n.savedSearchesTitle),
+                    ),
+                  ],
                 ),
               ),
             Expanded(
