@@ -29,7 +29,6 @@ import '../../features/listing/domain/plan_selection.dart';
 import '../../features/listing/presentation/create_listing_screen.dart';
 import '../../features/listing/presentation/item_details_screen.dart';
 import '../../features/listing/presentation/listing_plan_screen.dart';
-import '../../features/listing/presentation/listing_preview_screen.dart';
 import '../../features/listing/presentation/listing_submitted_screen.dart';
 import '../../features/listing/presentation/my_listings_screen.dart';
 import '../../features/listing/presentation/review_listing_screen.dart';
@@ -101,13 +100,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
         ],
-      ),
-      GoRoute(
-        path: RouteNames.listingPreviewPattern,
-        name: 'listingPreview',
-        // Top level, so a fresh open loads the listing by id without building Profile underneath.
-        builder: (context, state) =>
-            ListingPreviewScreen(listingId: state.pathParameters['listingId']!),
       ),
       GoRoute(
         path: RouteNames.listingViewPattern,

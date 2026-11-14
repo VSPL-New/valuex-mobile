@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/routing/route_names.dart';
@@ -7,6 +9,7 @@ import '../../../core/theme/text_styles.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/brand_gradient_button.dart';
 import '../../../l10n/app_localizations.dart';
+import 'listing_preview_screen.dart';
 
 /// Shown once the plan is paid (or costs nothing) and the listing has gone to the Trust & Safety review.
 /// It never says the listing is live: it goes live by itself when the review approves it.
@@ -15,7 +18,7 @@ class ListingSubmittedScreen extends StatelessWidget {
 
   const ListingSubmittedScreen({super.key, required this.listingId});
 
-  void _preview(BuildContext context) => context.push(RouteNames.listingPreview(listingId));
+  void _preview(BuildContext context) => unawaited(showListingPreview(context, listingId));
 
   @override
   Widget build(BuildContext context) {
