@@ -12,6 +12,7 @@ extension SearchListingCard on SearchListing {
         title: title,
         priceInr: price,
         city: city,
+        area: area,
         sellerRating: sellerRating,
         condition: switch (condition) {
           'NEW' => ListingCondition.newItem,

@@ -31,6 +31,14 @@ class Formatters {
     return '******$last4';
   }
 
+  static String location({required String city, String? area}) {
+    final locality = area?.trim() ?? '';
+    final cityName = city.trim();
+    return locality.isEmpty || locality.toLowerCase() == cityName.toLowerCase()
+        ? cityName
+        : [locality, if (cityName.isNotEmpty) cityName].join(', ');
+  }
+
   static String emailMasked(String email) {
     final parts = email.split('@');
     if (parts.length != 2) return email;

@@ -8,11 +8,13 @@ import '../theme/text_styles.dart';
 class SingleToneButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
+  final IconData? leadingIcon;
 
   const SingleToneButton({
     super.key,
     required this.label,
     required this.onPressed,
+    this.leadingIcon,
   });
 
   @override
@@ -37,12 +39,23 @@ class SingleToneButton extends StatelessWidget {
                 vertical: AppSpacing.sm,
               ),
               child: Center(
-                child: Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.button.copyWith(
-                    color: AppColors.brandForeground,
-                  ),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: AppSpacing.xs,
+                  children: [
+                    if (leadingIcon != null)
+                      ExcludeSemantics(
+                        child: Icon(leadingIcon, size: 16, color: AppColors.brandForeground),
+                      ),
+                    Text(
+                      label,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.button.copyWith(
+                        color: AppColors.brandForeground,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

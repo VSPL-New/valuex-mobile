@@ -30,6 +30,8 @@ void main() {
     'error text on white': (AppColors.brandError, AppColors.brandSurface),
     'error text on the input fill': (AppColors.brandError, AppColors.brandSurfaceTint),
     'card price on white': (AppColors.brandLink, AppColors.brandSurface),
+    'listing price on the page': (AppColors.brandPrimary, AppColors.brandBackground),
+    'photo count on its dark pill': (AppColors.brandOnPrimary, AppColors.brandMutedText),
     'condition chip on its tint': (AppColors.brandForeground, AppColors.brandSurfaceTint),
     'selected chip text on its blue tint': (AppColors.brandLink, AppColors.brandSurfaceTint),
     'selected condition text on its green tint': (
@@ -55,6 +57,9 @@ void main() {
     'control border on white': (AppColors.brandControlBorder, AppColors.brandSurface),
     'control border on the page': (AppColors.brandControlBorder, AppColors.brandBackground),
     'control border on input fill': (AppColors.brandControlBorder, AppColors.brandSurfaceTint),
+    'detail icon on white': (AppColors.brandAccent, AppColors.brandSurface),
+    'detail icon on alternating row': (AppColors.brandAccent, AppColors.brandBackground),
+    'section icon on its tint': (AppColors.brandPrimary, AppColors.brandSurfaceTint),
   };
 
   graphicPairs.forEach((name, pair) {

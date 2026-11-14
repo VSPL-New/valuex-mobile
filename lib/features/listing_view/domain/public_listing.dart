@@ -1,3 +1,5 @@
+import '../../../core/utils/formatters.dart';
+
 /// How an action behaves for this listing, as the server decides (US-012).
 enum CapabilityReason {
   comingSoon,
@@ -138,13 +140,7 @@ class ListingSeller {
         otherListingsCount: (json['otherListingsCount'] as num?)?.toInt() ?? 0,
       );
 
-  String get locationLabel {
-    final locality = area?.trim() ?? '';
-    final cityName = city.trim();
-    return locality.isEmpty || locality.toLowerCase() == cityName.toLowerCase()
-        ? cityName
-        : [locality, if (cityName.isNotEmpty) cityName].join(', ');
-  }
+  String get locationLabel => Formatters.location(city: city, area: area);
 }
 
 class CategoryStep {

@@ -5,6 +5,7 @@ import '../../../../core/theme/text_styles.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/public_listing.dart';
+import 'listing_attribute_table.dart';
 import 'listing_gallery.dart';
 
 /// Everything a buyer reads about a listing, top to bottom. It shows only what the server sent.
@@ -34,16 +35,45 @@ class ListingViewBody extends StatelessWidget {
         if (listing.description.isNotEmpty)
           _Section(
             title: l10n.listingViewDescription,
+            icon: Icons.notes_rounded,
             child: Text(
               listing.description,
               style: AppTextStyles.bodySecondary.copyWith(height: 1.7),
             ),
           ),
-        if (listing.attributes.isNotEmpty)
+        if (listing.attributes.isNotEmpty || (listing.conditionNotes?.trim().isNotEmpty ?? false))
           _Section(
             title: l10n.previewItemDetails,
+            icon: Icons.grid_view_rounded,
             child: Column(
-              children: [for (final attribute in listing.attributes) _AttributeRow(attribute)],
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (listing.attributes.isNotEmpty)
+                  ListingAttributeTable(attributes: listing.attributes),
+                if (listing.conditionNotes?.trim().isNotEmpty ?? false) ...[
+                  if (listing.attributes.isNotEmpty)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
+                      child: Divider(height: 1, color: AppColors.brandBorder),
+                    ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const ExcludeSemantics(
+                        child:
+                            Icon(Icons.info_outline_rounded, size: 16, color: AppColors.brandLink),
+                      ),
+                      const SizedBox(width: AppSpacing.xs),
+                      Expanded(
+                        child: Text(
+                          '${l10n.previewConditionNotes}: ${listing.conditionNotes!.trim()}',
+                          style: AppTextStyles.bodySecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ],
             ),
           ),
         _SellerCard(seller: listing.seller, onOpen: onOpenSeller),
@@ -71,20 +101,26 @@ class _Summary extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Semantics(
-                  header: true,
-                  child: Text(listing.title, style: AppTextStyles.heading2),
-                ),
-              ),
-              if (condition != null) ...[
-                const SizedBox(width: AppSpacing.sm),
-                _Chip(text: condition),
+          if (condition != null || (price != null && listing.negotiable) || intent != null) ...[
+            Wrap(
+              spacing: AppSpacing.sm,
+              runSpacing: AppSpacing.sm,
+              children: [
+                if (condition != null)
+                  _Chip(
+                    text: condition.toUpperCase(),
+                    condition:
+                        listing.conditionCode == 'NEW' || listing.conditionCode == 'LIKE_NEW',
+                  ),
+                if (price != null && listing.negotiable) _Chip(text: l10n.previewNegotiable),
+                if (intent != null) _Chip(text: intent),
               ],
-            ],
+            ),
+            const SizedBox(height: AppSpacing.sm),
+          ],
+          Semantics(
+            header: true,
+            child: Text(listing.title, style: AppTextStyles.heading2),
           ),
           if (price != null) ...[
             const SizedBox(height: AppSpacing.xs),
@@ -96,15 +132,12 @@ class _Summary extends StatelessWidget {
                   listing.startingFrom
                       ? l10n.listingViewStartingFrom(Formatters.money(price))
                       : Formatters.money(price),
-                  style: AppTextStyles.heading2.copyWith(color: AppColors.brandLink),
+                  style: AppTextStyles.heading2.copyWith(color: AppColors.brandPrimary),
                 ),
-                if (listing.negotiable) Text(l10n.previewNegotiable, style: AppTextStyles.hint),
+                if (!listing.startingFrom)
+                  Text(l10n.listingViewAskingPrice, style: AppTextStyles.hint),
               ],
             ),
-          ],
-          if (intent != null) ...[
-            const SizedBox(height: AppSpacing.sm),
-            Align(alignment: AlignmentDirectional.centerStart, child: _Chip(text: intent)),
           ],
           const SizedBox(height: AppSpacing.sm),
           Wrap(
@@ -117,13 +150,6 @@ class _Summary extends StatelessWidget {
                 _IconText(icon: Icons.schedule_rounded, text: l10n.listingViewPosted(days)),
             ],
           ),
-          if (listing.conditionNotes != null && listing.conditionNotes!.isNotEmpty) ...[
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              '${l10n.previewConditionNotes}: ${listing.conditionNotes}',
-              style: AppTextStyles.bodySecondary,
-            ),
-          ],
         ],
       ),
     );
@@ -151,8 +177,9 @@ class _Summary extends StatelessWidget {
 class _Section extends StatelessWidget {
   final String title;
   final Widget child;
+  final IconData? icon;
 
-  const _Section({required this.title, required this.child});
+  const _Section({required this.title, required this.child, this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +203,34 @@ class _Section extends StatelessWidget {
         children: [
           Semantics(
             header: true,
-            child: Text(title.toUpperCase(), style: AppTextStyles.label),
+            child: Row(
+              children: [
+                if (icon != null) ...[
+                  ExcludeSemantics(
+                    child: Container(
+                      width: AppSpacing.xl,
+                      height: AppSpacing.xl,
+                      decoration: BoxDecoration(
+                        color: AppColors.brandSurfaceTint,
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                      ),
+                      child: Icon(icon, size: 18, color: AppColors.brandPrimary),
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                ],
+                Expanded(
+                  child: Text(
+                    title.toUpperCase(),
+                    style: AppTextStyles.label.copyWith(
+                      color: AppColors.brandLink,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: AppSpacing.sm),
           child,
@@ -184,47 +238,6 @@ class _Section extends StatelessWidget {
       ),
     );
   }
-}
-
-class _AttributeRow extends StatelessWidget {
-  final ListingAttribute attribute;
-
-  const _AttributeRow(this.attribute);
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final value = formatAttributeValue(l10n, attribute);
-    return Semantics(
-      container: true,
-      label: '${attribute.label}: $value',
-      excludeSemantics: true,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(flex: 2, child: Text(attribute.label, style: AppTextStyles.hint)),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(flex: 3, child: Text(value, style: AppTextStyles.body)),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// The attribute's value as text: Yes/No for a boolean, a comma list for several, then its unit.
-String formatAttributeValue(AppLocalizations l10n, ListingAttribute attribute) {
-  final value = attribute.value;
-  final text = switch (value) {
-    bool flag => flag ? l10n.itemYes : l10n.itemNo,
-    List<dynamic> items => items.join(', '),
-    num number => number == number.roundToDouble() ? '${number.toInt()}' : '$number',
-    _ => '$value',
-  };
-  final unit = attribute.unit;
-  return unit == null || unit.isEmpty || value is bool ? text : '$text $unit';
 }
 
 class _SellerCard extends StatelessWidget {
@@ -244,7 +257,14 @@ class _SellerCard extends StatelessWidget {
         foregroundColor: AppColors.brandLink,
       ),
       onPressed: onOpen,
-      child: Text(l10n.listingViewViewSeller, style: AppTextStyles.linkSmall),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(child: Text(l10n.listingViewViewSeller, style: AppTextStyles.linkSmall)),
+          const SizedBox(width: AppSpacing.xs),
+          const ExcludeSemantics(child: Icon(Icons.chevron_right_rounded, size: 16)),
+        ],
+      ),
     );
     return _Section(
       title: l10n.listingViewSeller,
@@ -269,8 +289,14 @@ class _SellerCard extends StatelessWidget {
                         border: Border.all(color: AppColors.brandBorder),
                       ),
                       child: name.isEmpty
-                          ? const Icon(Icons.person_outline_rounded)
-                          : Text(name.characters.first.toUpperCase(), style: AppTextStyles.body),
+                          ? const Icon(Icons.person_outline_rounded, color: AppColors.brandLink)
+                          : Text(
+                              name.characters.first.toUpperCase(),
+                              style: AppTextStyles.body.copyWith(
+                                color: AppColors.brandLink,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                     ),
                   ),
                   const SizedBox(width: AppSpacing.sm),
@@ -318,21 +344,24 @@ class _SellerCard extends StatelessWidget {
 
 class _Chip extends StatelessWidget {
   final String text;
+  final bool condition;
 
-  const _Chip({required this.text});
+  const _Chip({required this.text, this.condition = false});
 
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: AppColors.brandSurfaceTint,
+        color: condition ? AppColors.brandSuccessTint : AppColors.brandSurfaceTint,
         borderRadius: BorderRadius.circular(AppRadius.sm),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
         child: Text(
           text,
-          style: AppTextStyles.caption.copyWith(color: AppColors.brandForeground),
+          style: AppTextStyles.caption.copyWith(
+            color: condition ? AppColors.brandSuccessText : AppColors.brandLink,
+          ),
         ),
       ),
     );
@@ -350,7 +379,7 @@ class _IconText extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ExcludeSemantics(child: Icon(icon, size: 16, color: AppColors.brandMutedText)),
+        ExcludeSemantics(child: Icon(icon, size: 16, color: AppColors.brandLink)),
         const SizedBox(width: AppSpacing.xs),
         Flexible(child: Text(text, style: AppTextStyles.hint)),
       ],

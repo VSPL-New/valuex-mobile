@@ -18,6 +18,7 @@ import 'package:valuex_mobile/features/listing_view/domain/public_listing.dart';
 import 'package:valuex_mobile/features/listing_view/presentation/listing_view_screen.dart';
 import 'package:valuex_mobile/features/listing_view/presentation/seller_profile_screen.dart';
 import 'package:valuex_mobile/features/listing_view/presentation/widgets/listing_gallery.dart';
+import 'package:valuex_mobile/features/listing_view/presentation/widgets/listing_attribute_table.dart';
 import 'package:valuex_mobile/features/search/domain/search_page.dart';
 import 'package:valuex_mobile/l10n/app_localizations.dart';
 
@@ -63,13 +64,14 @@ Map<String, dynamic> listingJson({
   String description = 'Lightly used, with the original box.',
   String title = 'Apple Watch',
   String? area,
+  String? conditionNotes = 'No scratches',
 }) =>
     {
       'listingId': 'l1',
       'title': title,
       'description': description,
       'condition': condition,
-      'conditionNotes': 'No scratches',
+      'conditionNotes': conditionNotes,
       'price': price,
       'priceQualifier': priceQualifier,
       'currency': 'INR',
@@ -206,7 +208,8 @@ void main() {
       expect(find.textContaining('Wearables'), findsNothing);
       expect(find.textContaining('Smart watches'), findsNothing);
       expect(find.text('Apple Watch'), findsOneWidget);
-      expect(find.text('Like New'), findsOneWidget);
+      expect(find.text('LIKE NEW'), findsOneWidget);
+      expect(find.text('Asking price'), findsOneWidget);
       expect(find.text('₹14,500'), findsOneWidget);
       expect(find.text('Negotiable'), findsOneWidget);
       expect(find.text('Posted 3 days ago'), findsOneWidget);
@@ -235,7 +238,13 @@ void main() {
         expect(decoration.color, AppColors.brandSurface);
         expect(decoration.boxShadow, isNotEmpty);
         expect(decoration.borderRadius, BorderRadius.circular(16));
+        expect(decoration.border, Border.all(color: AppColors.brandBorder));
+        expect(tester.widget<Text>(find.text(title)).style?.color, AppColors.brandLink);
       }
+      expect(find.byIcon(Icons.notes_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.grid_view_rounded), findsOneWidget);
+      expect(tester.getTopLeft(find.text('LIKE NEW')).dy,
+          lessThan(tester.getTopLeft(find.text('Apple Watch')).dy));
     });
 
     testWidgets('lists the schema attributes with units and Yes/No', (tester) async {
@@ -248,6 +257,25 @@ void main() {
       expect(find.text('91 %'), findsOneWidget);
       expect(find.text('Yes'), findsOneWidget);
       expect(find.text('Charger, Box'), findsOneWidget);
+      final table = find.byType(ListingAttributeTable);
+      expect(table, findsOneWidget);
+      expect(find.descendant(of: table, matching: find.byType(ColoredBox)), findsNWidgets(4));
+      final rowColors = tester
+          .widgetList<ColoredBox>(find.descendant(of: table, matching: find.byType(ColoredBox)))
+          .map((box) => box.color);
+      expect(rowColors, [
+        AppColors.brandBackground,
+        AppColors.brandSurface,
+        AppColors.brandBackground,
+        AppColors.brandSurface,
+      ]);
+      expect(tester.widget<Text>(find.text('128 GB')).style?.fontWeight, FontWeight.w600);
+      expect(tester.widget<Text>(find.text('128 GB')).textAlign, TextAlign.end);
+      expect(find.bySemanticsLabel('Battery health: 91 %'), findsOneWidget);
+      expect(tester.widget<Icon>(find.byIcon(Icons.storage_rounded)).color, AppColors.brandAccent);
+      expect(find.text('Condition notes: No scratches'), findsOneWidget);
+      expect(tester.getTopLeft(find.text('Condition notes: No scratches')).dy,
+          greaterThan(tester.getTopLeft(find.text('Accessories')).dy));
     });
 
     testWidgets('shows the seller rating when there is one', (tester) async {
@@ -290,7 +318,8 @@ void main() {
 
       expect(find.text('Starting from ₹85,00,000'), findsOneWidget);
       expect(find.text('For sale'), findsOneWidget);
-      expect(find.text('Like New'), findsNothing);
+      expect(find.text('LIKE NEW'), findsNothing);
+      expect(find.text('Asking price'), findsNothing);
       expect(find.text('Add to Cart'), findsNothing);
       expect(find.text('Buy Now'), findsNothing);
       expect(find.text('Chat'), findsOneWidget);
@@ -317,12 +346,52 @@ void main() {
     });
 
     testWidgets('empty sections stay hidden', (tester) async {
-      stubListing(listingJson(description: '', attributes: const []));
+      stubListing(listingJson(description: '', attributes: const [], conditionNotes: '  '));
       await open(tester);
       expect(find.text('DESCRIPTION'), findsNothing);
       expect(find.text('ITEM DETAILS'), findsNothing);
       expect(find.text('SELLER'), findsOneWidget);
     });
+
+    testWidgets('condition notes remain visible without schema attributes', (tester) async {
+      stubListing(listingJson(attributes: const [], conditionNotes: 'Scratched screen'));
+      await open(tester);
+      expect(find.text('ITEM DETAILS'), findsOneWidget);
+      expect(find.text('Condition notes: Scratched screen'), findsOneWidget);
+      expect(find.byType(ListingAttributeTable), findsNothing);
+    });
+
+    testWidgets('absent notes leave only the attribute table', (tester) async {
+      stubListing(listingJson(conditionNotes: null));
+      await open(tester);
+      expect(find.byType(ListingAttributeTable), findsOneWidget);
+      expect(find.textContaining('Condition notes:'), findsNothing);
+    });
+
+    testWidgets('poor condition does not receive a green positive-condition badge', (tester) async {
+      stubListing(listingJson(condition: const {'code': 'POOR', 'label': 'Poor'}));
+      await open(tester);
+      expect(tester.widget<Text>(find.text('POOR')).style?.color, AppColors.brandLink);
+    });
+
+    for (final locale in ['en', 'hi']) {
+      testWidgets('long specification rows wrap without loss in $locale at 200%', (tester) async {
+        const longValue = 'Charger, original box, extra straps and instruction booklet';
+        stubListing(listingJson(attributes: [
+          {
+            'key': 'unfamiliar',
+            'label': 'Included accessories and additional details',
+            'value': longValue
+          },
+        ]));
+        await open(tester, locale: Locale(locale), size: const Size(320, 640), textScale: 2);
+        await tester.scrollUntilVisible(find.text(longValue), 250,
+            scrollable: find.byType(Scrollable).first);
+        expect(tester.takeException(), isNull);
+        expect(tester.widget<Text>(find.text(longValue)).textAlign, TextAlign.start);
+        expect(find.byIcon(Icons.tune_rounded), findsOneWidget);
+      });
+    }
 
     testWidgets('does not break at 320px wide with 200% text', (tester) async {
       await open(tester, size: const Size(320, 640), textScale: 2);
@@ -367,6 +436,9 @@ void main() {
       expect(find.text('Chat'), findsOneWidget);
       expect(find.text('Call'), findsOneWidget);
       expect(find.text('Video'), findsOneWidget);
+      expect(find.byIcon(Icons.chat_bubble_outline_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.call_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.videocam_outlined), findsOneWidget);
       expect(find.text('Coming soon'), findsNothing);
       expect(find.bySemanticsLabel('Chat, Coming soon'), findsOneWidget);
       await tester.tap(find.text('Chat'));

@@ -35,7 +35,7 @@ class ListingCard extends StatelessWidget {
     final spoken = [
       listing.title,
       if (price != null) '${listing.startingFrom ? '${l10n.searchStartingFrom} ' : ''}$price',
-      listing.city,
+      listing.locationLabel,
       if (rating != null) l10n.homeRatingLabel(rating.toStringAsFixed(1)),
       if (condition != null) condition,
       if (badge != null) badge,
@@ -98,7 +98,7 @@ class ListingCard extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              listing.city,
+                              listing.locationLabel,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppTextStyles.hint,
