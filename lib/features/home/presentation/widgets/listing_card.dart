@@ -7,6 +7,7 @@ import '../../../../core/theme/text_styles.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../core/widgets/app_image.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../saved_listings/presentation/widgets/save_heart.dart';
 import '../../domain/entities/listing.dart';
 import '../home_labels.dart';
 
@@ -41,7 +42,7 @@ class ListingCard extends StatelessWidget {
       if (badge != null) badge,
     ].join(', ');
 
-    return Semantics(
+    final card = Semantics(
       button: true,
       label: spoken,
       excludeSemantics: true,
@@ -131,6 +132,16 @@ class ListingCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+
+    // The heart is a sibling of the card, not inside it: the card announces itself as one button
+    // and hides what is inside, which would hide the heart from a screen reader.
+    return Stack(
+      fit: StackFit.passthrough,
+      children: [
+        card,
+        Positioned(top: 0, right: 0, child: SaveHeart(listingId: listing.id, saved: listing.saved)),
+      ],
     );
   }
 }

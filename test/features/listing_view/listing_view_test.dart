@@ -225,6 +225,21 @@ void main() {
       verify(() => repository.view('l1')).called(1);
     });
 
+    testWidgets('shows a heart that starts from the saved flag (US-073)', (tester) async {
+      final handle = tester.ensureSemantics();
+      await open(tester);
+      expect(find.bySemanticsLabel('Save listing'), findsOneWidget);
+      expect(find.bySemanticsLabel('Remove from saved'), findsNothing);
+      expect(PublicListing.fromJson(listingJson()).saved, isFalse);
+
+      stubListing({...listingJson(), 'saved': true});
+      await open(tester);
+
+      expect(find.bySemanticsLabel('Remove from saved'), findsOneWidget);
+      expect(PublicListing.fromJson({...listingJson(), 'saved': true}).saved, isTrue);
+      handle.dispose();
+    });
+
     testWidgets('shows area and city and groups the content into brand cards', (tester) async {
       stubListing(listingJson(area: 'Whitefield'));
       await open(tester);

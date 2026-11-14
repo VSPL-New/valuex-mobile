@@ -39,6 +39,7 @@ const Map<String, Set<RegistrationStep>> _gatedRoutes = {
   RouteNames.search: {RegistrationStep.home},
   RouteNames.searchCategories: {RegistrationStep.home},
   RouteNames.savedSearches: {RegistrationStep.home},
+  RouteNames.savedItems: {RegistrationStep.home},
   RouteNames.sell: {RegistrationStep.home},
   RouteNames.sellDetails: {RegistrationStep.home},
   RouteNames.sellPlan: {RegistrationStep.home},
@@ -60,6 +61,7 @@ const Set<String> _signedInOnlyRoutes = {
   RouteNames.notifications,
   RouteNames.search,
   RouteNames.savedSearches,
+  RouteNames.savedItems,
   RouteNames.listingViewBase,
   RouteNames.sellerProfileBase,
 };

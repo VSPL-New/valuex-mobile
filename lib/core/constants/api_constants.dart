@@ -65,6 +65,8 @@ class ApiConstants {
   static const String savedSearches = '/search/saved';
 
   static String savedSearch(String id) => '/search/saved/$id';
+  static const String savedListings = '/saved-listings';
+  static String savedListing(String listingId) => '/saved-listings/$listingId';
   static const String categoryChildren = '/categories/children';
   static const String categorySearch = '/categories/search';
   static String categoryListingSchema(String code) => '/categories/$code/listing-schema';

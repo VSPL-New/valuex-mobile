@@ -149,8 +149,11 @@ class ProfileScreen extends ConsumerWidget {
                         items: [
                           item(Icons.inventory_2_outlined, l10n.profileMyOrders,
                               ProfileMenuKeys.myOrders),
-                          item(Icons.favorite_border, l10n.profileSavedItems,
-                              ProfileMenuKeys.savedItems),
+                          item(
+                              Icons.favorite_border,
+                              l10n.profileSavedItems,
+                              ProfileMenuKeys.savedItems,
+                              () => context.push(RouteNames.savedItems)),
                           item(Icons.bookmark_border, l10n.savedSearchesTitle, null,
                               () => context.push(RouteNames.savedSearches)),
                           item(Icons.credit_card, l10n.profilePaymentHistory,

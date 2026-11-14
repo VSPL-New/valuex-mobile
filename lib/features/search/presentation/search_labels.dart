@@ -14,18 +14,12 @@ extension SearchListingCard on SearchListing {
         city: city,
         area: area,
         sellerRating: sellerRating,
-        condition: switch (condition) {
-          'NEW' => ListingCondition.newItem,
-          'LIKE_NEW' => ListingCondition.likeNew,
-          'GOOD' => ListingCondition.good,
-          'FAIR' => ListingCondition.fair,
-          'POOR' => ListingCondition.poor,
-          _ => null,
-        },
+        condition: conditionFromApi(condition),
         isBoosted: badge == SearchBadge.boosted,
         isFeatured: badge == SearchBadge.featured,
         startingFrom: startingFrom,
         image: cardUrl ?? thumbnailUrl ?? '',
+        saved: saved,
       );
 }
 

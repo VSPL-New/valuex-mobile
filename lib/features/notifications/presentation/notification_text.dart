@@ -14,6 +14,7 @@ String notificationTitle(AppLocalizations l10n, AppNotification notification) {
     'LISTING_EXPIRED' => l10n.notifListingExpiredTitle,
     'LISTING_REMOVED_BY_ADMIN' => l10n.notifListingRemovedTitle,
     'SAVED_SEARCH_MATCHES' => l10n.notifSavedSearchTitle,
+    'SAVED_LISTING_UNAVAILABLE' => l10n.notifSavedListingTitle,
     _ => notification.title,
   };
 }
@@ -32,6 +33,20 @@ String? _savedSearchBody(AppLocalizations l10n, Map<String, dynamic> params) {
   if (titles.isEmpty) return '$head.';
   final more = count > titles.length ? ' ${l10n.notifSavedSearchAndMore}' : '';
   return '$head: ${titles.join('; ')}$more.';
+}
+
+/// "\"title\" has been sold." and the like, from the reason and title; null when either is missing, so
+/// the server's English text shows instead.
+String? _savedListingBody(AppLocalizations l10n, Map<String, dynamic> params) {
+  final title = _text(params['title']);
+  if (title == null) return null;
+  return switch (_text(params['reason'])) {
+    'SOLD' => l10n.notifSavedListingSold(title),
+    'EXPIRED' => l10n.notifSavedListingExpired(title),
+    'REMOVED' || 'DELETED' => l10n.notifSavedListingRemoved(title),
+    'SELLER_SUSPENDED' => l10n.notifSavedListingUnavailable(title),
+    _ => null,
+  };
 }
 
 String notificationBody(AppLocalizations l10n, AppNotification notification) {
@@ -58,6 +73,7 @@ String notificationBody(AppLocalizations l10n, AppNotification notification) {
     'LISTING_EXPIRED' => title == null ? null : l10n.notifListingExpiredBody(title),
     'LISTING_REMOVED_BY_ADMIN' => title == null ? null : l10n.notifListingRemovedBody(title),
     'SAVED_SEARCH_MATCHES' => _savedSearchBody(l10n, params),
+    'SAVED_LISTING_UNAVAILABLE' => _savedListingBody(l10n, params),
     _ => null,
   };
   return localized ?? notification.body;

@@ -2697,4 +2697,72 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notifSavedSearchAndMore => 'and more';
+
+  @override
+  String get notifSavedListingTitle => 'A saved item is no longer available';
+
+  @override
+  String notifSavedListingSold(String title) {
+    return '\"$title\" has been sold.';
+  }
+
+  @override
+  String notifSavedListingExpired(String title) {
+    return '\"$title\" has expired.';
+  }
+
+  @override
+  String notifSavedListingRemoved(String title) {
+    return '\"$title\" has been removed.';
+  }
+
+  @override
+  String notifSavedListingUnavailable(String title) {
+    return '\"$title\" is no longer available.';
+  }
+
+  @override
+  String get savedItemsTitle => 'Saved items';
+
+  @override
+  String get savedItemsEmpty => 'No saved items yet';
+
+  @override
+  String get savedItemsEmptyHint => 'Tap the heart on a listing to keep it here.';
+
+  @override
+  String get savedItemsLoadFailed => 'Unable to load your saved items. Try again';
+
+  @override
+  String get savedItemsLoadMoreFailed => 'Unable to load more items. Try again';
+
+  @override
+  String get savedItemNoLongerAvailable => 'No longer available';
+
+  @override
+  String get savedItemUnderReview => 'Under review';
+
+  @override
+  String get savedItemRemove => 'Remove from saved';
+
+  @override
+  String get savedItemRemoveFailed => 'Unable to remove this item. Try again';
+
+  @override
+  String get savedItemSave => 'Save listing';
+
+  @override
+  String get savedItemSaveFailed => 'Unable to update your saved items. Try again';
+
+  @override
+  String savedItemLimit(int count) {
+    return 'Maximum $count saved items reached. Remove some to add more';
+  }
+
+  @override
+  String get savedItemLimitUnknown =>
+      'You have reached the maximum number of saved items. Remove some to add more';
+
+  @override
+  String get savedItemUnavailableNow => 'This listing is no longer available';
 }
