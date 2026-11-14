@@ -93,30 +93,48 @@ Android note: cleartext HTTP is allowed in debug and profile builds only (needed
 
 ## Listing details
 
-The buyer's Listing details page hides the category breadcrumb and uses white, rounded
-Description, Item Details and Seller cards on the brand background. The seller card shows
-an initial avatar, the actual rating (or "No ratings yet") and View Profile. No sales count
-is shown until the backend supplies one.
+The buyer's Listing details page uses the Soft Luxe design: pale brand background, white
+rounded cards, blue uppercase section headings and tinted icon tiles. Category breadcrumbs
+stay hidden. Condition and Negotiable badges sit above the title, followed by the blue price
+and a localized Asking price caption (or Starting from where applicable).
+
+Item Details uses a bordered, alternating-row table with magenta attribute icons and bold
+values. Unknown schema keys use a neutral icon. Rows stack at narrow widths or large text
+sizes; condition notes appear below the table, including when there are no attributes.
+The seller card has a uniform subtle border (no blue top accent), an initial avatar, the actual
+rating (or "No ratings yet") and View Profile with a chevron. No sales count is shown until
+the backend supplies one. Contact icons do not change server-controlled action availability.
 
 The refresh icon sits on the main photo when signed links can expire; it reloads the public
 listing, and a failed refresh shows the standard error with Retry. Swipe, thumbnails and
 tap-to-zoom remain available.
 
 Listings now save the selected Home location's area separately as `locationArea`; the public
-response exposes it as `seller.area`. The heading shows **Area, City**, falling back to City
-for older listings. Deploy the backend migration `V30__listing_area.sql` with this change.
+response exposes it as `seller.area`. Home, search and seller-profile cards receive nullable `area`
+alongside `city` and share the details page's **Area, City** formatting (trimmed, with duplicates
+removed), falling back to City for older listings. Long card locations truncate visually but remain
+complete in the accessibility label. Deploy the backend migration `V30__listing_area.sql`, restart
+the backend and reindex existing listings with this change; reinstalling only the app is insufficient.
 Neither coordinates nor pincode are sent. Editing without a known Home location preserves
 the listing's stored area and city; choosing a city without an area clears the previous area.
 
 Manual checks:
 1. Choose an area on Home, create or edit a listing, then open it as a buyer after publication.
-   Confirm Area, City appears and no L1/L2/L3 breadcrumb is visible.
+   Confirm Area, City appears on Home, search, seller-profile cards and listing details, and no
+   L1/L2/L3 breadcrumb is visible on details. Clear/change the location and confirm refreshed
+   cards agree with details after the indexing worker runs.
 2. Check an older city-only listing and a seller without ratings; no fabricated area or sales
    count should appear.
 3. Swipe photos, select a thumbnail, open/close zoom, and use the on-photo refresh icon on a
    listing with expiring photo URLs. Repeat offline and confirm Retry recovers after reconnecting.
 4. Open View Profile. Check Description and Item Details cards with long content, at 320 px
    width and 200% text size, in English and Hindi.
+5. Check the blue headings, alternating specification rows, magenta icons and seller's uniform
+   border. Confirm condition notes appear once beneath Item Details, including for a listing
+   without attributes; blank notes must not create an otherwise empty card.
+6. Check a missing price, a Starting from price and a poor-condition listing. Do not show an
+   Asking price caption without a price or alongside Starting from, or a green badge for poor
+   condition. Chat, Call, Video, cart and purchase availability must remain server-controlled.
 
 ## Profile Hub (US-103)
 

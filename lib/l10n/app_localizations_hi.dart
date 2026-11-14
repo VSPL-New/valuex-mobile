@@ -2089,6 +2089,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get listingViewDescription => 'विवरण';
 
   @override
+  String get listingViewAskingPrice => 'मांगी गई कीमत';
+
+  @override
   String get listingViewRefreshPhotos => 'फ़ोटो रिफ़्रेश करें';
 
   @override

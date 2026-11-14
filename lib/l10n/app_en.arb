@@ -810,6 +810,7 @@
   "listingViewIntentRent": "For rent",
   "listingViewIntentLease": "For lease",
   "listingViewDescription": "Description",
+  "listingViewAskingPrice": "Asking price",
   "listingViewRefreshPhotos": "Refresh photos",
   "listingViewShowPhoto": "Show photo {index}",
   "@listingViewShowPhoto": {"placeholders": {"index": {"type": "int"}}},

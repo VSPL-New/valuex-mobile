@@ -79,7 +79,11 @@ void main() {
     test('become Home cards with price, rating, badge, condition and photo', () async {
       answer(() => FakeHttpAdapter.ok({
             'items': [
-              listingJson('a', title: 'Sony A7 IV', price: 185000, rating: 4.7, badge: 'BOOSTED'),
+              {
+                ...listingJson('a',
+                    title: 'Sony A7 IV', price: 185000, rating: 4.7, badge: 'BOOSTED'),
+                'area': 'Kothrud'
+              },
               listingJson('b',
                   title: 'Apple iPhone',
                   condition: 'LIKE_NEW',
@@ -102,6 +106,8 @@ void main() {
       expect(first.isBoosted, isTrue);
       expect(first.isFeatured, isFalse);
       expect(first.city, 'Pune');
+      expect(first.area, 'Kothrud');
+      expect(first.locationLabel, 'Kothrud, Pune');
       expect(first.image, 'https://media.example/card.jpg');
       final second = listings[1];
       expect(second.condition, ListingCondition.likeNew);
@@ -110,6 +116,7 @@ void main() {
       expect(second.image, isEmpty);
       expect(listings[2].condition, isNull);
       expect(listings[2].city, 'Mumbai');
+      expect(listings[2].locationLabel, 'Mumbai');
       expect(listings[2].isBoosted, isFalse);
     });
 

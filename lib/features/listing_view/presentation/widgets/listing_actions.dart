@@ -19,9 +19,9 @@ class ListingActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final contact = [
-      (l10n.previewChat, capabilities.chat),
-      (l10n.previewCall, capabilities.call),
-      (l10n.previewVideo, capabilities.video),
+      (l10n.previewChat, capabilities.chat, Icons.chat_bubble_outline_rounded),
+      (l10n.previewCall, capabilities.call, Icons.call_outlined),
+      (l10n.previewVideo, capabilities.video, Icons.videocam_outlined),
     ].where((entry) => !entry.$2.hidden).toList();
     final commerce = [
       (l10n.listingViewAddToCart, capabilities.cart, false),
@@ -30,8 +30,8 @@ class ListingActions extends StatelessWidget {
     if (contact.isEmpty && commerce.isEmpty) return const SizedBox.shrink();
     return DecoratedBox(
       decoration: const BoxDecoration(
-        color: AppColors.brandBackground,
-        border: Border(top: BorderSide(color: AppColors.brandDivider)),
+        color: AppColors.brandSurface,
+        border: Border(top: BorderSide(color: AppColors.brandBorder)),
       ),
       child: SafeArea(
         top: false,
@@ -44,13 +44,13 @@ class ListingActions extends StatelessWidget {
             children: [
               if (contact.isNotEmpty)
                 _row([
-                  for (final (label, capability) in contact)
+                  for (final (label, capability, icon) in contact)
                     _Action(
                       label: label,
                       capability: capability,
                       onUnbuilt: onUnbuilt,
                       builder: (text, onPressed) =>
-                          SingleToneButton(label: text, onPressed: onPressed),
+                          SingleToneButton(label: text, onPressed: onPressed, leadingIcon: icon),
                     ),
                 ], gap: AppSpacing.sm),
               if (contact.isNotEmpty && commerce.isNotEmpty) const SizedBox(height: AppSpacing.sm),

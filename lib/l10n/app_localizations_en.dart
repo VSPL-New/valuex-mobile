@@ -2097,6 +2097,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get listingViewDescription => 'Description';
 
   @override
+  String get listingViewAskingPrice => 'Asking price';
+
+  @override
   String get listingViewRefreshPhotos => 'Refresh photos';
 
   @override

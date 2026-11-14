@@ -621,6 +621,7 @@
   "listingViewIntentRent": "किराए के लिए",
   "listingViewIntentLease": "लीज़ के लिए",
   "listingViewDescription": "विवरण",
+  "listingViewAskingPrice": "मांगी गई कीमत",
   "listingViewRefreshPhotos": "फ़ोटो रिफ़्रेश करें",
   "listingViewShowPhoto": "फ़ोटो {index} दिखाएँ",
   "listingViewSeller": "विक्रेता",

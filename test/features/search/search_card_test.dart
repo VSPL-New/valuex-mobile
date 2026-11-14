@@ -5,6 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:valuex_mobile/core/widgets/app_image.dart';
 import 'package:valuex_mobile/features/home/domain/entities/listing.dart';
 import 'package:valuex_mobile/features/home/presentation/widgets/listing_card.dart';
+import 'package:valuex_mobile/features/search/domain/search_listing.dart';
+import 'package:valuex_mobile/features/search/presentation/search_labels.dart';
+import 'package:valuex_mobile/features/listing_view/domain/public_listing.dart';
 import 'package:valuex_mobile/l10n/app_localizations.dart';
 
 import '../../helpers/fonts.dart';
@@ -33,6 +36,54 @@ Future<void> _pump(WidgetTester tester, Listing listing, {Locale locale = const 
 
 void main() {
   setUpAll(loadBrandFonts);
+
+  for (final (area, city, expected) in [
+    ('  Kothrud  ', ' Pune ', 'Kothrud, Pune'),
+    (null, 'Pune', 'Pune'),
+    ('  ', 'Pune', 'Pune'),
+    ('pune', 'Pune', 'Pune'),
+    ('Kothrud', '', 'Kothrud'),
+    (null, '', ''),
+  ]) {
+    testWidgets('API area=$area city=$city formats consistently in tiles and details',
+        (tester) async {
+      final semantics = tester.ensureSemantics();
+      final json = <String, dynamic>{
+        'listingId': 'l1',
+        'title': 'Chair',
+        'price': 100,
+        'city': city,
+        if (area != null) 'area': area,
+      };
+      final card = SearchListing.fromJson(json).toCardListing();
+      final seller = ListingSeller.fromJson(json);
+      expect(card.area, area);
+      expect(card.locationLabel, expected);
+      expect(seller.locationLabel, expected);
+      await _pump(tester, card);
+      expect(find.text(expected), findsOneWidget);
+      expect(find.bySemanticsLabel('Chair, ₹100, $expected'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      semantics.dispose();
+    });
+  }
+
+  testWidgets('long area stays one line visually and complete in accessible text', (tester) async {
+    final semantics = tester.ensureSemantics();
+    const area = 'A very long neighbourhood name with multiple words';
+    final listing = SearchListing.fromJson({
+      'listingId': 'l1',
+      'title': 'Chair',
+      'price': 100,
+      'area': area,
+      'city': 'Pune',
+    }).toCardListing();
+    await _pump(tester, listing, locale: const Locale('hi'));
+    expect(tester.widget<Text>(find.text('$area, Pune')).overflow, TextOverflow.ellipsis);
+    expect(find.bySemanticsLabel('Chair, ₹100, $area, Pune'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    semantics.dispose();
+  });
 
   testWidgets('a search card loads the network photo sized to the card, not at full size',
       (tester) async {

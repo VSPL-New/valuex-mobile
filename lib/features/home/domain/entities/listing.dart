@@ -1,3 +1,5 @@
+import '../../../../core/utils/formatters.dart';
+
 enum ListingCondition { newItem, likeNew, excellent, good, fair, poor }
 
 /// A listing as shown on a card.
@@ -8,6 +10,7 @@ class Listing {
   /// Rupees, with paise when the price has them; null when the listing shows no price.
   final num? priceInr;
   final String city;
+  final String? area;
 
   /// 0 to 5, null for a seller without ratings.
   final double? sellerRating;
@@ -32,6 +35,7 @@ class Listing {
     required this.title,
     required this.priceInr,
     required this.city,
+    this.area,
     required this.condition,
     required this.image,
     this.sellerRating,
@@ -39,4 +43,6 @@ class Listing {
     this.isFeatured = false,
     this.startingFrom = false,
   });
+
+  String get locationLabel => Formatters.location(city: city, area: area);
 }

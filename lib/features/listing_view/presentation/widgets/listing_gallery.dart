@@ -88,16 +88,18 @@ class _ListingGalleryState extends State<ListingGallery> {
                   child: ExcludeSemantics(
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: AppColors.brandSurface,
-                        borderRadius: BorderRadius.circular(AppRadius.sm),
+                        color: AppColors.brandMutedText,
+                        borderRadius: BorderRadius.circular(AppRadius.xl),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: AppSpacing.sm,
                           vertical: AppSpacing.xs,
                         ),
-                        child:
-                            Text('${_page + 1} / ${photos.length}', style: AppTextStyles.caption),
+                        child: Text(
+                          '${_page + 1} / ${photos.length}',
+                          style: AppTextStyles.caption.copyWith(color: AppColors.brandOnPrimary),
+                        ),
                       ),
                     ),
                   ),
@@ -111,6 +113,9 @@ class _ListingGalleryState extends State<ListingGallery> {
                     style: IconButton.styleFrom(
                       backgroundColor: AppColors.brandSurface,
                       foregroundColor: AppColors.brandLink,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppRadius.lg),
+                      ),
                       minimumSize: const Size(
                         AppSizes.minTouchTarget,
                         AppSizes.minTouchTarget,

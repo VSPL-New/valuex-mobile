@@ -3735,6 +3735,12 @@ abstract class AppLocalizations {
   /// **'Description'**
   String get listingViewDescription;
 
+  /// No description provided for @listingViewAskingPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Asking price'**
+  String get listingViewAskingPrice;
+
   /// No description provided for @listingViewRefreshPhotos.
   ///
   /// In en, this message translates to:

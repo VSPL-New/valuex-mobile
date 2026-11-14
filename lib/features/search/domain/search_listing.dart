@@ -22,6 +22,7 @@ class SearchListing {
   final String? priceQualifier;
   final TransactionIntent? transactionIntent;
   final String city;
+  final String? area;
 
   /// A condition code such as `LIKE_NEW`; null for Real Estate.
   final String? condition;
@@ -37,6 +38,7 @@ class SearchListing {
     required this.id,
     required this.title,
     required this.city,
+    this.area,
     this.price,
     this.priceQualifier,
     this.transactionIntent,
@@ -62,6 +64,7 @@ class SearchListing {
       priceQualifier: json['priceQualifier'] as String?,
       transactionIntent: TransactionIntent.fromApi(json['transactionIntent'] as String?),
       city: json['city'] as String? ?? '',
+      area: json['area'] as String?,
       condition: json['condition'] as String?,
       sellerRating: (json['sellerRating'] as num?)?.toDouble(),
       badge: SearchBadge.fromApi(json['badge'] as String?),
