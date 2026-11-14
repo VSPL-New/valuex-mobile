@@ -134,3 +134,16 @@ Future<bool> showDeleteListingSheet(BuildContext context, String title) {
     destructive: true,
   );
 }
+
+/// The sheet that asks the owner to confirm marking [title] Sold, Rented or Leased (US-118). It
+/// says the deal may have been made outside JustQlic, and that this cannot be undone.
+Future<bool> showCloseListingSheet(BuildContext context, String title, String outcome) {
+  final l10n = AppLocalizations.of(context);
+  return showConfirmationSheet(
+    context,
+    title: l10n.myListingsCloseTitle(outcome),
+    body: [Text(l10n.myListingsCloseBody(title), style: AppTextStyles.body)],
+    confirmLabel: l10n.myListingsCloseConfirm(outcome),
+    cancelLabel: l10n.commonCancel,
+  );
+}

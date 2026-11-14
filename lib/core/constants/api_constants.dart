@@ -47,6 +47,7 @@ class ApiConstants {
   static String mediaAccess(String mediaId) => '/media/$mediaId/access';
   static String listingImages(String listingId) => '/listings/$listingId/images';
   static String listingSubmit(String listingId) => '/listings/$listingId/submit';
+  static String listingClose(String listingId) => '/listings/$listingId/close';
   static String listingTrustSafetyReview(String listingId) =>
       '/listings/$listingId/trust-safety-review';
   static String listingPlanSelection(String listingId) => '/listings/$listingId/plan-selection';

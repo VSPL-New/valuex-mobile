@@ -23,6 +23,7 @@ import 'widgets/confirmation_sheet.dart';
 import 'widgets/my_listing_card.dart';
 import 'widgets/my_listings_summary_cards.dart';
 import 'widgets/option_chip.dart';
+import 'widgets/listing_status_badge.dart';
 
 /// My Listings (US-010): the seller's own listings with counts, All / Active / Sold filters, and
 /// per listing a way to open it, edit it and delete it (with a five second undo).
@@ -120,6 +121,21 @@ class _MyListingsScreenState extends ConsumerState<MyListingsScreen> {
     }
   }
 
+  /// Asks first, then marks the property Sold, Rented or Leased (US-118). The page reloads on success
+  /// so the card shows its new status.
+  Future<void> _close(MyListingItem item) async {
+    final outcome = item.closeOutcome;
+    if (outcome == null) return;
+    final l10n = AppLocalizations.of(context);
+    final controller = _controller;
+    final title = item.title.isEmpty ? l10n.myListingsUntitled : item.title;
+    final label = closedOutcomeLabel(l10n, outcome);
+    if (!await showCloseListingSheet(context, title, label) || !mounted) return;
+    final error = await controller.close(item.id, outcome);
+    if (!mounted) return;
+    _say(error == null ? l10n.myListingsClosed(label) : listingErrorMessage(l10n, error));
+  }
+
   Future<void> _loadMore() async {
     final error = await _controller.loadMore();
     if (error != null && mounted) {
@@ -183,6 +199,7 @@ class _MyListingsScreenState extends ConsumerState<MyListingsScreen> {
           onPreview: () => unawaited(context.push<void>(RouteNames.listingPreview(item.id))),
           onEdit: item.canEdit ? () => unawaited(_edit(item)) : null,
           onDelete: item.canDelete ? () => unawaited(_delete(item)) : null,
+          onClose: item.closeOutcome == null ? null : () => unawaited(_close(item)),
         ),
         const SizedBox(height: AppSpacing.sm),
       ],

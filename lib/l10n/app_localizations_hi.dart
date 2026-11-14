@@ -1278,6 +1278,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get itemPriceInvalid => 'सही कीमत लिखें';
 
   @override
+  String get itemPriceRequiredForIntent => 'अपने विकल्प की कीमत लिखें';
+
+  @override
   String get itemCategoryChoose => 'श्रेणी चुनें';
 
   @override
@@ -1887,6 +1890,40 @@ class AppLocalizationsHi extends AppLocalizations {
   String get myListingsUndo => 'पूर्ववत करें';
 
   @override
+  String get myListingsOutcomeSold => 'बिक गई';
+
+  @override
+  String get myListingsOutcomeRented => 'किराये पर दी गई';
+
+  @override
+  String get myListingsOutcomeLeased => 'लीज़ पर दी गई';
+
+  @override
+  String myListingsMarkClosed(String title, String outcome) {
+    return '$title को \"$outcome\" के रूप में चिह्नित करें';
+  }
+
+  @override
+  String myListingsCloseTitle(String outcome) {
+    return 'इस प्रॉपर्टी को \"$outcome\" के रूप में चिह्नित करें?';
+  }
+
+  @override
+  String myListingsCloseBody(String title) {
+    return '\"$title\" खोज से हमेशा के लिए हटा दी जाएगी। यह JustQlic के अंदर या बाहर हुए सौदे के लिए है, और इसे वापस नहीं किया जा सकता।';
+  }
+
+  @override
+  String myListingsCloseConfirm(String outcome) {
+    return '\"$outcome\" चिह्नित करें';
+  }
+
+  @override
+  String myListingsClosed(String outcome) {
+    return 'प्रॉपर्टी \"$outcome\" चिह्नित की गई';
+  }
+
+  @override
   String get myListingsSaleDetailsSoon => 'बिक्री का विवरण जल्द उपलब्ध होगा';
 
   @override
@@ -2134,6 +2171,14 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get sellErrorNotDeletable =>
       'इस लिस्टिंग को अभी हटाया नहीं जा सकता। समीक्षा पूरी होने के बाद फिर कोशिश करें';
+
+  @override
+  String get sellErrorNotClosable =>
+      'इस प्रॉपर्टी को अभी बिकी, किराये पर या लीज़ पर दी गई के रूप में चिह्नित नहीं किया जा सकता';
+
+  @override
+  String get sellErrorNotProperty =>
+      'केवल प्रकाशित प्रॉपर्टी को ही बिकी, किराये पर या लीज़ पर दी गई के रूप में चिह्नित किया जा सकता है';
 
   @override
   String get sellErrorCategoryLocked => 'लिस्टिंग लाइव होने के बाद श्रेणी बदली नहीं जा सकती';

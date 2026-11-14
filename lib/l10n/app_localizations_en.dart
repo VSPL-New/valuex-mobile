@@ -1290,6 +1290,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get itemPriceInvalid => 'Enter a valid price';
 
   @override
+  String get itemPriceRequiredForIntent => 'Enter the price for your option';
+
+  @override
   String get itemCategoryChoose => 'Choose a category';
 
   @override
@@ -1897,6 +1900,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myListingsUndo => 'Undo';
 
   @override
+  String get myListingsOutcomeSold => 'Sold';
+
+  @override
+  String get myListingsOutcomeRented => 'Rented';
+
+  @override
+  String get myListingsOutcomeLeased => 'Leased';
+
+  @override
+  String myListingsMarkClosed(String title, String outcome) {
+    return 'Mark $title as $outcome';
+  }
+
+  @override
+  String myListingsCloseTitle(String outcome) {
+    return 'Mark this property as $outcome?';
+  }
+
+  @override
+  String myListingsCloseBody(String title) {
+    return '\"$title\" will be removed from search for good. This works for a deal made inside or outside JustQlic, and it cannot be undone.';
+  }
+
+  @override
+  String myListingsCloseConfirm(String outcome) {
+    return 'Mark as $outcome';
+  }
+
+  @override
+  String myListingsClosed(String outcome) {
+    return 'Property marked as $outcome';
+  }
+
+  @override
   String get myListingsSaleDetailsSoon => 'Sale details are coming soon';
 
   @override
@@ -2142,6 +2179,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get sellErrorNotDeletable =>
       'This listing can\'t be deleted right now. Try again after the review is done';
+
+  @override
+  String get sellErrorNotClosable =>
+      'This property can\'t be marked as sold, rented or leased right now';
+
+  @override
+  String get sellErrorNotProperty =>
+      'Only a published property can be marked as sold, rented or leased';
 
   @override
   String get sellErrorCategoryLocked =>

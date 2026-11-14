@@ -166,6 +166,18 @@ class MyListingsController extends Notifier<MyListingsState> {
     return null;
   }
 
+  /// Marks a property Sold, Rented or Leased, then reloads the page so the card, its status and the
+  /// counts show what the server now says. Returns the error when the server refused.
+  Future<ApiError?> close(String id, ClosedOutcome outcome) async {
+    try {
+      await _repository.closeListing(id, outcome);
+    } on ApiError catch (error) {
+      return error;
+    }
+    if (ref.mounted) await load();
+    return null;
+  }
+
   /// The counts after a listing is gone: every listing counts toward the total, only a published
   /// one toward Active.
   MyListingsSummary _without(MyListingItem? deleted) {

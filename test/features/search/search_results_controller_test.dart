@@ -603,6 +603,119 @@ void main() {
         expect(state().items, hasLength(4));
       });
     });
+
+    test('switching the intent drops the price range, as Buy and Rent prices are not alike', () {
+      fakeAsync((async) {
+        repository.handler = (criteria, page) async => listingsPage(0, 4, total: 4, hasNext: false);
+        const initial = SearchCriteria(
+          categoryCode: 'L3-HOMES',
+          categoryLevel: 3,
+          realEstate: true,
+          intent: TransactionIntent.sale,
+          priceMin: 2000000,
+          priceMax: 9000000,
+        );
+        final container = makeContainer();
+        final state = open(async, container, initial);
+
+        unawaited(
+          container
+              .read(searchResultsControllerProvider(initial).notifier)
+              .chooseIntent(TransactionIntent.rent),
+        );
+        async.flushMicrotasks();
+
+        expect(repository.calls.last.criteria.intent, TransactionIntent.rent);
+        expect(repository.calls.last.criteria.priceMin, isNull);
+        expect(repository.calls.last.criteria.priceMax, isNull);
+        expect(state().criteria.hasPriceRange, isFalse);
+      });
+    });
+
+    test('choosing the intent that is already chosen keeps the price range', () {
+      fakeAsync((async) {
+        repository.handler = (criteria, page) async => listingsPage(0, 4, total: 4, hasNext: false);
+        const initial = SearchCriteria(
+          categoryCode: 'L3-HOMES',
+          categoryLevel: 3,
+          realEstate: true,
+          intent: TransactionIntent.rent,
+          priceMin: 10000,
+          priceMax: 40000,
+        );
+        final container = makeContainer();
+        open(async, container, initial);
+
+        unawaited(
+          container
+              .read(searchResultsControllerProvider(initial).notifier)
+              .chooseIntent(TransactionIntent.rent),
+        );
+        async.flushMicrotasks();
+
+        expect(repository.calls.last.criteria.priceMin, 10000);
+        expect(repository.calls.last.criteria.priceMax, 40000);
+      });
+    });
+
+    test('ERROR_INTENT_NOT_SUPPORTED asks again without that intent and drops the price range', () {
+      fakeAsync((async) {
+        repository.handler = (criteria, page) async => criteria.intent == TransactionIntent.lease
+            ? throw _coded('ERROR_INTENT_NOT_SUPPORTED')
+            : listingsPage(0, 4, total: 4, hasNext: false);
+        const initial = SearchCriteria(
+          categoryCode: 'L3-HOMES',
+          categoryLevel: 3,
+          realEstate: true,
+          intent: TransactionIntent.lease,
+          priceMin: 10000,
+        );
+        final container = makeContainer();
+        final state = open(async, container, initial);
+
+        expect(state().needsIntent, isTrue);
+        expect(state().criteria.intent, isNull);
+        expect(state().criteria.hasPriceRange, isFalse);
+        expect(state().unsupportedIntents, {TransactionIntent.lease});
+        expect(state().error, isNull);
+        expect(state().isLoading, isFalse);
+
+        unawaited(
+          container
+              .read(searchResultsControllerProvider(initial).notifier)
+              .chooseIntent(TransactionIntent.sale),
+        );
+        async.flushMicrotasks();
+
+        expect(state().needsIntent, isFalse);
+        expect(state().items, hasLength(4));
+        expect(state().unsupportedIntents, {TransactionIntent.lease});
+      });
+    });
+
+    test('shows the error when every intent has been refused', () {
+      fakeAsync((async) {
+        repository.handler = (criteria, page) async => throw _coded('ERROR_INTENT_NOT_SUPPORTED');
+        const initial = SearchCriteria(
+          categoryCode: 'L3-HOMES',
+          categoryLevel: 3,
+          realEstate: true,
+          intent: TransactionIntent.sale,
+        );
+        final container = makeContainer();
+        final state = open(async, container, initial);
+        final controller = container.read(searchResultsControllerProvider(initial).notifier);
+
+        unawaited(controller.chooseIntent(TransactionIntent.rent));
+        async.flushMicrotasks();
+        unawaited(controller.chooseIntent(TransactionIntent.lease));
+        async.flushMicrotasks();
+
+        expect(state().unsupportedIntents, {TransactionIntent.sale, TransactionIntent.rent});
+        expect(state().needsIntent, isFalse);
+        expect(state().error, isNotNull);
+      });
+    });
   });
 
   test('typing after the controller is gone does nothing', () {
