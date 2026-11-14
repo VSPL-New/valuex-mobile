@@ -21,8 +21,6 @@ class RouteNames {
   static const String profile = '/profile';
   static const String profileDetails = '/profile/details';
   static const String myListings = '/profile/listings';
-  static String listingPreview(String listingId) => '$myListings/$listingId/preview';
-  static const String listingPreviewPattern = '$myListings/:listingId/preview';
   static const String accountSecurity = '/profile/security';
   static const String language = '/profile/language';
   static const String changeMobile = '/profile/security/mobile';

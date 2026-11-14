@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,11 +7,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
-import 'package:valuex_mobile/core/routing/route_guard.dart';
 import 'package:valuex_mobile/core/routing/route_names.dart';
 import 'package:valuex_mobile/core/widgets/single_tone_button.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
-import 'package:valuex_mobile/features/auth/presentation/providers/session_state.dart';
+import 'package:valuex_mobile/features/home/presentation/home_screen.dart';
 import 'package:valuex_mobile/features/home/presentation/providers/home_providers.dart';
 import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
 import 'package:valuex_mobile/features/listing/domain/category.dart';
@@ -355,24 +356,6 @@ void main() {
     });
   });
 
-  group('route guard', () {
-    test('a signed-out user is sent to sign in, a signed-in one may stay', () {
-      final path = RouteNames.listingPreview('l1');
-
-      expect(path, '/profile/listings/l1/preview');
-      expect(redirectFor(session: const AsyncData(Unauthenticated()), location: path),
-          RouteNames.signIn);
-      expect(
-        redirectFor(
-          session:
-              const AsyncData(Authenticated(status: AccountStatus.active, aadhaarVerified: true)),
-          location: path,
-        ),
-        isNull,
-      );
-    });
-  });
-
   group('screen', () {
     late _MockRepository repository;
     late AppHarness harness;
@@ -381,7 +364,7 @@ void main() {
       WidgetTester tester, {
       Map<String, dynamic>? json,
       Object? error,
-      Size size = const Size(390, 844),
+      Size size = const Size(390, 1000),
       double textScale = 1,
     }) async {
       if (error != null) {
@@ -400,7 +383,8 @@ void main() {
         homeLocationControllerProvider.overrideWith(_FakeLocation.new),
       ])
         ..signedInAs(AccountStatus.active, aadhaarVerified: true);
-      await harness.launch(location: RouteNames.listingPreview('l1'));
+      await harness.launch(location: RouteNames.home);
+      unawaited(showListingPreview(tester.element(find.byType(HomeScreen)), 'l1'));
       tester.view.physicalSize = size * tester.view.devicePixelRatio;
       await harness.settle();
     }
@@ -427,6 +411,22 @@ void main() {
       expect(find.text('Active'), findsOneWidget);
       expect(find.text('Your listing is visible to buyers.'), findsOneWidget);
       verify(() => repository.getListingPreview('l1')).called(1);
+      await harness.dispose();
+    });
+
+    testWidgets('is a popup over the current page, closed by its close button', (tester) async {
+      await open(tester);
+
+      expect(find.byType(Dialog), findsOneWidget);
+      expect(find.byType(HomeScreen), findsOneWidget);
+      expect(find.byTooltip('Close'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('Close'));
+      await harness.settle();
+
+      expect(find.byType(ListingPreviewScreen), findsNothing);
+      expect(find.byType(Dialog), findsNothing);
+      expect(find.byType(HomeScreen), findsOneWidget);
       await harness.dispose();
     });
 
@@ -534,7 +534,12 @@ void main() {
         expect(find.text(label), findsOneWidget, reason: label);
       }
       expect(find.text('Buyer actions are unavailable in preview'), findsOneWidget);
-      final secondary = tester.widgetList<SingleToneButton>(find.byType(SingleToneButton));
+      final secondary = tester.widgetList<SingleToneButton>(
+        find.descendant(
+          of: find.byType(ListingPreviewScreen),
+          matching: find.byType(SingleToneButton),
+        ),
+      );
       expect(secondary, hasLength(4));
       expect(secondary.every((button) => button.onPressed == null), isTrue);
       await tester.tap(find.text('Chat'), warnIfMissed: false);
@@ -630,7 +635,8 @@ void main() {
         homeLocationControllerProvider.overrideWith(_FakeLocation.new),
       ])
         ..signedInAs(AccountStatus.active, aadhaarVerified: true);
-      await harness.launch(location: RouteNames.listingPreview('l1'));
+      await harness.launch(location: RouteNames.home);
+      unawaited(showListingPreview(tester.element(find.byType(HomeScreen)), 'l1'));
       await harness.settle();
 
       expect(find.text('Retry'), findsOneWidget);
