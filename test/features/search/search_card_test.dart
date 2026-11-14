@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:valuex_mobile/core/widgets/app_image.dart';
@@ -11,20 +12,22 @@ import '../../helpers/fonts.dart';
 
 Future<void> _pump(WidgetTester tester, Listing listing, {Locale locale = const Locale('en')}) {
   return tester.pumpWidget(
-    MaterialApp(
-      locale: locale,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(
-        body: SizedBox(
-          width: 200,
-          height: 300,
-          child: ListingCard(listing: listing, onTap: () {}),
+    ProviderScope(
+      child: MaterialApp(
+        locale: locale,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: SizedBox(
+            width: 200,
+            height: 300,
+            child: ListingCard(listing: listing, onTap: () {}),
+          ),
         ),
       ),
     ),

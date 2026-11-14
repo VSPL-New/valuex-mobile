@@ -2685,4 +2685,73 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get notifSavedSearchAndMore => 'और भी';
+
+  @override
+  String get notifSavedListingTitle => 'आपका सहेजा हुआ आइटम अब उपलब्ध नहीं है';
+
+  @override
+  String notifSavedListingSold(String title) {
+    return '\"$title\" बिक गया है।';
+  }
+
+  @override
+  String notifSavedListingExpired(String title) {
+    return '\"$title\" की अवधि समाप्त हो गई है।';
+  }
+
+  @override
+  String notifSavedListingRemoved(String title) {
+    return '\"$title\" हटा दिया गया है।';
+  }
+
+  @override
+  String notifSavedListingUnavailable(String title) {
+    return '\"$title\" अब उपलब्ध नहीं है।';
+  }
+
+  @override
+  String get savedItemsTitle => 'सहेजे हुए आइटम';
+
+  @override
+  String get savedItemsEmpty => 'अभी कोई आइटम सहेजा नहीं गया है';
+
+  @override
+  String get savedItemsEmptyHint =>
+      'किसी लिस्टिंग को यहाँ रखने के लिए उसके दिल के निशान पर टैप करें।';
+
+  @override
+  String get savedItemsLoadFailed => 'आपके सहेजे हुए आइटम लोड नहीं हो सके। फिर कोशिश करें';
+
+  @override
+  String get savedItemsLoadMoreFailed => 'और आइटम लोड नहीं हो सके। फिर कोशिश करें';
+
+  @override
+  String get savedItemNoLongerAvailable => 'अब उपलब्ध नहीं है';
+
+  @override
+  String get savedItemUnderReview => 'समीक्षा में है';
+
+  @override
+  String get savedItemRemove => 'सहेजे हुए से हटाएँ';
+
+  @override
+  String get savedItemRemoveFailed => 'यह आइटम हटाया नहीं जा सका। फिर कोशिश करें';
+
+  @override
+  String get savedItemSave => 'लिस्टिंग सहेजें';
+
+  @override
+  String get savedItemSaveFailed => 'आपके सहेजे हुए आइटम अपडेट नहीं हो सके। फिर कोशिश करें';
+
+  @override
+  String savedItemLimit(int count) {
+    return 'अधिकतम $count आइटम सहेजे जा सकते हैं। और जोड़ने के लिए कुछ हटाएँ';
+  }
+
+  @override
+  String get savedItemLimitUnknown =>
+      'आप सहेजे जा सकने वाले आइटम की अधिकतम सीमा तक पहुँच गए हैं। और जोड़ने के लिए कुछ हटाएँ';
+
+  @override
+  String get savedItemUnavailableNow => 'यह लिस्टिंग अब उपलब्ध नहीं है';
 }

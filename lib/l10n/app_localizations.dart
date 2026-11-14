@@ -4736,6 +4736,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'and more'**
   String get notifSavedSearchAndMore;
+
+  /// No description provided for @notifSavedListingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A saved item is no longer available'**
+  String get notifSavedListingTitle;
+
+  /// No description provided for @notifSavedListingSold.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" has been sold.'**
+  String notifSavedListingSold(String title);
+
+  /// No description provided for @notifSavedListingExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" has expired.'**
+  String notifSavedListingExpired(String title);
+
+  /// No description provided for @notifSavedListingRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" has been removed.'**
+  String notifSavedListingRemoved(String title);
+
+  /// No description provided for @notifSavedListingUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" is no longer available.'**
+  String notifSavedListingUnavailable(String title);
+
+  /// No description provided for @savedItemsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved items'**
+  String get savedItemsTitle;
+
+  /// No description provided for @savedItemsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved items yet'**
+  String get savedItemsEmpty;
+
+  /// No description provided for @savedItemsEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the heart on a listing to keep it here.'**
+  String get savedItemsEmptyHint;
+
+  /// No description provided for @savedItemsLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load your saved items. Try again'**
+  String get savedItemsLoadFailed;
+
+  /// No description provided for @savedItemsLoadMoreFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load more items. Try again'**
+  String get savedItemsLoadMoreFailed;
+
+  /// No description provided for @savedItemNoLongerAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No longer available'**
+  String get savedItemNoLongerAvailable;
+
+  /// No description provided for @savedItemUnderReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Under review'**
+  String get savedItemUnderReview;
+
+  /// No description provided for @savedItemRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from saved'**
+  String get savedItemRemove;
+
+  /// No description provided for @savedItemRemoveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to remove this item. Try again'**
+  String get savedItemRemoveFailed;
+
+  /// No description provided for @savedItemSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save listing'**
+  String get savedItemSave;
+
+  /// No description provided for @savedItemSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to update your saved items. Try again'**
+  String get savedItemSaveFailed;
+
+  /// No description provided for @savedItemLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum {count} saved items reached. Remove some to add more'**
+  String savedItemLimit(int count);
+
+  /// No description provided for @savedItemLimitUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'You have reached the maximum number of saved items. Remove some to add more'**
+  String get savedItemLimitUnknown;
+
+  /// No description provided for @savedItemUnavailableNow.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing is no longer available'**
+  String get savedItemUnavailableNow;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
