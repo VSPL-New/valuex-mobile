@@ -290,7 +290,7 @@ void main() {
       await open(tester, size: const Size(320, 640), textScale: 2);
       expect(tester.takeException(), isNull);
       expect(find.text('Apple Watch'), findsOneWidget);
-      await tester.scrollUntilVisible(find.text('Coming soon').first, 300,
+      await tester.scrollUntilVisible(find.text('Buy Now'), 300,
           scrollable: find.byType(Scrollable).first);
       expect(tester.takeException(), isNull);
     });
@@ -310,17 +310,20 @@ void main() {
   });
 
   group('actions', () {
-    testWidgets('Chat, Call and Video are disabled with Coming soon and start nothing',
+    testWidgets('Chat, Call and Video are disabled, show no text under them and start nothing',
         (tester) async {
+      final handle = tester.ensureSemantics();
       await open(tester);
 
       expect(find.text('Chat'), findsOneWidget);
       expect(find.text('Call'), findsOneWidget);
       expect(find.text('Video'), findsOneWidget);
-      expect(find.text('Coming soon'), findsNWidgets(5));
+      expect(find.text('Coming soon'), findsNothing);
+      expect(find.bySemanticsLabel('Chat, Coming soon'), findsOneWidget);
       await tester.tap(find.text('Chat'));
       await tester.pump();
       expect(find.byType(SnackBar), findsNothing);
+      handle.dispose();
     });
 
     testWidgets('a general listing offers Add to Cart and Buy Now, also disabled', (tester) async {
