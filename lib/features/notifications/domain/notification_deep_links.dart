@@ -19,6 +19,7 @@ class NotificationTarget {
 const Map<String, NotificationTarget> _targets = {
   '/profile': NotificationTarget(RouteNames.profile, isTab: true),
   '/profile/account-security': NotificationTarget(RouteNames.accountSecurity),
+  '/saved-items': NotificationTarget(RouteNames.savedItems),
 };
 
 /// Deep link paths that open a listing page, with the route they open.

@@ -33,6 +33,7 @@ class RouteNames {
   /// One saved search's results: what the daily alert and a tap on a saved search open.
   static String savedSearch(String id) =>
       Uri(path: savedSearches, queryParameters: {'id': id}).toString();
+  static const String savedItems = '/saved-items';
   static const String listingViewBase = '/listing';
   static String listingView(String listingId) => '$listingViewBase/$listingId';
   static const String listingViewPattern = '$listingViewBase/:listingId';

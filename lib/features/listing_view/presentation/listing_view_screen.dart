@@ -9,6 +9,7 @@ import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/square_back_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../home/presentation/main_nav.dart';
+import '../../saved_listings/presentation/widgets/save_heart.dart';
 import 'listing_view_messages.dart';
 import 'providers/listing_view_providers.dart';
 import 'widgets/listing_actions.dart';
@@ -50,6 +51,8 @@ class ListingViewScreen extends ConsumerWidget {
                       child: Text(l10n.listingViewTitle, style: AppTextStyles.sectionTitle),
                     ),
                   ),
+                  if (listing.value case final data?)
+                    SaveHeart(listingId: data.listingId, saved: data.saved, overPhoto: false),
                 ],
               ),
             ),

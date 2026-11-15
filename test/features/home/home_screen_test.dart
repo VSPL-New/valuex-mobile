@@ -271,6 +271,16 @@ void main() {
     await harness.dispose();
   });
 
+  testWidgets('every featured card has a heart that starts unsaved (US-073)', (tester) async {
+    final handle = tester.ensureSemantics();
+    final harness = await openHome(tester);
+
+    expect(find.bySemanticsLabel('Save listing'), findsWidgets);
+    expect(find.bySemanticsLabel('Remove from saved'), findsNothing);
+    handle.dispose();
+    await harness.dispose();
+  });
+
   testWidgets('tapping a featured listing card opens that listing, not a coming soon message', (
     tester,
   ) async {

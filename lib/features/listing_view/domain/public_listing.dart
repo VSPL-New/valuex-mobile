@@ -175,6 +175,9 @@ class PublicListing {
   final Capabilities capabilities;
   final bool ownListing;
 
+  /// The signed-in buyer has saved this listing (US-073); the heart starts from it.
+  final bool saved;
+
   const PublicListing({
     required this.listingId,
     required this.title,
@@ -194,6 +197,7 @@ class PublicListing {
     this.publishedAt,
     this.serverTime,
     this.ownListing = false,
+    this.saved = false,
   });
 
   bool get startingFrom => priceQualifier == 'STARTING_FROM';
@@ -242,6 +246,7 @@ class PublicListing {
       serverTime: DateTime.tryParse(json['serverTime'] as String? ?? ''),
       capabilities: Capabilities.fromJson(json['capabilities']),
       ownListing: json['ownListing'] == true,
+      saved: json['saved'] == true,
     );
   }
 }
