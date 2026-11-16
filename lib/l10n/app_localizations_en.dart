@@ -2765,4 +2765,111 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get savedItemUnavailableNow => 'This listing is no longer available';
+
+  @override
+  String get profileBlockedUsers => 'Blocked users';
+
+  @override
+  String get blockedUsersTitle => 'Blocked users';
+
+  @override
+  String get blockedUsersEmpty => 'You haven\'t blocked anyone';
+
+  @override
+  String get blockedUsersEmptyHint =>
+      'People you block can\'t contact you, and you can\'t contact them.';
+
+  @override
+  String get blockedUsersLoadFailed => 'Unable to load your blocked users. Try again';
+
+  @override
+  String get blockedUsersLoadMoreFailed => 'Unable to load more users. Try again';
+
+  @override
+  String get blockedUserUnblock => 'Unblock';
+
+  @override
+  String blockedUserUnblockLabel(String name) {
+    return 'Unblock $name';
+  }
+
+  @override
+  String get blockedUserUnblocked => 'User unblocked';
+
+  @override
+  String get blockedUserUnblockFailed => 'Unable to unblock this user. Try again';
+
+  @override
+  String get userSafetyMenu => 'More options';
+
+  @override
+  String get blockUserAction => 'Block user';
+
+  @override
+  String get reportUserAction => 'Report user';
+
+  @override
+  String get blockUserTitle => 'Block this user?';
+
+  @override
+  String get blockUserMessage =>
+      'They won\'t be able to message, call or make offers to you, and you won\'t be able to contact them. Existing orders and accepted prices stay as they are. You can unblock them any time from Profile > Blocked users.';
+
+  @override
+  String get blockUserConfirm => 'Block';
+
+  @override
+  String get blockUserDone => 'User blocked';
+
+  @override
+  String get blockUserFailed => 'Unable to block this user. Try again';
+
+  @override
+  String get reportSheetTitle => 'Report this user';
+
+  @override
+  String get reportSheetSubtitle =>
+      'Tell us what happened. Your report is private and the user won\'t be told.';
+
+  @override
+  String get reportReasonSpam => 'Spam';
+
+  @override
+  String get reportReasonHarassment => 'Harassment';
+
+  @override
+  String get reportReasonScamOrFraud => 'Scam or fraud';
+
+  @override
+  String get reportReasonInappropriateContent => 'Inappropriate content';
+
+  @override
+  String get reportReasonOffensiveBehaviour => 'Offensive behaviour';
+
+  @override
+  String get reportReasonSharingContactDetails => 'Sharing contact details';
+
+  @override
+  String get reportReasonOther => 'Other';
+
+  @override
+  String get reportDetailsLabel => 'Add details (optional)';
+
+  @override
+  String get reportDetailsHint => 'What did they do?';
+
+  @override
+  String get reportSubmit => 'Submit report';
+
+  @override
+  String get reportDone => 'Thanks. We\'ve received your report';
+
+  @override
+  String get reportFailed => 'Unable to send your report. Try again';
+
+  @override
+  String get reportRateLimited => 'You\'ve reached today\'s report limit. Try again tomorrow';
+
+  @override
+  String get reportTargetMissing => 'We couldn\'t find what you tried to report';
 }

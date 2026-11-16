@@ -9,6 +9,7 @@ import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/square_back_button.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../communication_safety/presentation/widgets/user_safety_menu.dart';
 import '../../home/presentation/widgets/listing_card.dart';
 import '../../search/domain/search_listing.dart';
 import '../../search/presentation/search_labels.dart';
@@ -53,6 +54,7 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
                       child: Text(l10n.sellerProfileTitle, style: AppTextStyles.sectionTitle),
                     ),
                   ),
+                  UserSafetyMenu(userId: widget.sellerId),
                 ],
               ),
             ),

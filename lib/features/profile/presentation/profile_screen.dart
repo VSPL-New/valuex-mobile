@@ -182,6 +182,8 @@ class ProfileScreen extends ConsumerWidget {
                         items: [
                           item(Icons.lock_outline, l10n.profileAccountSecurity, null,
                               () => context.push(RouteNames.accountSecurity)),
+                          item(Icons.block, l10n.profileBlockedUsers, null,
+                              () => context.push(RouteNames.blockedUsers)),
                           item(Icons.location_on_outlined, l10n.profileMyAddresses),
                           ProfileMenuItem(
                             icon: Icons.notifications_none,

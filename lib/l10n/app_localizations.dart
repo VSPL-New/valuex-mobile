@@ -4856,6 +4856,210 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This listing is no longer available'**
   String get savedItemUnavailableNow;
+
+  /// No description provided for @profileBlockedUsers.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked users'**
+  String get profileBlockedUsers;
+
+  /// No description provided for @blockedUsersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked users'**
+  String get blockedUsersTitle;
+
+  /// No description provided for @blockedUsersEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t blocked anyone'**
+  String get blockedUsersEmpty;
+
+  /// No description provided for @blockedUsersEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'People you block can\'t contact you, and you can\'t contact them.'**
+  String get blockedUsersEmptyHint;
+
+  /// No description provided for @blockedUsersLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load your blocked users. Try again'**
+  String get blockedUsersLoadFailed;
+
+  /// No description provided for @blockedUsersLoadMoreFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load more users. Try again'**
+  String get blockedUsersLoadMoreFailed;
+
+  /// No description provided for @blockedUserUnblock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock'**
+  String get blockedUserUnblock;
+
+  /// No description provided for @blockedUserUnblockLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock {name}'**
+  String blockedUserUnblockLabel(String name);
+
+  /// No description provided for @blockedUserUnblocked.
+  ///
+  /// In en, this message translates to:
+  /// **'User unblocked'**
+  String get blockedUserUnblocked;
+
+  /// No description provided for @blockedUserUnblockFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to unblock this user. Try again'**
+  String get blockedUserUnblockFailed;
+
+  /// No description provided for @userSafetyMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'More options'**
+  String get userSafetyMenu;
+
+  /// No description provided for @blockUserAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Block user'**
+  String get blockUserAction;
+
+  /// No description provided for @reportUserAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Report user'**
+  String get reportUserAction;
+
+  /// No description provided for @blockUserTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Block this user?'**
+  String get blockUserTitle;
+
+  /// No description provided for @blockUserMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'They won\'t be able to message, call or make offers to you, and you won\'t be able to contact them. Existing orders and accepted prices stay as they are. You can unblock them any time from Profile > Blocked users.'**
+  String get blockUserMessage;
+
+  /// No description provided for @blockUserConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Block'**
+  String get blockUserConfirm;
+
+  /// No description provided for @blockUserDone.
+  ///
+  /// In en, this message translates to:
+  /// **'User blocked'**
+  String get blockUserDone;
+
+  /// No description provided for @blockUserFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to block this user. Try again'**
+  String get blockUserFailed;
+
+  /// No description provided for @reportSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report this user'**
+  String get reportSheetTitle;
+
+  /// No description provided for @reportSheetSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us what happened. Your report is private and the user won\'t be told.'**
+  String get reportSheetSubtitle;
+
+  /// No description provided for @reportReasonSpam.
+  ///
+  /// In en, this message translates to:
+  /// **'Spam'**
+  String get reportReasonSpam;
+
+  /// No description provided for @reportReasonHarassment.
+  ///
+  /// In en, this message translates to:
+  /// **'Harassment'**
+  String get reportReasonHarassment;
+
+  /// No description provided for @reportReasonScamOrFraud.
+  ///
+  /// In en, this message translates to:
+  /// **'Scam or fraud'**
+  String get reportReasonScamOrFraud;
+
+  /// No description provided for @reportReasonInappropriateContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Inappropriate content'**
+  String get reportReasonInappropriateContent;
+
+  /// No description provided for @reportReasonOffensiveBehaviour.
+  ///
+  /// In en, this message translates to:
+  /// **'Offensive behaviour'**
+  String get reportReasonOffensiveBehaviour;
+
+  /// No description provided for @reportReasonSharingContactDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharing contact details'**
+  String get reportReasonSharingContactDetails;
+
+  /// No description provided for @reportReasonOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get reportReasonOther;
+
+  /// No description provided for @reportDetailsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Add details (optional)'**
+  String get reportDetailsLabel;
+
+  /// No description provided for @reportDetailsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What did they do?'**
+  String get reportDetailsHint;
+
+  /// No description provided for @reportSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit report'**
+  String get reportSubmit;
+
+  /// No description provided for @reportDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks. We\'ve received your report'**
+  String get reportDone;
+
+  /// No description provided for @reportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to send your report. Try again'**
+  String get reportFailed;
+
+  /// No description provided for @reportRateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve reached today\'s report limit. Try again tomorrow'**
+  String get reportRateLimited;
+
+  /// No description provided for @reportTargetMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t find what you tried to report'**
+  String get reportTargetMissing;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

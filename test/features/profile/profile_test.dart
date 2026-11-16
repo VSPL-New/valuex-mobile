@@ -12,12 +12,15 @@ import 'package:valuex_mobile/core/routing/route_guard.dart';
 import 'package:valuex_mobile/core/routing/route_names.dart';
 import 'package:valuex_mobile/core/storage/preferences_service.dart';
 import 'package:valuex_mobile/core/widgets/loading_indicator.dart';
+import 'package:valuex_mobile/core/widgets/square_back_button.dart';
 import 'package:valuex_mobile/features/auth/data/models/auth_models.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/logout_outcome.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/user_profile.dart';
 import 'package:valuex_mobile/features/auth/presentation/providers/session_state.dart';
 import 'package:valuex_mobile/features/auth/presentation/widgets/avatar_image.dart';
+import 'package:valuex_mobile/features/communication_safety/data/communication_safety_repository.dart';
+import 'package:valuex_mobile/features/communication_safety/presentation/blocked_users_screen.dart';
 import 'package:valuex_mobile/features/profile/data/mock_profile_summary.dart';
 import 'package:valuex_mobile/features/profile/data/profile_repository.dart';
 import 'package:valuex_mobile/features/profile/domain/profile_menu_badges.dart';
@@ -32,6 +35,7 @@ import '../../helpers/fake_http_adapter.dart';
 import '../../helpers/fake_secure_storage.dart';
 import '../../helpers/fonts.dart';
 import '../../helpers/accessibility.dart';
+import '../communication_safety/communication_safety_fixtures.dart';
 
 const _json = {
   'userId': 'user-1',
@@ -167,6 +171,8 @@ void main() {
         tester,
         extraOverrides: [
           profileRepositoryProvider.overrideWithValue(repository),
+          communicationSafetyRepositoryProvider
+              .overrideWithValue(FakeCommunicationSafetyRepository()),
           if (premium)
             profileSummaryProvider.overrideWithValue(const ProfileSummary(
               rating: 4.8,
@@ -397,6 +403,20 @@ void main() {
       expect(find.byType(AccountSecurityScreen), findsOneWidget);
       expect(find.text('This is coming soon'), findsNothing);
       await tester.tap(find.byTooltip('Back'));
+      await harness.settle();
+      expect(find.byType(ProfileScreen), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('Blocked users is listed under Account and opens its own page', (tester) async {
+      await showProfile(tester);
+      await tester.scrollUntilVisible(find.text('Blocked users'), 200);
+      await tester.tap(find.text('Blocked users'));
+      await harness.settle();
+
+      expect(find.byType(BlockedUsersScreen), findsOneWidget);
+      expect(find.text('This is coming soon'), findsNothing);
+      await tester.tap(find.byType(SquareBackButton));
       await harness.settle();
       expect(find.byType(ProfileScreen), findsOneWidget);
       await harness.dispose();
