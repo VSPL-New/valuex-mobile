@@ -67,6 +67,11 @@ class ApiConstants {
   static String savedSearch(String id) => '/search/saved/$id';
   static const String savedListings = '/saved-listings';
   static String savedListing(String listingId) => '/saved-listings/$listingId';
+
+  // Block and report (US-132)
+  static String userBlock(String userId) => '/users/$userId/block';
+  static const String blockedUsers = '/users/me/blocks';
+  static const String reports = '/reports';
   static const String categoryChildren = '/categories/children';
   static const String categorySearch = '/categories/search';
   static String categoryListingSchema(String code) => '/categories/$code/listing-schema';

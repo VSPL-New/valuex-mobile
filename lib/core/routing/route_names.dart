@@ -34,6 +34,7 @@ class RouteNames {
   static String savedSearch(String id) =>
       Uri(path: savedSearches, queryParameters: {'id': id}).toString();
   static const String savedItems = '/saved-items';
+  static const String blockedUsers = '/profile/blocked-users';
   static const String listingViewBase = '/listing';
   static String listingView(String listingId) => '$listingViewBase/$listingId';
   static const String listingViewPattern = '$listingViewBase/:listingId';

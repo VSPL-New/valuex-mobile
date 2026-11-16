@@ -2757,4 +2757,112 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get savedItemUnavailableNow => 'यह लिस्टिंग अब उपलब्ध नहीं है';
+
+  @override
+  String get profileBlockedUsers => 'ब्लॉक किए गए उपयोगकर्ता';
+
+  @override
+  String get blockedUsersTitle => 'ब्लॉक किए गए उपयोगकर्ता';
+
+  @override
+  String get blockedUsersEmpty => 'आपने किसी को ब्लॉक नहीं किया है';
+
+  @override
+  String get blockedUsersEmptyHint =>
+      'जिन्हें आप ब्लॉक करते हैं वे आपसे संपर्क नहीं कर सकते, और आप भी उनसे संपर्क नहीं कर सकते।';
+
+  @override
+  String get blockedUsersLoadFailed => 'ब्लॉक किए गए उपयोगकर्ता लोड नहीं हो सके। दोबारा कोशिश करें';
+
+  @override
+  String get blockedUsersLoadMoreFailed => 'और उपयोगकर्ता लोड नहीं हो सके। दोबारा कोशिश करें';
+
+  @override
+  String get blockedUserUnblock => 'अनब्लॉक करें';
+
+  @override
+  String blockedUserUnblockLabel(String name) {
+    return '$name को अनब्लॉक करें';
+  }
+
+  @override
+  String get blockedUserUnblocked => 'उपयोगकर्ता अनब्लॉक हो गया';
+
+  @override
+  String get blockedUserUnblockFailed =>
+      'उपयोगकर्ता को अनब्लॉक नहीं किया जा सका। दोबारा कोशिश करें';
+
+  @override
+  String get userSafetyMenu => 'और विकल्प';
+
+  @override
+  String get blockUserAction => 'उपयोगकर्ता को ब्लॉक करें';
+
+  @override
+  String get reportUserAction => 'उपयोगकर्ता की रिपोर्ट करें';
+
+  @override
+  String get blockUserTitle => 'इस उपयोगकर्ता को ब्लॉक करें?';
+
+  @override
+  String get blockUserMessage =>
+      'वे आपको मैसेज, कॉल या ऑफ़र नहीं भेज पाएँगे, और आप भी उनसे संपर्क नहीं कर पाएँगे। मौजूदा ऑर्डर और स्वीकार की गई कीमतें जैसी हैं वैसी ही रहेंगी। आप कभी भी प्रोफ़ाइल > ब्लॉक किए गए उपयोगकर्ता से अनब्लॉक कर सकते हैं।';
+
+  @override
+  String get blockUserConfirm => 'ब्लॉक करें';
+
+  @override
+  String get blockUserDone => 'उपयोगकर्ता ब्लॉक हो गया';
+
+  @override
+  String get blockUserFailed => 'उपयोगकर्ता को ब्लॉक नहीं किया जा सका। दोबारा कोशिश करें';
+
+  @override
+  String get reportSheetTitle => 'इस उपयोगकर्ता की रिपोर्ट करें';
+
+  @override
+  String get reportSheetSubtitle =>
+      'हमें बताएँ क्या हुआ। आपकी रिपोर्ट निजी रहती है और उपयोगकर्ता को इसकी जानकारी नहीं दी जाती।';
+
+  @override
+  String get reportReasonSpam => 'स्पैम';
+
+  @override
+  String get reportReasonHarassment => 'उत्पीड़न';
+
+  @override
+  String get reportReasonScamOrFraud => 'धोखाधड़ी या स्कैम';
+
+  @override
+  String get reportReasonInappropriateContent => 'अनुचित सामग्री';
+
+  @override
+  String get reportReasonOffensiveBehaviour => 'आपत्तिजनक व्यवहार';
+
+  @override
+  String get reportReasonSharingContactDetails => 'संपर्क जानकारी साझा करना';
+
+  @override
+  String get reportReasonOther => 'अन्य';
+
+  @override
+  String get reportDetailsLabel => 'विवरण जोड़ें (वैकल्पिक)';
+
+  @override
+  String get reportDetailsHint => 'उन्होंने क्या किया?';
+
+  @override
+  String get reportSubmit => 'रिपोर्ट भेजें';
+
+  @override
+  String get reportDone => 'धन्यवाद। हमें आपकी रिपोर्ट मिल गई है';
+
+  @override
+  String get reportFailed => 'आपकी रिपोर्ट नहीं भेजी जा सकी। दोबारा कोशिश करें';
+
+  @override
+  String get reportRateLimited => 'आज की रिपोर्ट सीमा पूरी हो गई है। कल दोबारा कोशिश करें';
+
+  @override
+  String get reportTargetMissing => 'हम वह नहीं ढूँढ पाए जिसकी आप रिपोर्ट करना चाहते थे';
 }
