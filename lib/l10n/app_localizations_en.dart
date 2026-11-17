@@ -3185,4 +3185,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get listingViewIdentityRequired => 'Identity verification needed';
+
+  @override
+  String get realtimeReconnecting => 'Reconnecting…';
+
+  @override
+  String chatTyping(String name) {
+    return '$name is typing…';
+  }
 }

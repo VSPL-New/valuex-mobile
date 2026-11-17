@@ -5612,6 +5612,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Identity verification needed'**
   String get listingViewIdentityRequired;
+
+  /// No description provided for @realtimeReconnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting…'**
+  String get realtimeReconnecting;
+
+  /// No description provided for @chatTyping.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is typing…'**
+  String chatTyping(String name);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

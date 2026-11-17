@@ -80,6 +80,9 @@ class ApiConstants {
   static String chatMessages(String threadId) => '/chats/$threadId/messages';
   static String chatDelivered(String threadId) => '/chats/$threadId/delivered';
   static String chatRead(String threadId) => '/chats/$threadId/read';
+
+  // Realtime (US-130)
+  static const String realtimeTickets = '/realtime/tickets';
   static const String categoryChildren = '/categories/children';
   static const String categorySearch = '/categories/search';
   static String categoryListingSchema(String code) => '/categories/$code/listing-schema';

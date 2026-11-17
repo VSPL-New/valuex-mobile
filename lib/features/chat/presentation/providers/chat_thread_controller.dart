@@ -5,6 +5,9 @@ import 'dart:typed_data';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/network/api_error.dart';
+import '../../../../core/realtime/realtime_client.dart';
+import '../../../../core/realtime/realtime_event.dart';
+import '../../../../core/realtime/realtime_providers.dart';
 import '../../../../core/utils/provider_retry.dart';
 import '../../../profile/data/profile_repository.dart';
 import '../../data/chat_repository.dart';
@@ -57,12 +60,16 @@ class ChatThreadState {
   /// The first message from the other person that was unread when the thread opened; 0 for none.
   final int firstUnreadSeq;
 
+  /// Whether the other person is typing right now.
+  final bool typing;
+
   const ChatThreadState({
     required this.thread,
     required this.messages,
     required this.hasMoreOlder,
     this.loadingOlder = false,
     this.firstUnreadSeq = 0,
+    this.typing = false,
   });
 
   /// The highest sequence the server has given to a message the phone holds.
@@ -73,6 +80,7 @@ class ChatThreadState {
     List<ChatMessage>? messages,
     bool? hasMoreOlder,
     bool? loadingOlder,
+    bool? typing,
   }) =>
       ChatThreadState(
         thread: thread ?? this.thread,
@@ -80,6 +88,7 @@ class ChatThreadState {
         hasMoreOlder: hasMoreOlder ?? this.hasMoreOlder,
         loadingOlder: loadingOlder ?? this.loadingOlder,
         firstUnreadSeq: firstUnreadSeq,
+        typing: typing ?? this.typing,
       );
 }
 
@@ -93,10 +102,14 @@ class _ImageDraft {
 }
 
 /// One conversation (US-013). Messages are ordered by the sequence the server gives; a message the
-/// user writes shows at once as sending and is replaced by the stored one. News arrives by polling
-/// while the screen is open.
+/// user writes shows at once as sending and is replaced by the stored one. News arrives as events
+/// over the live connection (US-130) and, while it is down, by polling; after every reconnect the
+/// thread is re-read from the last sequence it holds.
 class ChatThreadController extends AsyncNotifier<ChatThreadState> {
   static const _uuid = Uuid();
+  static const _typingShownFor = Duration(seconds: 4);
+  static const _typingStopsAfter = Duration(seconds: 3);
+  static const _typingEvery = Duration(seconds: 1);
 
   final String threadId;
 
@@ -107,16 +120,34 @@ class ChatThreadController extends AsyncNotifier<ChatThreadState> {
   /// Ids of messages that failed for a reason a retry can fix; they are retried after a good poll.
   final Set<String> _retryable = {};
 
+  late RealtimeClient _client;
+  Timer? _pollTimer;
+  Timer? _typingHide;
+  Timer? _typingStop;
+  Timer? _typingThrottle;
+  Timer? _unreadRefresh;
+  bool _typingSent = false;
+
   ChatThreadController(this.threadId);
 
   @override
   Future<ChatThreadState> build() async {
     final repository = ref.watch(chatRepositoryProvider);
-    final interval = ref.watch(chatPollIntervalProvider);
-    if (interval != null) {
-      final timer = Timer.periodic(interval, (_) => unawaited(_poll()));
-      ref.onDispose(timer.cancel);
-    }
+    _client = ref.read(realtimeClientProvider);
+    ref.listen<Duration?>(
+      chatPollIntervalProvider,
+      (previous, next) => _pollEvery(next),
+      fireImmediately: true,
+    );
+    ref.listen<int>(realtimeResyncProvider, (previous, next) => unawaited(_poll()));
+    final events = ref.watch(chatEventsProvider).listen(_onEvent);
+    ref.onDispose(() {
+      events.cancel();
+      for (final timer in [_pollTimer, _typingHide, _typingStop, _typingThrottle, _unreadRefresh]) {
+        timer?.cancel();
+      }
+      _sendTyping(false);
+    });
     final (thread, page) = await (repository.thread(threadId), repository.messages(threadId)).wait;
     final firstUnread = page.messages
         .where((message) => !message.fromMe && message.seq > thread.myReadSeq)
@@ -130,6 +161,33 @@ class ChatThreadController extends AsyncNotifier<ChatThreadState> {
       hasMoreOlder: page.hasMore,
       firstUnreadSeq: firstUnread,
     );
+  }
+
+  /// The composer changed: tells the other person the user is typing (at most once a second) and
+  /// that they stopped, after a pause or when the field is empty. Never stored by the server.
+  void typingChanged(bool hasText) {
+    _typingStop?.cancel();
+    if (!hasText) {
+      _sendTyping(false);
+      return;
+    }
+    if (!(_typingThrottle?.isActive ?? false)) {
+      _sendTyping(true);
+      _typingThrottle = Timer(_typingEvery, () {});
+    }
+    _typingStop = Timer(_typingStopsAfter, () => _sendTyping(false));
+  }
+
+  void _sendTyping(bool typing) {
+    if (!typing && !_typingSent) return;
+    if (_client.send(RealtimeTypes.chatTyping, {'threadId': threadId, 'typing': typing})) {
+      _typingSent = typing;
+    }
+  }
+
+  void _pollEvery(Duration? interval) {
+    _pollTimer?.cancel();
+    _pollTimer = interval == null ? null : Timer.periodic(interval, (_) => unawaited(_poll()));
   }
 
   /// Sends a text message. [clientMessageId] and [agreed] are used to deliver a message the server
@@ -297,9 +355,19 @@ class ChatThreadController extends AsyncNotifier<ChatThreadState> {
     }
   }
 
-  /// Tells the server the caller has received and read everything up to [upTo].
+  /// Tells the server the caller has received and read everything up to [upTo]: over the live
+  /// connection when it is open, otherwise over REST.
   Future<void> _markSeen(int upTo, ChatThread thread) async {
     if (upTo <= 0 || upTo <= thread.myReadSeq) return;
+    final frame = {'threadId': threadId, 'upToSeq': upTo};
+    if (_client.send(RealtimeTypes.chatDeliveredFrame, frame) &&
+        _client.send(RealtimeTypes.chatRead, frame)) {
+      _unreadRefresh?.cancel();
+      _unreadRefresh = Timer(const Duration(milliseconds: 500), () {
+        if (ref.mounted) ref.invalidate(chatUnreadCountProvider);
+      });
+      return;
+    }
     final repository = ref.read(chatRepositoryProvider);
     try {
       await repository.markDelivered(threadId, upTo);
@@ -308,6 +376,74 @@ class ChatThreadController extends AsyncNotifier<ChatThreadState> {
     } on Object {
       // The cursor moves with the next successful poll.
     }
+  }
+
+  void _onEvent(RealtimeEvent event) {
+    final current = state.value;
+    if (current == null || event.data['threadId'] != threadId) return;
+    switch (event.type) {
+      case RealtimeTypes.chatMessageCreated:
+        _onMessage(current, event.data['message']);
+      case RealtimeTypes.chatMessageDelivered:
+        _onCursor(current, delivered: (event.data['upToSeq'] as num?)?.toInt());
+      case RealtimeTypes.chatRead:
+        _onCursor(current, read: (event.data['upToSeq'] as num?)?.toInt());
+      case RealtimeTypes.chatThreadUpdated:
+        _onThreadUpdated(current, event.data);
+      case RealtimeTypes.chatTyping:
+        _onTyping(current, event.data['typing'] == true);
+    }
+  }
+
+  void _onMessage(ChatThreadState current, Object? raw) {
+    if (raw is! Map<String, dynamic>) return;
+    final message = ChatMessage.fromJson(raw);
+    if (message.seq <= 0 || current.messages.any((known) => known.seq == message.seq)) return;
+    if (message.fromMe && current.messages.any((known) => known.seq == 0)) {
+      // The user's own send is in flight on this phone: its answer will bring the message. Read the
+      // thread anyway, in case it was sent from another device.
+      unawaited(_poll());
+      return;
+    }
+    final thread = current.thread.advanced(lastSeq: message.seq);
+    state = AsyncData(current.copyWith(
+      thread: thread,
+      messages: _normalize([...current.messages, message], thread),
+      typing: message.fromMe ? current.typing : false,
+    ));
+    if (!message.fromMe) unawaited(_markSeen(message.seq, thread));
+  }
+
+  void _onCursor(ChatThreadState current, {int? delivered, int? read}) {
+    // A message that was read was delivered too.
+    final thread = current.thread.advanced(
+      otherDeliveredSeq: math.max(delivered ?? 0, read ?? 0),
+      otherReadSeq: read,
+    );
+    state =
+        AsyncData(current.copyWith(thread: thread, messages: _normalize(current.messages, thread)));
+  }
+
+  void _onThreadUpdated(ChatThreadState current, Map<String, dynamic> data) {
+    final lastSeq = (data['lastSeq'] as num?)?.toInt() ?? 0;
+    final canSend = data['canSend'] as bool? ?? true;
+    final thread = current.thread
+        .withAccess(
+            canSend: canSend, reason: ReadOnlyReason.from(data['readOnlyReason'] as String?))
+        .advanced(lastSeq: lastSeq);
+    state = AsyncData(current.copyWith(thread: thread));
+    // The server has messages the phone does not (a message too large to push): read them.
+    if (lastSeq > current.lastSeq) unawaited(_poll());
+  }
+
+  void _onTyping(ChatThreadState current, bool typing) {
+    _typingHide?.cancel();
+    state = AsyncData(current.copyWith(typing: typing));
+    if (!typing) return;
+    _typingHide = Timer(_typingShownFor, () {
+      final latest = state.value;
+      if (ref.mounted && latest != null) state = AsyncData(latest.copyWith(typing: false));
+    });
   }
 
   void _closeThread(ReadOnlyReason reason) {

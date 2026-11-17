@@ -9,6 +9,7 @@ import '../../../core/theme/spacing.dart';
 import '../../../core/theme/text_styles.dart';
 import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/loading_indicator.dart';
+import '../../../core/widgets/realtime_reconnecting_banner.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../listing/data/photo_source.dart';
 import '../domain/chat.dart';
@@ -48,6 +49,7 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
   void initState() {
     super.initState();
     _scroll.addListener(_onScroll);
+    _text.addListener(_onTextChanged);
   }
 
   @override
@@ -56,6 +58,9 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
     _text.dispose();
     super.dispose();
   }
+
+  /// Lets the other person see "typing…" while the field holds text.
+  void _onTextChanged() => _controller.typingChanged(_text.text.trim().isNotEmpty);
 
   void _onScroll() {
     final atBottom = !_scroll.hasClients || _scroll.offset < _bottomSlack;
@@ -227,7 +232,9 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
           onCallsComingSoon: () => _snack(l10n.chatCallsComingSoon),
         ),
         const SafetyBanner(),
+        const RealtimeReconnectingBanner(),
         Expanded(child: _messages(context, data)),
+        if (data.typing && thread.canSend) _TypingIndicator(name: thread.counterpart.displayName),
         if (thread.canSend)
           ChatComposer(controller: _text, onSend: _send, onAttach: _attach)
         else
@@ -340,6 +347,32 @@ class _DateSeparator extends StatelessWidget {
       child: Center(
         child: Text(
           MaterialLocalizations.of(context).formatMediumDate(date),
+          style: AppTextStyles.caption.copyWith(color: AppColors.brandMutedText),
+        ),
+      ),
+    );
+  }
+}
+
+/// "Name is typing…" above the composer; announced politely when it appears.
+class _TypingIndicator extends StatelessWidget {
+  final String name;
+
+  const _TypingIndicator({required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    final label = AppLocalizations.of(context).chatTyping(name);
+    return Semantics(
+      liveRegion: true,
+      label: label,
+      excludeSemantics: true,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(AppSpacing.md, 0, AppSpacing.md, AppSpacing.xs),
+        child: Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: AppTextStyles.caption.copyWith(color: AppColors.brandMutedText),
         ),
       ),

@@ -1248,5 +1248,8 @@
   "contactOpening": "Opening chat",
   "listingViewUnavailable": "Unavailable",
   "listingViewNotNegotiable": "Not negotiable",
-  "listingViewIdentityRequired": "Identity verification needed"
+  "listingViewIdentityRequired": "Identity verification needed",
+  "realtimeReconnecting": "Reconnecting…",
+  "chatTyping": "{name} is typing…",
+  "@chatTyping": {"placeholders": {"name": {"type": "String"}}}
 }
