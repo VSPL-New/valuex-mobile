@@ -31,6 +31,7 @@ abstract final class RealtimeTypes {
   static const String chatRead = 'chat.read';
   static const String chatTyping = 'chat.typing';
   static const String chatThreadUpdated = 'chat.thread.updated';
+  static const String negotiationUpdated = 'negotiation.updated';
 
   /// Frames the app sends.
   static const String ping = 'ping';

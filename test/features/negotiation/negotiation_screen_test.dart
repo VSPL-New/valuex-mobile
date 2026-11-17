@@ -1,0 +1,352 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:valuex_mobile/core/network/api_error.dart';
+import 'package:valuex_mobile/core/realtime/realtime_event.dart';
+import 'package:valuex_mobile/features/negotiation/presentation/negotiation_screen.dart';
+
+import '../../helpers/fonts.dart';
+import 'negotiation_fixtures.dart';
+
+ApiError _refusal(String code) =>
+    ApiError(type: ApiErrorType.business, message: 'x', code: code, statusCode: 409);
+
+void main() {
+  late MockNegotiationRepository repo;
+
+  setUpAll(loadBrandFonts);
+
+  setUp(() {
+    repo = MockNegotiationRepository();
+  });
+
+  Future<void> pump(
+    WidgetTester tester, {
+    Locale locale = const Locale('en'),
+    double textScale = 1,
+    Size size = const Size(390, 844),
+  }) async {
+    await pumpNegotiationApp(
+      tester,
+      const NegotiationScreen(negotiationId: 'n1'),
+      repo: repo,
+      locale: locale,
+      textScale: textScale,
+      size: size,
+    );
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('shows a buyer waiting for the seller with the countdown, round and timeline',
+      (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => negotiation());
+
+    await pump(tester);
+
+    expect(find.text('Waiting for the seller'), findsOneWidget);
+    expect(find.text('Round 1 of 5'), findsOneWidget);
+    expect(find.text('Expires in 4h 20m'), findsOneWidget);
+    expect(find.text('Apple Watch'), findsOneWidget);
+    expect(find.text('Asking price: ₹14,500'), findsOneWidget);
+    expect(find.text('Asha K'), findsOneWidget);
+    expect(find.text('You · round 1'), findsOneWidget);
+    expect(find.text('₹12,000'), findsOneWidget);
+    expect(find.text('Cancel offer'), findsOneWidget);
+    expect(find.textContaining('Accept'), findsNothing);
+    expect(find.text('Counter'), findsNothing);
+  });
+
+  testWidgets('lets the buyer withdraw after confirming', (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => negotiation());
+    when(() => repo.cancel('n1')).thenAnswer(
+      (_) async => negotiation(state: 'NEGOTIATION_CANCELLED', awaiting: 'NONE', actions: {}),
+    );
+    await pump(tester);
+
+    await tester.tap(find.text('Cancel offer'));
+    await tester.pumpAndSettle();
+    expect(find.text('Cancel your offer?'), findsOneWidget);
+    await tester.tap(find.text('Keep'));
+    await tester.pumpAndSettle();
+    verifyNever(() => repo.cancel(any()));
+
+    await tester.tap(find.text('Cancel offer'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Cancel offer').last);
+    await tester.pumpAndSettle();
+
+    verify(() => repo.cancel('n1')).called(1);
+    expect(find.text('Cancelled'), findsOneWidget);
+    expect(find.text('Cancel offer'), findsNothing);
+  });
+
+  testWidgets('gives the seller Accept, Counter and Decline on their turn', (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => sellerTurn());
+
+    await pump(tester);
+
+    expect(find.text('Buyer offered ₹12,000'), findsOneWidget);
+    expect(find.text('Accept ₹12,000'), findsOneWidget);
+    expect(find.text('Counter'), findsOneWidget);
+    expect(find.text('Decline'), findsOneWidget);
+    expect(find.text('Cancel offer'), findsNothing);
+    expect(find.text('Ravi'), findsOneWidget);
+    expect(find.text('Buyer · round 1'), findsOneWidget);
+  });
+
+  testWidgets('accepts at the offered price and shows the locked price', (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => sellerTurn());
+    when(() => repo.accept('o1')).thenAnswer((_) async => negotiation(
+          role: 'SELLER',
+          state: 'OFFER_ACCEPTED',
+          awaiting: 'NONE',
+          agreedPrice: 12000,
+          priceLockExpiresAt: '2026-11-18T10:00:00Z',
+          expiresAt: null,
+          offers: [offerJson('o1', 'BUYER', 12000, 1, status: 'ACCEPTED')],
+          actions: {},
+        ));
+    await pump(tester);
+
+    await tester.tap(find.text('Accept ₹12,000'));
+    await tester.pumpAndSettle();
+
+    verify(() => repo.accept('o1')).called(1);
+    expect(find.text('Accepted at ₹12,000'), findsOneWidget);
+    expect(find.text('Price locked at ₹12,000. Ends in 24h 0m'), findsOneWidget);
+    expect(find.text('Accept ₹12,000'), findsNothing);
+  });
+
+  testWidgets('declines only after confirming, and the negotiation then shows as declined',
+      (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => sellerTurn());
+    when(() => repo.reject('o1')).thenAnswer((_) async => negotiation(
+          role: 'SELLER',
+          state: 'OFFER_REJECTED',
+          awaiting: 'NONE',
+          actions: {},
+          expiresAt: null,
+        ));
+    await pump(tester);
+
+    await tester.tap(find.text('Decline'));
+    await tester.pumpAndSettle();
+    expect(find.text('Decline this offer?'), findsOneWidget);
+    await tester.tap(find.text('Decline').last);
+    await tester.pumpAndSettle();
+
+    verify(() => repo.reject('o1')).called(1);
+    expect(find.text('Declined'), findsOneWidget);
+  });
+
+  testWidgets('counters with an amount from the sheet', (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => sellerTurn());
+    when(() => repo.counter('o1', amount: '13000', clientRequestId: any(named: 'clientRequestId')))
+        .thenAnswer((_) async => negotiation(
+              role: 'SELLER',
+              state: 'BUYER_REVIEWING',
+              awaiting: 'BUYER',
+              round: 2,
+              actions: {},
+              offers: [
+                offerJson('o1', 'BUYER', 12000, 1, status: 'SUPERSEDED'),
+                offerJson('o2', 'SELLER', 13000, 2),
+              ],
+            ));
+    await pump(tester);
+
+    await tester.tap(find.text('Counter'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), '13000');
+    await tester.tap(find.text('Send counter offer'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Waiting for the buyer'), findsOneWidget);
+    expect(find.text('Round 2 of 5'), findsOneWidget);
+    expect(find.text('₹13,000'), findsOneWidget);
+  });
+
+  testWidgets('lets the buyer answer a seller counter', (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => buyerTurn());
+
+    await pump(tester);
+
+    expect(find.text('Seller countered ₹13,500'), findsOneWidget);
+    expect(find.text('Accept ₹13,500'), findsOneWidget);
+    expect(find.text('Counter'), findsOneWidget);
+    expect(find.text('Decline'), findsOneWidget);
+    expect(find.text('Cancel offer'), findsOneWidget);
+    expect(find.text('Seller · round 2'), findsOneWidget);
+  });
+
+  testWidgets('shows a refusal in words and the latest state after a stale answer', (tester) async {
+    var reads = 0;
+    when(() => repo.get('n1')).thenAnswer((_) async {
+      reads++;
+      return reads == 1
+          ? sellerTurn()
+          : negotiation(
+              role: 'SELLER',
+              state: 'OFFER_REJECTED',
+              awaiting: 'NONE',
+              actions: {},
+              expiresAt: null);
+    });
+    when(() => repo.accept('o1')).thenThrow(_refusal('ERROR_OFFER_NOT_CURRENT'));
+    await pump(tester);
+
+    await tester.tap(find.text('Accept ₹12,000'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('This offer has changed. The latest is shown'), findsOneWidget);
+    expect(find.text('Declined'), findsOneWidget);
+  });
+
+  testWidgets('shows the range in words when a counter is refused', (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => sellerTurn());
+    when(() => repo.counter('o1',
+        amount: any(named: 'amount'),
+        clientRequestId: any(named: 'clientRequestId'))).thenThrow(const ApiError(
+      type: ApiErrorType.validation,
+      message: 'x',
+      code: 'ERROR_INVALID_COUNTER',
+      statusCode: 422,
+      details: {'min': '12000.01', 'max': '14500.00'},
+    ));
+    await pump(tester);
+
+    await tester.tap(find.text('Counter'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), '13000');
+    await tester.tap(find.text('Send counter offer'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Counter offer must be between ₹12,000.01 and ₹14,500'), findsOneWidget);
+  });
+
+  testWidgets('shows the agreed price of a property without a lock', (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => negotiation(
+          state: 'OFFER_ACCEPTED',
+          awaiting: 'NONE',
+          agreedPrice: 12000,
+          expiresAt: null,
+          realEstate: true,
+          offers: [offerJson('o1', 'BUYER', 12000, 1, status: 'ACCEPTED')],
+        ));
+
+    await pump(tester);
+
+    expect(find.text('Price agreed: ₹12,000. The owner will close the deal.'), findsOneWidget);
+    expect(find.textContaining('Ends in'), findsNothing);
+  });
+
+  testWidgets('says the item is gone and offers no answer when the listing is unavailable',
+      (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => negotiation(
+          role: 'SELLER',
+          available: false,
+          actions: {
+            'canAccept': false,
+            'canReject': false,
+            'canCounter': false,
+            'canCancel': false
+          },
+        ));
+
+    await pump(tester);
+
+    expect(find.text('This item is no longer available'), findsOneWidget);
+    expect(find.textContaining('Accept'), findsNothing);
+  });
+
+  testWidgets('shows an error with a Retry when the negotiation cannot be loaded', (tester) async {
+    var fail = true;
+    when(() => repo.get('n1')).thenAnswer((_) async {
+      if (fail) throw _refusal('ERROR_NEGOTIATION_NOT_FOUND');
+      return negotiation();
+    });
+    await pump(tester);
+
+    expect(find.text('Retry'), findsOneWidget);
+    fail = false;
+    await tester.tap(find.text('Retry'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Waiting for the seller'), findsOneWidget);
+  });
+
+  testWidgets('opens the listing and the chat from the screen', (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => negotiation());
+    await pump(tester);
+
+    await tester.tap(find.text('Apple Watch'));
+    await tester.pumpAndSettle();
+    expect(find.text('listing l1'), findsOneWidget);
+  });
+
+  testWidgets('opens the chat thread from the app bar', (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => negotiation());
+    await pump(tester);
+
+    await tester.tap(find.byTooltip('Chat with seller'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('thread t1'), findsOneWidget);
+  });
+
+  testWidgets('hides the chat button when the negotiation has no thread', (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => negotiation(threadId: null));
+
+    await pump(tester);
+
+    expect(find.byTooltip('Chat with seller'), findsNothing);
+  });
+
+  testWidgets('updates when the server says the negotiation changed', (tester) async {
+    var reads = 0;
+    when(() => repo.get('n1')).thenAnswer((_) async {
+      reads++;
+      return reads == 1 ? negotiation() : buyerTurn();
+    });
+    final realtime = await pumpNegotiationApp(
+      tester,
+      const NegotiationScreen(negotiationId: 'n1'),
+      repo: repo,
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Waiting for the seller'), findsOneWidget);
+
+    realtime.emit(RealtimeTypes.negotiationUpdated, {'negotiationId': 'n1'});
+    await tester.pumpAndSettle();
+
+    expect(find.text('Seller countered ₹13,500'), findsOneWidget);
+  });
+
+  testWidgets('counts down from the server clock, not the phone clock', (tester) async {
+    when(() => repo.get('n1'))
+        .thenAnswer((_) async => negotiation(expiresAt: '2026-11-17T10:00:30Z'));
+
+    await pump(tester);
+
+    expect(find.text('Expires in under a minute'), findsOneWidget);
+  });
+
+  testWidgets('shows a deadline that already passed on the server as expired', (tester) async {
+    when(() => repo.get('n1'))
+        .thenAnswer((_) async => negotiation(expiresAt: '2026-11-17T09:59:00Z'));
+
+    await pump(tester);
+
+    expect(find.text('Expired'), findsOneWidget);
+  });
+
+  testWidgets('works in Hindi, at large text and on a narrow screen', (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => buyerTurn());
+
+    await pump(tester, locale: const Locale('hi'), textScale: 2, size: const Size(320, 640));
+
+    expect(find.text('Seller countered ₹13,500'), findsNothing);
+    expect(find.textContaining('₹13,500'), findsWidgets);
+    expect(tester.takeException(), isNull);
+  });
+}

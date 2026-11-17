@@ -41,6 +41,11 @@ NotificationTarget? notificationTargetFor(String? deepLink) {
     final id = uri.queryParameters['id'];
     return id == null || id.isEmpty ? null : NotificationTarget(RouteNames.savedSearch(id));
   }
+  if (path.startsWith('${RouteNames.negotiationBase}/') &&
+      path.length > RouteNames.negotiationBase.length + 1) {
+    // An offer, counter or answer (US-017): opens that negotiation.
+    return NotificationTarget(path);
+  }
   final listingRoute = _listingRoutes[path];
   if (listingRoute != null) {
     final listingId = uri.queryParameters['listingId'];

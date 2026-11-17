@@ -15,6 +15,13 @@ class ListingActions extends StatelessWidget {
   final VoidCallback onUnbuilt;
   final VoidCallback onChat;
 
+  /// Opens the Make Offer sheet, or the negotiation the buyer already has (US-017); an older caller
+  /// that does not pass it keeps the coming soon message.
+  final VoidCallback? onOffer;
+
+  /// The buyer already has an open negotiation here, so the button reads "View offer".
+  final bool hasOffer;
+
   /// The buyer already has a chat about this listing, so the button reads "Open chat".
   final bool hasChat;
 
@@ -26,6 +33,8 @@ class ListingActions extends StatelessWidget {
     required this.capabilities,
     required this.onUnbuilt,
     required this.onChat,
+    this.onOffer,
+    this.hasOffer = false,
     this.hasChat = false,
     this.chatBusy = false,
   });
@@ -44,7 +53,12 @@ class ListingActions extends StatelessWidget {
       (l10n.previewVideo, capabilities.video, Icons.videocam_outlined, onUnbuilt),
     ].where((entry) => !entry.$2.hidden).toList();
     final commerce = [
-      (l10n.previewMakeOffer, capabilities.offer, false, onUnbuilt),
+      (
+        hasOffer ? l10n.listingViewViewOffer : l10n.previewMakeOffer,
+        capabilities.offer,
+        false,
+        onOffer ?? onUnbuilt,
+      ),
       (l10n.listingViewAddToCart, capabilities.cart, false, onUnbuilt),
       (l10n.previewBuyNow, capabilities.buyNow, true, onUnbuilt),
     ].where((entry) => !entry.$2.hidden).toList();
@@ -131,6 +145,7 @@ class _Action extends StatelessWidget {
         CapabilityReason.unavailable => l10n.listingViewUnavailable,
         CapabilityReason.notNegotiable => l10n.listingViewNotNegotiable,
         CapabilityReason.identityRequired => l10n.listingViewIdentityRequired,
+        CapabilityReason.reserved => l10n.listingViewReserved,
         _ => l10n.listingViewComingSoon,
       };
 

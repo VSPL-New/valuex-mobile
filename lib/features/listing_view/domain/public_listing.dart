@@ -8,6 +8,7 @@ enum CapabilityReason {
   unavailable,
   notNegotiable,
   identityRequired,
+  reserved,
   other;
 
   static CapabilityReason from(String? value) => switch (value) {
@@ -17,6 +18,7 @@ enum CapabilityReason {
         'UNAVAILABLE' => unavailable,
         'NOT_NEGOTIABLE' => notNegotiable,
         'IDENTITY_REQUIRED' => identityRequired,
+        'RESERVED' => reserved,
         _ => other,
       };
 }
@@ -189,6 +191,9 @@ class PublicListing {
   /// The caller's existing chat about this listing, when there is one.
   final String? chatThreadId;
 
+  /// The buyer's open price negotiation on this listing, if any (US-017).
+  final String? negotiationId;
+
   /// The signed-in buyer has saved this listing (US-073); the heart starts from it.
   final bool saved;
 
@@ -212,6 +217,7 @@ class PublicListing {
     this.serverTime,
     this.ownListing = false,
     this.chatThreadId,
+    this.negotiationId,
     this.saved = false,
   });
 
@@ -263,6 +269,9 @@ class PublicListing {
       ownListing: json['ownListing'] == true,
       chatThreadId: json['contact'] is Map<String, dynamic>
           ? (json['contact'] as Map<String, dynamic>)['threadId'] as String?
+          : null,
+      negotiationId: json['contact'] is Map<String, dynamic>
+          ? (json['contact'] as Map<String, dynamic>)['negotiationId'] as String?
           : null,
       saved: json['saved'] == true,
     );

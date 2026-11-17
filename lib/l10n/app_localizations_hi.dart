@@ -3184,4 +3184,344 @@ class AppLocalizationsHi extends AppLocalizations {
   String chatTyping(String name) {
     return '$name टाइप कर रहे हैं…';
   }
+
+  @override
+  String get negotiationTitle => 'ऑफ़र';
+
+  @override
+  String get offerSheetTitle => 'ऑफ़र दें';
+
+  @override
+  String offerAskingPrice(String price) {
+    return 'मांगी गई कीमत: $price';
+  }
+
+  @override
+  String get offerAmountLabel => 'आपका ऑफ़र';
+
+  @override
+  String offerRangeHint(String max) {
+    return 'आप अधिकतम $max तक ऑफ़र दे सकते हैं';
+  }
+
+  @override
+  String get offerAmountRequired => 'अपना ऑफ़र दर्ज करें';
+
+  @override
+  String get offerAmountInvalid => 'सही राशि दर्ज करें, जैसे 850 या 850.50';
+
+  @override
+  String offerAmountOutOfRange(String max) {
+    return 'ऑफ़र ₹1 से $max के बीच होना चाहिए';
+  }
+
+  @override
+  String get offerSubmit => 'ऑफ़र भेजें';
+
+  @override
+  String get offerChatWithSeller => 'विक्रेता से चैट करें';
+
+  @override
+  String get offerLowTitle => 'मांगी गई कीमत से बहुत कम';
+
+  @override
+  String get offerLowBody => 'आपका ऑफ़र मांगी गई कीमत से काफ़ी कम है। फिर भी भेजें?';
+
+  @override
+  String get offerLowConfirm => 'फिर भी भेजें';
+
+  @override
+  String get offerKeepEditing => 'ऑफ़र बदलें';
+
+  @override
+  String get counterSheetTitle => 'काउंटर ऑफ़र';
+
+  @override
+  String counterRangeHint(String min, String max) {
+    return '$min से $max के बीच दर्ज करें';
+  }
+
+  @override
+  String counterAmountOutOfRange(String min, String max) {
+    return 'काउंटर ऑफ़र $min से $max के बीच होना चाहिए';
+  }
+
+  @override
+  String get counterSubmit => 'काउंटर ऑफ़र भेजें';
+
+  @override
+  String get negotiationAccept => 'स्वीकार करें';
+
+  @override
+  String negotiationAcceptAmount(String amount) {
+    return '$amount स्वीकार करें';
+  }
+
+  @override
+  String get negotiationDecline => 'अस्वीकार करें';
+
+  @override
+  String get negotiationCounter => 'काउंटर';
+
+  @override
+  String get negotiationCancelOffer => 'ऑफ़र रद्द करें';
+
+  @override
+  String get negotiationDeclineTitle => 'यह ऑफ़र अस्वीकार करें?';
+
+  @override
+  String get negotiationDeclineBody => 'बातचीत समाप्त हो जाएगी।';
+
+  @override
+  String get negotiationCancelTitle => 'अपना ऑफ़र रद्द करें?';
+
+  @override
+  String get negotiationCancelBody => 'आप बाद में नया ऑफ़र दे सकते हैं। तय कीमत मुक्त हो जाएगी।';
+
+  @override
+  String get negotiationKeep => 'रखें';
+
+  @override
+  String negotiationAsking(String price) {
+    return 'मांगी गई कीमत: $price';
+  }
+
+  @override
+  String negotiationRound(int round, int max) {
+    return 'राउंड $round / $max';
+  }
+
+  @override
+  String get negotiationStatusWaitingSeller => 'विक्रेता के जवाब की प्रतीक्षा';
+
+  @override
+  String get negotiationStatusWaitingBuyer => 'खरीदार के जवाब की प्रतीक्षा';
+
+  @override
+  String negotiationStatusSellerCountered(String amount) {
+    return 'विक्रेता ने $amount का काउंटर दिया';
+  }
+
+  @override
+  String negotiationStatusBuyerOffered(String amount) {
+    return 'खरीदार ने $amount का ऑफ़र दिया';
+  }
+
+  @override
+  String negotiationStatusAccepted(String amount) {
+    return '$amount पर स्वीकार';
+  }
+
+  @override
+  String get negotiationStatusDeclined => 'अस्वीकृत';
+
+  @override
+  String get negotiationStatusExpired => 'समाप्त';
+
+  @override
+  String get negotiationStatusCancelled => 'रद्द';
+
+  @override
+  String get negotiationStatusConverted => 'ऑर्डर दिया गया';
+
+  @override
+  String get negotiationStatusUnavailable => 'यह वस्तु अब उपलब्ध नहीं है';
+
+  @override
+  String negotiationExpiresIn(String duration) {
+    return '$duration में समाप्त';
+  }
+
+  @override
+  String get negotiationExpiredChip => 'समाप्त';
+
+  @override
+  String negotiationLockBanner(String amount, String duration) {
+    return 'कीमत $amount पर तय है। $duration में समाप्त';
+  }
+
+  @override
+  String negotiationPropertyAgreed(String amount) {
+    return 'कीमत तय हुई: $amount। मालिक सौदा पूरा करेंगे।';
+  }
+
+  @override
+  String negotiationDurationHoursMinutes(int hours, int minutes) {
+    return '$hours घं $minutes मि';
+  }
+
+  @override
+  String negotiationDurationMinutes(int minutes) {
+    return '$minutes मि';
+  }
+
+  @override
+  String get negotiationDurationLessThanMinute => 'एक मिनट से कम';
+
+  @override
+  String get negotiationOffersHeading => 'ऑफ़र';
+
+  @override
+  String negotiationOfferBy(String party, int round) {
+    return '$party · राउंड $round';
+  }
+
+  @override
+  String get negotiationPartyYou => 'आप';
+
+  @override
+  String get negotiationPartyBuyer => 'खरीदार';
+
+  @override
+  String get negotiationPartySeller => 'विक्रेता';
+
+  @override
+  String negotiationErrorInvalidOffer(String min, String max) {
+    return 'ऑफ़र ₹$min से ₹$max के बीच होना चाहिए';
+  }
+
+  @override
+  String negotiationErrorInvalidCounter(String min, String max) {
+    return 'काउंटर ऑफ़र ₹$min से ₹$max के बीच होना चाहिए';
+  }
+
+  @override
+  String get negotiationErrorMax => 'बातचीत के प्रयासों की अधिकतम सीमा पूरी हो गई';
+
+  @override
+  String get negotiationErrorMaxSeller => 'बातचीत के राउंड की अधिकतम सीमा पूरी हो गई';
+
+  @override
+  String get negotiationErrorExpired => 'यह बातचीत समाप्त हो चुकी है';
+
+  @override
+  String get negotiationErrorNotNegotiable => 'इस लिस्टिंग पर ऑफ़र स्वीकार नहीं किए जाते';
+
+  @override
+  String get negotiationErrorExists => 'इस लिस्टिंग पर आपकी बातचीत पहले से खुली है';
+
+  @override
+  String get negotiationErrorCooldown => 'आप इस वस्तु पर कुछ समय बाद नया ऑफ़र दे सकते हैं';
+
+  @override
+  String get negotiationErrorTooMany => 'आपकी बहुत सी बातचीत खुली हैं। पहले कोई पूरी या रद्द करें';
+
+  @override
+  String get negotiationErrorNotCurrent => 'यह ऑफ़र बदल गया है। नवीनतम दिखाया गया है';
+
+  @override
+  String get negotiationErrorReserved => 'यह वस्तु अभी किसी अन्य खरीदार के लिए आरक्षित है';
+
+  @override
+  String get negotiationErrorUnavailable => 'यह वस्तु अब उपलब्ध नहीं है';
+
+  @override
+  String get negotiationErrorAlreadyAccepted =>
+      'इस वस्तु के लिए एक कीमत पहले ही स्वीकार हो चुकी है';
+
+  @override
+  String get negotiationErrorAadhaar => 'ऑफ़र देने के लिए आधार सत्यापन पूरा करें';
+
+  @override
+  String get negotiationErrorRateLimited => 'बहुत ज़्यादा ऑफ़र। एक मिनट बाद कोशिश करें';
+
+  @override
+  String get listingViewReserved => 'अभी आरक्षित';
+
+  @override
+  String get listingViewViewOffer => 'ऑफ़र देखें';
+
+  @override
+  String offerCardOffered(String who, String amount) {
+    return '$who $amount का ऑफ़र दिया';
+  }
+
+  @override
+  String offerCardCountered(String who, String amount) {
+    return '$who $amount का काउंटर दिया';
+  }
+
+  @override
+  String offerCardAccepted(String who, String amount) {
+    return '$who $amount स्वीकार किया';
+  }
+
+  @override
+  String offerCardDeclined(String who, String amount) {
+    return '$who $amount अस्वीकार किया';
+  }
+
+  @override
+  String get offerCardWithdrawn => 'खरीदार ने ऑफ़र वापस ले लिया';
+
+  @override
+  String get offerCardEnded => 'बातचीत समाप्त: वस्तु अब उपलब्ध नहीं है';
+
+  @override
+  String get offerCardView => 'ऑफ़र देखें';
+
+  @override
+  String get offerCardWhoYou => 'आपने';
+
+  @override
+  String get offerCardWhoBuyer => 'खरीदार ने';
+
+  @override
+  String get offerCardWhoSeller => 'विक्रेता ने';
+
+  @override
+  String notifOfferReceivedTitle(String title) {
+    return '$title पर नया ऑफ़र';
+  }
+
+  @override
+  String notifOfferReceivedBody(String amount) {
+    return 'एक खरीदार ने $amount का ऑफ़र दिया';
+  }
+
+  @override
+  String notifOfferCounteredTitle(String title) {
+    return '$title पर काउंटर ऑफ़र';
+  }
+
+  @override
+  String notifOfferCounteredBody(String amount) {
+    return 'दूसरे पक्ष ने $amount का काउंटर दिया';
+  }
+
+  @override
+  String notifOfferAcceptedTitle(String title) {
+    return '$title के लिए ऑफ़र स्वीकार';
+  }
+
+  @override
+  String notifOfferAcceptedBody(String amount) {
+    return 'कीमत $amount तय हुई';
+  }
+
+  @override
+  String notifOfferRejectedTitle(String title) {
+    return '$title के लिए ऑफ़र अस्वीकार';
+  }
+
+  @override
+  String notifOfferRejectedBody(String amount) {
+    return '$amount का ऑफ़र अस्वीकार किया गया';
+  }
+
+  @override
+  String notifOfferWithdrawnTitle(String title) {
+    return '$title के लिए ऑफ़र वापस लिया गया';
+  }
+
+  @override
+  String get notifOfferWithdrawnBody => 'खरीदार ने ऑफ़र वापस ले लिया';
+
+  @override
+  String notifNegotiationCancelledTitle(String title) {
+    return '$title की बातचीत समाप्त';
+  }
+
+  @override
+  String get notifNegotiationCancelledBody => 'यह वस्तु अब उपलब्ध नहीं है';
 }
