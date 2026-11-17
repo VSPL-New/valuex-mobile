@@ -601,13 +601,14 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('a screen that is not built yet says it is coming soon', (tester) async {
+    testWidgets('the Chats tab opens the conversation list', (tester) async {
       final harness = await openHome(tester);
 
       await tester.tap(find.text('Chats'));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
-      expect(find.text('This is coming soon'), findsOneWidget);
+      expect(find.text('Messages'), findsOneWidget);
+      expect(find.text('This is coming soon'), findsNothing);
       await harness.dispose();
     });
 

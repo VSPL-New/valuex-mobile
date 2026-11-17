@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../core/routing/route_names.dart';
+import '../../chat/presentation/providers/chat_unread_provider.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/theme/text_styles.dart';
@@ -71,7 +72,7 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
       bottomNavigationBar: BrandBottomNav(
         current: BottomNavItem.home,
-        chatsHasUnread: true,
+        chatsHasUnread: ref.watch(chatsHasUnreadProvider),
         onSelected: (item) =>
             onMainNavSelected(context, ref, current: BottomNavItem.home, item: item),
       ),

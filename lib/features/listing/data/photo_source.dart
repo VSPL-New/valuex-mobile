@@ -36,8 +36,10 @@ class DevicePhotoSource implements PhotoSource {
   static const int _quality = 85;
 
   final ImagePicker _picker;
+  final double maxSide;
 
-  DevicePhotoSource([ImagePicker? picker]) : _picker = picker ?? ImagePicker();
+  DevicePhotoSource([ImagePicker? picker, this.maxSide = _maxSide])
+      : _picker = picker ?? ImagePicker();
 
   @override
   Future<List<PickedPhoto>> pick(PhotoSourceKind kind, {required int limit}) async {
@@ -46,23 +48,23 @@ class DevicePhotoSource implements PhotoSource {
       if (kind == PhotoSourceKind.camera) {
         final file = await _picker.pickImage(
           source: ImageSource.camera,
-          maxWidth: _maxSide,
-          maxHeight: _maxSide,
+          maxWidth: maxSide,
+          maxHeight: maxSide,
           imageQuality: _quality,
         );
         files = [if (file != null) file];
       } else if (limit == 1) {
         final file = await _picker.pickImage(
           source: ImageSource.gallery,
-          maxWidth: _maxSide,
-          maxHeight: _maxSide,
+          maxWidth: maxSide,
+          maxHeight: maxSide,
           imageQuality: _quality,
         );
         files = [if (file != null) file];
       } else {
         files = await _picker.pickMultiImage(
-          maxWidth: _maxSide,
-          maxHeight: _maxSide,
+          maxWidth: maxSide,
+          maxHeight: maxSide,
           imageQuality: _quality,
           limit: limit,
         );
@@ -97,3 +99,6 @@ class DevicePhotoSource implements PhotoSource {
 }
 
 final photoSourceProvider = Provider<PhotoSource>((ref) => DevicePhotoSource());
+
+/// Pictures sent in a chat are scaled to 1600 px, the longest side the server keeps (US-013).
+final chatPhotoSourceProvider = Provider<PhotoSource>((ref) => DevicePhotoSource(null, 1600));

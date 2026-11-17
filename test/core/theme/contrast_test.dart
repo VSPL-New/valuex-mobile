@@ -40,6 +40,17 @@ void main() {
     ),
     'price note text on the amber card': (AppColors.brandMutedText, AppColors.sellNoteTint),
     'Boosted badge': (AppColors.brandOnPrimary, AppColors.brandAccent),
+    'sent chat bubble text on the blue end of its gradient': (
+      AppColors.brandOnPrimary,
+      AppColors.brandPrimary,
+    ),
+    'sent chat bubble text on the magenta end of its gradient': (
+      AppColors.brandOnPrimary,
+      AppColors.brandAccent,
+    ),
+    'restricted term on its highlight': (AppColors.brandError, AppColors.brandErrorTint),
+    'safety banner text on its pill': (AppColors.brandForeground, AppColors.brandMuted),
+    'received chat bubble time on white': (AppColors.brandMutedText, AppColors.brandSurface),
     'promo text on the dark card': (AppColors.brandOnPrimary, AppColors.brandForeground),
     'active tab label on white': (AppColors.brandLink, AppColors.brandSurface),
     'inactive tab label on white': (AppColors.brandMutedText, AppColors.brandSurface),

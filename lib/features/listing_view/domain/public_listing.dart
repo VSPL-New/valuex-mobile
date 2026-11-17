@@ -5,12 +5,18 @@ enum CapabilityReason {
   comingSoon,
   notApplicable,
   ownListing,
+  unavailable,
+  notNegotiable,
+  identityRequired,
   other;
 
   static CapabilityReason from(String? value) => switch (value) {
         'COMING_SOON' => comingSoon,
         'NOT_APPLICABLE' => notApplicable,
         'OWN_LISTING' => ownListing,
+        'UNAVAILABLE' => unavailable,
+        'NOT_NEGOTIABLE' => notNegotiable,
+        'IDENTITY_REQUIRED' => identityRequired,
         _ => other,
       };
 }
@@ -40,6 +46,9 @@ class Capabilities {
   final Capability chat;
   final Capability call;
   final Capability video;
+
+  /// Make an Offer; an older server does not send it, so it stays hidden.
+  final Capability offer;
   final Capability cart;
   final Capability buyNow;
 
@@ -49,6 +58,7 @@ class Capabilities {
     required this.video,
     required this.cart,
     required this.buyNow,
+    this.offer = Capability.missing,
   });
 
   factory Capabilities.fromJson(Object? json) {
@@ -57,6 +67,7 @@ class Capabilities {
       chat: Capability.fromJson(map['chat']),
       call: Capability.fromJson(map['call']),
       video: Capability.fromJson(map['video']),
+      offer: Capability.fromJson(map['offer']),
       cart: Capability.fromJson(map['cart']),
       buyNow: Capability.fromJson(map['buyNow']),
     );
@@ -175,6 +186,9 @@ class PublicListing {
   final Capabilities capabilities;
   final bool ownListing;
 
+  /// The caller's existing chat about this listing, when there is one.
+  final String? chatThreadId;
+
   /// The signed-in buyer has saved this listing (US-073); the heart starts from it.
   final bool saved;
 
@@ -197,6 +211,7 @@ class PublicListing {
     this.publishedAt,
     this.serverTime,
     this.ownListing = false,
+    this.chatThreadId,
     this.saved = false,
   });
 
@@ -246,6 +261,9 @@ class PublicListing {
       serverTime: DateTime.tryParse(json['serverTime'] as String? ?? ''),
       capabilities: Capabilities.fromJson(json['capabilities']),
       ownListing: json['ownListing'] == true,
+      chatThreadId: json['contact'] is Map<String, dynamic>
+          ? (json['contact'] as Map<String, dynamic>)['threadId'] as String?
+          : null,
       saved: json['saved'] == true,
     );
   }

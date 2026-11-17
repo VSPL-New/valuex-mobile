@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/network/api_error.dart';
 import '../../../core/routing/route_names.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/theme/text_styles.dart';
@@ -8,8 +9,11 @@ import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/square_back_button.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../chat/presentation/contact_error_messages.dart';
+import '../../chat/presentation/providers/chat_launcher.dart';
 import '../../home/presentation/main_nav.dart';
 import '../../saved_listings/presentation/widgets/save_heart.dart';
+import '../domain/public_listing.dart';
 import 'listing_view_messages.dart';
 import 'providers/listing_view_providers.dart';
 import 'widgets/listing_actions.dart';
@@ -24,6 +28,31 @@ class ListingViewScreen extends ConsumerWidget {
   final String listingId;
 
   const ListingViewScreen({super.key, required this.listingId});
+
+  /// Opens the chat about the listing (US-069): straight to an existing one, otherwise the server
+  /// starts it. A refusal shows its message; a listing that is gone refreshes the page.
+  Future<void> _openChat(BuildContext context, WidgetRef ref, PublicListing listing) async {
+    final l10n = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final result = await ref
+        .read(chatLauncherProvider.notifier)
+        .open(listing.listingId, knownThreadId: listing.chatThreadId);
+    if (!context.mounted) return;
+    final threadId = result.threadId;
+    if (threadId != null) {
+      await context.push(RouteNames.chatThread(threadId));
+      if (context.mounted) ref.invalidate(publicListingProvider(listingId));
+      return;
+    }
+    final error = result.error;
+    if (error == null) return;
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(contactErrorMessage(l10n, error))));
+    if (error is ApiError && error.code == 'ERROR_LISTING_NOT_AVAILABLE') {
+      ref.invalidate(publicListingProvider(listingId));
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -75,6 +104,9 @@ class ListingViewScreen extends ConsumerWidget {
                 final actions = ListingActions(
                   capabilities: data.capabilities,
                   onUnbuilt: () => showComingSoon(context),
+                  hasChat: data.chatThreadId != null,
+                  chatBusy: ref.watch(chatLauncherProvider),
+                  onChat: () => _openChat(context, ref, data),
                 );
                 if (large) {
                   return SingleChildScrollView(child: Column(children: [body, actions]));

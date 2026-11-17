@@ -8,4 +8,5 @@ class StorageKeys {
   static const String onboardingComplete = 'onboarding_complete';
   static const String homeLocation = 'home_location';
   static const String appLanguage = 'app_language';
+  static const String chatSafetyBannerDismissed = 'chat_safety_banner_dismissed';
 }
