@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/routing/route_names.dart';
+import '../../chat/presentation/providers/chat_unread_provider.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/theme/text_styles.dart';
 import '../../../core/widgets/app_button.dart';
@@ -174,7 +175,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     return Scaffold(
       bottomNavigationBar: BrandBottomNav(
         current: BottomNavItem.search,
-        chatsHasUnread: true,
+        chatsHasUnread: ref.watch(chatsHasUnreadProvider),
         onSelected: (item) =>
             onMainNavSelected(context, ref, current: BottomNavItem.search, item: item),
       ),

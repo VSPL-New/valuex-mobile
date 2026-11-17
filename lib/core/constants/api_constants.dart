@@ -72,6 +72,14 @@ class ApiConstants {
   static String userBlock(String userId) => '/users/$userId/block';
   static const String blockedUsers = '/users/me/blocks';
   static const String reports = '/reports';
+
+  // Chat (US-069, US-013)
+  static const String chats = '/chats';
+  static const String chatsUnreadCount = '/chats/unread-count';
+  static String chat(String threadId) => '/chats/$threadId';
+  static String chatMessages(String threadId) => '/chats/$threadId/messages';
+  static String chatDelivered(String threadId) => '/chats/$threadId/delivered';
+  static String chatRead(String threadId) => '/chats/$threadId/read';
   static const String categoryChildren = '/categories/children';
   static const String categorySearch = '/categories/search';
   static String categoryListingSchema(String code) => '/categories/$code/listing-schema';

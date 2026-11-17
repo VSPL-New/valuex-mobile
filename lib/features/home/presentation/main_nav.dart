@@ -39,6 +39,6 @@ void onMainNavSelected(
     case BottomNavItem.search:
       context.go(RouteNames.search);
     case BottomNavItem.chats:
-      showComingSoon(context);
+      context.go(RouteNames.chats);
   }
 }

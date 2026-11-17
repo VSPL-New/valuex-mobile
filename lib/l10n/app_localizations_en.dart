@@ -2872,4 +2872,317 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reportTargetMissing => 'We couldn\'t find what you tried to report';
+
+  @override
+  String get chatsTitle => 'Messages';
+
+  @override
+  String get chatsSearchHint => 'Search conversations...';
+
+  @override
+  String get chatsSearchLabel => 'Search conversations';
+
+  @override
+  String get chatsFilterAll => 'All';
+
+  @override
+  String get chatsFilterBuying => 'Buying';
+
+  @override
+  String get chatsFilterSelling => 'Selling';
+
+  @override
+  String get chatsEmpty => 'No conversations yet';
+
+  @override
+  String get chatsEmptyHint => 'Start from a listing.';
+
+  @override
+  String get chatsNoResults => 'No conversations match your search';
+
+  @override
+  String get chatsLoadFailed => 'Unable to load your conversations. Try again';
+
+  @override
+  String get chatsLoadMoreFailed => 'Unable to load more conversations. Try again';
+
+  @override
+  String get chatTagBuying => 'Buying';
+
+  @override
+  String get chatTagSelling => 'Selling';
+
+  @override
+  String get chatAgoNow => 'Just now';
+
+  @override
+  String chatAgoMinutes(int count) {
+    return '${count}m ago';
+  }
+
+  @override
+  String chatAgoHours(int count) {
+    return '${count}h ago';
+  }
+
+  @override
+  String chatAgoDays(int count) {
+    return '${count}d ago';
+  }
+
+  @override
+  String chatRowLabel(String name, String listing, String preview, String time) {
+    return '$name, about $listing. $preview. $time';
+  }
+
+  @override
+  String chatUnreadLabel(int count) {
+    return '$count unread';
+  }
+
+  @override
+  String get chatPreviewPhoto => 'Photo';
+
+  @override
+  String chatPreviewYou(String text) {
+    return 'You: $text';
+  }
+
+  @override
+  String get chatPreviewNone => 'No messages yet';
+
+  @override
+  String get chatThreadLoadFailed => 'Unable to load this conversation. Try again';
+
+  @override
+  String get chatThreadEmpty => 'Say hello to start the conversation';
+
+  @override
+  String get chatCallsComingSoon => 'Calls are coming soon';
+
+  @override
+  String get chatCallAction => 'Call, coming soon';
+
+  @override
+  String get chatVideoAction => 'Video call, coming soon';
+
+  @override
+  String get chatBackLabel => 'Back to messages';
+
+  @override
+  String chatListingOpen(String title) {
+    return 'Open listing $title';
+  }
+
+  @override
+  String get chatListingUnavailable => 'No longer available';
+
+  @override
+  String get chatSafetyBanner =>
+      'Keep chats and payments on JustQlic. Never share OTPs or bank details.';
+
+  @override
+  String get chatSafetyBannerDismiss => 'Dismiss safety tip';
+
+  @override
+  String get chatSafetyTip => 'For your safety, keep chats and payments on JustQlic.';
+
+  @override
+  String get chatMenuReportConversation => 'Report conversation';
+
+  @override
+  String get chatComposerHint => 'Type a message...';
+
+  @override
+  String get chatComposerLabel => 'Message';
+
+  @override
+  String get chatSend => 'Send message';
+
+  @override
+  String get chatAttach => 'Attach a photo';
+
+  @override
+  String get chatAttachCamera => 'Take a photo';
+
+  @override
+  String get chatAttachGallery => 'Choose from gallery';
+
+  @override
+  String chatCounter(int count, int max) {
+    return '$count/$max';
+  }
+
+  @override
+  String get chatStatusSending => 'Sending';
+
+  @override
+  String get chatStatusSent => 'Sent';
+
+  @override
+  String get chatStatusDelivered => 'Delivered';
+
+  @override
+  String get chatStatusRead => 'Read';
+
+  @override
+  String get chatStatusFailed => 'Not sent. Tap to retry';
+
+  @override
+  String get chatRetry => 'Retry';
+
+  @override
+  String get chatDiscard => 'Delete';
+
+  @override
+  String chatBubbleMine(String text, String time, String status) {
+    return 'You: $text. $time. $status';
+  }
+
+  @override
+  String chatBubbleTheirs(String name, String text, String time) {
+    return '$name: $text. $time';
+  }
+
+  @override
+  String chatPhotoMine(String time, String status) {
+    return 'Photo from you. $time. $status';
+  }
+
+  @override
+  String chatPhotoTheirs(String name, String time) {
+    return 'Photo from $name. $time';
+  }
+
+  @override
+  String get chatPhotoUnavailable => 'Photo unavailable';
+
+  @override
+  String get chatNewMessages => 'New messages';
+
+  @override
+  String get chatLoadOlder => 'Load earlier messages';
+
+  @override
+  String get chatLoadOlderFailed => 'Unable to load earlier messages. Try again';
+
+  @override
+  String get chatReadOnlyBlocked => 'You can\'t send messages in this conversation.';
+
+  @override
+  String get chatReadOnlyUnavailable =>
+      'This person is currently unavailable, so you can\'t send messages.';
+
+  @override
+  String get chatReadOnlyListingRemoved =>
+      'This listing was removed, so the conversation is closed.';
+
+  @override
+  String get chatPhotoDenied =>
+      'Allow access to your camera or photos in Settings to share a picture';
+
+  @override
+  String chatErrorTooLong(int max) {
+    return 'Message exceeds $max characters';
+  }
+
+  @override
+  String get chatErrorEmpty => 'Write a message before sending';
+
+  @override
+  String get chatErrorRateLimited => 'You\'re sending messages too fast. Slow down a little';
+
+  @override
+  String get chatErrorBlocked => 'You can\'t contact this seller';
+
+  @override
+  String get chatErrorSellerUnavailable => 'Seller is currently unavailable';
+
+  @override
+  String chatErrorImageTooLarge(int max) {
+    return 'Image exceeds $max MB';
+  }
+
+  @override
+  String get chatErrorImageInvalid => 'This image can\'t be sent';
+
+  @override
+  String get chatErrorOverrideLimit => 'You\'ve used all your overrides for today';
+
+  @override
+  String get chatErrorAgreementOutdated =>
+      'The agreement text has changed. Update the app and try again';
+
+  @override
+  String get chatErrorThreadClosed => 'This conversation is closed';
+
+  @override
+  String get chatErrorGeneric => 'Unable to send. Try again';
+
+  @override
+  String get chatFlaggedTitle => 'Message blocked';
+
+  @override
+  String get chatFlaggedAlert =>
+      'We detected restricted terms in your message and blocked it. If you believe we\'ve made a wrong call, please click \'Deliver message\' else remove restricted terms and resubmit.';
+
+  @override
+  String get chatFlaggedEdit => 'Edit message';
+
+  @override
+  String get chatFlaggedDeliver => 'Deliver message';
+
+  @override
+  String get chatFlaggedTerm => 'restricted term';
+
+  @override
+  String get chatAgreementTitle => 'Before we deliver it';
+
+  @override
+  String get chatAgreementBody =>
+      'I am confident that I\'m not violating JustQlic policies. If any violation found, I understand my account may be blocked permanently.';
+
+  @override
+  String get chatAgreementAgree => 'I agree and deliver';
+
+  @override
+  String get contactLoginRequired => 'Please login to contact seller';
+
+  @override
+  String get contactRateLimited => 'Too many contact attempts. Try again later';
+
+  @override
+  String get contactSellerUnavailable => 'Seller is currently unavailable';
+
+  @override
+  String get contactBlocked => 'You cannot contact this seller';
+
+  @override
+  String get contactOwnListing => 'This is your own listing';
+
+  @override
+  String get contactAccountNotActive => 'Complete your registration to contact sellers';
+
+  @override
+  String get contactOpenChat => 'Open chat';
+
+  @override
+  String get chatCardUpdate => 'Conversation update';
+
+  @override
+  String chatListingCardLabel(String title) {
+    return 'Listing: $title';
+  }
+
+  @override
+  String get contactOpening => 'Opening chat';
+
+  @override
+  String get listingViewUnavailable => 'Unavailable';
+
+  @override
+  String get listingViewNotNegotiable => 'Not negotiable';
+
+  @override
+  String get listingViewIdentityRequired => 'Identity verification needed';
 }

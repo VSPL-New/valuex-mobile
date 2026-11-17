@@ -5060,6 +5060,558 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We couldn\'t find what you tried to report'**
   String get reportTargetMissing;
+
+  /// No description provided for @chatsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get chatsTitle;
+
+  /// No description provided for @chatsSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search conversations...'**
+  String get chatsSearchHint;
+
+  /// No description provided for @chatsSearchLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search conversations'**
+  String get chatsSearchLabel;
+
+  /// No description provided for @chatsFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get chatsFilterAll;
+
+  /// No description provided for @chatsFilterBuying.
+  ///
+  /// In en, this message translates to:
+  /// **'Buying'**
+  String get chatsFilterBuying;
+
+  /// No description provided for @chatsFilterSelling.
+  ///
+  /// In en, this message translates to:
+  /// **'Selling'**
+  String get chatsFilterSelling;
+
+  /// No description provided for @chatsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations yet'**
+  String get chatsEmpty;
+
+  /// No description provided for @chatsEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Start from a listing.'**
+  String get chatsEmptyHint;
+
+  /// No description provided for @chatsNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations match your search'**
+  String get chatsNoResults;
+
+  /// No description provided for @chatsLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load your conversations. Try again'**
+  String get chatsLoadFailed;
+
+  /// No description provided for @chatsLoadMoreFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load more conversations. Try again'**
+  String get chatsLoadMoreFailed;
+
+  /// No description provided for @chatTagBuying.
+  ///
+  /// In en, this message translates to:
+  /// **'Buying'**
+  String get chatTagBuying;
+
+  /// No description provided for @chatTagSelling.
+  ///
+  /// In en, this message translates to:
+  /// **'Selling'**
+  String get chatTagSelling;
+
+  /// No description provided for @chatAgoNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get chatAgoNow;
+
+  /// No description provided for @chatAgoMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}m ago'**
+  String chatAgoMinutes(int count);
+
+  /// No description provided for @chatAgoHours.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}h ago'**
+  String chatAgoHours(int count);
+
+  /// No description provided for @chatAgoDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}d ago'**
+  String chatAgoDays(int count);
+
+  /// No description provided for @chatRowLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, about {listing}. {preview}. {time}'**
+  String chatRowLabel(String name, String listing, String preview, String time);
+
+  /// No description provided for @chatUnreadLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} unread'**
+  String chatUnreadLabel(int count);
+
+  /// No description provided for @chatPreviewPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get chatPreviewPhoto;
+
+  /// No description provided for @chatPreviewYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You: {text}'**
+  String chatPreviewYou(String text);
+
+  /// No description provided for @chatPreviewNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get chatPreviewNone;
+
+  /// No description provided for @chatThreadLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load this conversation. Try again'**
+  String get chatThreadLoadFailed;
+
+  /// No description provided for @chatThreadEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Say hello to start the conversation'**
+  String get chatThreadEmpty;
+
+  /// No description provided for @chatCallsComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Calls are coming soon'**
+  String get chatCallsComingSoon;
+
+  /// No description provided for @chatCallAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Call, coming soon'**
+  String get chatCallAction;
+
+  /// No description provided for @chatVideoAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call, coming soon'**
+  String get chatVideoAction;
+
+  /// No description provided for @chatBackLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to messages'**
+  String get chatBackLabel;
+
+  /// No description provided for @chatListingOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open listing {title}'**
+  String chatListingOpen(String title);
+
+  /// No description provided for @chatListingUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No longer available'**
+  String get chatListingUnavailable;
+
+  /// No description provided for @chatSafetyBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep chats and payments on JustQlic. Never share OTPs or bank details.'**
+  String get chatSafetyBanner;
+
+  /// No description provided for @chatSafetyBannerDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss safety tip'**
+  String get chatSafetyBannerDismiss;
+
+  /// No description provided for @chatSafetyTip.
+  ///
+  /// In en, this message translates to:
+  /// **'For your safety, keep chats and payments on JustQlic.'**
+  String get chatSafetyTip;
+
+  /// No description provided for @chatMenuReportConversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Report conversation'**
+  String get chatMenuReportConversation;
+
+  /// No description provided for @chatComposerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Type a message...'**
+  String get chatComposerHint;
+
+  /// No description provided for @chatComposerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get chatComposerLabel;
+
+  /// No description provided for @chatSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send message'**
+  String get chatSend;
+
+  /// No description provided for @chatAttach.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach a photo'**
+  String get chatAttach;
+
+  /// No description provided for @chatAttachCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get chatAttachCamera;
+
+  /// No description provided for @chatAttachGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get chatAttachGallery;
+
+  /// No description provided for @chatCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}/{max}'**
+  String chatCounter(int count, int max);
+
+  /// No description provided for @chatStatusSending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending'**
+  String get chatStatusSending;
+
+  /// No description provided for @chatStatusSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get chatStatusSent;
+
+  /// No description provided for @chatStatusDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get chatStatusDelivered;
+
+  /// No description provided for @chatStatusRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get chatStatusRead;
+
+  /// No description provided for @chatStatusFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sent. Tap to retry'**
+  String get chatStatusFailed;
+
+  /// No description provided for @chatRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get chatRetry;
+
+  /// No description provided for @chatDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get chatDiscard;
+
+  /// No description provided for @chatBubbleMine.
+  ///
+  /// In en, this message translates to:
+  /// **'You: {text}. {time}. {status}'**
+  String chatBubbleMine(String text, String time, String status);
+
+  /// No description provided for @chatBubbleTheirs.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: {text}. {time}'**
+  String chatBubbleTheirs(String name, String text, String time);
+
+  /// No description provided for @chatPhotoMine.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo from you. {time}. {status}'**
+  String chatPhotoMine(String time, String status);
+
+  /// No description provided for @chatPhotoTheirs.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo from {name}. {time}'**
+  String chatPhotoTheirs(String name, String time);
+
+  /// No description provided for @chatPhotoUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo unavailable'**
+  String get chatPhotoUnavailable;
+
+  /// No description provided for @chatNewMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'New messages'**
+  String get chatNewMessages;
+
+  /// No description provided for @chatLoadOlder.
+  ///
+  /// In en, this message translates to:
+  /// **'Load earlier messages'**
+  String get chatLoadOlder;
+
+  /// No description provided for @chatLoadOlderFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load earlier messages. Try again'**
+  String get chatLoadOlderFailed;
+
+  /// No description provided for @chatReadOnlyBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t send messages in this conversation.'**
+  String get chatReadOnlyBlocked;
+
+  /// No description provided for @chatReadOnlyUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This person is currently unavailable, so you can\'t send messages.'**
+  String get chatReadOnlyUnavailable;
+
+  /// No description provided for @chatReadOnlyListingRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing was removed, so the conversation is closed.'**
+  String get chatReadOnlyListingRemoved;
+
+  /// No description provided for @chatPhotoDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow access to your camera or photos in Settings to share a picture'**
+  String get chatPhotoDenied;
+
+  /// No description provided for @chatErrorTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Message exceeds {max} characters'**
+  String chatErrorTooLong(int max);
+
+  /// No description provided for @chatErrorEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a message before sending'**
+  String get chatErrorEmpty;
+
+  /// No description provided for @chatErrorRateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re sending messages too fast. Slow down a little'**
+  String get chatErrorRateLimited;
+
+  /// No description provided for @chatErrorBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t contact this seller'**
+  String get chatErrorBlocked;
+
+  /// No description provided for @chatErrorSellerUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller is currently unavailable'**
+  String get chatErrorSellerUnavailable;
+
+  /// No description provided for @chatErrorImageTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Image exceeds {max} MB'**
+  String chatErrorImageTooLarge(int max);
+
+  /// No description provided for @chatErrorImageInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'This image can\'t be sent'**
+  String get chatErrorImageInvalid;
+
+  /// No description provided for @chatErrorOverrideLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve used all your overrides for today'**
+  String get chatErrorOverrideLimit;
+
+  /// No description provided for @chatErrorAgreementOutdated.
+  ///
+  /// In en, this message translates to:
+  /// **'The agreement text has changed. Update the app and try again'**
+  String get chatErrorAgreementOutdated;
+
+  /// No description provided for @chatErrorThreadClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'This conversation is closed'**
+  String get chatErrorThreadClosed;
+
+  /// No description provided for @chatErrorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to send. Try again'**
+  String get chatErrorGeneric;
+
+  /// No description provided for @chatFlaggedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Message blocked'**
+  String get chatFlaggedTitle;
+
+  /// No description provided for @chatFlaggedAlert.
+  ///
+  /// In en, this message translates to:
+  /// **'We detected restricted terms in your message and blocked it. If you believe we\'ve made a wrong call, please click \'Deliver message\' else remove restricted terms and resubmit.'**
+  String get chatFlaggedAlert;
+
+  /// No description provided for @chatFlaggedEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit message'**
+  String get chatFlaggedEdit;
+
+  /// No description provided for @chatFlaggedDeliver.
+  ///
+  /// In en, this message translates to:
+  /// **'Deliver message'**
+  String get chatFlaggedDeliver;
+
+  /// No description provided for @chatFlaggedTerm.
+  ///
+  /// In en, this message translates to:
+  /// **'restricted term'**
+  String get chatFlaggedTerm;
+
+  /// No description provided for @chatAgreementTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Before we deliver it'**
+  String get chatAgreementTitle;
+
+  /// No description provided for @chatAgreementBody.
+  ///
+  /// In en, this message translates to:
+  /// **'I am confident that I\'m not violating JustQlic policies. If any violation found, I understand my account may be blocked permanently.'**
+  String get chatAgreementBody;
+
+  /// No description provided for @chatAgreementAgree.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree and deliver'**
+  String get chatAgreementAgree;
+
+  /// No description provided for @contactLoginRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please login to contact seller'**
+  String get contactLoginRequired;
+
+  /// No description provided for @contactRateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many contact attempts. Try again later'**
+  String get contactRateLimited;
+
+  /// No description provided for @contactSellerUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller is currently unavailable'**
+  String get contactSellerUnavailable;
+
+  /// No description provided for @contactBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot contact this seller'**
+  String get contactBlocked;
+
+  /// No description provided for @contactOwnListing.
+  ///
+  /// In en, this message translates to:
+  /// **'This is your own listing'**
+  String get contactOwnListing;
+
+  /// No description provided for @contactAccountNotActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your registration to contact sellers'**
+  String get contactAccountNotActive;
+
+  /// No description provided for @contactOpenChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Open chat'**
+  String get contactOpenChat;
+
+  /// No description provided for @chatCardUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversation update'**
+  String get chatCardUpdate;
+
+  /// No description provided for @chatListingCardLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing: {title}'**
+  String chatListingCardLabel(String title);
+
+  /// No description provided for @contactOpening.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening chat'**
+  String get contactOpening;
+
+  /// No description provided for @listingViewUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get listingViewUnavailable;
+
+  /// No description provided for @listingViewNotNegotiable.
+  ///
+  /// In en, this message translates to:
+  /// **'Not negotiable'**
+  String get listingViewNotNegotiable;
+
+  /// No description provided for @listingViewIdentityRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Identity verification needed'**
+  String get listingViewIdentityRequired;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

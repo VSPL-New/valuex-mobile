@@ -46,6 +46,16 @@ void main() {
       }
     });
 
+    test('cannot open the Chats tab or a conversation', () {
+      for (final route in [RouteNames.chats, RouteNames.chatThread('t1')]) {
+        expect(
+          redirectFor(session: _signedOut(), location: route),
+          RouteNames.signIn,
+          reason: route,
+        );
+      }
+    });
+
     test('cannot open steps that need an account', () {
       for (final route in [
         RouteNames.signupEmail,
@@ -249,6 +259,16 @@ void main() {
 
     test('a suspended account is sent to the blocked page', () {
       for (final route in routes) {
+        expect(redirectFor(session: _signedIn(AccountStatus.suspended), location: route),
+            RouteNames.accountBlocked,
+            reason: route);
+      }
+    });
+
+    test('the Chats tab and a conversation are open to an active account only', () {
+      for (final route in [RouteNames.chats, RouteNames.chatThread('t1')]) {
+        expect(redirectFor(session: _signedIn(AccountStatus.active), location: route), isNull,
+            reason: route);
         expect(redirectFor(session: _signedIn(AccountStatus.suspended), location: route),
             RouteNames.accountBlocked,
             reason: route);

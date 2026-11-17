@@ -37,6 +37,8 @@ import '../../features/listing_view/presentation/listing_view_screen.dart';
 import '../../features/listing_view/presentation/seller_profile_screen.dart';
 import '../../features/profile/presentation/profile_details_screen.dart';
 import '../../features/communication_safety/presentation/blocked_users_screen.dart';
+import '../../features/chat/presentation/chat_list_screen.dart';
+import '../../features/chat/presentation/chat_thread_screen.dart';
 import '../../features/saved_listings/presentation/saved_items_screen.dart';
 import '../../features/saved_searches/presentation/saved_search_results_screen.dart';
 import '../../features/saved_searches/presentation/saved_searches_screen.dart';
@@ -114,6 +116,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'sellerProfile',
         builder: (context, state) =>
             SellerProfileScreen(sellerId: state.pathParameters['sellerId']!),
+      ),
+      GoRoute(
+        path: RouteNames.chats,
+        name: 'chats',
+        builder: (context, state) => const ChatListScreen(),
+        routes: [
+          GoRoute(
+            path: ':threadId',
+            name: 'chatThread',
+            builder: (context, state) =>
+                ChatThreadScreen(threadId: state.pathParameters['threadId']!),
+          ),
+        ],
       ),
       GoRoute(
         path: '/',

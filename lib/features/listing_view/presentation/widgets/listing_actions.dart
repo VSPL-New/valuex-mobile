@@ -7,25 +7,46 @@ import '../../../../core/widgets/single_tone_button.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/public_listing.dart';
 
-/// Chat, Call, Video, Add to Cart and Buy Now, exactly as the server allows them. None of them is
-/// built yet, so an offered one only says so; one the server marks not applicable is left out.
+/// Chat, Call, Video, Make an Offer, Add to Cart and Buy Now, exactly as the server allows them
+/// for this buyer (US-012, US-069). Chat opens the conversation; the others are not built yet, so
+/// an offered one only says so. One the server marks not applicable is left out.
 class ListingActions extends StatelessWidget {
   final Capabilities capabilities;
   final VoidCallback onUnbuilt;
+  final VoidCallback onChat;
 
-  const ListingActions({super.key, required this.capabilities, required this.onUnbuilt});
+  /// The buyer already has a chat about this listing, so the button reads "Open chat".
+  final bool hasChat;
+
+  /// A chat is being opened; a second tap is ignored until it answers.
+  final bool chatBusy;
+
+  const ListingActions({
+    super.key,
+    required this.capabilities,
+    required this.onUnbuilt,
+    required this.onChat,
+    this.hasChat = false,
+    this.chatBusy = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final contact = [
-      (l10n.previewChat, capabilities.chat, Icons.chat_bubble_outline_rounded),
-      (l10n.previewCall, capabilities.call, Icons.call_outlined),
-      (l10n.previewVideo, capabilities.video, Icons.videocam_outlined),
+      (
+        hasChat ? l10n.contactOpenChat : l10n.previewChat,
+        capabilities.chat,
+        Icons.chat_bubble_outline_rounded,
+        chatBusy ? null : onChat,
+      ),
+      (l10n.previewCall, capabilities.call, Icons.call_outlined, onUnbuilt),
+      (l10n.previewVideo, capabilities.video, Icons.videocam_outlined, onUnbuilt),
     ].where((entry) => !entry.$2.hidden).toList();
     final commerce = [
-      (l10n.listingViewAddToCart, capabilities.cart, false),
-      (l10n.previewBuyNow, capabilities.buyNow, true),
+      (l10n.previewMakeOffer, capabilities.offer, false, onUnbuilt),
+      (l10n.listingViewAddToCart, capabilities.cart, false, onUnbuilt),
+      (l10n.previewBuyNow, capabilities.buyNow, true, onUnbuilt),
     ].where((entry) => !entry.$2.hidden).toList();
     if (contact.isEmpty && commerce.isEmpty) return const SizedBox.shrink();
     return DecoratedBox(
@@ -44,11 +65,11 @@ class ListingActions extends StatelessWidget {
             children: [
               if (contact.isNotEmpty)
                 _row([
-                  for (final (label, capability, icon) in contact)
+                  for (final (label, capability, icon, onTap) in contact)
                     _Action(
                       label: label,
                       capability: capability,
-                      onUnbuilt: onUnbuilt,
+                      onTap: onTap,
                       builder: (text, onPressed) =>
                           SingleToneButton(label: text, onPressed: onPressed, leadingIcon: icon),
                     ),
@@ -56,11 +77,11 @@ class ListingActions extends StatelessWidget {
               if (contact.isNotEmpty && commerce.isNotEmpty) const SizedBox(height: AppSpacing.sm),
               if (commerce.isNotEmpty)
                 _row([
-                  for (final (label, capability, primary) in commerce)
+                  for (final (label, capability, primary, onTap) in commerce)
                     _Action(
                       label: label,
                       capability: capability,
-                      onUnbuilt: onUnbuilt,
+                      onTap: onTap,
                       builder: (text, onPressed) => primary
                           ? BrandGradientButton(
                               label: text,
@@ -93,30 +114,37 @@ class ListingActions extends StatelessWidget {
 class _Action extends StatelessWidget {
   final String label;
   final Capability capability;
-  final VoidCallback onUnbuilt;
+
+  /// What a tap does when the server offers the action; null while it must be ignored.
+  final VoidCallback? onTap;
   final Widget Function(String text, VoidCallback? onPressed) builder;
 
   const _Action({
     required this.label,
     required this.capability,
-    required this.onUnbuilt,
+    required this.onTap,
     required this.builder,
   });
+
+  String _status(AppLocalizations l10n) => switch (capability.reason) {
+        CapabilityReason.ownListing => l10n.listingViewOwnListing,
+        CapabilityReason.unavailable => l10n.listingViewUnavailable,
+        CapabilityReason.notNegotiable => l10n.listingViewNotNegotiable,
+        CapabilityReason.identityRequired => l10n.listingViewIdentityRequired,
+        _ => l10n.listingViewComingSoon,
+      };
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final status = capability.reason == CapabilityReason.ownListing
-        ? l10n.listingViewOwnListing
-        : l10n.listingViewComingSoon;
-    // An action the server offers has no flow behind it yet, so it only reports that.
-    final onPressed = capability.available ? onUnbuilt : null;
+    final status = _status(l10n);
+    final onPressed = capability.available ? onTap : null;
     // Disabled buttons stay quiet on screen; the reason is only spoken, except for your own listing.
-    final showStatus = onPressed == null && capability.reason == CapabilityReason.ownListing;
+    final showStatus = !capability.available && capability.reason == CapabilityReason.ownListing;
     return Semantics(
       container: true,
       enabled: onPressed != null,
-      label: onPressed == null ? l10n.listingViewActionLabel(label, status) : label,
+      label: capability.available ? label : l10n.listingViewActionLabel(label, status),
       excludeSemantics: true,
       child: Column(
         mainAxisSize: MainAxisSize.min,

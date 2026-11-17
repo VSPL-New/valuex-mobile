@@ -35,6 +35,12 @@ class RouteNames {
       Uri(path: savedSearches, queryParameters: {'id': id}).toString();
   static const String savedItems = '/saved-items';
   static const String blockedUsers = '/profile/blocked-users';
+
+  /// The Chats tab and one conversation (US-013).
+  static const String chats = '/chats';
+  static const String chatThreadBase = '/chats';
+  static String chatThread(String threadId) => '$chatThreadBase/$threadId';
+  static const String chatThreadPattern = '$chatThreadBase/:threadId';
   static const String listingViewBase = '/listing';
   static String listingView(String listingId) => '$listingViewBase/$listingId';
   static const String listingViewPattern = '$listingViewBase/:listingId';

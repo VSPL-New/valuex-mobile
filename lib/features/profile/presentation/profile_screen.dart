@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/routing/route_names.dart';
+import '../../chat/presentation/providers/chat_unread_provider.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/theme/text_styles.dart';
@@ -111,6 +112,7 @@ class ProfileScreen extends ConsumerWidget {
       child: Scaffold(
         bottomNavigationBar: BrandBottomNav(
           current: BottomNavItem.profile,
+          chatsHasUnread: ref.watch(chatsHasUnreadProvider),
           onSelected: (next) =>
               onMainNavSelected(context, ref, current: BottomNavItem.profile, item: next),
         ),
