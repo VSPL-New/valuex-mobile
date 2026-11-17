@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/routing/app_router.dart';
+import 'core/realtime/realtime_providers.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/presentation/widgets/session_expiry_listener.dart';
 import 'features/settings/domain/supported_languages.dart';
@@ -15,6 +16,8 @@ class ValueXApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
     final locale = ref.watch(localeControllerProvider);
+    // Keeps the live connection open while the user is signed in with an active account.
+    ref.watch(realtimeConnectionProvider);
 
     return MaterialApp.router(
       onGenerateTitle: (context) => AppLocalizations.of(context).appName,

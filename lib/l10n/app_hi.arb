@@ -949,5 +949,8 @@
   "contactOpening": "चैट खुल रही है",
   "listingViewUnavailable": "उपलब्ध नहीं",
   "listingViewNotNegotiable": "मोलभाव संभव नहीं",
-  "listingViewIdentityRequired": "पहचान सत्यापन आवश्यक"
+  "listingViewIdentityRequired": "पहचान सत्यापन आवश्यक",
+  "realtimeReconnecting": "फिर से कनेक्ट हो रहा है…",
+  "chatTyping": "{name} टाइप कर रहे हैं…",
+  "@chatTyping": {"placeholders": {"name": {"type": "String"}}}
 }

@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
+import 'package:valuex_mobile/core/realtime/realtime_event.dart';
+import 'package:valuex_mobile/core/realtime/realtime_providers.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/user_profile.dart';
 import 'package:valuex_mobile/features/profile/data/profile_repository.dart';
@@ -17,6 +19,7 @@ import 'package:valuex_mobile/features/listing/domain/listing_photo.dart';
 
 import '../../helpers/accessibility.dart';
 import '../../helpers/fonts.dart';
+import '../../core/realtime/realtime_fakes.dart';
 import '../communication_safety/communication_safety_fixtures.dart';
 import 'chat_fixtures.dart';
 import 'chat_test_app.dart';
@@ -84,6 +87,7 @@ void main() {
     Size size = const Size(390, 844),
     Map<String, Object> prefs = const {'chat_safety_banner_dismissed': true},
     Locale locale = const Locale('en'),
+    FakeRealtimeClient? realtime,
   }) =>
       pumpChatApp(
         tester,
@@ -94,6 +98,7 @@ void main() {
         size: size,
         preferences: prefs,
         locale: locale,
+        realtime: realtime,
       );
 
   testWidgets('shows the header, the listing card and the messages with times and status',
@@ -479,6 +484,84 @@ void main() {
         findsOneWidget);
   });
 
+  group('live connection', () {
+    testWidgets('shows a message that arrives as an event, and the other person typing',
+        (tester) async {
+      final realtime = FakeRealtimeClient();
+      await pump(tester, realtime: realtime);
+
+      realtime.emit('chat.typing', {'threadId': 't1', 'typing': true});
+      await tester.pumpAndSettle();
+      expect(find.text('Rajesh Kumar is typing…'), findsOneWidget);
+
+      realtime.emit('chat.message.created', {
+        'threadId': 't1',
+        'message': messageJson(seq: 5, body: 'Live hello'),
+      });
+      await tester.pumpAndSettle();
+
+      expect(find.text('Live hello'), findsOneWidget);
+      expect(find.text('Rajesh Kumar is typing…'), findsNothing);
+    });
+
+    testWidgets('the typing line goes away by itself and is hidden when nobody can write',
+        (tester) async {
+      final realtime = FakeRealtimeClient();
+      await pump(tester, realtime: realtime);
+
+      realtime.emit('chat.typing', {'threadId': 't1', 'typing': true});
+      await tester.pumpAndSettle();
+      await tester.pump(const Duration(seconds: 4));
+      await tester.pumpAndSettle();
+      expect(find.text('Rajesh Kumar is typing…'), findsNothing);
+
+      realtime.emit('chat.typing', {'threadId': 't1', 'typing': true});
+      realtime.emit('chat.thread.updated', {
+        'threadId': 't1',
+        'canSend': false,
+        'readOnlyReason': 'BLOCKED',
+        'lastSeq': 4,
+      });
+      await tester.pumpAndSettle();
+      expect(find.text('Rajesh Kumar is typing…'), findsNothing);
+      expect(find.byType(TextField), findsNothing);
+      await tester.pump(const Duration(seconds: 4));
+    });
+
+    testWidgets('the composer tells the other person that the user is typing, and stops',
+        (tester) async {
+      final realtime = FakeRealtimeClient()..open = true;
+      await pump(tester, realtime: realtime);
+
+      await tester.enterText(find.byType(TextField), 'Hel');
+      await tester.pump();
+      await tester.enterText(find.byType(TextField), '');
+      await tester.pump();
+
+      final typing = [
+        for (final frame in realtime.sent)
+          if (frame.type == 'chat.typing') frame.data!['typing'],
+      ];
+      expect(typing, [true, false]);
+    });
+
+    for (final status in [RealtimeStatus.reconnecting, RealtimeStatus.degraded]) {
+      testWidgets('shows the reconnecting strip while $status', (tester) async {
+        await pump(tester, extra: [
+          realtimeStatusProvider.overrideWith(() => _FixedStatus(status)),
+        ]);
+
+        expect(find.text('Reconnecting…'), findsOneWidget);
+      });
+    }
+
+    testWidgets('shows no strip while the connection is fine', (tester) async {
+      await pump(tester);
+
+      expect(find.text('Reconnecting…'), findsNothing);
+    });
+  });
+
   testWidgets('works in Hindi', (tester) async {
     await pump(tester, locale: const Locale('hi'));
 
@@ -560,6 +643,15 @@ void main() {
       expect(safety.reports.single.targetId, 't1');
     });
   });
+}
+
+class _FixedStatus extends RealtimeStatusController {
+  final RealtimeStatus initial;
+
+  _FixedStatus(this.initial);
+
+  @override
+  RealtimeStatus build() => initial;
 }
 
 Override _profile() => userProfileProvider.overrideWith((ref) async => const UserProfile(

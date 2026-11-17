@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:fake_async/fake_async.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
+import 'package:valuex_mobile/core/realtime/realtime_providers.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/user_profile.dart';
 import 'package:valuex_mobile/features/chat/data/chat_repository.dart';
@@ -18,6 +20,7 @@ import 'package:valuex_mobile/features/chat/presentation/providers/chat_unread_p
 import 'package:valuex_mobile/features/profile/data/profile_repository.dart';
 
 import 'chat_fixtures.dart';
+import '../../core/realtime/realtime_fakes.dart';
 
 ApiError _business(String code, {Map<String, String> details = const {}, int status = 422}) =>
     ApiError(
@@ -31,6 +34,7 @@ const _offline = ApiError(type: ApiErrorType.network, message: 'offline');
 
 void main() {
   late MockChatRepository repo;
+  late FakeRealtimeClient realtime;
 
   setUpAll(() {
     registerFallbackValue(ChatRole.all);
@@ -39,6 +43,7 @@ void main() {
 
   setUp(() {
     repo = MockChatRepository();
+    realtime = FakeRealtimeClient();
     when(() => repo.markDelivered(any(), any())).thenAnswer((_) async {});
     when(() => repo.markRead(any(), any())).thenAnswer((_) async {});
   });
@@ -47,6 +52,7 @@ void main() {
     final created = ProviderContainer(overrides: [
       chatRepositoryProvider.overrideWithValue(repo),
       chatPollIntervalProvider.overrideWithValue(poll),
+      realtimeClientProvider.overrideWithValue(realtime),
       userProfileProvider.overrideWith((ref) async => const UserProfile(
             userId: 'me',
             status: AccountStatus.active,
@@ -390,6 +396,268 @@ void main() {
       expect(current(c).hasMoreOlder, isTrue);
     });
 
+    group('live events', () {
+      void connectedSocket() => realtime.open = true;
+
+      Future<void> settle() => Future<void>.delayed(Duration.zero);
+
+      Map<String, dynamic> created(int seq, {bool fromMe = false}) => {
+            'threadId': 't1',
+            'message': messageJson(seq: seq, fromMe: fromMe, body: 'live $seq'),
+          };
+
+      test(
+          'adds a message from the other person in order, once, and tells the server over the socket',
+          () async {
+        stubThread(thread: _thread(lastSeq: 2, myReadSeq: 2));
+        connectedSocket();
+        final c = container();
+        await open(c);
+
+        realtime.emit('chat.message.created', created(3));
+        await settle();
+        realtime.emit('chat.message.created', created(3));
+        await settle();
+
+        expect(current(c).messages.map((m) => m.seq), [1, 2, 3]);
+        expect(current(c).thread.lastSeq, 3);
+        expect(realtime.sent.map((frame) => frame.type), ['chat.delivered', 'chat.read']);
+        expect(realtime.sent.first.data, {'threadId': 't1', 'upToSeq': 3});
+        verifyNever(() => repo.markRead('t1', 3));
+      });
+
+      test('tells the server over REST when the socket is not open', () async {
+        stubThread(thread: _thread(lastSeq: 2, myReadSeq: 2));
+        final c = container();
+        await open(c);
+
+        realtime.emit('chat.message.created', created(3));
+        await settle();
+
+        verify(() => repo.markDelivered('t1', 3)).called(1);
+        verify(() => repo.markRead('t1', 3)).called(1);
+        expect(realtime.sent, isEmpty);
+      });
+
+      test('ignores an event for another thread and a message it cannot read', () async {
+        stubThread();
+        final c = container();
+        await open(c);
+
+        realtime.emit('chat.message.created', {...created(3), 'threadId': 't2'});
+        realtime.emit('chat.message.created', {'threadId': 't1', 'message': 'broken'});
+        realtime.emit('chat.message.created', {'threadId': 't1', 'message': messageJson(seq: 0)});
+        realtime.emit('chat.unknown', {'threadId': 't1'});
+        await settle();
+
+        expect(current(c).messages.map((m) => m.seq), [1, 2]);
+      });
+
+      test('adds a message the user sent from another device, without marking it seen', () async {
+        stubThread(thread: _thread(lastSeq: 2, myReadSeq: 2));
+        connectedSocket();
+        final c = container();
+        await open(c);
+
+        realtime.emit('chat.message.created', created(3, fromMe: true));
+        await settle();
+
+        expect(current(c).messages.map((m) => m.seq), [1, 2, 3]);
+        expect(realtime.sent, isEmpty);
+      });
+
+      test('a message of the user that is still being sent here waits for its own answer',
+          () async {
+        stubThread(thread: _thread(lastSeq: 2, myReadSeq: 2));
+        final c = container();
+        final controller = await open(c);
+        final answer = Completer<ChatMessage>();
+        when(() => repo.sendText('t1',
+            clientMessageId: any(named: 'clientMessageId'),
+            body: 'Hello',
+            agreed: false)).thenAnswer((_) => answer.future);
+        when(() => repo.messages('t1', afterSeq: 2)).thenAnswer((_) async => page(const []));
+        unawaited(controller.sendText('Hello'));
+        await settle();
+
+        realtime.emit('chat.message.created', created(3, fromMe: true));
+        await settle();
+        expect(current(c).messages.where((m) => m.seq > 0).map((m) => m.seq), [1, 2]);
+        verify(() => repo.messages('t1', afterSeq: 2)).called(1);
+
+        answer.complete(message(seq: 3, body: 'Hello', fromMe: true, status: 'SENT'));
+        await settle();
+
+        expect(current(c).messages.map((m) => m.seq), [1, 2, 3]);
+      });
+
+      test('delivered and read events move the status of the user\'s messages and never back',
+          () async {
+        stubThread(thread: _thread(lastSeq: 2));
+        final c = container();
+        await open(c);
+        expect(current(c).messages.last.status, MessageStatus.sent);
+
+        realtime.emit('chat.message.delivered', {'threadId': 't1', 'upToSeq': 2});
+        await settle();
+        expect(current(c).messages.last.status, MessageStatus.delivered);
+
+        realtime.emit('chat.read', {'threadId': 't1', 'upToSeq': 2});
+        await settle();
+        expect(current(c).messages.last.status, MessageStatus.read);
+
+        realtime.emit('chat.message.delivered', {'threadId': 't1', 'upToSeq': 1});
+        await settle();
+        expect(current(c).messages.last.status, MessageStatus.read);
+      });
+
+      test('a thread update closes the thread with the reason, and opens it again', () async {
+        stubThread();
+        final c = container();
+        await open(c);
+
+        realtime.emit('chat.thread.updated', {
+          'threadId': 't1',
+          'canSend': false,
+          'readOnlyReason': 'BLOCKED',
+          'lastSeq': 2,
+        });
+        await settle();
+        expect(current(c).thread.canSend, isFalse);
+        expect(current(c).thread.readOnlyReason, ReadOnlyReason.blocked);
+
+        realtime.emit('chat.thread.updated',
+            {'threadId': 't1', 'canSend': true, 'readOnlyReason': null, 'lastSeq': 2});
+        await settle();
+        expect(current(c).thread.canSend, isTrue);
+        expect(current(c).thread.readOnlyReason, isNull);
+      });
+
+      test('a thread update that names a newer message reads what the phone is missing', () async {
+        stubThread(thread: _thread(lastSeq: 2, myReadSeq: 2));
+        final c = container();
+        await open(c);
+        when(() => repo.thread('t1')).thenAnswer((_) async => _thread(lastSeq: 3, myReadSeq: 2));
+        when(() => repo.messages('t1', afterSeq: 2))
+            .thenAnswer((_) async => page([message(seq: 3, body: 'too big to push')]));
+
+        realtime.emit('chat.thread.updated',
+            {'threadId': 't1', 'canSend': true, 'readOnlyReason': null, 'lastSeq': 3});
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+
+        expect(current(c).messages.map((m) => m.seq), [1, 2, 3]);
+      });
+
+      test('re-reads from the last sequence after every reconnect', () async {
+        stubThread(thread: _thread(lastSeq: 2, myReadSeq: 2));
+        final c = container();
+        await open(c);
+        when(() => repo.messages('t1', afterSeq: 2))
+            .thenAnswer((_) async => page([message(seq: 3, body: 'missed')]));
+
+        c.read(realtimeResyncProvider.notifier).bump();
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+
+        expect(current(c).messages.map((m) => m.seq), [1, 2, 3]);
+      });
+
+      test('shows typing for four seconds, hides it at once for a stop or a message', () {
+        fakeAsync((async) {
+          stubThread();
+          final c = container();
+          c.listen(chatThreadControllerProvider('t1'), (_, __) {});
+          async.flushMicrotasks();
+
+          realtime.emit('chat.typing', {'threadId': 't1', 'typing': true});
+          async.flushMicrotasks();
+          expect(current(c).typing, isTrue);
+          async.elapse(const Duration(seconds: 3));
+          expect(current(c).typing, isTrue);
+          async.elapse(const Duration(seconds: 1));
+          expect(current(c).typing, isFalse);
+
+          realtime.emit('chat.typing', {'threadId': 't1', 'typing': true});
+          async.flushMicrotasks();
+          realtime.emit('chat.typing', {'threadId': 't1', 'typing': false});
+          async.flushMicrotasks();
+          expect(current(c).typing, isFalse);
+
+          realtime.emit('chat.typing', {'threadId': 't1', 'typing': true});
+          async.flushMicrotasks();
+          realtime.emit('chat.message.created', created(3));
+          async.flushMicrotasks();
+          expect(current(c).typing, isFalse);
+          expect(current(c).messages.map((m) => m.seq), [1, 2, 3]);
+          c.dispose();
+        });
+      });
+
+      test('tells the other person about typing at most once a second and when it stops', () {
+        fakeAsync((async) {
+          stubThread();
+          connectedSocket();
+          final c = container();
+          c.listen(chatThreadControllerProvider('t1'), (_, __) {});
+          async.flushMicrotasks();
+          final controller = c.read(chatThreadControllerProvider('t1').notifier);
+          List<String> frames() => [
+                for (final frame in realtime.sent)
+                  if (frame.type == 'chat.typing') '${frame.data!['typing']}',
+              ];
+
+          controller.typingChanged(true);
+          controller.typingChanged(true);
+          expect(frames(), ['true']);
+
+          async.elapse(const Duration(milliseconds: 1100));
+          controller.typingChanged(true);
+          expect(frames(), ['true', 'true']);
+
+          async.elapse(const Duration(seconds: 3));
+          expect(frames(), ['true', 'true', 'false']);
+
+          controller.typingChanged(false);
+          expect(frames(), ['true', 'true', 'false']);
+
+          controller.typingChanged(true);
+          controller.typingChanged(false);
+          expect(frames(), ['true', 'true', 'false', 'true', 'false']);
+          c.dispose();
+        });
+      });
+
+      test(
+          'says it stopped typing when the screen closes, and sends nothing while the socket is down',
+          () {
+        fakeAsync((async) {
+          stubThread();
+          connectedSocket();
+          final c = container();
+          c.listen(chatThreadControllerProvider('t1'), (_, __) {});
+          async.flushMicrotasks();
+          c.read(chatThreadControllerProvider('t1').notifier).typingChanged(true);
+
+          c.dispose();
+
+          expect(realtime.sent.last.data, {'threadId': 't1', 'typing': false});
+        });
+        fakeAsync((async) {
+          stubThread();
+          realtime.sent.clear();
+          realtime.open = false;
+          final c = container();
+          c.listen(chatThreadControllerProvider('t1'), (_, __) {});
+          async.flushMicrotasks();
+
+          c.read(chatThreadControllerProvider('t1').notifier).typingChanged(true);
+          async.elapse(const Duration(seconds: 5));
+          c.dispose();
+
+          expect(realtime.sent, isEmpty);
+        });
+      });
+    });
+
     test('shows the error state when the thread cannot be loaded', () async {
       when(() => repo.thread('t1')).thenThrow(_offline);
       when(() => repo.messages('t1')).thenAnswer((_) async => page(const []));
@@ -484,6 +752,36 @@ void main() {
       expect(state(c).threads.last.unreadCount, 4);
     });
 
+    test('refreshes quietly when a message or a thread update arrives and after a reconnect',
+        () async {
+      var reads = 0;
+      when(() => repo.threads(role: ChatRole.all, page: any(named: 'page'))).thenAnswer((_) async {
+        reads++;
+        return threadPage([_thread(id: 'a', unread: reads)]);
+      });
+      final c = container();
+      await load(c);
+      expect(reads, 1);
+
+      realtime.emit('chat.typing', {'threadId': 'a', 'typing': true});
+      realtime.emit('chat.read', {'threadId': 'a', 'upToSeq': 1});
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(reads, 1);
+
+      realtime.emit('chat.message.created', {'threadId': 'a'});
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(reads, 2);
+      expect(state(c).threads.single.unreadCount, 2);
+
+      realtime.emit('chat.thread.updated', {'threadId': 'a'});
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(reads, 3);
+
+      c.read(realtimeResyncProvider.notifier).bump();
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(reads, 4);
+    });
+
     test('an unread count shows the dot, and a failed first read shows none', () async {
       when(() => repo.unreadCount()).thenAnswer((_) async => 2);
       final c = container();
@@ -496,6 +794,32 @@ void main() {
       failing.listen(chatsHasUnreadProvider, (_, __) {});
       await expectLater(failing.read(chatUnreadCountProvider.future), throwsA(isA<ApiError>()));
       expect(failing.read(chatsHasUnreadProvider), isFalse);
+    });
+
+    test('the unread count is read again after a chat change or a reconnect, not for typing',
+        () async {
+      var reads = 0;
+      when(() => repo.unreadCount()).thenAnswer((_) async => ++reads);
+      final c = container();
+      c.listen(chatsHasUnreadProvider, (_, __) {});
+      expect(await c.read(chatUnreadCountProvider.future), 1);
+
+      realtime.emit('chat.typing', {'threadId': 't1', 'typing': true});
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+      expect(reads, 1);
+
+      realtime.emit('chat.message.created', {'threadId': 't1'});
+      realtime.emit('chat.read', {'threadId': 't1', 'upToSeq': 1});
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+      expect(await c.read(chatUnreadCountProvider.future), 2);
+
+      realtime.emit('chat.thread.updated', {'threadId': 't1'});
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+      expect(await c.read(chatUnreadCountProvider.future), 3);
+
+      c.read(realtimeResyncProvider.notifier).bump();
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+      expect(await c.read(chatUnreadCountProvider.future), 4);
     });
   });
 

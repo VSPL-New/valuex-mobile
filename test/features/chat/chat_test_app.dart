@@ -4,11 +4,13 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:valuex_mobile/core/realtime/realtime_providers.dart';
 import 'package:valuex_mobile/core/theme/app_theme.dart';
 import 'package:valuex_mobile/features/chat/data/chat_repository.dart';
 import 'package:valuex_mobile/features/chat/presentation/providers/chat_polling.dart';
 import 'package:valuex_mobile/l10n/app_localizations.dart';
 
+import '../../core/realtime/realtime_fakes.dart';
 import 'chat_fixtures.dart';
 
 /// Pumps [home] at "/" inside a small router whose other routes only name where they lead, so a
@@ -22,6 +24,7 @@ Future<void> pumpChatApp(
   double textScale = 1,
   Size size = const Size(390, 844),
   Map<String, Object> preferences = const {},
+  FakeRealtimeClient? realtime,
 }) async {
   SharedPreferences.setMockInitialValues(preferences);
   tester.view.physicalSize = size * 2;
@@ -51,6 +54,7 @@ Future<void> pumpChatApp(
       overrides: [
         chatRepositoryProvider.overrideWithValue(repo),
         chatPollIntervalProvider.overrideWithValue(null),
+        realtimeClientProvider.overrideWithValue(realtime ?? FakeRealtimeClient()),
         ...overrides,
       ],
       child: MaterialApp.router(

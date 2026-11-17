@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/foundation.dart';
 
 /// The version of the "Deliver message" agreement text the app shows. The server refuses another
@@ -187,15 +189,35 @@ class ChatThread {
   }
 
   /// The thread made read-only, as the server reports a block or a closed listing on a send.
-  ChatThread readOnly(ReadOnlyReason reason) => ChatThread(
+  ChatThread readOnly(ReadOnlyReason reason) => withAccess(canSend: false, reason: reason);
+
+  /// The thread with what the server says about the other person's cursors or the last sequence.
+  /// A cursor or sequence never moves backwards.
+  ChatThread advanced({int? lastSeq, int? otherReadSeq, int? otherDeliveredSeq}) => ChatThread(
         threadId: threadId,
         isBuyer: isBuyer,
         listing: listing,
         counterpart: counterpart,
         lastMessage: lastMessage,
         unreadCount: unreadCount,
-        canSend: false,
-        readOnlyReason: reason,
+        canSend: canSend,
+        readOnlyReason: readOnlyReason,
+        lastSeq: math.max(this.lastSeq, lastSeq ?? 0),
+        myReadSeq: myReadSeq,
+        otherReadSeq: math.max(this.otherReadSeq, otherReadSeq ?? 0),
+        otherDeliveredSeq: math.max(this.otherDeliveredSeq, otherDeliveredSeq ?? 0),
+      );
+
+  /// The thread with whether anyone can write in it, and why not.
+  ChatThread withAccess({required bool canSend, ReadOnlyReason? reason}) => ChatThread(
+        threadId: threadId,
+        isBuyer: isBuyer,
+        listing: listing,
+        counterpart: counterpart,
+        lastMessage: lastMessage,
+        unreadCount: unreadCount,
+        canSend: canSend,
+        readOnlyReason: canSend ? null : reason,
         lastSeq: lastSeq,
         myReadSeq: myReadSeq,
         otherReadSeq: otherReadSeq,

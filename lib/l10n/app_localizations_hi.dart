@@ -3176,4 +3176,12 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get listingViewIdentityRequired => 'पहचान सत्यापन आवश्यक';
+
+  @override
+  String get realtimeReconnecting => 'फिर से कनेक्ट हो रहा है…';
+
+  @override
+  String chatTyping(String name) {
+    return '$name टाइप कर रहे हैं…';
+  }
 }

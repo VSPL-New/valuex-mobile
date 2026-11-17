@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/realtime/realtime_event.dart';
+import '../../../../core/realtime/realtime_providers.dart';
 import '../../../../core/utils/provider_retry.dart';
 import '../../data/chat_repository.dart';
 import '../../domain/chat.dart';
@@ -39,18 +41,36 @@ class ChatListState {
       );
 }
 
-/// The Chats tab: conversations, newest activity first, refreshed while it is on screen.
+/// The Chats tab: conversations, newest activity first. They are refreshed when an event says a
+/// conversation changed and after every reconnect (US-130), and polled while the live connection is
+/// down.
 class ChatListController extends AsyncNotifier<ChatListState> {
+  Timer? _pollTimer;
+
   @override
   Future<ChatListState> build() async {
     final role = ref.watch(chatRoleFilterProvider);
-    final interval = ref.watch(chatPollIntervalProvider);
-    if (interval != null) {
-      final timer = Timer.periodic(interval, (_) => unawaited(_refreshQuietly(role)));
-      ref.onDispose(timer.cancel);
-    }
+    ref.listen<Duration?>(chatPollIntervalProvider, (previous, next) => _pollEvery(role, next),
+        fireImmediately: true);
+    ref.listen<int>(realtimeResyncProvider, (previous, next) => unawaited(_refreshQuietly(role)));
+    final events = ref.watch(chatEventsProvider).listen((event) {
+      if (event.type == RealtimeTypes.chatMessageCreated ||
+          event.type == RealtimeTypes.chatThreadUpdated) {
+        unawaited(_refreshQuietly(role));
+      }
+    });
+    ref.onDispose(() {
+      events.cancel();
+      _pollTimer?.cancel();
+    });
     final page = await ref.watch(chatRepositoryProvider).threads(role: role);
     return ChatListState(threads: page.items, page: page.page, hasNext: page.hasNext);
+  }
+
+  void _pollEvery(ChatRole role, Duration? interval) {
+    _pollTimer?.cancel();
+    _pollTimer =
+        interval == null ? null : Timer.periodic(interval, (_) => unawaited(_refreshQuietly(role)));
   }
 
   /// Reloads the first page for a pull to refresh; the error is left to the caller.
