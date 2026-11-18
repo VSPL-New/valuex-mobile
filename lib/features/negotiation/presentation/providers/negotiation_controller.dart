@@ -124,6 +124,7 @@ class NegotiationController extends AsyncNotifier<Negotiation> {
   static const _staleCodes = {
     'ERROR_OFFER_NOT_CURRENT',
     'ERROR_NEGOTIATION_EXPIRED',
+    'ERROR_OFFER_EXPIRED',
     'ERROR_ITEM_UNAVAILABLE',
     'ERROR_ALREADY_ACCEPTED',
   };

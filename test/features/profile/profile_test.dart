@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/config/app_config.dart';
@@ -21,6 +22,9 @@ import 'package:valuex_mobile/features/auth/presentation/providers/session_state
 import 'package:valuex_mobile/features/auth/presentation/widgets/avatar_image.dart';
 import 'package:valuex_mobile/features/communication_safety/data/communication_safety_repository.dart';
 import 'package:valuex_mobile/features/communication_safety/presentation/blocked_users_screen.dart';
+import 'package:valuex_mobile/features/negotiation/data/negotiation_repository.dart';
+import 'package:valuex_mobile/features/negotiation/domain/offers.dart';
+import 'package:valuex_mobile/features/negotiation/presentation/offers_screen.dart';
 import 'package:valuex_mobile/features/profile/data/mock_profile_summary.dart';
 import 'package:valuex_mobile/features/profile/data/profile_repository.dart';
 import 'package:valuex_mobile/features/profile/domain/profile_menu_badges.dart';
@@ -36,6 +40,8 @@ import '../../helpers/fake_secure_storage.dart';
 import '../../helpers/fonts.dart';
 import '../../helpers/accessibility.dart';
 import '../communication_safety/communication_safety_fixtures.dart';
+import '../negotiation/negotiation_fixtures.dart';
+import '../negotiation/offers_fixtures.dart';
 
 const _json = {
   'userId': 'user-1',
@@ -53,7 +59,10 @@ const _json = {
 class _MockProfileRepository extends Mock implements ProfileRepository {}
 
 void main() {
-  setUpAll(loadBrandFonts);
+  setUpAll(() async {
+    registerFallbackValue(OffersFilter.pending);
+    await loadBrandFonts();
+  });
 
   group('repository', () {
     late FakeHttpAdapter adapter;
@@ -162,6 +171,7 @@ void main() {
       WidgetTester tester, {
       bool premium = false,
       ProfileMenuBadges badges = const ProfileMenuBadges(),
+      List<Override> more = const [],
     }) async {
       profile = UserProfileModel.fromJson(_json).toEntity();
       repository = _MockProfileRepository();
@@ -173,6 +183,7 @@ void main() {
           profileRepositoryProvider.overrideWithValue(repository),
           communicationSafetyRepositoryProvider
               .overrideWithValue(FakeCommunicationSafetyRepository()),
+          ...more,
           if (premium)
             profileSummaryProvider.overrideWithValue(const ProfileSummary(
               rating: 4.8,
@@ -252,6 +263,31 @@ void main() {
         await expectLater(tester, meetsGuideline(guideline));
       }
       semantics.dispose();
+      await harness.dispose();
+    });
+
+    testWidgets('the Offers row shows the offers waiting and opens the Offers screen',
+        (tester) async {
+      final offers = MockNegotiationRepository();
+      when(() => offers.receivedOffers(any(), page: any(named: 'page')))
+          .thenAnswer((_) async => receivedPage([receivedJson()]));
+      when(() => offers.sentOffers(any(), page: any(named: 'page')))
+          .thenAnswer((_) async => sentPage([]));
+      when(() => offers.offersSummary()).thenAnswer((_) async => const OffersSummary());
+      await launch(
+        tester,
+        badges: const ProfileMenuBadges({ProfileMenuKeys.offers: 4}),
+        more: [negotiationRepositoryProvider.overrideWithValue(offers)],
+      );
+      await tester.tap(find.text('Profile'));
+      await harness.settle();
+
+      expect(find.bySemanticsLabel('Offers, 4 new'), findsOneWidget);
+      await tester.tap(find.text('Offers'));
+      await harness.settle();
+
+      expect(find.byType(OffersScreen), findsOneWidget);
+      expect(find.text('Ravi K'), findsOneWidget);
       await harness.dispose();
     });
 

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
 import '../domain/negotiation.dart';
+import '../domain/offers.dart';
 
 /// The result of making an offer: the negotiation, and whether this call created it (201) or
 /// returned the one a retry had already made (200).
@@ -15,6 +16,9 @@ class MadeOffer {
 /// Price negotiation with a seller or buyer (US-017). Failures surface as `ApiError`; the screens map
 /// the codes to text. Amounts are sent as decimal strings, never as floating point numbers.
 class NegotiationRepository {
+  /// Offers in each page of the Offers screen; the server allows at most 50.
+  static const int offersPageSize = 20;
+
   final ApiClient _client;
 
   NegotiationRepository(this._client);
@@ -60,6 +64,31 @@ class NegotiationRepository {
         ApiConstants.offerCounter(offerId),
         data: {'amount': amount, 'clientRequestId': clientRequestId},
         parse: _parse,
+      );
+
+  /// Offers a seller received, for one list (US-076); sorted by the server.
+  Future<OffersPage> receivedOffers(OffersFilter filter, {int page = 0}) => _client.get(
+        ApiConstants.offersReceived,
+        queryParameters: {'status': filter.apiName, 'page': page, 'size': offersPageSize},
+        parse: (json) => OffersPage.received(json as Map<String, dynamic>),
+      );
+
+  /// Offers the person sent as a buyer, for one list (US-076).
+  Future<OffersPage> sentOffers(OffersFilter filter, {int page = 0}) => _client.get(
+        ApiConstants.negotiations,
+        queryParameters: {
+          'role': 'BUYER',
+          'status': filter == OffersFilter.closed ? 'CLOSED' : 'OPEN',
+          'page': page,
+          'size': offersPageSize,
+        },
+        parse: (json) => OffersPage.sent(json as Map<String, dynamic>, filter),
+      );
+
+  /// What waits for the seller: offers to answer, locked prices, offers about to expire.
+  Future<OffersSummary> offersSummary() => _client.get(
+        ApiConstants.offersReceivedSummary,
+        parse: (json) => OffersSummary.fromJson(json as Map<String, dynamic>),
       );
 
   /// The buyer withdraws; an accepted price is released.

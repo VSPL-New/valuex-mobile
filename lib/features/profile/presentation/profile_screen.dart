@@ -16,6 +16,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../auth/domain/entities/logout_outcome.dart';
 import '../../auth/presentation/auth_error_messages.dart';
 import '../../home/presentation/main_nav.dart';
+import '../../negotiation/presentation/providers/offers_badge_provider.dart';
 import '../../notifications/presentation/providers/notifications_providers.dart';
 import '../data/mock_profile_summary.dart';
 import '../data/profile_repository.dart';
@@ -95,6 +96,9 @@ class ProfileScreen extends ConsumerWidget {
     // The backend sends no NOTIFICATIONS badge, so the row uses the unread count itself.
     final unreadNotifications =
         ref.watch(unreadNotificationsProvider).value ?? badges.count(ProfileMenuKeys.notifications);
+    // Follows `badge.updated` events, so the number changes while the page is open (US-076).
+    final offersAwaiting =
+        ref.watch(offersBadgeProvider).value ?? badges.count(ProfileMenuKeys.offers);
 
     ProfileMenuItem item(IconData icon, String label, [String? badgeKey, VoidCallback? onTap]) =>
         ProfileMenuItem(
@@ -166,6 +170,12 @@ class ProfileScreen extends ConsumerWidget {
                       ProfileMenuSection(
                         title: l10n.profileSectionSelling,
                         items: [
+                          ProfileMenuItem(
+                            icon: Icons.local_offer_outlined,
+                            label: l10n.profileOffers,
+                            badge: offersAwaiting,
+                            onTap: () => context.push(RouteNames.offers),
+                          ),
                           item(Icons.assignment_outlined, l10n.profileIncomingOrders,
                               ProfileMenuKeys.incomingOrders),
                           item(

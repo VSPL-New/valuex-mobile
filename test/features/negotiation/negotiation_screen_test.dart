@@ -110,11 +110,153 @@ void main() {
 
     await tester.tap(find.text('Accept ₹12,000'));
     await tester.pumpAndSettle();
+    await tester.tap(find.text('Accept'));
+    await tester.pumpAndSettle();
 
     verify(() => repo.accept('o1')).called(1);
     expect(find.text('Accepted at ₹12,000'), findsOneWidget);
     expect(find.text('Price locked at ₹12,000. Ends in 24h 0m'), findsOneWidget);
     expect(find.text('Accept ₹12,000'), findsNothing);
+  });
+
+  testWidgets('asks the seller to confirm an accept and does nothing when they keep waiting',
+      (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => sellerTurn());
+    await pump(tester);
+
+    await tester.tap(find.text('Accept ₹12,000'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Accept this offer?'), findsOneWidget);
+    expect(
+      find.text(
+          'The price is locked for the buyer and the other offers on this item will be declined.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Keep'));
+    await tester.pumpAndSettle();
+
+    verifyNever(() => repo.accept(any()));
+  });
+
+  testWidgets('tells a property seller that the other offers stay open', (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => negotiation(
+          role: 'SELLER',
+          realEstate: true,
+          actions: {'canAccept': true, 'canReject': true, 'canCounter': true, 'canCancel': false},
+          counterRange: {'min': 12000.01, 'max': 14500},
+        ));
+    await pump(tester);
+
+    await tester.tap(find.text('Accept ₹12,000'));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text('You agree on this price with the buyer. Other offers on this property stay open.'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('lets the buyer accept a counter offer without a confirmation', (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => buyerTurn());
+    when(() => repo.accept('o2')).thenAnswer((_) async => negotiation(
+          state: 'OFFER_ACCEPTED',
+          awaiting: 'NONE',
+          agreedPrice: 13500,
+          priceLockExpiresAt: '2026-11-18T10:00:00Z',
+          expiresAt: null,
+          actions: {},
+        ));
+    await pump(tester);
+
+    await tester.tap(find.text('Accept ₹13,500'));
+    await tester.pumpAndSettle();
+
+    verify(() => repo.accept('o2')).called(1);
+    expect(find.text('Accept this offer?'), findsNothing);
+  });
+
+  testWidgets('tells the seller the buyer can check out once the price is accepted for goods',
+      (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => negotiation(
+          role: 'SELLER',
+          state: 'OFFER_ACCEPTED',
+          awaiting: 'NONE',
+          agreedPrice: 12000,
+          priceLockExpiresAt: '2026-11-18T10:00:00Z',
+          expiresAt: null,
+          actions: {},
+        ));
+
+    await pump(tester);
+
+    expect(find.text('The buyer has been told and can now go to checkout.'), findsOneWidget);
+  });
+
+  testWidgets('does not say the buyer can check out to the buyer or for a property',
+      (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => negotiation(
+          state: 'OFFER_ACCEPTED',
+          awaiting: 'NONE',
+          agreedPrice: 12000,
+          priceLockExpiresAt: '2026-11-18T10:00:00Z',
+          expiresAt: null,
+          actions: {},
+        ));
+
+    await pump(tester);
+
+    expect(find.text('The buyer has been told and can now go to checkout.'), findsNothing);
+  });
+
+  testWidgets('says only Accept and Decline remain at the last round', (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => negotiation(
+          role: 'SELLER',
+          round: 5,
+          offers: [offerJson('o5', 'BUYER', 13000, 5)],
+          actions: {'canAccept': true, 'canReject': true, 'canCounter': false, 'canCancel': false},
+        ));
+
+    await pump(tester);
+
+    expect(find.text('This is the last round. You can only accept or decline.'), findsOneWidget);
+    expect(find.text('Counter'), findsNothing);
+    expect(find.text('Accept ₹13,000'), findsOneWidget);
+  });
+
+  testWidgets('does not show the last round note while counters are still possible',
+      (tester) async {
+    when(() => repo.get('n1')).thenAnswer((_) async => sellerTurn());
+
+    await pump(tester);
+
+    expect(find.text('This is the last round. You can only accept or decline.'), findsNothing);
+  });
+
+  testWidgets('shows the seller wording when an offer expired while they were reading it',
+      (tester) async {
+    var reads = 0;
+    when(() => repo.get('n1')).thenAnswer((_) async {
+      reads++;
+      return reads == 1
+          ? sellerTurn()
+          : negotiation(
+              role: 'SELLER',
+              state: 'NEGOTIATION_EXPIRED',
+              awaiting: 'NONE',
+              actions: {},
+              expiresAt: null);
+    });
+    when(() => repo.accept('o1')).thenThrow(_refusal('ERROR_OFFER_EXPIRED'));
+    await pump(tester);
+
+    await tester.tap(find.text('Accept ₹12,000'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Accept'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('This offer has expired'), findsOneWidget);
+    expect(find.text('Expired'), findsWidgets);
   });
 
   testWidgets('declines only after confirming, and the negotiation then shows as declined',
@@ -196,6 +338,8 @@ void main() {
     await pump(tester);
 
     await tester.tap(find.text('Accept ₹12,000'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Accept'));
     await tester.pumpAndSettle();
 
     expect(find.text('This offer has changed. The latest is shown'), findsOneWidget);

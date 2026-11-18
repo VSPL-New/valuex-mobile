@@ -71,6 +71,17 @@ void main() {
       );
     });
 
+    test('tell a declined buyer neutrally, with no price', () {
+      expect(notificationTitle(_en, _n('OFFER_SUPERSEDED', params: params)),
+          'Offer closed for Apple Watch');
+      expect(
+        notificationBody(_en, _n('OFFER_SUPERSEDED', params: {'listingTitle': 'Apple Watch'})),
+        'The seller accepted another offer for this item. You can make a new offer if it becomes available again',
+      );
+      expect(notificationBody(_hi, _n('OFFER_SUPERSEDED', params: params)), isNot(contains('₹')));
+      expect(notificationCategoryOf('OFFER_SUPERSEDED'), NotificationCategory.messages);
+    });
+
     test('are shown in Hindi', () {
       expect(
           notificationTitle(_hi, _n('OFFER_RECEIVED', params: params)), 'Apple Watch पर नया ऑफ़र');

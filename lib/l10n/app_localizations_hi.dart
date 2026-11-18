@@ -3524,4 +3524,120 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get notifNegotiationCancelledBody => 'यह वस्तु अब उपलब्ध नहीं है';
+
+  @override
+  String notifOfferSupersededTitle(String title) {
+    return '$title के लिए ऑफ़र बंद';
+  }
+
+  @override
+  String get notifOfferSupersededBody =>
+      'विक्रेता ने इस वस्तु के लिए दूसरा ऑफ़र स्वीकार कर लिया। दोबारा उपलब्ध होने पर आप नया ऑफ़र दे सकते हैं';
+
+  @override
+  String get offerCardSuperseded =>
+      'विक्रेता ने दूसरा ऑफ़र स्वीकार कर लिया। दोबारा उपलब्ध होने पर आप नया ऑफ़र दे सकते हैं';
+
+  @override
+  String get profileOffers => 'ऑफ़र';
+
+  @override
+  String get offersTitle => 'ऑफ़र';
+
+  @override
+  String get offersTabReceived => 'प्राप्त';
+
+  @override
+  String get offersTabSent => 'भेजे गए';
+
+  @override
+  String get offersFilterPending => 'लंबित';
+
+  @override
+  String get offersFilterAccepted => 'स्वीकृत';
+
+  @override
+  String get offersFilterClosed => 'बंद';
+
+  @override
+  String get offersEmptyTitle => 'यहाँ कोई ऑफ़र नहीं है';
+
+  @override
+  String get offersEmptyReceivedHint => 'जब खरीदार आपकी वस्तुओं पर ऑफ़र देंगे, वे यहाँ दिखेंगे।';
+
+  @override
+  String get offersEmptySentHint => 'आपके द्वारा दिए गए ऑफ़र यहाँ दिखेंगे।';
+
+  @override
+  String get offersLoadFailed => 'ऑफ़र लोड नहीं हो सके। दोबारा कोशिश के लिए नीचे खींचें।';
+
+  @override
+  String get offersLoadMore => 'और लोड करें';
+
+  @override
+  String get offersLoadMoreFailed => 'और ऑफ़र लोड नहीं हो सके';
+
+  @override
+  String offersExpiringSoon(int count) {
+    return '$count जल्द समाप्त होंगे';
+  }
+
+  @override
+  String offersOfferedOf(String offered, String asking) {
+    return '$asking में से $offered का ऑफ़र';
+  }
+
+  @override
+  String get offersNoRatings => 'अभी कोई रेटिंग नहीं';
+
+  @override
+  String offersRating(String rating, int count) {
+    return '$rating ★ ($count)';
+  }
+
+  @override
+  String get offersNeedsYourAnswer => 'आपके जवाब का इंतज़ार';
+
+  @override
+  String get offersWaitingBuyer => 'खरीदार के जवाब का इंतज़ार';
+
+  @override
+  String get offersWaitingSeller => 'विक्रेता के जवाब का इंतज़ार';
+
+  @override
+  String offersLockEndsIn(String duration) {
+    return 'कीमत सुरक्षित, $duration बाकी';
+  }
+
+  @override
+  String offersCardLabel(String name, String item, String offered, String asking, String ago) {
+    return '$name, $item। $asking में से $offered का ऑफ़र। $ago';
+  }
+
+  @override
+  String get negotiationAcceptTitle => 'यह ऑफ़र स्वीकार करें?';
+
+  @override
+  String get negotiationAcceptConfirm => 'स्वीकार करें';
+
+  @override
+  String get negotiationAcceptBodyGoods =>
+      'कीमत खरीदार के लिए सुरक्षित हो जाएगी और इस वस्तु के बाकी ऑफ़र अस्वीकार कर दिए जाएँगे।';
+
+  @override
+  String get negotiationAcceptBodyProperty =>
+      'आप खरीदार के साथ इस कीमत पर सहमत होते हैं। इस संपत्ति के बाकी ऑफ़र खुले रहेंगे।';
+
+  @override
+  String get negotiationSellerAcceptedNote =>
+      'खरीदार को बता दिया गया है और वह अब चेकआउट कर सकता है।';
+
+  @override
+  String get negotiationRoundCap => 'यह आख़िरी दौर है। आप सिर्फ़ स्वीकार या अस्वीकार कर सकते हैं।';
+
+  @override
+  String get negotiationErrorOfferExpired => 'यह ऑफ़र समाप्त हो चुका है';
+
+  @override
+  String get counterSliderLabel => 'जवाबी राशि';
 }

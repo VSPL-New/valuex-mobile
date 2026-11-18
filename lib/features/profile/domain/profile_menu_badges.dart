@@ -7,6 +7,7 @@ class ProfileMenuKeys {
   static const String incomingOrders = 'INCOMING_ORDERS';
   static const String myListings = 'MY_LISTINGS';
   static const String savedItems = 'SAVED_ITEMS';
+  static const String offers = 'OFFERS';
   static const String transactions = 'TRANSACTIONS';
   static const String payouts = 'PAYOUTS';
   static const String notifications = 'NOTIFICATIONS';

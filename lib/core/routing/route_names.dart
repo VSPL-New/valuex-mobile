@@ -34,6 +34,9 @@ class RouteNames {
   static String savedSearch(String id) =>
       Uri(path: savedSearches, queryParameters: {'id': id}).toString();
   static const String savedItems = '/saved-items';
+
+  /// Offers received and sent (US-076).
+  static const String offers = '/offers';
   static const String blockedUsers = '/profile/blocked-users';
 
   /// The Chats tab and one conversation (US-013).

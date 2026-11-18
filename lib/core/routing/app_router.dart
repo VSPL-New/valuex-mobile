@@ -40,6 +40,7 @@ import '../../features/communication_safety/presentation/blocked_users_screen.da
 import '../../features/chat/presentation/chat_list_screen.dart';
 import '../../features/chat/presentation/chat_thread_screen.dart';
 import '../../features/negotiation/presentation/negotiation_screen.dart';
+import '../../features/negotiation/presentation/offers_screen.dart';
 import '../../features/saved_listings/presentation/saved_items_screen.dart';
 import '../../features/saved_searches/presentation/saved_search_results_screen.dart';
 import '../../features/saved_searches/presentation/saved_searches_screen.dart';
@@ -258,6 +259,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               ? const SavedSearchesScreen()
               : SavedSearchResultsScreen(savedSearchId: id);
         },
+      ),
+      GoRoute(
+        path: RouteNames.offers,
+        name: 'offers',
+        builder: (context, state) => const OffersScreen(),
       ),
       GoRoute(
         path: RouteNames.savedItems,
