@@ -81,6 +81,14 @@ class ApiConstants {
   static String chatDelivered(String threadId) => '/chats/$threadId/delivered';
   static String chatRead(String threadId) => '/chats/$threadId/read';
 
+  // Price negotiation (US-017)
+  static String listingOffers(String listingId) => '/listings/$listingId/offers';
+  static String negotiation(String negotiationId) => '/negotiations/$negotiationId';
+  static String negotiationCancel(String negotiationId) => '/negotiations/$negotiationId/cancel';
+  static String offerAccept(String offerId) => '/offers/$offerId/accept';
+  static String offerReject(String offerId) => '/offers/$offerId/reject';
+  static String offerCounter(String offerId) => '/offers/$offerId/counter';
+
   // Realtime (US-130)
   static const String realtimeTickets = '/realtime/tickets';
   static const String categoryChildren = '/categories/children';

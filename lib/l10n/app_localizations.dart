@@ -5624,6 +5624,552 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} is typing…'**
   String chatTyping(String name);
+
+  /// No description provided for @negotiationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer'**
+  String get negotiationTitle;
+
+  /// No description provided for @offerSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Make an offer'**
+  String get offerSheetTitle;
+
+  /// No description provided for @offerAskingPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Asking price: {price}'**
+  String offerAskingPrice(String price);
+
+  /// No description provided for @offerAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your offer'**
+  String get offerAmountLabel;
+
+  /// No description provided for @offerRangeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You can offer up to {max}'**
+  String offerRangeHint(String max);
+
+  /// No description provided for @offerAmountRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your offer'**
+  String get offerAmountRequired;
+
+  /// No description provided for @offerAmountInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid amount, for example 850 or 850.50'**
+  String get offerAmountInvalid;
+
+  /// No description provided for @offerAmountOutOfRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer must be between ₹1 and {max}'**
+  String offerAmountOutOfRange(String max);
+
+  /// No description provided for @offerSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Send offer'**
+  String get offerSubmit;
+
+  /// No description provided for @offerChatWithSeller.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat with seller'**
+  String get offerChatWithSeller;
+
+  /// No description provided for @offerLowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Much lower than the asking price'**
+  String get offerLowTitle;
+
+  /// No description provided for @offerLowBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your offer is significantly lower than the asking price. Send it anyway?'**
+  String get offerLowBody;
+
+  /// No description provided for @offerLowConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Send anyway'**
+  String get offerLowConfirm;
+
+  /// No description provided for @offerKeepEditing.
+  ///
+  /// In en, this message translates to:
+  /// **'Change offer'**
+  String get offerKeepEditing;
+
+  /// No description provided for @counterSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Counter offer'**
+  String get counterSheetTitle;
+
+  /// No description provided for @counterRangeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter between {min} and {max}'**
+  String counterRangeHint(String min, String max);
+
+  /// No description provided for @counterAmountOutOfRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Counter offer must be between {min} and {max}'**
+  String counterAmountOutOfRange(String min, String max);
+
+  /// No description provided for @counterSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Send counter offer'**
+  String get counterSubmit;
+
+  /// No description provided for @negotiationAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get negotiationAccept;
+
+  /// No description provided for @negotiationAcceptAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept {amount}'**
+  String negotiationAcceptAmount(String amount);
+
+  /// No description provided for @negotiationDecline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get negotiationDecline;
+
+  /// No description provided for @negotiationCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'Counter'**
+  String get negotiationCounter;
+
+  /// No description provided for @negotiationCancelOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel offer'**
+  String get negotiationCancelOffer;
+
+  /// No description provided for @negotiationDeclineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline this offer?'**
+  String get negotiationDeclineTitle;
+
+  /// No description provided for @negotiationDeclineBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The negotiation will end.'**
+  String get negotiationDeclineBody;
+
+  /// No description provided for @negotiationCancelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel your offer?'**
+  String get negotiationCancelTitle;
+
+  /// No description provided for @negotiationCancelBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You can make a new offer later. An agreed price will be released.'**
+  String get negotiationCancelBody;
+
+  /// No description provided for @negotiationKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep'**
+  String get negotiationKeep;
+
+  /// No description provided for @negotiationAsking.
+  ///
+  /// In en, this message translates to:
+  /// **'Asking price: {price}'**
+  String negotiationAsking(String price);
+
+  /// No description provided for @negotiationRound.
+  ///
+  /// In en, this message translates to:
+  /// **'Round {round} of {max}'**
+  String negotiationRound(int round, int max);
+
+  /// No description provided for @negotiationStatusWaitingSeller.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the seller'**
+  String get negotiationStatusWaitingSeller;
+
+  /// No description provided for @negotiationStatusWaitingBuyer.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the buyer'**
+  String get negotiationStatusWaitingBuyer;
+
+  /// No description provided for @negotiationStatusSellerCountered.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller countered {amount}'**
+  String negotiationStatusSellerCountered(String amount);
+
+  /// No description provided for @negotiationStatusBuyerOffered.
+  ///
+  /// In en, this message translates to:
+  /// **'Buyer offered {amount}'**
+  String negotiationStatusBuyerOffered(String amount);
+
+  /// No description provided for @negotiationStatusAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted at {amount}'**
+  String negotiationStatusAccepted(String amount);
+
+  /// No description provided for @negotiationStatusDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get negotiationStatusDeclined;
+
+  /// No description provided for @negotiationStatusExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get negotiationStatusExpired;
+
+  /// No description provided for @negotiationStatusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get negotiationStatusCancelled;
+
+  /// No description provided for @negotiationStatusConverted.
+  ///
+  /// In en, this message translates to:
+  /// **'Order placed'**
+  String get negotiationStatusConverted;
+
+  /// No description provided for @negotiationStatusUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This item is no longer available'**
+  String get negotiationStatusUnavailable;
+
+  /// No description provided for @negotiationExpiresIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Expires in {duration}'**
+  String negotiationExpiresIn(String duration);
+
+  /// No description provided for @negotiationExpiredChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get negotiationExpiredChip;
+
+  /// No description provided for @negotiationLockBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Price locked at {amount}. Ends in {duration}'**
+  String negotiationLockBanner(String amount, String duration);
+
+  /// No description provided for @negotiationPropertyAgreed.
+  ///
+  /// In en, this message translates to:
+  /// **'Price agreed: {amount}. The owner will close the deal.'**
+  String negotiationPropertyAgreed(String amount);
+
+  /// No description provided for @negotiationDurationHoursMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h {minutes}m'**
+  String negotiationDurationHoursMinutes(int hours, int minutes);
+
+  /// No description provided for @negotiationDurationMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes}m'**
+  String negotiationDurationMinutes(int minutes);
+
+  /// No description provided for @negotiationDurationLessThanMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'under a minute'**
+  String get negotiationDurationLessThanMinute;
+
+  /// No description provided for @negotiationOffersHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers'**
+  String get negotiationOffersHeading;
+
+  /// No description provided for @negotiationOfferBy.
+  ///
+  /// In en, this message translates to:
+  /// **'{party} · round {round}'**
+  String negotiationOfferBy(String party, int round);
+
+  /// No description provided for @negotiationPartyYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get negotiationPartyYou;
+
+  /// No description provided for @negotiationPartyBuyer.
+  ///
+  /// In en, this message translates to:
+  /// **'Buyer'**
+  String get negotiationPartyBuyer;
+
+  /// No description provided for @negotiationPartySeller.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller'**
+  String get negotiationPartySeller;
+
+  /// No description provided for @negotiationErrorInvalidOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer must be between ₹{min} and ₹{max}'**
+  String negotiationErrorInvalidOffer(String min, String max);
+
+  /// No description provided for @negotiationErrorInvalidCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'Counter offer must be between ₹{min} and ₹{max}'**
+  String negotiationErrorInvalidCounter(String min, String max);
+
+  /// No description provided for @negotiationErrorMax.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum negotiation attempts reached'**
+  String get negotiationErrorMax;
+
+  /// No description provided for @negotiationErrorMaxSeller.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum negotiation rounds reached'**
+  String get negotiationErrorMaxSeller;
+
+  /// No description provided for @negotiationErrorExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This negotiation has expired'**
+  String get negotiationErrorExpired;
+
+  /// No description provided for @negotiationErrorNotNegotiable.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing does not take offers'**
+  String get negotiationErrorNotNegotiable;
+
+  /// No description provided for @negotiationErrorExists.
+  ///
+  /// In en, this message translates to:
+  /// **'You already have an open negotiation on this listing'**
+  String get negotiationErrorExists;
+
+  /// No description provided for @negotiationErrorCooldown.
+  ///
+  /// In en, this message translates to:
+  /// **'You can make a new offer on this item later'**
+  String get negotiationErrorCooldown;
+
+  /// No description provided for @negotiationErrorTooMany.
+  ///
+  /// In en, this message translates to:
+  /// **'You have too many open negotiations. Finish or cancel one first'**
+  String get negotiationErrorTooMany;
+
+  /// No description provided for @negotiationErrorNotCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'This offer has changed. The latest is shown'**
+  String get negotiationErrorNotCurrent;
+
+  /// No description provided for @negotiationErrorReserved.
+  ///
+  /// In en, this message translates to:
+  /// **'This item is reserved for another buyer right now'**
+  String get negotiationErrorReserved;
+
+  /// No description provided for @negotiationErrorUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This item is no longer available'**
+  String get negotiationErrorUnavailable;
+
+  /// No description provided for @negotiationErrorAlreadyAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'A price for this item has already been accepted'**
+  String get negotiationErrorAlreadyAccepted;
+
+  /// No description provided for @negotiationErrorAadhaar.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete Aadhaar verification to make an offer'**
+  String get negotiationErrorAadhaar;
+
+  /// No description provided for @negotiationErrorRateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many offers. Try again in a minute'**
+  String get negotiationErrorRateLimited;
+
+  /// No description provided for @listingViewReserved.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserved right now'**
+  String get listingViewReserved;
+
+  /// No description provided for @listingViewViewOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'View offer'**
+  String get listingViewViewOffer;
+
+  /// No description provided for @offerCardOffered.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} offered {amount}'**
+  String offerCardOffered(String who, String amount);
+
+  /// No description provided for @offerCardCountered.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} countered with {amount}'**
+  String offerCardCountered(String who, String amount);
+
+  /// No description provided for @offerCardAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} accepted {amount}'**
+  String offerCardAccepted(String who, String amount);
+
+  /// No description provided for @offerCardDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} declined {amount}'**
+  String offerCardDeclined(String who, String amount);
+
+  /// No description provided for @offerCardWithdrawn.
+  ///
+  /// In en, this message translates to:
+  /// **'The buyer withdrew the offer'**
+  String get offerCardWithdrawn;
+
+  /// No description provided for @offerCardEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Negotiation ended: the item is no longer available'**
+  String get offerCardEnded;
+
+  /// No description provided for @offerCardView.
+  ///
+  /// In en, this message translates to:
+  /// **'View offer'**
+  String get offerCardView;
+
+  /// No description provided for @offerCardWhoYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get offerCardWhoYou;
+
+  /// No description provided for @offerCardWhoBuyer.
+  ///
+  /// In en, this message translates to:
+  /// **'The buyer'**
+  String get offerCardWhoBuyer;
+
+  /// No description provided for @offerCardWhoSeller.
+  ///
+  /// In en, this message translates to:
+  /// **'The seller'**
+  String get offerCardWhoSeller;
+
+  /// No description provided for @notifOfferReceivedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New offer on {title}'**
+  String notifOfferReceivedTitle(String title);
+
+  /// No description provided for @notifOfferReceivedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A buyer offered {amount}'**
+  String notifOfferReceivedBody(String amount);
+
+  /// No description provided for @notifOfferCounteredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Counter offer on {title}'**
+  String notifOfferCounteredTitle(String title);
+
+  /// No description provided for @notifOfferCounteredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The other side countered with {amount}'**
+  String notifOfferCounteredBody(String amount);
+
+  /// No description provided for @notifOfferAcceptedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer accepted for {title}'**
+  String notifOfferAcceptedTitle(String title);
+
+  /// No description provided for @notifOfferAcceptedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The price {amount} is agreed'**
+  String notifOfferAcceptedBody(String amount);
+
+  /// No description provided for @notifOfferRejectedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer declined for {title}'**
+  String notifOfferRejectedTitle(String title);
+
+  /// No description provided for @notifOfferRejectedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The offer of {amount} was declined'**
+  String notifOfferRejectedBody(String amount);
+
+  /// No description provided for @notifOfferWithdrawnTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer withdrawn for {title}'**
+  String notifOfferWithdrawnTitle(String title);
+
+  /// No description provided for @notifOfferWithdrawnBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The buyer withdrew the offer'**
+  String get notifOfferWithdrawnBody;
+
+  /// No description provided for @notifNegotiationCancelledTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Negotiation ended for {title}'**
+  String notifNegotiationCancelledTitle(String title);
+
+  /// No description provided for @notifNegotiationCancelledBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This item is no longer available'**
+  String get notifNegotiationCancelledBody;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

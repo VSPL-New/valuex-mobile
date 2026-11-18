@@ -321,6 +321,8 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
                 key: ValueKey('card-${message.seq}-${message.clientMessageId}'),
                 message: message,
                 onOpenListing: () => context.push(RouteNames.listingView(thread.listing.listingId)),
+                viewerIsBuyer: thread.isBuyer,
+                onOpenNegotiation: (id) => context.push(RouteNames.negotiation(id)),
               )
             : MessageBubble(
                 key: ValueKey('${message.seq}-${message.clientMessageId}'),

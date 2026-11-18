@@ -1,3 +1,4 @@
+import '../../../core/utils/formatters.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/app_notification.dart';
 
@@ -15,7 +16,7 @@ String notificationTitle(AppLocalizations l10n, AppNotification notification) {
     'LISTING_REMOVED_BY_ADMIN' => l10n.notifListingRemovedTitle,
     'SAVED_SEARCH_MATCHES' => l10n.notifSavedSearchTitle,
     'SAVED_LISTING_UNAVAILABLE' => l10n.notifSavedListingTitle,
-    _ => notification.title,
+    _ => _offerTitle(l10n, notification) ?? notification.title,
   };
 }
 
@@ -76,7 +77,38 @@ String notificationBody(AppLocalizations l10n, AppNotification notification) {
     'SAVED_LISTING_UNAVAILABLE' => _savedListingBody(l10n, params),
     _ => null,
   };
-  return localized ?? notification.body;
+  return localized ?? _offerBody(l10n, notification) ?? notification.body;
 }
 
 String? _text(Object? value) => value is String && value.isNotEmpty ? value : null;
+
+/// The item title and the amount of an offer message, from the server's values; null for the message
+/// of another kind, or when a value is missing, so the server's English text shows instead (US-017).
+String? _offerTitle(AppLocalizations l10n, AppNotification notification) {
+  final title = _text(notification.params['listingTitle']);
+  if (title == null) return null;
+  return switch (notification.eventType) {
+    'OFFER_RECEIVED' => l10n.notifOfferReceivedTitle(title),
+    'OFFER_COUNTERED' => l10n.notifOfferCounteredTitle(title),
+    'OFFER_ACCEPTED' => l10n.notifOfferAcceptedTitle(title),
+    'OFFER_REJECTED' => l10n.notifOfferRejectedTitle(title),
+    'OFFER_WITHDRAWN' => l10n.notifOfferWithdrawnTitle(title),
+    'NEGOTIATION_CANCELLED' => l10n.notifNegotiationCancelledTitle(title),
+    _ => null,
+  };
+}
+
+String? _offerBody(AppLocalizations l10n, AppNotification notification) {
+  final raw = notification.params['amount'];
+  final value = raw is String ? num.tryParse(raw) : null;
+  final amount = value == null ? null : Formatters.money(value);
+  return switch (notification.eventType) {
+    'OFFER_RECEIVED' => amount == null ? null : l10n.notifOfferReceivedBody(amount),
+    'OFFER_COUNTERED' => amount == null ? null : l10n.notifOfferCounteredBody(amount),
+    'OFFER_ACCEPTED' => amount == null ? null : l10n.notifOfferAcceptedBody(amount),
+    'OFFER_REJECTED' => amount == null ? null : l10n.notifOfferRejectedBody(amount),
+    'OFFER_WITHDRAWN' => l10n.notifOfferWithdrawnBody,
+    'NEGOTIATION_CANCELLED' => l10n.notifNegotiationCancelledBody,
+    _ => null,
+  };
+}

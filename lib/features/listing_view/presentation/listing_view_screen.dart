@@ -12,6 +12,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../chat/presentation/contact_error_messages.dart';
 import '../../chat/presentation/providers/chat_launcher.dart';
 import '../../home/presentation/main_nav.dart';
+import '../../negotiation/presentation/offer_sheet.dart';
 import '../../saved_listings/presentation/widgets/save_heart.dart';
 import '../domain/public_listing.dart';
 import 'listing_view_messages.dart';
@@ -52,6 +53,30 @@ class ListingViewScreen extends ConsumerWidget {
     if (error is ApiError && error.code == 'ERROR_LISTING_NOT_AVAILABLE') {
       ref.invalidate(publicListingProvider(listingId));
     }
+  }
+
+  /// Make an Offer (US-017): opens the negotiation the buyer already has, otherwise the offer
+  /// sheet; a negotiation that was made, or already existed, is then shown. The page is read
+  /// again afterwards because the offer changes what the buyer can do here.
+  Future<void> _makeOffer(BuildContext context, WidgetRef ref, PublicListing listing) async {
+    final existing = listing.negotiationId;
+    final price = listing.price;
+    String? negotiationId = existing;
+    if (negotiationId == null) {
+      if (price == null) return;
+      negotiationId = await showOfferSheet(
+        context,
+        listingId: listing.listingId,
+        askingPrice: price,
+        onChat: () {
+          Navigator.of(context).pop();
+          _openChat(context, ref, listing);
+        },
+      );
+    }
+    if (negotiationId == null || !context.mounted) return;
+    await context.push(RouteNames.negotiation(negotiationId));
+    if (context.mounted) ref.invalidate(publicListingProvider(listingId));
   }
 
   @override
@@ -107,6 +132,8 @@ class ListingViewScreen extends ConsumerWidget {
                   hasChat: data.chatThreadId != null,
                   chatBusy: ref.watch(chatLauncherProvider),
                   onChat: () => _openChat(context, ref, data),
+                  onOffer: () => _makeOffer(context, ref, data),
+                  hasOffer: data.negotiationId != null,
                 );
                 if (large) {
                   return SingleChildScrollView(child: Column(children: [body, actions]));

@@ -41,6 +41,11 @@ class RouteNames {
   static const String chatThreadBase = '/chats';
   static String chatThread(String threadId) => '$chatThreadBase/$threadId';
   static const String chatThreadPattern = '$chatThreadBase/:threadId';
+
+  /// One price negotiation (US-017).
+  static const String negotiationBase = '/negotiations';
+  static String negotiation(String negotiationId) => '$negotiationBase/$negotiationId';
+  static const String negotiationPattern = '$negotiationBase/:negotiationId';
   static const String listingViewBase = '/listing';
   static String listingView(String listingId) => '$listingViewBase/$listingId';
   static const String listingViewPattern = '$listingViewBase/:listingId';

@@ -3193,4 +3193,346 @@ class AppLocalizationsEn extends AppLocalizations {
   String chatTyping(String name) {
     return '$name is typing…';
   }
+
+  @override
+  String get negotiationTitle => 'Offer';
+
+  @override
+  String get offerSheetTitle => 'Make an offer';
+
+  @override
+  String offerAskingPrice(String price) {
+    return 'Asking price: $price';
+  }
+
+  @override
+  String get offerAmountLabel => 'Your offer';
+
+  @override
+  String offerRangeHint(String max) {
+    return 'You can offer up to $max';
+  }
+
+  @override
+  String get offerAmountRequired => 'Enter your offer';
+
+  @override
+  String get offerAmountInvalid => 'Enter a valid amount, for example 850 or 850.50';
+
+  @override
+  String offerAmountOutOfRange(String max) {
+    return 'Offer must be between ₹1 and $max';
+  }
+
+  @override
+  String get offerSubmit => 'Send offer';
+
+  @override
+  String get offerChatWithSeller => 'Chat with seller';
+
+  @override
+  String get offerLowTitle => 'Much lower than the asking price';
+
+  @override
+  String get offerLowBody =>
+      'Your offer is significantly lower than the asking price. Send it anyway?';
+
+  @override
+  String get offerLowConfirm => 'Send anyway';
+
+  @override
+  String get offerKeepEditing => 'Change offer';
+
+  @override
+  String get counterSheetTitle => 'Counter offer';
+
+  @override
+  String counterRangeHint(String min, String max) {
+    return 'Enter between $min and $max';
+  }
+
+  @override
+  String counterAmountOutOfRange(String min, String max) {
+    return 'Counter offer must be between $min and $max';
+  }
+
+  @override
+  String get counterSubmit => 'Send counter offer';
+
+  @override
+  String get negotiationAccept => 'Accept';
+
+  @override
+  String negotiationAcceptAmount(String amount) {
+    return 'Accept $amount';
+  }
+
+  @override
+  String get negotiationDecline => 'Decline';
+
+  @override
+  String get negotiationCounter => 'Counter';
+
+  @override
+  String get negotiationCancelOffer => 'Cancel offer';
+
+  @override
+  String get negotiationDeclineTitle => 'Decline this offer?';
+
+  @override
+  String get negotiationDeclineBody => 'The negotiation will end.';
+
+  @override
+  String get negotiationCancelTitle => 'Cancel your offer?';
+
+  @override
+  String get negotiationCancelBody =>
+      'You can make a new offer later. An agreed price will be released.';
+
+  @override
+  String get negotiationKeep => 'Keep';
+
+  @override
+  String negotiationAsking(String price) {
+    return 'Asking price: $price';
+  }
+
+  @override
+  String negotiationRound(int round, int max) {
+    return 'Round $round of $max';
+  }
+
+  @override
+  String get negotiationStatusWaitingSeller => 'Waiting for the seller';
+
+  @override
+  String get negotiationStatusWaitingBuyer => 'Waiting for the buyer';
+
+  @override
+  String negotiationStatusSellerCountered(String amount) {
+    return 'Seller countered $amount';
+  }
+
+  @override
+  String negotiationStatusBuyerOffered(String amount) {
+    return 'Buyer offered $amount';
+  }
+
+  @override
+  String negotiationStatusAccepted(String amount) {
+    return 'Accepted at $amount';
+  }
+
+  @override
+  String get negotiationStatusDeclined => 'Declined';
+
+  @override
+  String get negotiationStatusExpired => 'Expired';
+
+  @override
+  String get negotiationStatusCancelled => 'Cancelled';
+
+  @override
+  String get negotiationStatusConverted => 'Order placed';
+
+  @override
+  String get negotiationStatusUnavailable => 'This item is no longer available';
+
+  @override
+  String negotiationExpiresIn(String duration) {
+    return 'Expires in $duration';
+  }
+
+  @override
+  String get negotiationExpiredChip => 'Expired';
+
+  @override
+  String negotiationLockBanner(String amount, String duration) {
+    return 'Price locked at $amount. Ends in $duration';
+  }
+
+  @override
+  String negotiationPropertyAgreed(String amount) {
+    return 'Price agreed: $amount. The owner will close the deal.';
+  }
+
+  @override
+  String negotiationDurationHoursMinutes(int hours, int minutes) {
+    return '${hours}h ${minutes}m';
+  }
+
+  @override
+  String negotiationDurationMinutes(int minutes) {
+    return '${minutes}m';
+  }
+
+  @override
+  String get negotiationDurationLessThanMinute => 'under a minute';
+
+  @override
+  String get negotiationOffersHeading => 'Offers';
+
+  @override
+  String negotiationOfferBy(String party, int round) {
+    return '$party · round $round';
+  }
+
+  @override
+  String get negotiationPartyYou => 'You';
+
+  @override
+  String get negotiationPartyBuyer => 'Buyer';
+
+  @override
+  String get negotiationPartySeller => 'Seller';
+
+  @override
+  String negotiationErrorInvalidOffer(String min, String max) {
+    return 'Offer must be between ₹$min and ₹$max';
+  }
+
+  @override
+  String negotiationErrorInvalidCounter(String min, String max) {
+    return 'Counter offer must be between ₹$min and ₹$max';
+  }
+
+  @override
+  String get negotiationErrorMax => 'Maximum negotiation attempts reached';
+
+  @override
+  String get negotiationErrorMaxSeller => 'Maximum negotiation rounds reached';
+
+  @override
+  String get negotiationErrorExpired => 'This negotiation has expired';
+
+  @override
+  String get negotiationErrorNotNegotiable => 'This listing does not take offers';
+
+  @override
+  String get negotiationErrorExists => 'You already have an open negotiation on this listing';
+
+  @override
+  String get negotiationErrorCooldown => 'You can make a new offer on this item later';
+
+  @override
+  String get negotiationErrorTooMany =>
+      'You have too many open negotiations. Finish or cancel one first';
+
+  @override
+  String get negotiationErrorNotCurrent => 'This offer has changed. The latest is shown';
+
+  @override
+  String get negotiationErrorReserved => 'This item is reserved for another buyer right now';
+
+  @override
+  String get negotiationErrorUnavailable => 'This item is no longer available';
+
+  @override
+  String get negotiationErrorAlreadyAccepted => 'A price for this item has already been accepted';
+
+  @override
+  String get negotiationErrorAadhaar => 'Complete Aadhaar verification to make an offer';
+
+  @override
+  String get negotiationErrorRateLimited => 'Too many offers. Try again in a minute';
+
+  @override
+  String get listingViewReserved => 'Reserved right now';
+
+  @override
+  String get listingViewViewOffer => 'View offer';
+
+  @override
+  String offerCardOffered(String who, String amount) {
+    return '$who offered $amount';
+  }
+
+  @override
+  String offerCardCountered(String who, String amount) {
+    return '$who countered with $amount';
+  }
+
+  @override
+  String offerCardAccepted(String who, String amount) {
+    return '$who accepted $amount';
+  }
+
+  @override
+  String offerCardDeclined(String who, String amount) {
+    return '$who declined $amount';
+  }
+
+  @override
+  String get offerCardWithdrawn => 'The buyer withdrew the offer';
+
+  @override
+  String get offerCardEnded => 'Negotiation ended: the item is no longer available';
+
+  @override
+  String get offerCardView => 'View offer';
+
+  @override
+  String get offerCardWhoYou => 'You';
+
+  @override
+  String get offerCardWhoBuyer => 'The buyer';
+
+  @override
+  String get offerCardWhoSeller => 'The seller';
+
+  @override
+  String notifOfferReceivedTitle(String title) {
+    return 'New offer on $title';
+  }
+
+  @override
+  String notifOfferReceivedBody(String amount) {
+    return 'A buyer offered $amount';
+  }
+
+  @override
+  String notifOfferCounteredTitle(String title) {
+    return 'Counter offer on $title';
+  }
+
+  @override
+  String notifOfferCounteredBody(String amount) {
+    return 'The other side countered with $amount';
+  }
+
+  @override
+  String notifOfferAcceptedTitle(String title) {
+    return 'Offer accepted for $title';
+  }
+
+  @override
+  String notifOfferAcceptedBody(String amount) {
+    return 'The price $amount is agreed';
+  }
+
+  @override
+  String notifOfferRejectedTitle(String title) {
+    return 'Offer declined for $title';
+  }
+
+  @override
+  String notifOfferRejectedBody(String amount) {
+    return 'The offer of $amount was declined';
+  }
+
+  @override
+  String notifOfferWithdrawnTitle(String title) {
+    return 'Offer withdrawn for $title';
+  }
+
+  @override
+  String get notifOfferWithdrawnBody => 'The buyer withdrew the offer';
+
+  @override
+  String notifNegotiationCancelledTitle(String title) {
+    return 'Negotiation ended for $title';
+  }
+
+  @override
+  String get notifNegotiationCancelledBody => 'This item is no longer available';
 }
