@@ -292,6 +292,69 @@ void main() {
       expect(result, '13000.50');
     });
 
+    testWidgets('moves the amount field when the slider is dragged inside the corridor',
+        (tester) async {
+      await openCounter(tester);
+      final slider = find.byType(Slider);
+      expect(slider, findsOneWidget);
+
+      await tester.drag(slider, const Offset(400, 0));
+      await tester.pumpAndSettle();
+
+      final field = tester.widget<TextField>(find.byType(TextField));
+      expect(field.controller!.text, '14500');
+      await tester.tap(find.text('Send counter offer'));
+      await tester.pumpAndSettle();
+      expect(result, '14500');
+    });
+
+    testWidgets('keeps the slider at the corridor ends and in step with a typed amount',
+        (tester) async {
+      await openCounter(tester);
+      double value() => tester.widget<Slider>(find.byType(Slider)).value;
+
+      expect(value(), 12001);
+      await type(tester, '13000');
+      expect(value(), 13000);
+      await type(tester, '12000.01');
+      expect(value(), 12001);
+      await type(tester, '14500');
+      expect(value(), 14500);
+      await type(tester, '99999');
+      expect(value(), 14500);
+    });
+
+    testWidgets('speaks the slider in rupees', (tester) async {
+      await openCounter(tester);
+
+      expect(find.bySemanticsLabel('Counter amount'), findsWidgets);
+      final slider = tester.widget<Slider>(find.byType(Slider));
+      expect(slider.semanticFormatterCallback!(13000.4), '₹13,000');
+    });
+
+    testWidgets('has no slider when the corridor holds a single rupee', (tester) async {
+      await pumpNegotiationApp(
+        tester,
+        Scaffold(
+          body: Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () => showCounterSheet(
+                context,
+                range: const CounterRange(min: 900.01, max: 900.99),
+              ),
+              child: const Text('open'),
+            ),
+          ),
+        ),
+        repo: repo,
+      );
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(Slider), findsNothing);
+      expect(find.byType(TextField), findsOneWidget);
+    });
+
     testWidgets('accepts both ends of the corridor', (tester) async {
       await openCounter(tester);
 

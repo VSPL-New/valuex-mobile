@@ -20,6 +20,7 @@ String negotiationErrorMessage(AppLocalizations l10n, Object error) {
       'ERROR_MAX_NEGOTIATIONS' => l10n.negotiationErrorMax,
       'WARNING_MAX_NEGOTIATIONS' => l10n.negotiationErrorMaxSeller,
       'ERROR_NEGOTIATION_EXPIRED' => l10n.negotiationErrorExpired,
+      'ERROR_OFFER_EXPIRED' => l10n.negotiationErrorOfferExpired,
       'ERROR_NOT_NEGOTIABLE' => l10n.negotiationErrorNotNegotiable,
       'ERROR_NEGOTIATION_EXISTS' => l10n.negotiationErrorExists,
       'ERROR_NEGOTIATION_COOLDOWN' => l10n.negotiationErrorCooldown,

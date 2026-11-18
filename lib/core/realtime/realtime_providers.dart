@@ -63,6 +63,9 @@ final chatEventsProvider = _eventsWithPrefix(const ['chat.']);
 /// Events of price negotiations and agreements (US-017 and later): `negotiation.*`, `agreement.*`.
 final negotiationEventsProvider = _eventsWithPrefix(const ['negotiation.', 'agreement.']);
 
+/// Badge counts changed (US-076): `badge.updated`.
+final badgeEventsProvider = _eventsWithPrefix(const ['badge.']);
+
 /// Events of calls (on hold): `call.*`.
 final callEventsProvider = _eventsWithPrefix(const ['call.']);
 

@@ -6170,6 +6170,204 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This item is no longer available'**
   String get notifNegotiationCancelledBody;
+
+  /// No description provided for @notifOfferSupersededTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer closed for {title}'**
+  String notifOfferSupersededTitle(String title);
+
+  /// No description provided for @notifOfferSupersededBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The seller accepted another offer for this item. You can make a new offer if it becomes available again'**
+  String get notifOfferSupersededBody;
+
+  /// No description provided for @offerCardSuperseded.
+  ///
+  /// In en, this message translates to:
+  /// **'The seller accepted another offer. You can make a new offer if it becomes available again'**
+  String get offerCardSuperseded;
+
+  /// No description provided for @profileOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers'**
+  String get profileOffers;
+
+  /// No description provided for @offersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers'**
+  String get offersTitle;
+
+  /// No description provided for @offersTabReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Received'**
+  String get offersTabReceived;
+
+  /// No description provided for @offersTabSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get offersTabSent;
+
+  /// No description provided for @offersFilterPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get offersFilterPending;
+
+  /// No description provided for @offersFilterAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get offersFilterAccepted;
+
+  /// No description provided for @offersFilterClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get offersFilterClosed;
+
+  /// No description provided for @offersEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No offers here'**
+  String get offersEmptyTitle;
+
+  /// No description provided for @offersEmptyReceivedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'When buyers make offers on your items, they show up here.'**
+  String get offersEmptyReceivedHint;
+
+  /// No description provided for @offersEmptySentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers you make on items show up here.'**
+  String get offersEmptySentHint;
+
+  /// No description provided for @offersLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load offers. Pull down to try again.'**
+  String get offersLoadFailed;
+
+  /// No description provided for @offersLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get offersLoadMore;
+
+  /// No description provided for @offersLoadMoreFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load more offers'**
+  String get offersLoadMoreFailed;
+
+  /// No description provided for @offersExpiringSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} expiring soon'**
+  String offersExpiringSoon(int count);
+
+  /// No description provided for @offersOfferedOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Offered {offered} of {asking}'**
+  String offersOfferedOf(String offered, String asking);
+
+  /// No description provided for @offersNoRatings.
+  ///
+  /// In en, this message translates to:
+  /// **'No ratings yet'**
+  String get offersNoRatings;
+
+  /// No description provided for @offersRating.
+  ///
+  /// In en, this message translates to:
+  /// **'{rating} ★ ({count})'**
+  String offersRating(String rating, int count);
+
+  /// No description provided for @offersNeedsYourAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs your answer'**
+  String get offersNeedsYourAnswer;
+
+  /// No description provided for @offersWaitingBuyer.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the buyer'**
+  String get offersWaitingBuyer;
+
+  /// No description provided for @offersWaitingSeller.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the seller'**
+  String get offersWaitingSeller;
+
+  /// No description provided for @offersLockEndsIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Price locked, {duration} left'**
+  String offersLockEndsIn(String duration);
+
+  /// No description provided for @offersCardLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, {item}. Offered {offered} of {asking}. {ago}'**
+  String offersCardLabel(String name, String item, String offered, String asking, String ago);
+
+  /// No description provided for @negotiationAcceptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept this offer?'**
+  String get negotiationAcceptTitle;
+
+  /// No description provided for @negotiationAcceptConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get negotiationAcceptConfirm;
+
+  /// No description provided for @negotiationAcceptBodyGoods.
+  ///
+  /// In en, this message translates to:
+  /// **'The price is locked for the buyer and the other offers on this item will be declined.'**
+  String get negotiationAcceptBodyGoods;
+
+  /// No description provided for @negotiationAcceptBodyProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'You agree on this price with the buyer. Other offers on this property stay open.'**
+  String get negotiationAcceptBodyProperty;
+
+  /// No description provided for @negotiationSellerAcceptedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'The buyer has been told and can now go to checkout.'**
+  String get negotiationSellerAcceptedNote;
+
+  /// No description provided for @negotiationRoundCap.
+  ///
+  /// In en, this message translates to:
+  /// **'This is the last round. You can only accept or decline.'**
+  String get negotiationRoundCap;
+
+  /// No description provided for @negotiationErrorOfferExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This offer has expired'**
+  String get negotiationErrorOfferExpired;
+
+  /// No description provided for @counterSliderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Counter amount'**
+  String get counterSliderLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

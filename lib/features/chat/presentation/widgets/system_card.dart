@@ -44,6 +44,7 @@ class SystemCard extends StatelessWidget {
       'OFFER_ACCEPTED' => l10n.offerCardAccepted(who, money),
       'OFFER_REJECTED' => l10n.offerCardDeclined(who, money),
       'OFFER_WITHDRAWN' => l10n.offerCardWithdrawn,
+      'OFFER_SUPERSEDED' => l10n.offerCardSuperseded,
       'NEGOTIATION_CANCELLED' => l10n.offerCardEnded,
       _ => null,
     };

@@ -69,6 +69,15 @@ void main() {
     expect(find.text('Negotiation ended: the item is no longer available'), findsOneWidget);
   });
 
+  testWidgets('tells a declined buyer neutrally, with no winner and no price', (tester) async {
+    await pump(tester, _card({'negotiationId': 'n1', 'kind': 'OFFER_SUPERSEDED', 'round': 1}));
+    expect(
+      find.text(
+          'The seller accepted another offer. You can make a new offer if it becomes available again'),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('opens the negotiation when tapped', (tester) async {
     String? opened;
     await pump(tester, _card({...base, 'kind': 'OFFER_RECEIVED', 'by': 'BUYER'}),

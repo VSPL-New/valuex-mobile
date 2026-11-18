@@ -77,7 +77,22 @@ class _NegotiationScreenState extends ConsumerState<NegotiationScreen> {
     return answer == true;
   }
 
-  Future<void> _accept() async => _report(await _controller.accept());
+  /// The seller confirms first: accepting locks the price for the buyer and, for goods, declines the
+  /// other offers on the item (US-076). The buyer accepting a counter offer answers at once.
+  Future<void> _accept(Negotiation negotiation) async {
+    if (negotiation.role == NegotiationRole.seller) {
+      final l10n = AppLocalizations.of(context);
+      final sure = await _confirm(
+        title: l10n.negotiationAcceptTitle,
+        body: negotiation.listing.realEstate
+            ? l10n.negotiationAcceptBodyProperty
+            : l10n.negotiationAcceptBodyGoods,
+        confirmLabel: l10n.negotiationAcceptConfirm,
+      );
+      if (!sure) return;
+    }
+    _report(await _controller.accept());
+  }
 
   Future<void> _reject() async {
     final l10n = AppLocalizations.of(context);
@@ -142,6 +157,12 @@ class _NegotiationScreenState extends ConsumerState<NegotiationScreen> {
     final lockShown =
         negotiation.state == NegotiationState.offerAccepted && negotiation.agreedPrice != null;
     final showExpiry = negotiation.state.isAwaitingAnswer && negotiation.expiresAt != null;
+    // At the last round the counter is gone and only Accept and Decline remain (US-076).
+    final roundCapReached = negotiation.isMyTurn &&
+        !actions.canCounter &&
+        actions.canAccept &&
+        negotiation.maxRounds > 0 &&
+        negotiation.round >= negotiation.maxRounds;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -187,6 +208,24 @@ class _NegotiationScreenState extends ConsumerState<NegotiationScreen> {
                     lockEndsAt: negotiation.priceLockExpiresAt,
                     serverTime: negotiation.serverTime,
                   ),
+                  if (negotiation.role == NegotiationRole.seller && !negotiation.listing.realEstate)
+                    Padding(
+                      padding: const EdgeInsets.only(top: AppSpacing.sm),
+                      child: Text(
+                        l10n.negotiationSellerAcceptedNote,
+                        style: AppTextStyles.caption.copyWith(color: AppColors.brandMutedText),
+                      ),
+                    ),
+                ],
+                if (roundCapReached) ...[
+                  const SizedBox(height: AppSpacing.md),
+                  Semantics(
+                    liveRegion: true,
+                    child: Text(
+                      l10n.negotiationRoundCap,
+                      style: AppTextStyles.bodySecondary.copyWith(color: AppColors.brandMutedText),
+                    ),
+                  ),
                 ],
                 const SizedBox(height: AppSpacing.lg),
                 Text(l10n.negotiationOffersHeading, style: AppTextStyles.sectionTitle),
@@ -202,7 +241,7 @@ class _NegotiationScreenState extends ConsumerState<NegotiationScreen> {
               if (actions.canAccept && pending != null)
                 BrandGradientButton(
                   label: l10n.negotiationAcceptAmount(Formatters.money(pending.amount)),
-                  onPressed: _accept,
+                  onPressed: () => _accept(negotiation),
                 ),
               if (actions.canCounter && negotiation.counterRange != null)
                 SingleToneButton(

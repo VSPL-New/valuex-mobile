@@ -93,6 +93,7 @@ String? _offerTitle(AppLocalizations l10n, AppNotification notification) {
     'OFFER_ACCEPTED' => l10n.notifOfferAcceptedTitle(title),
     'OFFER_REJECTED' => l10n.notifOfferRejectedTitle(title),
     'OFFER_WITHDRAWN' => l10n.notifOfferWithdrawnTitle(title),
+    'OFFER_SUPERSEDED' => l10n.notifOfferSupersededTitle(title),
     'NEGOTIATION_CANCELLED' => l10n.notifNegotiationCancelledTitle(title),
     _ => null,
   };
@@ -108,6 +109,7 @@ String? _offerBody(AppLocalizations l10n, AppNotification notification) {
     'OFFER_ACCEPTED' => amount == null ? null : l10n.notifOfferAcceptedBody(amount),
     'OFFER_REJECTED' => amount == null ? null : l10n.notifOfferRejectedBody(amount),
     'OFFER_WITHDRAWN' => l10n.notifOfferWithdrawnBody,
+    'OFFER_SUPERSEDED' => l10n.notifOfferSupersededBody,
     'NEGOTIATION_CANCELLED' => l10n.notifNegotiationCancelledBody,
     _ => null,
   };

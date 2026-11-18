@@ -34,6 +34,27 @@ class _CounterSheetState extends State<CounterSheet> {
   final _amount = TextEditingController();
   String? _error;
 
+  /// The slider moves in whole rupees between the ends of the corridor; the field takes paise too.
+  late final double _sliderMin = widget.range.min.ceilToDouble();
+  late final double _sliderMax = widget.range.max.floorToDouble();
+  bool get _hasSlider => _sliderMax > _sliderMin;
+
+  /// Where the slider stands for what is typed: the typed amount held inside the slider's ends, and
+  /// the low end while nothing valid is typed.
+  double get _sliderValue {
+    final typed = parseOfferAmount(_amount.text);
+    return typed == null ? _sliderMin : double.parse(typed).clamp(_sliderMin, _sliderMax);
+  }
+
+  void _slide(double value) {
+    final rupees = value.round();
+    _amount.value = TextEditingValue(
+      text: '$rupees',
+      selection: TextSelection.collapsed(offset: '$rupees'.length),
+    );
+    setState(() => _error = _validate(AppLocalizations.of(context), _amount.text));
+  }
+
   @override
   void dispose() {
     _amount.dispose();
@@ -103,6 +124,19 @@ class _CounterSheetState extends State<CounterSheet> {
                 errorMaxLines: 3,
               ),
             ),
+            if (_hasSlider) ...[
+              const SizedBox(height: AppSpacing.sm),
+              Semantics(
+                label: l10n.counterSliderLabel,
+                child: Slider(
+                  min: _sliderMin,
+                  max: _sliderMax,
+                  value: _sliderValue,
+                  semanticFormatterCallback: (value) => Formatters.money(value.round()),
+                  onChanged: _slide,
+                ),
+              ),
+            ],
             const SizedBox(height: AppSpacing.md),
             BrandGradientButton(label: l10n.counterSubmit, onPressed: _submit),
           ],

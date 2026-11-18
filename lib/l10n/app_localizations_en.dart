@@ -3535,4 +3535,119 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notifNegotiationCancelledBody => 'This item is no longer available';
+
+  @override
+  String notifOfferSupersededTitle(String title) {
+    return 'Offer closed for $title';
+  }
+
+  @override
+  String get notifOfferSupersededBody =>
+      'The seller accepted another offer for this item. You can make a new offer if it becomes available again';
+
+  @override
+  String get offerCardSuperseded =>
+      'The seller accepted another offer. You can make a new offer if it becomes available again';
+
+  @override
+  String get profileOffers => 'Offers';
+
+  @override
+  String get offersTitle => 'Offers';
+
+  @override
+  String get offersTabReceived => 'Received';
+
+  @override
+  String get offersTabSent => 'Sent';
+
+  @override
+  String get offersFilterPending => 'Pending';
+
+  @override
+  String get offersFilterAccepted => 'Accepted';
+
+  @override
+  String get offersFilterClosed => 'Closed';
+
+  @override
+  String get offersEmptyTitle => 'No offers here';
+
+  @override
+  String get offersEmptyReceivedHint => 'When buyers make offers on your items, they show up here.';
+
+  @override
+  String get offersEmptySentHint => 'Offers you make on items show up here.';
+
+  @override
+  String get offersLoadFailed => 'Could not load offers. Pull down to try again.';
+
+  @override
+  String get offersLoadMore => 'Load more';
+
+  @override
+  String get offersLoadMoreFailed => 'Could not load more offers';
+
+  @override
+  String offersExpiringSoon(int count) {
+    return '$count expiring soon';
+  }
+
+  @override
+  String offersOfferedOf(String offered, String asking) {
+    return 'Offered $offered of $asking';
+  }
+
+  @override
+  String get offersNoRatings => 'No ratings yet';
+
+  @override
+  String offersRating(String rating, int count) {
+    return '$rating ★ ($count)';
+  }
+
+  @override
+  String get offersNeedsYourAnswer => 'Needs your answer';
+
+  @override
+  String get offersWaitingBuyer => 'Waiting for the buyer';
+
+  @override
+  String get offersWaitingSeller => 'Waiting for the seller';
+
+  @override
+  String offersLockEndsIn(String duration) {
+    return 'Price locked, $duration left';
+  }
+
+  @override
+  String offersCardLabel(String name, String item, String offered, String asking, String ago) {
+    return '$name, $item. Offered $offered of $asking. $ago';
+  }
+
+  @override
+  String get negotiationAcceptTitle => 'Accept this offer?';
+
+  @override
+  String get negotiationAcceptConfirm => 'Accept';
+
+  @override
+  String get negotiationAcceptBodyGoods =>
+      'The price is locked for the buyer and the other offers on this item will be declined.';
+
+  @override
+  String get negotiationAcceptBodyProperty =>
+      'You agree on this price with the buyer. Other offers on this property stay open.';
+
+  @override
+  String get negotiationSellerAcceptedNote => 'The buyer has been told and can now go to checkout.';
+
+  @override
+  String get negotiationRoundCap => 'This is the last round. You can only accept or decline.';
+
+  @override
+  String get negotiationErrorOfferExpired => 'This offer has expired';
+
+  @override
+  String get counterSliderLabel => 'Counter amount';
 }
