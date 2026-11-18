@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid.dart';
 import '../../../core/network/api_error.dart';
 import '../../../core/routing/route_names.dart';
 import '../../../core/theme/spacing.dart';
@@ -9,6 +10,8 @@ import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/square_back_button.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../buy_now/presentation/buy_now_error_messages.dart';
+import '../../buy_now/presentation/providers/buy_now_launcher.dart';
 import '../../chat/presentation/contact_error_messages.dart';
 import '../../chat/presentation/providers/chat_launcher.dart';
 import '../../home/presentation/main_nav.dart';
@@ -79,6 +82,35 @@ class ListingViewScreen extends ConsumerWidget {
     if (context.mounted) ref.invalidate(publicListingProvider(listingId));
   }
 
+  /// Buy Now (US-068): reserves the listing at the price the buyer saw. A refusal shows its message,
+  /// and the page is read again when what the buyer saw is no longer true (sold, reserved, price
+  /// changed, switched off). The reservation then goes to checkout, which arrives with Sprint 5.
+  Future<void> _buyNow(BuildContext context, WidgetRef ref, PublicListing listing) async {
+    final price = listing.price;
+    if (price == null) return;
+    final l10n = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final result = await ref.read(buyNowLauncherProvider.notifier).start(
+          listing.listingId,
+          expectedPrice: price.toString(),
+          clientRequestId: const Uuid().v4(),
+        );
+    if (!context.mounted) return;
+    final error = result.error;
+    if (error != null) {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(buyNowErrorMessage(l10n, error))));
+      if (buyNowErrorStalesPage(error)) ref.invalidate(publicListingProvider(listingId));
+      return;
+    }
+    if (result.reservation == null) return;
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(l10n.buyNowReserved)));
+    ref.invalidate(publicListingProvider(listingId));
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
@@ -133,6 +165,8 @@ class ListingViewScreen extends ConsumerWidget {
                   chatBusy: ref.watch(chatLauncherProvider),
                   onChat: () => _openChat(context, ref, data),
                   onOffer: () => _makeOffer(context, ref, data),
+                  onBuyNow: () => _buyNow(context, ref, data),
+                  buyNowBusy: ref.watch(buyNowLauncherProvider),
                   hasOffer: data.negotiationId != null,
                 );
                 if (large) {

@@ -6368,6 +6368,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Counter amount'**
   String get counterSliderLabel;
+
+  /// No description provided for @itemBuyNowLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Buy Now'**
+  String get itemBuyNowLabel;
+
+  /// No description provided for @itemBuyNowHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Buyers can reserve this item at your asking price without making an offer.'**
+  String get itemBuyNowHelp;
+
+  /// No description provided for @itemPurchaseOptionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on Buy Now or allow offers so buyers can purchase'**
+  String get itemPurchaseOptionRequired;
+
+  /// No description provided for @listingViewBuyNowOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller requires price negotiation for this item'**
+  String get listingViewBuyNowOff;
+
+  /// No description provided for @buyNowErrorSold.
+  ///
+  /// In en, this message translates to:
+  /// **'This item is no longer available'**
+  String get buyNowErrorSold;
+
+  /// No description provided for @buyNowErrorPriceChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Price has changed. Please review'**
+  String get buyNowErrorPriceChanged;
+
+  /// No description provided for @buyNowErrorDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller requires price negotiation for this item'**
+  String get buyNowErrorDisabled;
+
+  /// No description provided for @buyNowErrorNotApplicable.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Now is not available for property'**
+  String get buyNowErrorNotApplicable;
+
+  /// No description provided for @buyNowErrorCheckoutUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Now is not available yet. Please try again later'**
+  String get buyNowErrorCheckoutUnavailable;
+
+  /// No description provided for @buyNowErrorRateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many Buy Now attempts. Try again later'**
+  String get buyNowErrorRateLimited;
+
+  /// No description provided for @buyNowReserved.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserved for you. Checkout is coming soon'**
+  String get buyNowReserved;
+
+  /// No description provided for @reservationTimeLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} left'**
+  String reservationTimeLeft(String time);
+
+  /// No description provided for @reservationEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Reservation ended'**
+  String get reservationEnded;
+
+  /// No description provided for @reservationSpoken.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes, plural, =0{Less than a minute left to complete your purchase} =1{1 minute left to complete your purchase} other{{minutes} minutes left to complete your purchase}}'**
+  String reservationSpoken(int minutes);
+
+  /// No description provided for @reservationSpokenSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds} seconds left to complete your purchase'**
+  String reservationSpokenSeconds(int seconds);
+
+  /// No description provided for @notifBuyNowPriceChangedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Price changed for {title}'**
+  String notifBuyNowPriceChangedTitle(String title);
+
+  /// No description provided for @notifBuyNowPriceChangedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Please review the new price'**
+  String get notifBuyNowPriceChangedBody;
+
+  /// No description provided for @previewBuyNowOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Now on'**
+  String get previewBuyNowOn;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -233,6 +233,29 @@ void main() {
       await harness.dispose();
     });
 
+    testWidgets('Allow Buy Now is on by default and one of Buy Now or offers must stay on',
+        (tester) async {
+      final harness = await open(tester);
+      await chooseCategory(tester, harness);
+
+      final buyNow = find.byType(Switch);
+      expect(find.text('ALLOW BUY NOW'), findsOneWidget);
+      expect(tester.widget<Switch>(buyNow).value, isTrue);
+      const rule = 'Turn on Buy Now or allow offers so buyers can purchase';
+      expect(find.text(rule), findsNothing);
+
+      await tester.tap(find.text('No'));
+      await tester.tap(buyNow);
+      await harness.settle();
+      expect(tester.widget<Switch>(buyNow).value, isFalse);
+      expect(find.text(rule), findsOneWidget);
+
+      await tester.tap(find.text('Yes'));
+      await harness.settle();
+      expect(find.text(rule), findsNothing);
+      await harness.dispose();
+    });
+
     testWidgets('asks only what the form shows: a missing required value is hinted',
         (tester) async {
       final harness = await open(tester);

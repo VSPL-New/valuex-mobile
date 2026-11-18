@@ -31,6 +31,7 @@ class ListingPreviewData {
   final String description;
   final num? price;
   final bool? negotiable;
+  final bool buyNowEnabled;
   final int? quantity;
   final Map<String, Object?> attributes;
   final String city;
@@ -52,6 +53,7 @@ class ListingPreviewData {
     this.description = '',
     this.price,
     this.negotiable,
+    this.buyNowEnabled = true,
     this.quantity,
     this.attributes = const {},
     this.city = '',
@@ -79,6 +81,7 @@ class ListingPreviewData {
       description: json['description'] as String? ?? '',
       price: json['price'] as num?,
       negotiable: json['negotiable'] as bool?,
+      buyNowEnabled: json['buyNowEnabled'] as bool? ?? true,
       quantity: (json['quantity'] as num?)?.toInt(),
       attributes: attributes is Map<String, dynamic> ? {...attributes} : const {},
       city: json['location'] as String? ?? '',

@@ -29,6 +29,8 @@ void main() {
     Capabilities capabilities, {
     VoidCallback? onChat,
     VoidCallback? onUnbuilt,
+    VoidCallback? onBuyNow,
+    bool buyNowBusy = false,
     bool hasChat = false,
     bool chatBusy = false,
     double textScale = 1,
@@ -50,6 +52,8 @@ void main() {
             capabilities: capabilities,
             onUnbuilt: onUnbuilt ?? () {},
             onChat: onChat ?? () {},
+            onBuyNow: onBuyNow,
+            buyNowBusy: buyNowBusy,
             hasChat: hasChat,
             chatBusy: chatBusy,
           ),
@@ -148,5 +152,68 @@ void main() {
     await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
     await expectLater(tester, meetsGuideline(textContrast));
     handle.dispose();
+  });
+
+  group('Buy Now (US-068)', () {
+    const enabled = Capability(available: true, reason: CapabilityReason.other);
+
+    testWidgets('an available Buy Now starts the reservation and does not say coming soon',
+        (tester) async {
+      var buyNow = 0;
+      var unbuilt = 0;
+      await pump(tester, _caps(buyNow: enabled),
+          onBuyNow: () => buyNow++, onUnbuilt: () => unbuilt++);
+
+      await tester.tap(find.text('Buy Now'));
+
+      expect(buyNow, 1);
+      expect(unbuilt, 0);
+    });
+
+    testWidgets('a second tap while a Buy Now is starting is ignored', (tester) async {
+      var buyNow = 0;
+      await pump(tester, _caps(buyNow: enabled), onBuyNow: () => buyNow++, buyNowBusy: true);
+
+      await tester.tap(find.text('Buy Now'));
+
+      expect(buyNow, 0);
+    });
+
+    testWidgets('a caller without a Buy Now handler keeps the coming soon message', (tester) async {
+      var unbuilt = 0;
+      await pump(tester, _caps(buyNow: enabled), onUnbuilt: () => unbuilt++);
+
+      await tester.tap(find.text('Buy Now'));
+
+      expect(unbuilt, 1);
+    });
+
+    testWidgets('says why Buy Now cannot be used: switched off by the seller, or reserved',
+        (tester) async {
+      final handle = tester.ensureSemantics();
+      var buyNow = 0;
+      await pump(
+        tester,
+        _caps(
+          buyNow: const Capability(available: false, reason: CapabilityReason.disabledBySeller),
+        ),
+        onBuyNow: () => buyNow++,
+      );
+      expect(find.bySemanticsLabel('Buy Now, Seller requires price negotiation for this item'),
+          findsOneWidget);
+      await tester.tap(find.text('Buy Now'));
+      expect(buyNow, 0);
+
+      await pump(
+        tester,
+        _caps(buyNow: const Capability(available: false, reason: CapabilityReason.reserved)),
+      );
+      expect(find.bySemanticsLabel('Buy Now, Reserved right now'), findsOneWidget);
+      handle.dispose();
+    });
+
+    test('reads the new reason from the server', () {
+      expect(CapabilityReason.from('DISABLED_BY_SELLER'), CapabilityReason.disabledBySeller);
+    });
   });
 }

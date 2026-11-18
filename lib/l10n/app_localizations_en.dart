@@ -3650,4 +3650,75 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get counterSliderLabel => 'Counter amount';
+
+  @override
+  String get itemBuyNowLabel => 'Allow Buy Now';
+
+  @override
+  String get itemBuyNowHelp =>
+      'Buyers can reserve this item at your asking price without making an offer.';
+
+  @override
+  String get itemPurchaseOptionRequired => 'Turn on Buy Now or allow offers so buyers can purchase';
+
+  @override
+  String get listingViewBuyNowOff => 'Seller requires price negotiation for this item';
+
+  @override
+  String get buyNowErrorSold => 'This item is no longer available';
+
+  @override
+  String get buyNowErrorPriceChanged => 'Price has changed. Please review';
+
+  @override
+  String get buyNowErrorDisabled => 'Seller requires price negotiation for this item';
+
+  @override
+  String get buyNowErrorNotApplicable => 'Buy Now is not available for property';
+
+  @override
+  String get buyNowErrorCheckoutUnavailable =>
+      'Buy Now is not available yet. Please try again later';
+
+  @override
+  String get buyNowErrorRateLimited => 'Too many Buy Now attempts. Try again later';
+
+  @override
+  String get buyNowReserved => 'Reserved for you. Checkout is coming soon';
+
+  @override
+  String reservationTimeLeft(String time) {
+    return '$time left';
+  }
+
+  @override
+  String get reservationEnded => 'Reservation ended';
+
+  @override
+  String reservationSpoken(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: '$minutes minutes left to complete your purchase',
+      one: '1 minute left to complete your purchase',
+      zero: 'Less than a minute left to complete your purchase',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String reservationSpokenSeconds(int seconds) {
+    return '$seconds seconds left to complete your purchase';
+  }
+
+  @override
+  String notifBuyNowPriceChangedTitle(String title) {
+    return 'Price changed for $title';
+  }
+
+  @override
+  String get notifBuyNowPriceChangedBody => 'Please review the new price';
+
+  @override
+  String get previewBuyNowOn => 'Buy Now on';
 }

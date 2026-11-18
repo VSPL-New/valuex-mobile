@@ -95,6 +95,7 @@ String? _offerTitle(AppLocalizations l10n, AppNotification notification) {
     'OFFER_WITHDRAWN' => l10n.notifOfferWithdrawnTitle(title),
     'OFFER_SUPERSEDED' => l10n.notifOfferSupersededTitle(title),
     'NEGOTIATION_CANCELLED' => l10n.notifNegotiationCancelledTitle(title),
+    'BUY_NOW_PRICE_CHANGED' => l10n.notifBuyNowPriceChangedTitle(title),
     _ => null,
   };
 }
@@ -111,6 +112,7 @@ String? _offerBody(AppLocalizations l10n, AppNotification notification) {
     'OFFER_WITHDRAWN' => l10n.notifOfferWithdrawnBody,
     'OFFER_SUPERSEDED' => l10n.notifOfferSupersededBody,
     'NEGOTIATION_CANCELLED' => l10n.notifNegotiationCancelledBody,
+    'BUY_NOW_PRICE_CHANGED' => l10n.notifBuyNowPriceChangedBody,
     _ => null,
   };
 }

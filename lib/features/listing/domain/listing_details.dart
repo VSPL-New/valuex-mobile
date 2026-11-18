@@ -44,6 +44,7 @@ enum DetailsField {
   description,
   price,
   negotiable,
+  purchaseOption,
   quantity
 }
 
@@ -58,6 +59,9 @@ class ListingDetailsDraft {
   /// As typed, without the rupee sign; parsed when validated.
   final String price;
   final bool? negotiable;
+
+  /// The seller lets buyers use Buy Now (US-068); on unless switched off, and goods only.
+  final bool buyNowEnabled;
 
   /// As typed; goods only.
   final String quantity;
@@ -79,6 +83,7 @@ class ListingDetailsDraft {
     this.description = '',
     this.price = '',
     this.negotiable,
+    this.buyNowEnabled = true,
     this.quantity = '1',
     this.attributes = const {},
     this.locationState,
@@ -93,6 +98,7 @@ class ListingDetailsDraft {
     String? description,
     String? price,
     bool? negotiable,
+    bool? buyNowEnabled,
     String? quantity,
     Map<String, Object?>? attributes,
     String? locationState,
@@ -106,6 +112,7 @@ class ListingDetailsDraft {
       description: description ?? this.description,
       price: price ?? this.price,
       negotiable: negotiable ?? this.negotiable,
+      buyNowEnabled: buyNowEnabled ?? this.buyNowEnabled,
       quantity: quantity ?? this.quantity,
       attributes: attributes ?? this.attributes,
       locationState: locationState ?? this.locationState,
@@ -132,6 +139,8 @@ class ListingDetailsDraft {
         DetailsField.description,
       if (schema != null && !common!.priceDerived && parsedPrice == null) DetailsField.price,
       if ((common?.negotiableVisible ?? false) && negotiable == null) DetailsField.negotiable,
+      if ((common?.negotiableVisible ?? false) && negotiable == false && !buyNowEnabled)
+        DetailsField.purchaseOption,
       if ((common?.quantityVisible ?? false) && parsedQuantity == null) DetailsField.quantity,
     ];
   }
@@ -190,6 +199,7 @@ class ListingDetailsDraft {
       'description': description.trim(),
       if (!common.priceDerived) 'price': parsedPrice,
       if (common.negotiableVisible) 'negotiable': negotiable,
+      if (common.negotiableVisible) 'buyNowEnabled': buyNowEnabled,
       if (common.quantityVisible) 'quantity': parsedQuantity,
       'attributes': attributePayload(schema),
       'location': city,

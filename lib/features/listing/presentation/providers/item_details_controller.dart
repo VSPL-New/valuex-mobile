@@ -193,6 +193,10 @@ class ItemDetailsController extends Notifier<ItemDetailsState> {
   void setNegotiable(bool value) =>
       _edit(DetailsField.negotiable, (d) => d.copyWith(negotiable: value));
 
+  /// The seller turns Buy Now on or off (US-068); the page checks that Buy Now or offers stay on.
+  void setBuyNowEnabled(bool value) =>
+      _edit(DetailsField.purchaseOption, (d) => d.copyWith(buyNowEnabled: value));
+
   void setQuantity(String value) =>
       _edit(DetailsField.quantity, (d) => d.copyWith(quantity: value));
 
