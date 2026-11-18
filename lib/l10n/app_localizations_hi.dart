@@ -3640,4 +3640,77 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get counterSliderLabel => 'जवाबी राशि';
+
+  @override
+  String get itemBuyNowLabel => 'अभी खरीदें की अनुमति दें';
+
+  @override
+  String get itemBuyNowHelp =>
+      'खरीदार ऑफ़र किए बिना आपकी माँगी गई कीमत पर यह वस्तु आरक्षित कर सकते हैं।';
+
+  @override
+  String get itemPurchaseOptionRequired =>
+      'खरीदार खरीद सकें, इसके लिए अभी खरीदें चालू करें या ऑफ़र की अनुमति दें';
+
+  @override
+  String get listingViewBuyNowOff => 'विक्रेता इस वस्तु के लिए मोलभाव चाहता है';
+
+  @override
+  String get buyNowErrorSold => 'यह वस्तु अब उपलब्ध नहीं है';
+
+  @override
+  String get buyNowErrorPriceChanged => 'कीमत बदल गई है। कृपया देखें';
+
+  @override
+  String get buyNowErrorDisabled => 'विक्रेता इस वस्तु के लिए मोलभाव चाहता है';
+
+  @override
+  String get buyNowErrorNotApplicable => 'संपत्ति के लिए अभी खरीदें उपलब्ध नहीं है';
+
+  @override
+  String get buyNowErrorCheckoutUnavailable =>
+      'अभी खरीदें अभी उपलब्ध नहीं है। कृपया बाद में कोशिश करें';
+
+  @override
+  String get buyNowErrorRateLimited =>
+      'अभी खरीदें के बहुत ज़्यादा प्रयास हुए। कुछ देर बाद कोशिश करें';
+
+  @override
+  String get buyNowReserved => 'वस्तु आपके लिए आरक्षित है। चेकआउट जल्द आ रहा है';
+
+  @override
+  String reservationTimeLeft(String time) {
+    return '$time बाकी';
+  }
+
+  @override
+  String get reservationEnded => 'आरक्षण समाप्त हो गया';
+
+  @override
+  String reservationSpoken(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'खरीद पूरी करने के लिए $minutes मिनट बचे हैं',
+      one: 'खरीद पूरी करने के लिए 1 मिनट बचा है',
+      zero: 'खरीद पूरी करने के लिए एक मिनट से कम बचा है',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String reservationSpokenSeconds(int seconds) {
+    return 'खरीद पूरी करने के लिए $seconds सेकंड बचे हैं';
+  }
+
+  @override
+  String notifBuyNowPriceChangedTitle(String title) {
+    return '$title की कीमत बदल गई';
+  }
+
+  @override
+  String get notifBuyNowPriceChangedBody => 'कृपया नई कीमत देखें';
+
+  @override
+  String get previewBuyNowOn => 'अभी खरीदें चालू';
 }

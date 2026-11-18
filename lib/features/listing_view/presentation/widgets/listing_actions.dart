@@ -19,6 +19,13 @@ class ListingActions extends StatelessWidget {
   /// that does not pass it keeps the coming soon message.
   final VoidCallback? onOffer;
 
+  /// Reserves the listing at its asking price (US-068); an older caller that does not pass it keeps the
+  /// coming soon message.
+  final VoidCallback? onBuyNow;
+
+  /// A Buy Now is being started; a second tap is ignored until it answers.
+  final bool buyNowBusy;
+
   /// The buyer already has an open negotiation here, so the button reads "View offer".
   final bool hasOffer;
 
@@ -34,6 +41,8 @@ class ListingActions extends StatelessWidget {
     required this.onUnbuilt,
     required this.onChat,
     this.onOffer,
+    this.onBuyNow,
+    this.buyNowBusy = false,
     this.hasOffer = false,
     this.hasChat = false,
     this.chatBusy = false,
@@ -60,7 +69,7 @@ class ListingActions extends StatelessWidget {
         onOffer ?? onUnbuilt,
       ),
       (l10n.listingViewAddToCart, capabilities.cart, false, onUnbuilt),
-      (l10n.previewBuyNow, capabilities.buyNow, true, onUnbuilt),
+      (l10n.previewBuyNow, capabilities.buyNow, true, buyNowBusy ? null : (onBuyNow ?? onUnbuilt)),
     ].where((entry) => !entry.$2.hidden).toList();
     if (contact.isEmpty && commerce.isEmpty) return const SizedBox.shrink();
     return DecoratedBox(
@@ -146,6 +155,7 @@ class _Action extends StatelessWidget {
         CapabilityReason.notNegotiable => l10n.listingViewNotNegotiable,
         CapabilityReason.identityRequired => l10n.listingViewIdentityRequired,
         CapabilityReason.reserved => l10n.listingViewReserved,
+        CapabilityReason.disabledBySeller => l10n.listingViewBuyNowOff,
         _ => l10n.listingViewComingSoon,
       };
 

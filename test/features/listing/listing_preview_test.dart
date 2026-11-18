@@ -146,6 +146,14 @@ void main() {
       expect(data.publishedAt, DateTime.utc(2026, 11, 1, 10));
     });
 
+    test('reads the Buy Now switch, on unless the server says off', () {
+      expect(ListingPreviewData.fromJson(_json()).buyNowEnabled, isTrue);
+      expect(
+        ListingPreviewData.fromJson({..._json(), 'buyNowEnabled': false}).buyNowEnabled,
+        isFalse,
+      );
+    });
+
     test('keeps a missing quantity missing instead of defaulting it to 1', () {
       final data = ListingPreviewData.fromJson(_json(quantity: null));
 
@@ -405,11 +413,20 @@ void main() {
       expect(find.text('Like New'), findsOneWidget);
       expect(find.text('₹14,500'), findsOneWidget);
       expect(find.text('Negotiable'), findsOneWidget);
+      expect(find.text('Buy Now on'), findsOneWidget);
       expect(find.text('Bengaluru'), findsOneWidget);
       expect(find.text('Boosted plan'), findsOneWidget);
       expect(find.text('Active'), findsOneWidget);
       expect(find.text('Your listing is visible to buyers.'), findsOneWidget);
       verify(() => repository.getListingPreview('l1')).called(1);
+      await harness.dispose();
+    });
+
+    testWidgets('does not say Buy Now is on when the seller switched it off', (tester) async {
+      await open(tester, json: {..._json(), 'buyNowEnabled': false});
+
+      expect(find.text('Buy Now on'), findsNothing);
+      expect(find.text('Negotiable'), findsOneWidget);
       await harness.dispose();
     });
 

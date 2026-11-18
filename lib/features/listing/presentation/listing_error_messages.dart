@@ -27,6 +27,7 @@ String? listingCodeMessage(AppLocalizations l10n, String? code) {
     'ERROR_PRICE_REQUIRED_FOR_INTENT' => l10n.itemPriceRequiredForIntent,
     'ERROR_CONDITION_NOTES_REQUIRED' => l10n.itemConditionNotesRequired,
     'ERROR_NEGOTIABLE_REQUIRED' => l10n.itemNegotiableRequired,
+    'ERROR_NO_PURCHASE_OPTION' => l10n.itemPurchaseOptionRequired,
     'ERROR_QUANTITY_INVALID' => l10n.itemQuantityInvalid,
     'ERROR_ATTRIBUTE_REQUIRED' ||
     'ERROR_ATTRIBUTE_INVALID' ||

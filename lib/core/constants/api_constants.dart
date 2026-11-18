@@ -89,6 +89,10 @@ class ApiConstants {
   static String offerReject(String offerId) => '/offers/$offerId/reject';
   static String offerCounter(String offerId) => '/offers/$offerId/counter';
 
+  // Direct Buy Now (US-068)
+  static String listingBuyNow(String listingId) => '/listings/$listingId/buy-now';
+  static String priceAgreement(String agreementId) => '/price-agreements/$agreementId';
+
   // Seller offers (US-076)
   static const String negotiations = '/negotiations';
   static const String offersReceived = '/offers/received';

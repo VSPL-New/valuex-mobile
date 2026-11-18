@@ -32,6 +32,7 @@ ApiError _error(String code, {Map<String, String> details = const {}, ApiErrorTy
     );
 
 void main() {
+  buyNowNotificationTests();
   group('offer notifications', () {
     const params = {'listingTitle': 'Apple Watch', 'amount': '12000.00'};
 
@@ -183,6 +184,30 @@ void main() {
     test('is available in Hindi', () {
       expect(negotiationErrorMessage(_hi, _error('ERROR_ITEM_RESERVED')),
           isNot('This item is reserved for another buyer right now'));
+    });
+  });
+}
+
+void buyNowNotificationTests() {
+  group('Buy Now price change notification (US-068)', () {
+    const params = {'listingTitle': 'Apple Watch'};
+
+    test('is shown in English and in Hindi from its values', () {
+      final notification = _n('BUY_NOW_PRICE_CHANGED', params: params);
+
+      expect(notificationTitle(_en, notification), 'Price changed for Apple Watch');
+      expect(notificationBody(_en, notification), 'Please review the new price');
+      expect(notificationTitle(_hi, notification), 'Apple Watch की कीमत बदल गई');
+      expect(notificationBody(_hi, notification), 'कृपया नई कीमत देखें');
+    });
+
+    test('shows the server English text when the title is missing', () {
+      expect(notificationTitle(_en, _n('BUY_NOW_PRICE_CHANGED')), 'Server title');
+    });
+
+    test('opens the listing from its link', () {
+      expect(notificationTargetFor('/listings/l1')?.route, '/listing/l1');
+      expect(notificationTargetFor('/listings/'), isNull);
     });
   });
 }

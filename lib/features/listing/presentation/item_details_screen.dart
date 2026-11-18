@@ -547,6 +547,26 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
               ),
               _Hint(
                   show: hints.contains(DetailsField.negotiable), text: l10n.itemNegotiableRequired),
+              const SizedBox(height: AppSpacing.md),
+              _Section(
+                label: l10n.itemBuyNowLabel,
+                icon: Icons.shopping_bag_outlined,
+                isField: true,
+                child: MergeSemantics(
+                  child: Row(
+                    children: [
+                      Expanded(child: Text(l10n.itemBuyNowHelp, style: AppTextStyles.hint)),
+                      Switch(
+                        value: draft.buyNowEnabled,
+                        onChanged: _controller.setBuyNowEnabled,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              _Hint(
+                  show: hints.contains(DetailsField.purchaseOption),
+                  text: l10n.itemPurchaseOptionRequired),
             ],
             if (common.quantityVisible) ...[
               const SizedBox(height: AppSpacing.md),

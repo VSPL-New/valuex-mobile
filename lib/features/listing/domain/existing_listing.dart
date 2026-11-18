@@ -61,6 +61,7 @@ class ExistingListing {
         description: json['description'] as String? ?? '',
         price: _priceText(json['price']),
         negotiable: json['negotiable'] as bool?,
+        buyNowEnabled: json['buyNowEnabled'] as bool? ?? true,
         quantity: ((json['quantity'] as num?)?.toInt() ?? 1).toString(),
         attributes: attributes is Map<String, dynamic> ? {...attributes} : const {},
       ),

@@ -46,6 +46,11 @@ NotificationTarget? notificationTargetFor(String? deepLink) {
     // An offer, counter or answer (US-017): opens that negotiation.
     return NotificationTarget(path);
   }
+  const publicListingBase = '/listings/';
+  if (path.startsWith(publicListingBase) && path.length > publicListingBase.length) {
+    // A Buy Now reservation ended by a price change (US-068): opens that listing for the new price.
+    return NotificationTarget(RouteNames.listingView(path.substring(publicListingBase.length)));
+  }
   final listingRoute = _listingRoutes[path];
   if (listingRoute != null) {
     final listingId = uri.queryParameters['listingId'];

@@ -158,6 +158,7 @@ class _Summary extends StatelessWidget {
     final condition = data.condition;
     final showCondition = condition != null && (schema?.common.conditionVisible ?? true);
     final showNegotiable = data.negotiable == true && (schema?.common.negotiableVisible ?? true);
+    final showBuyNow = data.buyNowEnabled && (schema?.common.negotiableVisible ?? false);
     final price = data.price;
     final planBadge = data.planBadge;
     return Padding(
@@ -186,7 +187,7 @@ class _Summary extends StatelessWidget {
               ],
             ],
           ),
-          if (price != null || showNegotiable) ...[
+          if (price != null || showNegotiable || showBuyNow) ...[
             const SizedBox(height: AppSpacing.xs),
             Wrap(
               spacing: AppSpacing.sm,
@@ -198,6 +199,7 @@ class _Summary extends StatelessWidget {
                     style: AppTextStyles.heading2.copyWith(color: AppColors.brandLink),
                   ),
                 if (showNegotiable) Text(l10n.previewNegotiable, style: AppTextStyles.hint),
+                if (showBuyNow) Text(l10n.previewBuyNowOn, style: AppTextStyles.hint),
               ],
             ),
           ],
