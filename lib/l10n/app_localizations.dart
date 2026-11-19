@@ -6476,6 +6476,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Buy Now on'**
   String get previewBuyNowOn;
+
+  /// No description provided for @cartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cart'**
+  String get cartTitle;
+
+  /// No description provided for @cartItemsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 item} other{{count} items}}'**
+  String cartItemsCount(int count);
+
+  /// No description provided for @cartEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your cart is empty'**
+  String get cartEmptyTitle;
+
+  /// No description provided for @cartEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an item once the seller accepts your offer, or reserve it with Buy Now.'**
+  String get cartEmptyBody;
+
+  /// No description provided for @cartSellerFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller'**
+  String get cartSellerFallback;
+
+  /// No description provided for @cartStatusAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get cartStatusAccepted;
+
+  /// No description provided for @cartStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get cartStatusPending;
+
+  /// No description provided for @cartStatusExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get cartStatusExpired;
+
+  /// No description provided for @cartStatusUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get cartStatusUnavailable;
+
+  /// No description provided for @cartAgreedPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Agreed price {price}'**
+  String cartAgreedPrice(String price);
+
+  /// No description provided for @cartNowAsking.
+  ///
+  /// In en, this message translates to:
+  /// **'Now asking {price}'**
+  String cartNowAsking(String price);
+
+  /// No description provided for @cartPriceValidFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Price held for {duration}'**
+  String cartPriceValidFor(String duration);
+
+  /// No description provided for @cartRemovesIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaves your cart in {duration}'**
+  String cartRemovesIn(String duration);
+
+  /// No description provided for @cartDeliveryChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose at checkout'**
+  String get cartDeliveryChoose;
+
+  /// No description provided for @cartRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get cartRemove;
+
+  /// No description provided for @cartRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from your cart'**
+  String get cartRemoved;
+
+  /// No description provided for @cartUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get cartUndo;
+
+  /// No description provided for @cartTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get cartTotal;
+
+  /// No description provided for @cartProceed.
+  ///
+  /// In en, this message translates to:
+  /// **'Proceed to checkout'**
+  String get cartProceed;
+
+  /// No description provided for @cartCheckoutSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkout is coming soon'**
+  String get cartCheckoutSoon;
+
+  /// No description provided for @cartLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t load your cart'**
+  String get cartLoadFailed;
+
+  /// No description provided for @cartRefreshFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t refresh your cart. Showing what it held a moment ago'**
+  String get cartRefreshFailed;
+
+  /// No description provided for @cartAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to your cart'**
+  String get cartAdded;
+
+  /// No description provided for @cartViewCart.
+  ///
+  /// In en, this message translates to:
+  /// **'View cart'**
+  String get cartViewCart;
+
+  /// No description provided for @cartAddedAfterReserve.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserved for you and added to your cart'**
+  String get cartAddedAfterReserve;
+
+  /// No description provided for @cartProblemUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No longer available'**
+  String get cartProblemUnavailable;
+
+  /// No description provided for @cartProblemPriceChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Price changed. Please review'**
+  String get cartProblemPriceChanged;
+
+  /// No description provided for @cartProblemExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Cart item expired. Please add again'**
+  String get cartProblemExpired;
+
+  /// No description provided for @cartProblemAcceptanceExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Price acceptance expired. Make a new offer'**
+  String get cartProblemAcceptanceExpired;
+
+  /// No description provided for @cartLineLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{title}, {price}, {status}, from {seller}'**
+  String cartLineLabel(String title, String price, String status, String seller);
+
+  /// No description provided for @cartErrorMax.
+  ///
+  /// In en, this message translates to:
+  /// **'Cart limit reached ({limit} items)'**
+  String cartErrorMax(String limit);
+
+  /// No description provided for @cartErrorMaxGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Cart limit reached. Remove an item to add another'**
+  String get cartErrorMaxGeneric;
+
+  /// No description provided for @cartErrorNotAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Your price hasn\'t been accepted yet. Make an offer or use Buy Now first'**
+  String get cartErrorNotAccepted;
+
+  /// No description provided for @cartErrorOwnListing.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t add your own item to the cart'**
+  String get cartErrorOwnListing;
+
+  /// No description provided for @cartErrorNotApplicable.
+  ///
+  /// In en, this message translates to:
+  /// **'This item can\'t be bought through the cart'**
+  String get cartErrorNotApplicable;
+
+  /// No description provided for @cartErrorNotInCart.
+  ///
+  /// In en, this message translates to:
+  /// **'This item is not in your cart'**
+  String get cartErrorNotInCart;
+
+  /// No description provided for @cartErrorUnavailableYet.
+  ///
+  /// In en, this message translates to:
+  /// **'The cart is not available yet. Please try again later'**
+  String get cartErrorUnavailableYet;
+
+  /// No description provided for @listingViewNegotiationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Make an offer or Buy Now first'**
+  String get listingViewNegotiationRequired;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

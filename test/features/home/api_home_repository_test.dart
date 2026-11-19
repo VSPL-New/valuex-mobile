@@ -205,13 +205,19 @@ void main() {
     });
   });
 
-  test('the cart count is zero until the cart exists', () async {
-    answer(() => FakeHttpAdapter.ok(<Object>[]));
+  test('the cart count comes from the cart summary', () async {
+    answer(() => FakeHttpAdapter.ok({'itemCount': 3, 'validCount': 2}));
 
     final badges = await repository.badges();
 
-    expect(badges.cartItems, 0);
+    expect(badges.cartItems, 3);
     expect(badges.unreadNotifications, 0);
-    expect(adapter.requests, isEmpty);
+    expect(adapter.requests.single.path, '/cart/summary');
+  });
+
+  test('a cart that cannot be read shows no badge instead of an error', () async {
+    answer(() => FakeHttpAdapter.error(503, 'ERROR_CHECKOUT_UNAVAILABLE', 'Not available'));
+
+    expect((await repository.badges()).cartItems, 0);
   });
 }

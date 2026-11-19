@@ -3713,4 +3713,141 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get previewBuyNowOn => 'अभी खरीदें चालू';
+
+  @override
+  String get cartTitle => 'कार्ट';
+
+  @override
+  String cartItemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count आइटम',
+      one: '1 आइटम',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cartEmptyTitle => 'आपका कार्ट खाली है';
+
+  @override
+  String get cartEmptyBody =>
+      'विक्रेता के आपका ऑफ़र स्वीकार करने पर आइटम जोड़ें, या अभी खरीदें से उसे रिज़र्व करें।';
+
+  @override
+  String get cartSellerFallback => 'विक्रेता';
+
+  @override
+  String get cartStatusAccepted => 'स्वीकृत';
+
+  @override
+  String get cartStatusPending => 'लंबित';
+
+  @override
+  String get cartStatusExpired => 'समाप्त';
+
+  @override
+  String get cartStatusUnavailable => 'उपलब्ध नहीं';
+
+  @override
+  String cartAgreedPrice(String price) {
+    return 'तय कीमत $price';
+  }
+
+  @override
+  String cartNowAsking(String price) {
+    return 'अब मांगी जा रही कीमत $price';
+  }
+
+  @override
+  String cartPriceValidFor(String duration) {
+    return 'कीमत $duration तक सुरक्षित';
+  }
+
+  @override
+  String cartRemovesIn(String duration) {
+    return '$duration में कार्ट से हट जाएगा';
+  }
+
+  @override
+  String get cartDeliveryChoose => 'चेकआउट पर चुनें';
+
+  @override
+  String get cartRemove => 'हटाएँ';
+
+  @override
+  String get cartRemoved => 'कार्ट से हटाया गया';
+
+  @override
+  String get cartUndo => 'पूर्ववत करें';
+
+  @override
+  String get cartTotal => 'कुल';
+
+  @override
+  String get cartProceed => 'चेकआउट पर जाएँ';
+
+  @override
+  String get cartCheckoutSoon => 'चेकआउट जल्द आ रहा है';
+
+  @override
+  String get cartLoadFailed => 'हम आपका कार्ट लोड नहीं कर सके';
+
+  @override
+  String get cartRefreshFailed =>
+      'कार्ट रीफ़्रेश नहीं हो सका। कुछ देर पहले का कार्ट दिखाया जा रहा है';
+
+  @override
+  String get cartAdded => 'आपके कार्ट में जोड़ा गया';
+
+  @override
+  String get cartViewCart => 'कार्ट देखें';
+
+  @override
+  String get cartAddedAfterReserve => 'आपके लिए रिज़र्व किया गया और कार्ट में जोड़ा गया';
+
+  @override
+  String get cartProblemUnavailable => 'अब उपलब्ध नहीं';
+
+  @override
+  String get cartProblemPriceChanged => 'कीमत बदल गई है। कृपया देखें';
+
+  @override
+  String get cartProblemExpired => 'कार्ट का आइटम समाप्त हो गया। कृपया फिर से जोड़ें';
+
+  @override
+  String get cartProblemAcceptanceExpired => 'कीमत की स्वीकृति समाप्त हो गई। नया ऑफ़र करें';
+
+  @override
+  String cartLineLabel(String title, String price, String status, String seller) {
+    return '$title, $price, $status, विक्रेता $seller';
+  }
+
+  @override
+  String cartErrorMax(String limit) {
+    return 'कार्ट की सीमा पूरी हो गई ($limit आइटम)';
+  }
+
+  @override
+  String get cartErrorMaxGeneric => 'कार्ट की सीमा पूरी हो गई। नया जोड़ने के लिए एक आइटम हटाएँ';
+
+  @override
+  String get cartErrorNotAccepted =>
+      'आपकी कीमत अभी स्वीकार नहीं हुई है। पहले ऑफ़र करें या अभी खरीदें का उपयोग करें';
+
+  @override
+  String get cartErrorOwnListing => 'आप अपना ही आइटम कार्ट में नहीं जोड़ सकते';
+
+  @override
+  String get cartErrorNotApplicable => 'यह आइटम कार्ट से नहीं खरीदा जा सकता';
+
+  @override
+  String get cartErrorNotInCart => 'यह आइटम आपके कार्ट में नहीं है';
+
+  @override
+  String get cartErrorUnavailableYet => 'कार्ट अभी उपलब्ध नहीं है। कृपया बाद में पुनः प्रयास करें';
+
+  @override
+  String get listingViewNegotiationRequired => 'पहले ऑफ़र करें या अभी खरीदें';
 }

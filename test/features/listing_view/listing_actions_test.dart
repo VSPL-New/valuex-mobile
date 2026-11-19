@@ -216,4 +216,97 @@ void main() {
       expect(CapabilityReason.from('DISABLED_BY_SELLER'), CapabilityReason.disabledBySeller);
     });
   });
+
+  group('Add to Cart (US-019)', () {
+    const enabled = Capability(available: true, reason: CapabilityReason.other);
+    const needsOffer = Capability(available: false, reason: CapabilityReason.negotiationRequired);
+
+    Future<void> pumpCart(
+      WidgetTester tester,
+      Capability cart, {
+      VoidCallback? onAddToCart,
+      VoidCallback? onNegotiationRequired,
+      VoidCallback? onUnbuilt,
+      bool busy = false,
+    }) async {
+      await tester.pumpWidget(MaterialApp(
+        theme: AppTheme.lightTheme,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: Align(
+            alignment: Alignment.bottomCenter,
+            child: ListingActions(
+              capabilities: _caps(cart: cart),
+              onUnbuilt: onUnbuilt ?? () {},
+              onChat: () {},
+              onAddToCart: onAddToCart,
+              addToCartBusy: busy,
+              onNegotiationRequired: onNegotiationRequired,
+            ),
+          ),
+        ),
+      ));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('an available Add to Cart adds the listing and does not say coming soon',
+        (tester) async {
+      var adds = 0;
+      var unbuilt = 0;
+      await pumpCart(tester, enabled, onAddToCart: () => adds++, onUnbuilt: () => unbuilt++);
+
+      await tester.tap(find.text('Add to Cart'));
+
+      expect(adds, 1);
+      expect(unbuilt, 0);
+    });
+
+    testWidgets('a second tap while an add is running is ignored', (tester) async {
+      var adds = 0;
+      await pumpCart(tester, enabled, onAddToCart: () => adds++, busy: true);
+
+      await tester.tap(find.text('Add to Cart'));
+
+      expect(adds, 0);
+    });
+
+    testWidgets('a caller without an add handler keeps the coming soon message', (tester) async {
+      var unbuilt = 0;
+      await pumpCart(tester, enabled, onUnbuilt: () => unbuilt++);
+
+      await tester.tap(find.text('Add to Cart'));
+
+      expect(unbuilt, 1);
+    });
+
+    testWidgets('without an accepted price the button stays tappable and only explains',
+        (tester) async {
+      final handle = tester.ensureSemantics();
+      var adds = 0;
+      var hints = 0;
+      await pumpCart(tester, needsOffer,
+          onAddToCart: () => adds++, onNegotiationRequired: () => hints++);
+
+      await tester.tap(find.text('Add to Cart'));
+
+      expect(adds, 0);
+      expect(hints, 1);
+      expect(find.bySemanticsLabel('Add to Cart, Make an offer or Buy Now first'), findsOneWidget);
+      handle.dispose();
+    });
+
+    testWidgets('a caller without a hint leaves that button off', (tester) async {
+      var adds = 0;
+      await pumpCart(tester, needsOffer, onAddToCart: () => adds++);
+
+      await tester.tap(find.text('Add to Cart'));
+
+      expect(adds, 0);
+    });
+
+    test('reads the new reason from the server', () {
+      expect(CapabilityReason.from('NEGOTIATION_REQUIRED'), CapabilityReason.negotiationRequired);
+    });
+  });
 }

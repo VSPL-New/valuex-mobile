@@ -1,6 +1,7 @@
 import '../../../core/constants/api_constants.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/network/api_client.dart';
+import '../../cart/domain/cart.dart';
 import '../../search/domain/search_listing.dart';
 import '../../search/presentation/search_labels.dart';
 import '../domain/entities/home_badges.dart';
@@ -42,10 +43,20 @@ class ApiHomeRepository implements HomeRepository {
     );
   }
 
-  /// The cart is not built yet (Sprint 5), so its count is zero. The unread notification count
-  /// comes from the notifications repository, not from here.
+  /// The cart count (US-019). A cart that cannot be read shows no badge rather than an error: the
+  /// unread notification count comes from the notifications repository, not from here.
   @override
-  Future<HomeBadges> badges() async => const HomeBadges();
+  Future<HomeBadges> badges() async {
+    try {
+      final summary = await _client.get<CartSummary>(
+        ApiConstants.cartSummary,
+        parse: (json) => CartSummary.fromJson(json as Map<String, dynamic>),
+      );
+      return HomeBadges(cartItems: summary.itemCount);
+    } on Object {
+      return const HomeBadges();
+    }
+  }
 
   /// A promo whose target this app cannot open is left out.
   static Promo? _promo(Map<String, dynamic> json) {

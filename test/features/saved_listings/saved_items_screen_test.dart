@@ -8,6 +8,7 @@ import 'package:valuex_mobile/core/routing/route_names.dart';
 import 'package:valuex_mobile/core/widgets/square_back_button.dart';
 import 'package:valuex_mobile/features/auth/data/models/auth_models.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
+import 'package:valuex_mobile/features/cart/data/cart_repository.dart';
 import 'package:valuex_mobile/features/home/data/mock_home_repository.dart';
 import 'package:valuex_mobile/features/home/presentation/providers/home_providers.dart';
 import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
@@ -24,6 +25,7 @@ import 'package:valuex_mobile/features/search/domain/search_page.dart';
 import '../../helpers/accessibility.dart';
 import '../../helpers/app_harness.dart';
 import '../../helpers/fonts.dart';
+import '../cart/cart_fixtures.dart';
 import '../search/search_fixtures.dart';
 import 'saved_listings_fixtures.dart';
 
@@ -44,8 +46,11 @@ void main() {
   late FakeSavedListingsRepository saved;
   late FakeSearchRepository search;
   late AppHarness harness;
+  late MockCartRepository cart;
 
   setUp(() {
+    cart = MockCartRepository();
+    when(() => cart.get()).thenAnswer((_) async => cartOf([]));
     saved = FakeSavedListingsRepository();
     saved.onList = (page) async => savedPage([
           savedListingJson('l1', title: 'Apple iPhone 14'),
@@ -96,6 +101,7 @@ void main() {
         listingRepositoryProvider.overrideWithValue(categories),
         notificationsRepositoryProvider.overrideWithValue(notifications),
         profileRepositoryProvider.overrideWithValue(profile),
+        cartRepositoryProvider.overrideWithValue(cart),
       ],
     );
     harness.signedInAs(AccountStatus.active);
@@ -117,9 +123,9 @@ void main() {
       expect(find.text('No longer available'), findsOneWidget);
       expect(find.text('Under review'), findsOneWidget);
       expect(find.text('Remove from saved'), findsNWidgets(3));
-      // Add to cart is disabled until Sprint 5, and only offered for an available item.
+      // Add to Cart is offered only for an available item, and it is live now (US-019).
       expect(find.text('Add to Cart'), findsOneWidget);
-      expect(tester.widget<OutlinedButton>(find.byType(OutlinedButton)).onPressed, isNull);
+      expect(tester.widget<OutlinedButton>(find.byType(OutlinedButton)).onPressed, isNotNull);
       handle.dispose();
       await harness.dispose();
     });
@@ -129,6 +135,38 @@ void main() {
 
       expect(find.textContaining('42,000'), findsWidgets);
       expect(find.text('Like New'), findsWidgets);
+      await harness.dispose();
+    });
+
+    testWidgets('Add to Cart adds the item and View cart opens the cart (US-019)', (tester) async {
+      when(() => cart.add('l1')).thenAnswer((_) async => addedLine());
+      await openAt(tester, RouteNames.savedItems);
+
+      await tester.tap(find.text('Add to Cart'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      verify(() => cart.add('l1')).called(1);
+      expect(find.text('Added to your cart'), findsOneWidget);
+      await tester.tap(find.text('View cart'));
+      await harness.settle();
+      expect(find.text('Your cart is empty'), findsOneWidget);
+      await harness.dispose();
+    });
+
+    testWidgets('Add to Cart without an accepted price says what to do first', (tester) async {
+      when(() => cart.add('l1')).thenThrow(const ApiError(
+        type: ApiErrorType.business,
+        message: 'server words',
+        code: 'ERROR_PRICE_NOT_ACCEPTED',
+        statusCode: 409,
+      ));
+      await openAt(tester, RouteNames.savedItems);
+
+      await tester.tap(find.text('Add to Cart'));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining("hasn't been accepted yet"), findsOneWidget);
       await harness.dispose();
     });
 
