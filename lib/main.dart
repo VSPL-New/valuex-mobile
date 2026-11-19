@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app.dart';
 import 'core/config/app_config.dart';
+import 'core/push/firebase_push_service.dart';
+import 'core/push/push_providers.dart';
 import 'core/security/secure_storage_service.dart';
 import 'core/storage/preferences_service.dart';
 import 'features/settings/presentation/providers/locale_controller.dart';
@@ -17,12 +19,14 @@ Future<void> main() async {
   }
 
   final savedLanguage = await PreferencesService().getAppLanguage();
+  final pushService = await FirebasePushService.create();
 
   runApp(
     ProviderScope(
       overrides: [
         appConfigProvider.overrideWithValue(config),
         savedLanguageCodeProvider.overrideWithValue(savedLanguage),
+        pushServiceProvider.overrideWithValue(pushService),
       ],
       child: const ValueXApp(),
     ),

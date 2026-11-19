@@ -130,6 +130,14 @@ void main() {
       expect(notificationTargetFor('/profile/')?.route, RouteNames.profile);
     });
 
+    test('a conversation link opens that conversation on top (US-131)', () {
+      final target = notificationTargetFor('/chats/8b3f-1')!;
+      expect(target.route, RouteNames.chatThread('8b3f-1'));
+      expect(target.isTab, isFalse);
+      expect(notificationTargetFor('/chats/'), isNull);
+      expect(notificationTargetFor('/chats'), isNull);
+    });
+
     test('screens that are not built yet and missing links have no target', () {
       expect(notificationTargetFor('/support'), isNull);
       expect(notificationTargetFor(null), isNull);

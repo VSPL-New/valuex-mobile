@@ -2,10 +2,15 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
         android:label="JustQlic"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <!-- A push that names no channel lands here (US-131). -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="general" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -57,6 +57,15 @@ class SecureStorageService {
     await _storage.delete(key: StorageKeys.pendingLogoutToken);
   }
 
+  // Random id of this install, kept across sign-outs so the server can tell one phone's tokens apart (US-131).
+  Future<String?> getInstallId() async {
+    return await _storage.read(key: StorageKeys.installId);
+  }
+
+  Future<void> saveInstallId(String installId) async {
+    await _storage.write(key: StorageKeys.installId, value: installId);
+  }
+
   Future<void> clearSession() async {
     await _storage.delete(key: StorageKeys.accessToken);
     await _storage.delete(key: StorageKeys.refreshToken);
