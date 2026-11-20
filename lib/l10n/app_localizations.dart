@@ -5574,7 +5574,7 @@ abstract class AppLocalizations {
   /// No description provided for @contactOpenChat.
   ///
   /// In en, this message translates to:
-  /// **'Open chat'**
+  /// **'Chat'**
   String get contactOpenChat;
 
   /// No description provided for @chatCardUpdate.
