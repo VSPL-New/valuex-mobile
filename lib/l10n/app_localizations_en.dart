@@ -3723,6 +3723,142 @@ class AppLocalizationsEn extends AppLocalizations {
   String get previewBuyNowOn => 'Buy Now on';
 
   @override
+  String get cartTitle => 'Cart';
+
+  @override
+  String cartItemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items',
+      one: '1 item',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cartEmptyTitle => 'Your cart is empty';
+
+  @override
+  String get cartEmptyBody =>
+      'Add an item once the seller accepts your offer, or reserve it with Buy Now.';
+
+  @override
+  String get cartSellerFallback => 'Seller';
+
+  @override
+  String get cartStatusAccepted => 'Accepted';
+
+  @override
+  String get cartStatusPending => 'Pending';
+
+  @override
+  String get cartStatusExpired => 'Expired';
+
+  @override
+  String get cartStatusUnavailable => 'Unavailable';
+
+  @override
+  String cartAgreedPrice(String price) {
+    return 'Agreed price $price';
+  }
+
+  @override
+  String cartNowAsking(String price) {
+    return 'Now asking $price';
+  }
+
+  @override
+  String cartPriceValidFor(String duration) {
+    return 'Price held for $duration';
+  }
+
+  @override
+  String cartRemovesIn(String duration) {
+    return 'Leaves your cart in $duration';
+  }
+
+  @override
+  String get cartDeliveryChoose => 'Choose at checkout';
+
+  @override
+  String get cartRemove => 'Remove';
+
+  @override
+  String get cartRemoved => 'Removed from your cart';
+
+  @override
+  String get cartUndo => 'Undo';
+
+  @override
+  String get cartTotal => 'Total';
+
+  @override
+  String get cartProceed => 'Proceed to checkout';
+
+  @override
+  String get cartCheckoutSoon => 'Checkout is coming soon';
+
+  @override
+  String get cartLoadFailed => 'We couldn\'t load your cart';
+
+  @override
+  String get cartRefreshFailed => 'Couldn\'t refresh your cart. Showing what it held a moment ago';
+
+  @override
+  String get cartAdded => 'Added to your cart';
+
+  @override
+  String get cartViewCart => 'View cart';
+
+  @override
+  String get cartAddedAfterReserve => 'Reserved for you and added to your cart';
+
+  @override
+  String get cartProblemUnavailable => 'No longer available';
+
+  @override
+  String get cartProblemPriceChanged => 'Price changed. Please review';
+
+  @override
+  String get cartProblemExpired => 'Cart item expired. Please add again';
+
+  @override
+  String get cartProblemAcceptanceExpired => 'Price acceptance expired. Make a new offer';
+
+  @override
+  String cartLineLabel(String title, String price, String status, String seller) {
+    return '$title, $price, $status, from $seller';
+  }
+
+  @override
+  String cartErrorMax(String limit) {
+    return 'Cart limit reached ($limit items)';
+  }
+
+  @override
+  String get cartErrorMaxGeneric => 'Cart limit reached. Remove an item to add another';
+
+  @override
+  String get cartErrorNotAccepted =>
+      'Your price hasn\'t been accepted yet. Make an offer or use Buy Now first';
+
+  @override
+  String get cartErrorOwnListing => 'You can\'t add your own item to the cart';
+
+  @override
+  String get cartErrorNotApplicable => 'This item can\'t be bought through the cart';
+
+  @override
+  String get cartErrorNotInCart => 'This item is not in your cart';
+
+  @override
+  String get cartErrorUnavailableYet => 'The cart is not available yet. Please try again later';
+
+  @override
+  String get listingViewNegotiationRequired => 'Make an offer or Buy Now first';
+
+  @override
   String get pushPromptTitle => 'Hear about messages and offers';
 
   @override

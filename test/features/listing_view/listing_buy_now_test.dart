@@ -11,6 +11,7 @@ import 'package:valuex_mobile/core/routing/route_names.dart';
 import 'package:valuex_mobile/core/theme/app_theme.dart';
 import 'package:valuex_mobile/features/buy_now/data/buy_now_repository.dart';
 import 'package:valuex_mobile/features/buy_now/domain/buy_now_reservation.dart';
+import 'package:valuex_mobile/features/cart/data/cart_repository.dart';
 import 'package:valuex_mobile/features/listing_view/data/listing_view_repository.dart';
 import 'package:valuex_mobile/features/listing_view/domain/public_listing.dart';
 import 'package:valuex_mobile/features/listing_view/presentation/listing_view_screen.dart';
@@ -19,6 +20,7 @@ import 'package:valuex_mobile/l10n/app_localizations.dart';
 import '../../core/realtime/realtime_fakes.dart';
 import '../../helpers/fonts.dart';
 import '../buy_now/buy_now_test.dart' show MockBuyNowRepository, reservationJson;
+import '../cart/cart_fixtures.dart';
 
 class _MockListingViewRepository extends Mock implements ListingViewRepository {}
 
@@ -56,10 +58,12 @@ void main() {
 
   late _MockListingViewRepository listings;
   late MockBuyNowRepository buyNow;
+  late MockCartRepository cart;
 
   setUp(() {
     listings = _MockListingViewRepository();
     buyNow = MockBuyNowRepository();
+    cart = MockCartRepository();
   });
 
   Future<void> open(WidgetTester tester, PublicListing listing) async {
@@ -75,12 +79,17 @@ void main() {
           builder: (context, state) =>
               ListingViewScreen(listingId: state.pathParameters['listingId']!),
         ),
+        GoRoute(
+          path: RouteNames.cart,
+          builder: (context, state) => const Scaffold(body: Text('cart screen')),
+        ),
       ],
     );
     await tester.pumpWidget(ProviderScope(
       overrides: [
         listingViewRepositoryProvider.overrideWithValue(listings),
         buyNowRepositoryProvider.overrideWithValue(buyNow),
+        cartRepositoryProvider.overrideWithValue(cart),
         realtimeClientProvider.overrideWithValue(FakeRealtimeClient()),
       ],
       child: MaterialApp.router(
@@ -100,9 +109,10 @@ void main() {
       ));
 
   testWidgets(
-      'tapping Buy Now sends the price the buyer saw, says it is reserved and reads the '
-      'page again', (tester) async {
+      'tapping Buy Now sends the price the buyer saw, adds the line to the cart and opens the cart',
+      (tester) async {
     whenStarted().thenAnswer((_) async => BuyNowReservation.fromJson(reservationJson()));
+    when(() => cart.add('l1')).thenAnswer((_) async => addedLine());
     await open(tester, _listing());
 
     await tester.tap(find.text('Buy Now'));
@@ -115,7 +125,21 @@ void main() {
         )).captured;
     expect(sent.first, '14500');
     expect(sent.last, isNotEmpty);
-    expect(find.text('Reserved for you. Checkout is coming soon'), findsOneWidget);
+    verify(() => cart.add('l1')).called(1);
+    expect(find.text('cart screen'), findsOneWidget);
+    verify(() => listings.view('l1')).called(2);
+  });
+
+  testWidgets('a reservation that cannot be added to the cart stays and says why', (tester) async {
+    whenStarted().thenAnswer((_) async => BuyNowReservation.fromJson(reservationJson()));
+    when(() => cart.add('l1')).thenAnswer((_) async => throw _error('ERROR_MAX_CART_ITEMS'));
+    await open(tester, _listing());
+
+    await tester.tap(find.text('Buy Now'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('cart screen'), findsNothing);
+    expect(find.text('Cart limit reached. Remove an item to add another'), findsOneWidget);
     verify(() => listings.view('l1')).called(2);
   });
 

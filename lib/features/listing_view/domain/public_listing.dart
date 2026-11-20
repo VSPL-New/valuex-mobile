@@ -10,6 +10,7 @@ enum CapabilityReason {
   identityRequired,
   reserved,
   disabledBySeller,
+  negotiationRequired,
   other;
 
   static CapabilityReason from(String? value) => switch (value) {
@@ -21,6 +22,7 @@ enum CapabilityReason {
         'IDENTITY_REQUIRED' => identityRequired,
         'RESERVED' => reserved,
         'DISABLED_BY_SELLER' => disabledBySeller,
+        'NEGOTIATION_REQUIRED' => negotiationRequired,
         _ => other,
       };
 }

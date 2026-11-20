@@ -12,6 +12,7 @@ import 'package:valuex_mobile/features/address/domain/saved_address.dart';
 import 'package:valuex_mobile/features/address/presentation/providers/address_providers.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/presentation/screens/sign_in_mobile_screen.dart';
+import 'package:valuex_mobile/features/cart/data/cart_repository.dart';
 import 'package:valuex_mobile/features/home/data/mock_home_repository.dart';
 import 'package:valuex_mobile/features/home/domain/entities/home_badges.dart';
 import 'package:valuex_mobile/features/home/domain/entities/home_location.dart';
@@ -32,6 +33,7 @@ import 'package:valuex_mobile/features/notifications/data/notifications_reposito
 
 import '../../helpers/app_harness.dart';
 import '../../helpers/fonts.dart';
+import '../cart/cart_fixtures.dart';
 import '../search/search_fixtures.dart';
 
 class _MockNotifications extends Mock implements NotificationsRepository {}
@@ -119,8 +121,11 @@ void main() {
   late _MockListingView listingView;
   late FakeSearchRepository search;
   late HomeRepository content;
+  late MockCartRepository cartRepository;
   setUp(() {
     content = const MockHomeRepository();
+    cartRepository = MockCartRepository();
+    when(() => cartRepository.get()).thenAnswer((_) async => cartOf([]));
     taxonomy = _MockCategories();
     listingView = _MockListingView();
     when(() => listingView.view(any())).thenAnswer(
@@ -201,6 +206,7 @@ void main() {
         listingViewRepositoryProvider.overrideWithValue(listingView),
         searchRepositoryProvider.overrideWithValue(search),
         notificationsRepositoryProvider.overrideWithValue(notifications),
+        cartRepositoryProvider.overrideWithValue(cartRepository),
         savedAddressesProvider.overrideWith((ref) => (savedLoader ?? () async => saved)()),
       ],
     );
@@ -239,6 +245,17 @@ void main() {
     expect(find.bySemanticsLabel('Cart, 2 items'), findsOneWidget);
     expect(find.bySemanticsLabel('Notifications, 3 unread'), findsOneWidget);
     handle.dispose();
+    await harness.dispose();
+  });
+
+  testWidgets('the cart icon in the header opens the cart', (tester) async {
+    final harness = await openHome(tester);
+
+    await tester.tap(find.bySemanticsLabel('Cart, 2 items'));
+    await harness.settle();
+
+    expect(find.text('Your cart is empty'), findsOneWidget);
+    verify(() => cartRepository.get()).called(1);
     await harness.dispose();
   });
 

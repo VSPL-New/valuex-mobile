@@ -37,6 +37,9 @@ class RouteNames {
 
   /// Offers received and sent (US-076).
   static const String offers = '/offers';
+
+  /// The buyer's cart (US-019).
+  static const String cart = '/cart';
   static const String blockedUsers = '/profile/blocked-users';
 
   /// The Chats tab and one conversation (US-013).

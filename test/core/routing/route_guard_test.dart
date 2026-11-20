@@ -234,6 +234,7 @@ void main() {
       RouteNames.notifications,
       RouteNames.search,
       RouteNames.savedSearches,
+      RouteNames.cart,
     ];
 
     test('signed-out users are sent to Sign In', () {

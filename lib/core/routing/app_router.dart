@@ -41,6 +41,7 @@ import '../../features/chat/presentation/chat_list_screen.dart';
 import '../../features/chat/presentation/chat_thread_screen.dart';
 import '../../features/negotiation/presentation/negotiation_screen.dart';
 import '../../features/negotiation/presentation/offers_screen.dart';
+import '../../features/cart/presentation/cart_screen.dart';
 import '../../features/saved_listings/presentation/saved_items_screen.dart';
 import '../../features/saved_searches/presentation/saved_search_results_screen.dart';
 import '../../features/saved_searches/presentation/saved_searches_screen.dart';
@@ -112,6 +113,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'listingView',
         builder: (context, state) =>
             ListingViewScreen(listingId: state.pathParameters['listingId']!),
+      ),
+      GoRoute(
+        path: RouteNames.cart,
+        name: 'cart',
+        builder: (context, state) => const CartScreen(),
       ),
       GoRoute(
         path: RouteNames.negotiationPattern,

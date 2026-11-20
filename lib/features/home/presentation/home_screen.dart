@@ -88,7 +88,7 @@ class HomeScreen extends ConsumerWidget {
                 locating: locationAsync.isLoading,
                 badges: badges,
                 onLocation: () => showLocationSheet(context),
-                onCart: () => showComingSoon(context),
+                onCart: () => context.push(RouteNames.cart),
                 onNotifications: () => context.push(RouteNames.notifications),
                 onSearch: () => context.push(RouteNames.search),
                 onPhotoSearch: () => showComingSoon(context),
