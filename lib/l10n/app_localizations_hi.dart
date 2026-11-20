@@ -3713,4 +3713,26 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get previewBuyNowOn => 'अभी खरीदें चालू';
+
+  @override
+  String get pushPromptTitle => 'संदेश और ऑफ़र की जानकारी पाएँ';
+
+  @override
+  String get pushPromptBody =>
+      'सूचनाएँ चालू करें, ताकि JustQlic बंद होने पर भी पता चले कि किसी ने आपको संदेश भेजा या आपके ऑफ़र का जवाब दिया। हम लॉक स्क्रीन पर संदेश का पाठ या रकम कभी नहीं दिखाते।';
+
+  @override
+  String get pushPromptAllow => 'सूचनाएँ चालू करें';
+
+  @override
+  String get pushPromptLater => 'अभी नहीं';
+
+  @override
+  String get pushOffTitle => 'इस फ़ोन पर सूचनाएँ बंद हैं';
+
+  @override
+  String get pushOffBody => 'संदेश और ऑफ़र की जानकारी पाने के लिए इन्हें सेटिंग में चालू करें।';
+
+  @override
+  String get pushOffAction => 'सेटिंग खोलें';
 }

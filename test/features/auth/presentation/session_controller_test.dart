@@ -6,6 +6,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
 import 'package:valuex_mobile/core/network/session_event.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
+import 'package:valuex_mobile/core/push/push_providers.dart';
+import 'package:valuex_mobile/core/push/push_service.dart';
+import 'package:valuex_mobile/core/push/push_token_repository.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/auth_session.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/logout_outcome.dart';
@@ -19,6 +22,22 @@ import '../../../helpers/mocks.dart';
 
 UserProfile _profile(AccountStatus status, {bool aadhaarVerified = false}) {
   return UserProfile(userId: 'user-1', status: status, aadhaarVerified: aadhaarVerified);
+}
+
+class _RecordingRegistration extends PushRegistration {
+  final List<String> order;
+
+  _RecordingRegistration(this.order)
+      : super(
+          service: const NoopPushService(),
+          repository: PushTokenRepository(MockApiClient()),
+          installId: () async => 'install',
+          locale: () => 'en',
+          platform: 'ANDROID',
+        );
+
+  @override
+  Future<void> unregister() async => order.add('unregister');
 }
 
 void main() {
@@ -206,6 +225,28 @@ void main() {
       expect(outcome, LogoutOutcome.queued);
       final state = container.read(sessionControllerProvider).value as Unauthenticated;
       expect(state.sessionExpired, isFalse);
+    });
+
+    test('removes this phone from push before the session is cleared (US-131)', () async {
+      final order = <String>[];
+      final push = _RecordingRegistration(order);
+      final local = ProviderContainer(overrides: [
+        authRepositoryProvider.overrideWithValue(repository),
+        apiClientProvider.overrideWithValue(apiClient),
+        pushRegistrationProvider.overrideWithValue(push),
+      ]);
+      addTearDown(local.dispose);
+      when(() => repository.hasSession()).thenAnswer((_) async => true);
+      when(() => repository.fetchProfile()).thenAnswer((_) async => _profile(AccountStatus.active));
+      when(() => repository.logout()).thenAnswer((_) async {
+        order.add('logout');
+        return LogoutOutcome.revoked;
+      });
+      await local.read(sessionControllerProvider.future);
+
+      await local.read(sessionControllerProvider.notifier).logOut();
+
+      expect(order, ['unregister', 'logout']);
     });
 
     test('a session that ends during the call does not show the expired notice', () async {

@@ -12,6 +12,7 @@ import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/realtime_reconnecting_banner.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../listing/data/photo_source.dart';
+import '../../notifications/presentation/push_permission_sheet.dart';
 import '../domain/chat.dart';
 import 'chat_error_messages.dart';
 import 'providers/chat_thread_controller.dart';
@@ -50,6 +51,10 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
     super.initState();
     _scroll.addListener(_onScroll);
     _text.addListener(_onTextChanged);
+    // The first time a conversation is open, explain notifications and ask (US-131).
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) unawaited(maybeAskForPushPermission(context, ref));
+    });
   }
 
   @override

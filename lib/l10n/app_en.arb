@@ -1436,5 +1436,12 @@
   "notifBuyNowPriceChangedTitle": "Price changed for {title}",
   "@notifBuyNowPriceChangedTitle": {"placeholders": {"title": {"type": "String"}}},
   "notifBuyNowPriceChangedBody": "Please review the new price",
-  "previewBuyNowOn": "Buy Now on"
+  "previewBuyNowOn": "Buy Now on",
+  "pushPromptTitle": "Hear about messages and offers",
+  "pushPromptBody": "Turn on notifications to know when someone messages you or answers your offer, even when JustQlic is closed. We never show message text or amounts on your lock screen.",
+  "pushPromptAllow": "Turn on notifications",
+  "pushPromptLater": "Not now",
+  "pushOffTitle": "Notifications are off on this phone",
+  "pushOffBody": "Turn them on in Settings to hear about messages and offers.",
+  "pushOffAction": "Open Settings"
 }
