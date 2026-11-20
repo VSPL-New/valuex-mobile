@@ -44,6 +44,10 @@ dependencies:
 
   # Permissions
   permission_handler: ^11.3.1
+
+  # Push notifications (US-131)
+  firebase_core: ^4.15.1
+  firebase_messaging: ^16.7.1
   speech_to_text_platform_interface: ^2.5.0
   screen_protector: ^1.5.3
   geocoding: ^5.0.1

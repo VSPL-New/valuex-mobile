@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="push_channel_chat">Messages</string>
+    <string name="push_channel_offers">Offers</string>
+    <string name="push_channel_calls">Calls</string>
+    <string name="push_channel_general">General</string>
+</resources>

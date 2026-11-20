@@ -3857,4 +3857,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get listingViewNegotiationRequired => 'Make an offer or Buy Now first';
+
+  @override
+  String get pushPromptTitle => 'Hear about messages and offers';
+
+  @override
+  String get pushPromptBody =>
+      'Turn on notifications to know when someone messages you or answers your offer, even when JustQlic is closed. We never show message text or amounts on your lock screen.';
+
+  @override
+  String get pushPromptAllow => 'Turn on notifications';
+
+  @override
+  String get pushPromptLater => 'Not now';
+
+  @override
+  String get pushOffTitle => 'Notifications are off on this phone';
+
+  @override
+  String get pushOffBody => 'Turn them on in Settings to hear about messages and offers.';
+
+  @override
+  String get pushOffAction => 'Open Settings';
 }
