@@ -114,6 +114,24 @@ void main() {
       expect(error.type, ApiErrorType.server);
     });
 
+    test('a 200 with no body is a success for a call that expects nothing back', () async {
+      final adapter = FakeHttpAdapter((_) async => ResponseBody.fromString('', 200));
+      final client = _client(FakeSecureStorage(), adapter);
+
+      await client.put<void>('/saved-listings/l1');
+    });
+
+    test('a 200 with no body is still an error for a call that expects data', () async {
+      final adapter = FakeHttpAdapter((_) async => ResponseBody.fromString('', 200));
+      final client = _client(FakeSecureStorage(), adapter);
+
+      final error = await _expectError(
+        client.get<String>('/x', authenticated: false, parse: (data) => data as String),
+      );
+
+      expect(error.type, ApiErrorType.server);
+    });
+
     test('postWithStatus returns the parsed data and the HTTP status', () async {
       final adapter = FakeHttpAdapter((options) async {
         return options.path == '/created'
