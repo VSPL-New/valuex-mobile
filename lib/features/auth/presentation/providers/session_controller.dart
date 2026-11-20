@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/network/session_event.dart';
+import '../../../../core/push/push_providers.dart';
 import '../../../../core/utils/provider_retry.dart';
 import '../../domain/entities/account_status.dart';
 import '../../domain/entities/auth_session.dart';
@@ -50,6 +51,8 @@ class SessionController extends _$SessionController {
   Future<LogoutOutcome> logOut() async {
     _loggingOut = true;
     try {
+      // Needs the signed-in session, so it goes before the logout; it never holds sign-out up.
+      await ref.read(pushRegistrationProvider).unregister();
       final outcome = await ref.read(authRepositoryProvider).logout();
       state = const AsyncData(Unauthenticated());
       return outcome;

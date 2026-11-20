@@ -18,6 +18,7 @@ import '../domain/app_notification.dart';
 import '../domain/notification_deep_links.dart';
 import 'providers/notifications_providers.dart';
 import 'notification_navigation.dart';
+import 'push_permission_sheet.dart';
 import 'widgets/notification_card.dart';
 import 'widgets/notification_tabs.dart';
 
@@ -115,6 +116,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             onBack: () => context.canPop() ? context.pop() : context.go(RouteNames.home),
             onMarkAll: _markAllRead,
           ),
+          const PushOffBanner(),
           Expanded(
             child: state != null
                 ? _content(l10n, state)

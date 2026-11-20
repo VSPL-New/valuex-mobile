@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../features/auth/domain/entities/account_status.dart';
+import '../../features/auth/presentation/providers/account_active_provider.dart';
 import '../../features/auth/presentation/providers/session_controller.dart';
-import '../../features/auth/presentation/providers/session_state.dart';
 import '../network/api_client.dart';
 import 'realtime_client.dart';
 import 'realtime_event.dart';
@@ -86,10 +85,7 @@ final realtimeConnectionProvider = Provider<void>((ref) {
     }
   });
 
-  final active = ref.watch(sessionControllerProvider.select((session) {
-    final state = session.value;
-    return state is Authenticated && state.status == AccountStatus.active;
-  }));
+  final active = ref.watch(accountActiveProvider);
   if (active) {
     client.connect();
   } else {

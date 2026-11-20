@@ -41,6 +41,11 @@ NotificationTarget? notificationTargetFor(String? deepLink) {
     final id = uri.queryParameters['id'];
     return id == null || id.isEmpty ? null : NotificationTarget(RouteNames.savedSearch(id));
   }
+  if (path.startsWith('${RouteNames.chatThreadBase}/') &&
+      path.length > RouteNames.chatThreadBase.length + 1) {
+    // A new message (US-013, US-131): opens that conversation.
+    return NotificationTarget(path);
+  }
   if (path.startsWith('${RouteNames.negotiationBase}/') &&
       path.length > RouteNames.negotiationBase.length + 1) {
     // An offer, counter or answer (US-017): opens that negotiation.

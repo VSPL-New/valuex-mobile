@@ -47,3 +47,9 @@ kotlin {
 flutter {
     source = "../.."
 }
+
+// The Firebase file is per environment and is not committed (US-131). Without it the app still builds and
+// runs, with push switched off.
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+}

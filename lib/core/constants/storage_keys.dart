@@ -9,4 +9,6 @@ class StorageKeys {
   static const String homeLocation = 'home_location';
   static const String appLanguage = 'app_language';
   static const String chatSafetyBannerDismissed = 'chat_safety_banner_dismissed';
+  static const String installId = 'install_id';
+  static const String pushPermissionAsked = 'push_permission_asked';
 }

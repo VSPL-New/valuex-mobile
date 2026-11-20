@@ -106,6 +106,7 @@ class ApiConstants {
 
   // Realtime (US-130)
   static const String realtimeTickets = '/realtime/tickets';
+  static const String devicePushToken = '/devices/push-token';
   static const String categoryChildren = '/categories/children';
   static const String categorySearch = '/categories/search';
   static String categoryListingSchema(String code) => '/categories/$code/listing-schema';

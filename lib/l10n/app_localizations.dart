@@ -6704,6 +6704,47 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Make an offer or Buy Now first'**
   String get listingViewNegotiationRequired;
+  /// No description provided for @pushPromptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hear about messages and offers'**
+  String get pushPromptTitle;
+
+  /// No description provided for @pushPromptBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on notifications to know when someone messages you or answers your offer, even when JustQlic is closed. We never show message text or amounts on your lock screen.'**
+  String get pushPromptBody;
+
+  /// No description provided for @pushPromptAllow.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on notifications'**
+  String get pushPromptAllow;
+
+  /// No description provided for @pushPromptLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get pushPromptLater;
+
+  /// No description provided for @pushOffTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are off on this phone'**
+  String get pushOffTitle;
+
+  /// No description provided for @pushOffBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn them on in Settings to hear about messages and offers.'**
+  String get pushOffBody;
+
+  /// No description provided for @pushOffAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get pushOffAction;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
