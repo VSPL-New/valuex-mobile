@@ -942,7 +942,7 @@
   "contactBlocked": "आप इस विक्रेता से संपर्क नहीं कर सकते",
   "contactOwnListing": "यह आपकी अपनी लिस्टिंग है",
   "contactAccountNotActive": "विक्रेताओं से संपर्क करने के लिए अपना पंजीकरण पूरा करें",
-  "contactOpenChat": "चैट खोलें",
+  "contactOpenChat": "चैट",
   "chatCardUpdate": "बातचीत अपडेट",
   "chatListingCardLabel": "लिस्टिंग: {title}",
   "@chatListingCardLabel": {"placeholders": {"title": {"type": "String"}}},

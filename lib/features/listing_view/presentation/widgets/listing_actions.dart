@@ -40,7 +40,7 @@ class ListingActions extends StatelessWidget {
   /// The buyer already has an open negotiation here, so the button reads "View offer".
   final bool hasOffer;
 
-  /// The buyer already has a chat about this listing, so the button reads "Open chat".
+  /// The buyer already has a chat about this listing; the button opens it and still reads "Chat".
   final bool hasChat;
 
   /// A chat is being opened; a second tap is ignored until it answers.

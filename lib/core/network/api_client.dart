@@ -228,8 +228,10 @@ class ApiClient {
     }
 
     try {
-      // 204 No Content (a delete) has no envelope to read.
-      if (response.statusCode == 204) return (null as T, response);
+      // 204 No Content (a delete) has no envelope to read; nor has a 2xx with no body (a save) when
+      // the caller expects nothing back.
+      final emptyBody = response.data == null || response.data == '';
+      if (response.statusCode == 204 || (emptyBody && null is T)) return (null as T, response);
       final envelope = ApiResponse.tryParse<T>(response.data, parse: parse);
       if (envelope == null || !envelope.success) {
         throw ApiError(

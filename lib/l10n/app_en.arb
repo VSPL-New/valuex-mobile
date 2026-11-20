@@ -1241,7 +1241,7 @@
   "contactBlocked": "You cannot contact this seller",
   "contactOwnListing": "This is your own listing",
   "contactAccountNotActive": "Complete your registration to contact sellers",
-  "contactOpenChat": "Open chat",
+  "contactOpenChat": "Chat",
   "chatCardUpdate": "Conversation update",
   "chatListingCardLabel": "Listing: {title}",
   "@chatListingCardLabel": {"placeholders": {"title": {"type": "String"}}},

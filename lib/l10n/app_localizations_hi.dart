@@ -3155,7 +3155,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get contactAccountNotActive => 'विक्रेताओं से संपर्क करने के लिए अपना पंजीकरण पूरा करें';
 
   @override
-  String get contactOpenChat => 'चैट खोलें';
+  String get contactOpenChat => 'चैट';
 
   @override
   String get chatCardUpdate => 'बातचीत अपडेट';

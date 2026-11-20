@@ -96,19 +96,19 @@ void main() {
     verify(() => chats.open('l1')).called(1);
   });
 
-  testWidgets('a chat that already exists opens straight away and the button reads Open chat',
+  testWidgets('a chat that already exists opens straight away and the button reads Chat',
       (tester) async {
     await open(tester, _listing(threadId: 't7'));
-    expect(find.text('Open chat'), findsOneWidget);
+    expect(find.text('Chat'), findsOneWidget);
 
-    await tester.tap(find.text('Open chat'));
+    await tester.tap(find.text('Chat'));
     await tester.pumpAndSettle();
 
     expect(find.text('thread t7'), findsOneWidget);
     verifyNever(() => chats.open(any()));
   });
 
-  testWidgets('after coming back the listing is read again so it can show Open chat',
+  testWidgets('after coming back the listing is read again and the chat opens straight away',
       (tester) async {
     when(() => chats.open('l1'))
         .thenAnswer((_) async => OpenedChat(thread: thread(id: 'new'), created: true));
@@ -120,7 +120,8 @@ void main() {
     await tester.tap(find.text('back'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Open chat'), findsOneWidget);
+    expect(find.text('Chat'), findsOneWidget);
+    expect(find.text('Open chat'), findsNothing);
   });
 
   testWidgets('every refusal shows its own message and stays on the listing', (tester) async {

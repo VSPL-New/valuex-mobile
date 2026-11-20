@@ -3164,7 +3164,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contactAccountNotActive => 'Complete your registration to contact sellers';
 
   @override
-  String get contactOpenChat => 'Open chat';
+  String get contactOpenChat => 'Chat';
 
   @override
   String get chatCardUpdate => 'Conversation update';

@@ -82,11 +82,11 @@ void main() {
     handle.dispose();
   });
 
-  testWidgets('an existing chat reads Open chat', (tester) async {
+  testWidgets('an existing chat still reads Chat', (tester) async {
     await pump(tester, _caps(), hasChat: true);
 
-    expect(find.text('Open chat'), findsOneWidget);
-    expect(find.text('Chat'), findsNothing);
+    expect(find.text('Chat'), findsOneWidget);
+    expect(find.text('Open chat'), findsNothing);
   });
 
   testWidgets('a second tap while the chat is opening is ignored', (tester) async {
