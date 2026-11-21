@@ -59,6 +59,11 @@ void main() {
         ),
         GoRoute(path: RouteNames.cart, builder: (context, state) => const CartScreen()),
         GoRoute(
+          path: RouteNames.cartDeliveryPattern,
+          builder: (context, state) =>
+              Scaffold(body: Text('delivery screen ${state.pathParameters['itemId']}')),
+        ),
+        GoRoute(
           path: RouteNames.home,
           builder: (context, state) => const Scaffold(body: Text('home screen')),
         ),
@@ -243,6 +248,93 @@ void main() {
         find.text("Couldn't refresh your cart. Showing what it held a moment ago"),
         findsOneWidget,
       );
+    });
+  });
+
+  group('delivery on a line (US-020)', () {
+    testWidgets('only a line that can be bought offers Choose delivery', (tester) async {
+      cartHolds(mixed);
+      await open(tester, size: const Size(390, 1600));
+
+      expect(find.text('Choose delivery'), findsOneWidget);
+      expect(find.text('Change'), findsNothing);
+      expect(find.text('Choose at checkout'), findsNWidgets(4));
+    });
+
+    testWidgets('Choose delivery opens the delivery screen of that line', (tester) async {
+      cartHolds([
+        groupJson('s1', 'Asha K', [lineJson('i7')]),
+      ]);
+      await open(tester);
+
+      await tester.tap(find.text('Choose delivery'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('delivery screen i7'), findsOneWidget);
+    });
+
+    testWidgets('a chosen delivery shows its cost and date, and the button reads Change',
+        (tester) async {
+      cartHolds([
+        groupJson('s1', 'Asha K', [
+          lineJson(
+            'i1',
+            delivery: deliveryJson(
+              mode: 'DELIVERY',
+              addressId: 'a1',
+              cost: '60.00',
+              eta: '2026-11-25',
+            ),
+          ),
+        ]),
+      ]);
+      await open(tester);
+
+      expect(find.text('Delivery, ₹60, by Nov 25'), findsOneWidget);
+      expect(find.text('Change'), findsOneWidget);
+      expect(find.text('Choose delivery'), findsNothing);
+      expect(find.text('Choose at checkout'), findsNothing);
+    });
+
+    testWidgets('a chosen self-pickup shows how the buyer pays', (tester) async {
+      cartHolds([
+        groupJson('s1', 'Asha K', [
+          lineJson('i1', delivery: deliveryJson(mode: 'SELF_PICKUP', payment: 'PAY_NOW')),
+          lineJson(
+            'i2',
+            title: 'Desk',
+            delivery: deliveryJson(mode: 'SELF_PICKUP', payment: 'PAY_AT_PICKUP'),
+          ),
+        ]),
+      ]);
+      await open(tester, size: const Size(390, 1600));
+
+      expect(find.text('Self-pickup, pay now'), findsOneWidget);
+      expect(find.text('Self-pickup, pay at pickup'), findsOneWidget);
+    });
+
+    testWidgets('the choice is read out with the line', (tester) async {
+      final handle = tester.ensureSemantics();
+      cartHolds([
+        groupJson('s1', 'Asha K', [
+          lineJson(
+            'i1',
+            delivery: deliveryJson(
+              mode: 'DELIVERY',
+              addressId: 'a1',
+              cost: 60,
+              eta: '2026-11-25',
+            ),
+          ),
+        ]),
+      ]);
+      await open(tester);
+
+      expect(
+        find.bySemanticsLabel(RegExp(r'^Hero phone, .*from Asha K.*Delivery, ₹60, by Nov 25')),
+        findsOneWidget,
+      );
+      handle.dispose();
     });
   });
 

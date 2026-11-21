@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
 import '../domain/cart.dart';
+import '../domain/delivery.dart';
 
 /// What adding a line gave: the line, and whether this call made it (201) or it was already in the
 /// cart (200).
@@ -40,6 +41,38 @@ class CartRepository {
 
   /// Removing a line that is already gone is not an error.
   Future<void> remove(String itemId) => _client.delete<void>(ApiConstants.cartItem(itemId));
+
+  /// What the line allows for receiving the item. With an [addressId] the delivery option also carries
+  /// the shipping cost and date for that address (US-020).
+  Future<DeliveryOptions> deliveryOptions(String itemId, {String? addressId}) =>
+      _client.get<DeliveryOptions>(
+        ApiConstants.cartItemDeliveryOptions(itemId),
+        queryParameters: {if (addressId != null) 'addressId': addressId},
+        parse: (json) => DeliveryOptions.fromJson(json as Map<String, dynamic>),
+      );
+
+  /// Saves how the buyer receives the line and returns the line as the cart shows it now. The app
+  /// sends the shipping cost it showed ([expectedShippingCost]), never a price: the server prices
+  /// the delivery and refuses with `ERROR_SHIPPING_CHANGED` when the cost is no longer that.
+  Future<CartLine> chooseDelivery(
+    String itemId, {
+    required DeliveryMode mode,
+    String? addressId,
+    PaymentOption? paymentOption,
+    num? expectedShippingCost,
+    required bool termsAccepted,
+  }) =>
+      _client.put<CartLine>(
+        ApiConstants.cartItemDelivery(itemId),
+        data: {
+          'mode': mode.api,
+          if (addressId != null) 'addressId': addressId,
+          if (paymentOption != null) 'paymentOption': paymentOption.api,
+          if (expectedShippingCost != null) 'expectedShippingCost': expectedShippingCost,
+          'termsAccepted': termsAccepted,
+        },
+        parse: (json) => CartLine.fromJson(json as Map<String, dynamic>),
+      );
 }
 
 final cartRepositoryProvider =

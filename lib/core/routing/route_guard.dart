@@ -42,6 +42,7 @@ const Map<String, Set<RegistrationStep>> _gatedRoutes = {
   RouteNames.savedItems: {RegistrationStep.home},
   RouteNames.offers: {RegistrationStep.home},
   RouteNames.cart: {RegistrationStep.home},
+  RouteNames.cartItemsBase: {RegistrationStep.home},
   RouteNames.chats: {RegistrationStep.home},
   RouteNames.sell: {RegistrationStep.home},
   RouteNames.sellDetails: {RegistrationStep.home},
@@ -68,6 +69,7 @@ const Set<String> _signedInOnlyRoutes = {
   RouteNames.savedItems,
   RouteNames.offers,
   RouteNames.cart,
+  RouteNames.cartItemsBase,
   RouteNames.chats,
   RouteNames.listingViewBase,
   RouteNames.sellerProfileBase,
@@ -83,6 +85,7 @@ String _gatedBase(String location) {
     RouteNames.listingViewBase,
     RouteNames.sellerProfileBase,
     RouteNames.chatThreadBase,
+    RouteNames.cartItemsBase,
     RouteNames.negotiationBase,
   ]) {
     if (location.startsWith('$base/')) return base;

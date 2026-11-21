@@ -227,7 +227,7 @@ void main() {
       );
     });
 
-    const routes = [
+    final routes = [
       RouteNames.accountSecurity,
       RouteNames.changeMobile,
       RouteNames.changeEmail,
@@ -235,6 +235,7 @@ void main() {
       RouteNames.search,
       RouteNames.savedSearches,
       RouteNames.cart,
+      RouteNames.cartDelivery('i1'),
     ];
 
     test('signed-out users are sent to Sign In', () {

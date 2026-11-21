@@ -5,6 +5,7 @@ import 'package:valuex_mobile/core/network/api_client.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
 import 'package:valuex_mobile/features/cart/data/cart_repository.dart';
 import 'package:valuex_mobile/features/cart/domain/cart.dart';
+import 'package:valuex_mobile/features/cart/domain/delivery.dart';
 
 import '../../helpers/fake_http_adapter.dart';
 import '../../helpers/fake_secure_storage.dart';
@@ -137,6 +138,86 @@ void main() {
 
       expect(adapter.requests.single.path, '/cart/items/i1');
       expect(adapter.requests.single.method, 'DELETE');
+    });
+
+    group('delivery (US-020)', () {
+      test('asks what a line allows, with and without an address', () async {
+        answer((_) => FakeHttpAdapter.ok(optionsJson(cost: '60.00', eta: '2026-11-25')));
+
+        final withAddress = await repository.deliveryOptions('i1', addressId: 'a1');
+        await repository.deliveryOptions('i1');
+
+        expect(adapter.requests.first.path, '/cart/items/i1/delivery-options');
+        expect(adapter.requests.first.method, 'GET');
+        expect(adapter.requests.first.queryParameters, {'addressId': 'a1'});
+        expect(adapter.requests.last.queryParameters, isEmpty);
+        expect(withAddress.delivery.cost, 60);
+      });
+
+      test('saves a delivery choice with the cost shown and never a price', () async {
+        answer((_) => FakeHttpAdapter.ok(lineJson(
+              'i1',
+              delivery:
+                  deliveryJson(mode: 'DELIVERY', addressId: 'a1', cost: 60, eta: '2026-11-25'),
+            )));
+
+        final line = await repository.chooseDelivery(
+          'i1',
+          mode: DeliveryMode.delivery,
+          addressId: 'a1',
+          expectedShippingCost: 60,
+          termsAccepted: true,
+        );
+
+        final request = adapter.requests.single;
+        expect(request.path, '/cart/items/i1/delivery');
+        expect(request.method, 'PUT');
+        expect(request.data, {
+          'mode': 'DELIVERY',
+          'addressId': 'a1',
+          'expectedShippingCost': 60,
+          'termsAccepted': true,
+        });
+        expect((request.data as Map).keys, isNot(contains('price')));
+        expect(line.delivery.mode, DeliveryMode.delivery);
+      });
+
+      test('saves a self-pickup choice with its payment option and no address', () async {
+        answer((_) => FakeHttpAdapter.ok(lineJson(
+              'i1',
+              delivery: deliveryJson(mode: 'SELF_PICKUP', payment: 'PAY_NOW'),
+            )));
+
+        await repository.chooseDelivery(
+          'i1',
+          mode: DeliveryMode.selfPickup,
+          paymentOption: PaymentOption.payNow,
+          termsAccepted: true,
+        );
+
+        expect(adapter.requests.single.data, {
+          'mode': 'SELF_PICKUP',
+          'paymentOption': 'PAY_NOW',
+          'termsAccepted': true,
+        });
+      });
+
+      test('surfaces a changed shipping cost with the new figure', () async {
+        answer((_) => FakeHttpAdapter.error(
+              409,
+              'ERROR_SHIPPING_CHANGED',
+              'Shipping cost has changed. Please review',
+              details: {'shippingCost': '90.00'},
+            ));
+
+        await expectLater(
+          repository.chooseDelivery('i1',
+              mode: DeliveryMode.delivery, addressId: 'a1', termsAccepted: true),
+          throwsA(isA<ApiError>()
+              .having((e) => e.code, 'code', 'ERROR_SHIPPING_CHANGED')
+              .having((e) => e.details['shippingCost'], 'cost', '90.00')),
+        );
+      });
     });
 
     test('surfaces the server code and details of a refusal', () async {

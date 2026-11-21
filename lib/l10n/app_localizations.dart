@@ -6746,6 +6746,336 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open Settings'**
   String get pushOffAction;
+
+  /// No description provided for @cartDeliveryScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery or pickup'**
+  String get cartDeliveryScreenTitle;
+
+  /// No description provided for @cartDeliveryQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'How do you want to receive this?'**
+  String get cartDeliveryQuestion;
+
+  /// No description provided for @cartDeliveryChooseButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose delivery'**
+  String get cartDeliveryChooseButton;
+
+  /// No description provided for @cartDeliveryChangeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get cartDeliveryChangeButton;
+
+  /// No description provided for @cartDeliverySummaryDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery, {cost}, by {date}'**
+  String cartDeliverySummaryDelivery(String cost, String date);
+
+  /// No description provided for @cartDeliverySummaryPickupNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Self-pickup, pay now'**
+  String get cartDeliverySummaryPickupNow;
+
+  /// No description provided for @cartDeliverySummaryPickupLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Self-pickup, pay at pickup'**
+  String get cartDeliverySummaryPickupLater;
+
+  /// No description provided for @cartDeliveryOptionDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery'**
+  String get cartDeliveryOptionDelivery;
+
+  /// No description provided for @cartDeliveryOptionPickup.
+  ///
+  /// In en, this message translates to:
+  /// **'Self-pickup'**
+  String get cartDeliveryOptionPickup;
+
+  /// No description provided for @cartDeliveryAddressHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery address'**
+  String get cartDeliveryAddressHeading;
+
+  /// No description provided for @cartDeliveryDefaultTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get cartDeliveryDefaultTag;
+
+  /// No description provided for @cartDeliveryAddAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a new address'**
+  String get cartDeliveryAddAddress;
+
+  /// No description provided for @cartDeliveryNoAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an address to see the shipping cost and date'**
+  String get cartDeliveryNoAddress;
+
+  /// No description provided for @cartDeliveryCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping {cost}'**
+  String cartDeliveryCost(String cost);
+
+  /// No description provided for @cartDeliveryEta.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrives by {date}'**
+  String cartDeliveryEta(String date);
+
+  /// No description provided for @cartDeliveryExceedsPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping costs more than this item'**
+  String get cartDeliveryExceedsPrice;
+
+  /// No description provided for @cartDeliveryPricing.
+  ///
+  /// In en, this message translates to:
+  /// **'Working out the shipping cost…'**
+  String get cartDeliveryPricing;
+
+  /// No description provided for @cartDeliveryPriceFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t work out the shipping cost. Please try again'**
+  String get cartDeliveryPriceFailed;
+
+  /// No description provided for @cartDeliveryUnavailableReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller doesn\'t offer delivery to your location'**
+  String get cartDeliveryUnavailableReason;
+
+  /// No description provided for @cartPickupUnavailableReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Self-pickup not available for this item'**
+  String get cartPickupUnavailableReason;
+
+  /// No description provided for @cartPickupHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Pickup location'**
+  String get cartPickupHeading;
+
+  /// No description provided for @cartPickupSeller.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller: {name}'**
+  String cartPickupSeller(String name);
+
+  /// No description provided for @cartPickupAfterOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'The full address and the seller\'s contact are shown after you place the order.'**
+  String get cartPickupAfterOrder;
+
+  /// No description provided for @cartPayHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'How will you pay?'**
+  String get cartPayHeading;
+
+  /// No description provided for @cartPayNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay Now'**
+  String get cartPayNow;
+
+  /// No description provided for @cartPayNowHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Held safely in escrow until you confirm the item'**
+  String get cartPayNowHint;
+
+  /// No description provided for @cartPayAtPickup.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay at Pickup'**
+  String get cartPayAtPickup;
+
+  /// No description provided for @cartPayAtPickupHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay the seller directly when you collect'**
+  String get cartPayAtPickupHint;
+
+  /// No description provided for @cartPayAtPickupBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay at Pickup is not protected by escrow'**
+  String get cartPayAtPickupBanner;
+
+  /// No description provided for @cartTermsDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree that this item will be delivered to the address I chose by JustQlic\'s delivery partner. The shipping cost and date shown are estimates and may change if the address is wrong or incomplete. My payment stays in escrow until I confirm that I received the item.'**
+  String get cartTermsDelivery;
+
+  /// No description provided for @cartTermsPickupNow.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to collect this item myself from the seller\'s pickup location. My payment stays in escrow and is released to the seller only after I confirm that I received the item.'**
+  String get cartTermsPickupNow;
+
+  /// No description provided for @cartTermsPickupLater.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to collect this item myself and to pay the seller directly at pickup. I understand that a payment made directly to the seller is not protected by escrow, and JustQlic cannot refund or recover it.'**
+  String get cartTermsPickupLater;
+
+  /// No description provided for @cartTermsAgree.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the terms above'**
+  String get cartTermsAgree;
+
+  /// No description provided for @cartDeliverySave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get cartDeliverySave;
+
+  /// No description provided for @cartDeliverySaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery choice saved'**
+  String get cartDeliverySaved;
+
+  /// No description provided for @cartDeliveryLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t load the delivery options'**
+  String get cartDeliveryLoadFailed;
+
+  /// No description provided for @cartErrorNoDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller doesn\'t offer delivery to your location'**
+  String get cartErrorNoDelivery;
+
+  /// No description provided for @cartErrorNoPickup.
+  ///
+  /// In en, this message translates to:
+  /// **'Self-pickup not available for this item'**
+  String get cartErrorNoPickup;
+
+  /// No description provided for @cartErrorInvalidAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter complete delivery address'**
+  String get cartErrorInvalidAddress;
+
+  /// No description provided for @cartErrorShippingChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping cost has changed to {cost}. Please review'**
+  String cartErrorShippingChanged(String cost);
+
+  /// No description provided for @cartErrorShippingChangedGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping cost has changed. Please review'**
+  String get cartErrorShippingChangedGeneric;
+
+  /// No description provided for @cartAddressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New address'**
+  String get cartAddressTitle;
+
+  /// No description provided for @cartAddressLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Street and area'**
+  String get cartAddressLine;
+
+  /// No description provided for @cartAddressCity.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get cartAddressCity;
+
+  /// No description provided for @cartAddressPincode.
+  ///
+  /// In en, this message translates to:
+  /// **'Pincode'**
+  String get cartAddressPincode;
+
+  /// No description provided for @cartAddressName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name this address'**
+  String get cartAddressName;
+
+  /// No description provided for @cartAddressNameHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get cartAddressNameHome;
+
+  /// No description provided for @cartAddressNameOffice.
+  ///
+  /// In en, this message translates to:
+  /// **'Office'**
+  String get cartAddressNameOffice;
+
+  /// No description provided for @cartAddressNameOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get cartAddressNameOther;
+
+  /// No description provided for @cartAddressNameCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Name (for example Mum\'s flat)'**
+  String get cartAddressNameCustom;
+
+  /// No description provided for @cartAddressMakeDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Make this my default address'**
+  String get cartAddressMakeDefault;
+
+  /// No description provided for @cartAddressSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save address'**
+  String get cartAddressSave;
+
+  /// No description provided for @cartAddressSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Address saved'**
+  String get cartAddressSaved;
+
+  /// No description provided for @cartAddressSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t save the address. Please try again'**
+  String get cartAddressSaveFailed;
+
+  /// No description provided for @cartAddressFirstIsDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Your first address is saved as your default'**
+  String get cartAddressFirstIsDefault;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
