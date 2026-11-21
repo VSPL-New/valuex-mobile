@@ -98,6 +98,8 @@ class ApiConstants {
   static const String cartItems = '/cart/items';
   static const String cartSummary = '/cart/summary';
   static String cartItem(String itemId) => '/cart/items/$itemId';
+  static String cartItemDeliveryOptions(String itemId) => '/cart/items/$itemId/delivery-options';
+  static String cartItemDelivery(String itemId) => '/cart/items/$itemId/delivery';
 
   // Seller offers (US-076)
   static const String negotiations = '/negotiations';

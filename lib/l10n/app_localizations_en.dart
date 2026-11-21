@@ -3879,4 +3879,183 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pushOffAction => 'Open Settings';
+
+  @override
+  String get cartDeliveryScreenTitle => 'Delivery or pickup';
+
+  @override
+  String get cartDeliveryQuestion => 'How do you want to receive this?';
+
+  @override
+  String get cartDeliveryChooseButton => 'Choose delivery';
+
+  @override
+  String get cartDeliveryChangeButton => 'Change';
+
+  @override
+  String cartDeliverySummaryDelivery(String cost, String date) {
+    return 'Delivery, $cost, by $date';
+  }
+
+  @override
+  String get cartDeliverySummaryPickupNow => 'Self-pickup, pay now';
+
+  @override
+  String get cartDeliverySummaryPickupLater => 'Self-pickup, pay at pickup';
+
+  @override
+  String get cartDeliveryOptionDelivery => 'Delivery';
+
+  @override
+  String get cartDeliveryOptionPickup => 'Self-pickup';
+
+  @override
+  String get cartDeliveryAddressHeading => 'Delivery address';
+
+  @override
+  String get cartDeliveryDefaultTag => 'Default';
+
+  @override
+  String get cartDeliveryAddAddress => 'Add a new address';
+
+  @override
+  String get cartDeliveryNoAddress => 'Add an address to see the shipping cost and date';
+
+  @override
+  String cartDeliveryCost(String cost) {
+    return 'Shipping $cost';
+  }
+
+  @override
+  String cartDeliveryEta(String date) {
+    return 'Arrives by $date';
+  }
+
+  @override
+  String get cartDeliveryExceedsPrice => 'Shipping costs more than this item';
+
+  @override
+  String get cartDeliveryPricing => 'Working out the shipping cost…';
+
+  @override
+  String get cartDeliveryPriceFailed => 'We couldn\'t work out the shipping cost. Please try again';
+
+  @override
+  String get cartDeliveryUnavailableReason => 'Seller doesn\'t offer delivery to your location';
+
+  @override
+  String get cartPickupUnavailableReason => 'Self-pickup not available for this item';
+
+  @override
+  String get cartPickupHeading => 'Pickup location';
+
+  @override
+  String cartPickupSeller(String name) {
+    return 'Seller: $name';
+  }
+
+  @override
+  String get cartPickupAfterOrder =>
+      'The full address and the seller\'s contact are shown after you place the order.';
+
+  @override
+  String get cartPayHeading => 'How will you pay?';
+
+  @override
+  String get cartPayNow => 'Pay Now';
+
+  @override
+  String get cartPayNowHint => 'Held safely in escrow until you confirm the item';
+
+  @override
+  String get cartPayAtPickup => 'Pay at Pickup';
+
+  @override
+  String get cartPayAtPickupHint => 'Pay the seller directly when you collect';
+
+  @override
+  String get cartPayAtPickupBanner => 'Pay at Pickup is not protected by escrow';
+
+  @override
+  String get cartTermsDelivery =>
+      'I agree that this item will be delivered to the address I chose by JustQlic\'s delivery partner. The shipping cost and date shown are estimates and may change if the address is wrong or incomplete. My payment stays in escrow until I confirm that I received the item.';
+
+  @override
+  String get cartTermsPickupNow =>
+      'I agree to collect this item myself from the seller\'s pickup location. My payment stays in escrow and is released to the seller only after I confirm that I received the item.';
+
+  @override
+  String get cartTermsPickupLater =>
+      'I agree to collect this item myself and to pay the seller directly at pickup. I understand that a payment made directly to the seller is not protected by escrow, and JustQlic cannot refund or recover it.';
+
+  @override
+  String get cartTermsAgree => 'I agree to the terms above';
+
+  @override
+  String get cartDeliverySave => 'Save';
+
+  @override
+  String get cartDeliverySaved => 'Delivery choice saved';
+
+  @override
+  String get cartDeliveryLoadFailed => 'We couldn\'t load the delivery options';
+
+  @override
+  String get cartErrorNoDelivery => 'Seller doesn\'t offer delivery to your location';
+
+  @override
+  String get cartErrorNoPickup => 'Self-pickup not available for this item';
+
+  @override
+  String get cartErrorInvalidAddress => 'Please enter complete delivery address';
+
+  @override
+  String cartErrorShippingChanged(String cost) {
+    return 'Shipping cost has changed to $cost. Please review';
+  }
+
+  @override
+  String get cartErrorShippingChangedGeneric => 'Shipping cost has changed. Please review';
+
+  @override
+  String get cartAddressTitle => 'New address';
+
+  @override
+  String get cartAddressLine => 'Street and area';
+
+  @override
+  String get cartAddressCity => 'City';
+
+  @override
+  String get cartAddressPincode => 'Pincode';
+
+  @override
+  String get cartAddressName => 'Name this address';
+
+  @override
+  String get cartAddressNameHome => 'Home';
+
+  @override
+  String get cartAddressNameOffice => 'Office';
+
+  @override
+  String get cartAddressNameOther => 'Other';
+
+  @override
+  String get cartAddressNameCustom => 'Name (for example Mum\'s flat)';
+
+  @override
+  String get cartAddressMakeDefault => 'Make this my default address';
+
+  @override
+  String get cartAddressSave => 'Save address';
+
+  @override
+  String get cartAddressSaved => 'Address saved';
+
+  @override
+  String get cartAddressSaveFailed => 'We couldn\'t save the address. Please try again';
+
+  @override
+  String get cartAddressFirstIsDefault => 'Your first address is saved as your default';
 }

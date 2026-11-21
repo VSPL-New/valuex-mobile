@@ -40,6 +40,11 @@ class RouteNames {
 
   /// The buyer's cart (US-019).
   static const String cart = '/cart';
+
+  /// Choosing how a cart line is received (US-020).
+  static const String cartItemsBase = '/cart/items';
+  static String cartDelivery(String itemId) => '$cartItemsBase/$itemId/delivery';
+  static const String cartDeliveryPattern = '$cartItemsBase/:itemId/delivery';
   static const String blockedUsers = '/profile/blocked-users';
 
   /// The Chats tab and one conversation (US-013).

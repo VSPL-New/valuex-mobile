@@ -31,6 +31,25 @@ class AddressRepository {
       },
     );
   }
+
+  /// Saves a verified address (US-020). The server checks it again, then saves it; the first
+  /// address a user saves becomes the default.
+  Future<SavedAddress> create(AddressValue value, {String? label, bool makeDefault = false}) {
+    return _client.post<SavedAddress>(
+      ApiConstants.savedAddresses,
+      data: {
+        'address': value.address,
+        if (value.landmark != null && value.landmark!.isNotEmpty) 'landmark': value.landmark,
+        'city': value.city,
+        'state': value.state,
+        'pincode': value.pincode,
+        if (value.placeId != null) 'placeId': value.placeId,
+        if (label != null && label.trim().isNotEmpty) 'label': label.trim(),
+        'makeDefault': makeDefault,
+      },
+      parse: SavedAddress.fromJson,
+    );
+  }
 }
 
 final addressRepositoryProvider = Provider<AddressRepository>(

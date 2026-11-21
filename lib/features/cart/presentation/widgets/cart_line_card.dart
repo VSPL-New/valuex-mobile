@@ -8,6 +8,7 @@ import '../../../negotiation/presentation/negotiation_format.dart';
 import '../../../negotiation/presentation/widgets/countdown_text.dart';
 import '../../domain/cart.dart';
 import '../cart_error_messages.dart';
+import '../delivery_format.dart';
 
 /// One item of the cart (US-019): photo, title, the agreed price, where the line stands, how long the
 /// price and the line last (counted from the server's clock), what is left to choose and a Remove
@@ -18,12 +19,17 @@ class CartLineCard extends StatelessWidget {
   final DateTime serverTime;
   final VoidCallback onRemove;
 
+  /// Opens the screen that chooses how the item is received (US-020). Only a line that can be bought
+  /// offers it.
+  final VoidCallback? onChooseDelivery;
+
   const CartLineCard({
     super.key,
     required this.line,
     required this.sellerName,
     required this.serverTime,
     required this.onRemove,
+    this.onChooseDelivery,
   });
 
   static String statusLabel(AppLocalizations l10n, CartLineStatus status) => switch (status) {
@@ -40,12 +46,14 @@ class CartLineCard extends StatelessWidget {
     final price = Formatters.money(line.agreedPrice);
     final status = statusLabel(l10n, line.status);
     final problem = cartProblemText(l10n, line.problem);
+    final delivery = deliverySummary(context, l10n, line.delivery) ?? l10n.cartDeliveryChoose;
     final priceChanged = line.problem == 'ERROR_PRICE_CHANGED' && line.currentPrice != null;
     final details = Semantics(
       container: true,
       label: [
         l10n.cartLineLabel(title, price, status, sellerName),
         if (problem != null) problem,
+        delivery,
       ].join('. '),
       excludeSemantics: true,
       child: Row(
@@ -101,7 +109,7 @@ class CartLineCard extends StatelessWidget {
                 ],
                 const SizedBox(height: AppSpacing.xs),
                 Text(
-                  l10n.cartDeliveryChoose,
+                  delivery,
                   style: AppTextStyles.caption.copyWith(color: AppColors.brandMutedText),
                 ),
                 if (line.problem != 'ERROR_CART_EXPIRED')
@@ -132,15 +140,36 @@ class CartLineCard extends StatelessWidget {
             details,
             Align(
               alignment: AlignmentDirectional.centerEnd,
-              child: TextButton.icon(
-                style: TextButton.styleFrom(
-                  minimumSize: const Size(AppSizes.minTouchTarget, AppSizes.minTouchTarget),
-                  foregroundColor: AppColors.brandLink,
-                  textStyle: AppTextStyles.linkSmall,
-                ),
-                onPressed: onRemove,
-                icon: const Icon(Icons.delete_outline, size: 18),
-                label: Text(l10n.cartRemove),
+              child: Wrap(
+                alignment: WrapAlignment.end,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  if (onChooseDelivery != null)
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(AppSizes.minTouchTarget, AppSizes.minTouchTarget),
+                        foregroundColor: AppColors.brandLink,
+                        textStyle: AppTextStyles.linkSmall,
+                      ),
+                      onPressed: onChooseDelivery,
+                      icon: const Icon(Icons.local_shipping_outlined, size: 18),
+                      label: Text(
+                        line.delivery.chosen
+                            ? l10n.cartDeliveryChangeButton
+                            : l10n.cartDeliveryChooseButton,
+                      ),
+                    ),
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      minimumSize: const Size(AppSizes.minTouchTarget, AppSizes.minTouchTarget),
+                      foregroundColor: AppColors.brandLink,
+                      textStyle: AppTextStyles.linkSmall,
+                    ),
+                    onPressed: onRemove,
+                    icon: const Icon(Icons.delete_outline, size: 18),
+                    label: Text(l10n.cartRemove),
+                  ),
+                ],
               ),
             ),
           ],

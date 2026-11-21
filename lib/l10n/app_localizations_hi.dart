@@ -3872,4 +3872,184 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get pushOffAction => 'सेटिंग खोलें';
+
+  @override
+  String get cartDeliveryScreenTitle => 'डिलीवरी या पिकअप';
+
+  @override
+  String get cartDeliveryQuestion => 'आप इसे कैसे लेना चाहते हैं?';
+
+  @override
+  String get cartDeliveryChooseButton => 'डिलीवरी चुनें';
+
+  @override
+  String get cartDeliveryChangeButton => 'बदलें';
+
+  @override
+  String cartDeliverySummaryDelivery(String cost, String date) {
+    return 'डिलीवरी, $cost, $date तक';
+  }
+
+  @override
+  String get cartDeliverySummaryPickupNow => 'खुद लेना, अभी भुगतान';
+
+  @override
+  String get cartDeliverySummaryPickupLater => 'खुद लेना, पिकअप पर भुगतान';
+
+  @override
+  String get cartDeliveryOptionDelivery => 'डिलीवरी';
+
+  @override
+  String get cartDeliveryOptionPickup => 'खुद लेना';
+
+  @override
+  String get cartDeliveryAddressHeading => 'डिलीवरी का पता';
+
+  @override
+  String get cartDeliveryDefaultTag => 'डिफ़ॉल्ट';
+
+  @override
+  String get cartDeliveryAddAddress => 'नया पता जोड़ें';
+
+  @override
+  String get cartDeliveryNoAddress => 'शिपिंग शुल्क और तारीख देखने के लिए पता जोड़ें';
+
+  @override
+  String cartDeliveryCost(String cost) {
+    return 'शिपिंग $cost';
+  }
+
+  @override
+  String cartDeliveryEta(String date) {
+    return '$date तक पहुँचेगा';
+  }
+
+  @override
+  String get cartDeliveryExceedsPrice => 'शिपिंग शुल्क इस वस्तु की कीमत से ज़्यादा है';
+
+  @override
+  String get cartDeliveryPricing => 'शिपिंग शुल्क निकाला जा रहा है…';
+
+  @override
+  String get cartDeliveryPriceFailed => 'हम शिपिंग शुल्क नहीं निकाल सके। कृपया फिर कोशिश करें';
+
+  @override
+  String get cartDeliveryUnavailableReason => 'विक्रेता आपके स्थान पर डिलीवरी नहीं करता';
+
+  @override
+  String get cartPickupUnavailableReason => 'इस वस्तु के लिए खुद लेने की सुविधा उपलब्ध नहीं है';
+
+  @override
+  String get cartPickupHeading => 'पिकअप का स्थान';
+
+  @override
+  String cartPickupSeller(String name) {
+    return 'विक्रेता: $name';
+  }
+
+  @override
+  String get cartPickupAfterOrder =>
+      'ऑर्डर देने के बाद पूरा पता और विक्रेता का संपर्क दिखाया जाएगा।';
+
+  @override
+  String get cartPayHeading => 'आप भुगतान कैसे करेंगे?';
+
+  @override
+  String get cartPayNow => 'अभी भुगतान करें';
+
+  @override
+  String get cartPayNowHint => 'वस्तु मिलने की पुष्टि तक एस्क्रो में सुरक्षित रहेगा';
+
+  @override
+  String get cartPayAtPickup => 'पिकअप पर भुगतान';
+
+  @override
+  String get cartPayAtPickupHint => 'वस्तु लेते समय विक्रेता को सीधे भुगतान करें';
+
+  @override
+  String get cartPayAtPickupBanner => 'पिकअप पर भुगतान एस्क्रो से सुरक्षित नहीं है';
+
+  @override
+  String get cartTermsDelivery =>
+      'मैं सहमत हूँ कि यह वस्तु JustQlic के डिलीवरी पार्टनर द्वारा मेरे चुने हुए पते पर पहुँचाई जाएगी। दिखाया गया शिपिंग शुल्क और तारीख अनुमानित हैं और पता गलत या अधूरा होने पर बदल सकते हैं। वस्तु मिलने की पुष्टि करने तक मेरा भुगतान एस्क्रो में सुरक्षित रहेगा।';
+
+  @override
+  String get cartTermsPickupNow =>
+      'मैं सहमत हूँ कि मैं यह वस्तु विक्रेता के पिकअप स्थान से स्वयं लूँगा/लूँगी। मेरा भुगतान एस्क्रो में रहेगा और वस्तु मिलने की मेरी पुष्टि के बाद ही विक्रेता को जारी किया जाएगा।';
+
+  @override
+  String get cartTermsPickupLater =>
+      'मैं सहमत हूँ कि मैं यह वस्तु स्वयं लूँगा/लूँगी और पिकअप के समय विक्रेता को सीधे भुगतान करूँगा/करूँगी। मैं समझता/समझती हूँ कि विक्रेता को सीधे किया गया भुगतान एस्क्रो से सुरक्षित नहीं है और JustQlic उसे वापस नहीं कर सकता और न ही वसूल कर सकता है।';
+
+  @override
+  String get cartTermsAgree => 'मैं ऊपर दी गई शर्तों से सहमत हूँ';
+
+  @override
+  String get cartDeliverySave => 'सहेजें';
+
+  @override
+  String get cartDeliverySaved => 'डिलीवरी का चुनाव सहेजा गया';
+
+  @override
+  String get cartDeliveryLoadFailed => 'हम डिलीवरी के विकल्प लोड नहीं कर सके';
+
+  @override
+  String get cartErrorNoDelivery => 'विक्रेता आपके स्थान पर डिलीवरी नहीं करता';
+
+  @override
+  String get cartErrorNoPickup => 'इस वस्तु के लिए खुद लेने की सुविधा उपलब्ध नहीं है';
+
+  @override
+  String get cartErrorInvalidAddress => 'कृपया डिलीवरी का पूरा पता दर्ज करें';
+
+  @override
+  String cartErrorShippingChanged(String cost) {
+    return 'शिपिंग शुल्क बदलकर $cost हो गया है। कृपया देख लें';
+  }
+
+  @override
+  String get cartErrorShippingChangedGeneric => 'शिपिंग शुल्क बदल गया है। कृपया देख लें';
+
+  @override
+  String get cartAddressTitle => 'नया पता';
+
+  @override
+  String get cartAddressLine => 'गली और इलाका';
+
+  @override
+  String get cartAddressCity => 'शहर';
+
+  @override
+  String get cartAddressPincode => 'पिनकोड';
+
+  @override
+  String get cartAddressName => 'इस पते को नाम दें';
+
+  @override
+  String get cartAddressNameHome => 'घर';
+
+  @override
+  String get cartAddressNameOffice => 'ऑफ़िस';
+
+  @override
+  String get cartAddressNameOther => 'अन्य';
+
+  @override
+  String get cartAddressNameCustom => 'नाम (जैसे माँ का घर)';
+
+  @override
+  String get cartAddressMakeDefault => 'इसे मेरा डिफ़ॉल्ट पता बनाएँ';
+
+  @override
+  String get cartAddressSave => 'पता सहेजें';
+
+  @override
+  String get cartAddressSaved => 'पता सहेजा गया';
+
+  @override
+  String get cartAddressSaveFailed => 'हम पता नहीं सहेज सके। कृपया फिर कोशिश करें';
+
+  @override
+  String get cartAddressFirstIsDefault =>
+      'आपका पहला पता आपके डिफ़ॉल्ट पते के रूप में सहेजा जाता है';
 }

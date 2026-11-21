@@ -1,3 +1,5 @@
+import 'delivery.dart';
+
 /// Where one cart line stands, decided by the server on every read (US-019). Only [accepted] can be
 /// bought; [pending] is an offer still waiting for the seller.
 enum CartLineStatus {
@@ -18,7 +20,8 @@ enum CartLineStatus {
 
 /// One item in the cart. [agreedPrice] is the price the buyer agreed; [currentPrice] is what the
 /// listing asks now (null when the listing is gone). [problem] is the server's error code for a line
-/// that cannot be bought, and [agreementValidUntil] is set only for an accepted line.
+/// that cannot be bought, and [agreementValidUntil] is set only for an accepted line. [delivery] is
+/// how the buyer chose to receive the item (US-020).
 class CartLine {
   final String itemId;
   final String listingId;
@@ -31,6 +34,7 @@ class CartLine {
   final DateTime addedAt;
   final DateTime expiresAt;
   final String? problem;
+  final CartDelivery delivery;
 
   const CartLine({
     required this.itemId,
@@ -44,6 +48,7 @@ class CartLine {
     required this.addedAt,
     required this.expiresAt,
     required this.problem,
+    this.delivery = CartDelivery.none,
   });
 
   factory CartLine.fromJson(Map<String, dynamic> json) => CartLine(
@@ -61,6 +66,7 @@ class CartLine {
         addedAt: DateTime.parse(json['addedAt'] as String),
         expiresAt: DateTime.parse(json['expiresAt'] as String),
         problem: json['problem'] as String?,
+        delivery: CartDelivery.fromJson(json['delivery']),
       );
 }
 
