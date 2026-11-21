@@ -36,6 +36,40 @@ void main() {
           cartErrorMessage(l10n, _error('ERROR_CHECKOUT_UNAVAILABLE')), contains('not available'));
     });
 
+    test('gives the delivery codes their own text, with the new cost when the server sends it', () {
+      expect(
+        cartErrorMessage(l10n, _error('ERROR_NO_DELIVERY_AVAILABLE')),
+        "Seller doesn't offer delivery to your location",
+      );
+      expect(
+        cartErrorMessage(l10n, _error('ERROR_NO_SELF_PICKUP')),
+        'Self-pickup not available for this item',
+      );
+      expect(
+        cartErrorMessage(l10n, _error('ERROR_INVALID_ADDRESS')),
+        'Please enter complete delivery address',
+      );
+      expect(
+        cartErrorMessage(
+          l10n,
+          _error('ERROR_SHIPPING_CHANGED', details: {'shippingCost': '90.00'}),
+        ),
+        'Shipping cost has changed to ₹90. Please review',
+      );
+      expect(
+        cartErrorMessage(l10n, _error('ERROR_SHIPPING_CHANGED')),
+        'Shipping cost has changed. Please review',
+      );
+      expect(
+        cartErrorMessage(l10n, _error('ERROR_ACCEPTANCE_EXPIRED')),
+        'Price acceptance expired. Make a new offer',
+      );
+      expect(
+        cartErrorMessage(l10n, _error('ERROR_CART_EXPIRED')),
+        'Cart item expired. Please add again',
+      );
+    });
+
     test('falls back to the Buy Now texts and to a generic one for anything else', () {
       expect(cartErrorMessage(l10n, _error('ERROR_ITEM_RESERVED')), isNotEmpty);
       expect(cartErrorMessage(l10n, _error('ERROR_SOMETHING_NEW')), isNotEmpty);

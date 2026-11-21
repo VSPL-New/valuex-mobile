@@ -183,6 +183,9 @@ class _Content extends StatelessWidget {
                       sellerName: group.sellerName ?? l10n.cartSellerFallback,
                       serverTime: data.serverTime,
                       onRemove: () => onRemove(line),
+                      onChooseDelivery: line.status.payable
+                          ? () => unawaited(context.push(RouteNames.cartDelivery(line.itemId)))
+                          : null,
                     ),
                     const SizedBox(height: AppSpacing.sm),
                   ],
