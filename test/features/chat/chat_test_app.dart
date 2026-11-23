@@ -45,6 +45,10 @@ Future<void> pumpChatApp(
         builder: (context, state) =>
             Scaffold(body: Text('listing ${state.pathParameters['listingId']}')),
       ),
+      GoRoute(
+        path: '/call/:callId',
+        builder: (context, state) => Scaffold(body: Text('call ${state.pathParameters['callId']}')),
+      ),
       GoRoute(path: '/chats', builder: (context, state) => const Scaffold(body: Text('chats tab'))),
       GoRoute(path: '/home', builder: (context, state) => const Scaffold(body: Text('home tab'))),
     ],

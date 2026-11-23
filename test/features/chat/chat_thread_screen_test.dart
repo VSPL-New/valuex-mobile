@@ -3,12 +3,16 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
 import 'package:valuex_mobile/core/realtime/realtime_event.dart';
 import 'package:valuex_mobile/core/realtime/realtime_providers.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/user_profile.dart';
+import 'package:valuex_mobile/features/calls/data/call_permissions.dart';
+import 'package:valuex_mobile/features/calls/data/call_repository.dart';
+import 'package:valuex_mobile/features/calls/domain/call.dart';
 import 'package:valuex_mobile/features/profile/data/profile_repository.dart';
 import 'package:valuex_mobile/features/chat/domain/chat.dart';
 import 'package:valuex_mobile/features/chat/presentation/chat_thread_screen.dart';
@@ -20,6 +24,7 @@ import 'package:valuex_mobile/features/listing/domain/listing_photo.dart';
 import '../../helpers/accessibility.dart';
 import '../../helpers/fonts.dart';
 import '../../core/realtime/realtime_fakes.dart';
+import '../calls/call_fixtures.dart';
 import '../communication_safety/communication_safety_fixtures.dart';
 import 'chat_fixtures.dart';
 import 'chat_test_app.dart';
@@ -140,16 +145,46 @@ void main() {
     expect(find.text('listing l1'), findsOneWidget);
   });
 
-  testWidgets('Call and Video are disabled and say calls are coming soon', (tester) async {
+  testWidgets('Call and Video ring the seller when the viewer is the buyer', (tester) async {
+    final calls = MockCallRepository();
+    final permissions = FakeCallPermissions();
+    when(() => calls.start('l1', type: CallType.voice)).thenAnswer((_) async => call());
+    when(() => calls.start('l1', type: CallType.video))
+        .thenAnswer((_) async => call(type: 'VIDEO'));
+    await pump(tester, extra: [
+      callRepositoryProvider.overrideWithValue(calls),
+      callPermissionsProvider.overrideWithValue(permissions),
+    ]);
+
+    await tester.tap(find.byIcon(Icons.call_outlined));
+    await tester.pumpAndSettle();
+    expect(find.text('call c1'), findsOneWidget);
+    expect(permissions.requests, [false]);
+
+    final router = GoRouter.of(tester.element(find.text('call c1')));
+    router.pop();
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.videocam_outlined));
+    await tester.pumpAndSettle();
+
+    expect(find.text('call c1'), findsOneWidget);
+    expect(permissions.requests, [false, true]);
+  });
+
+  testWidgets('Call and Video are off for the seller of the listing', (tester) async {
     final handle = tester.ensureSemantics();
+    stub(thread0: thread(role: 'SELLER', lastSeq: 4, myReadSeq: 4));
     await pump(tester);
 
-    expect(find.bySemanticsLabel('Call, coming soon'), findsOneWidget);
-    expect(find.bySemanticsLabel('Video call, coming soon'), findsOneWidget);
     await tester.tap(find.byIcon(Icons.call_outlined));
     await tester.pump();
 
-    expect(find.text('Calls are coming soon'), findsOneWidget);
+    expect(find.text('call c1'), findsNothing);
+    final call = tester.widget<IconButton>(find.widgetWithIcon(IconButton, Icons.call_outlined));
+    final video =
+        tester.widget<IconButton>(find.widgetWithIcon(IconButton, Icons.videocam_outlined));
+    expect(call.onPressed, isNull);
+    expect(video.onPressed, isNull);
     handle.dispose();
   });
 

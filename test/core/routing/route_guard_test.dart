@@ -47,7 +47,7 @@ void main() {
     });
 
     test('cannot open the Chats tab or a conversation', () {
-      for (final route in [RouteNames.chats, RouteNames.chatThread('t1')]) {
+      for (final route in [RouteNames.chats, RouteNames.chatThread('t1'), RouteNames.call('c1')]) {
         expect(
           redirectFor(session: _signedOut(), location: route),
           RouteNames.signIn,
@@ -268,7 +268,7 @@ void main() {
     });
 
     test('the Chats tab and a conversation are open to an active account only', () {
-      for (final route in [RouteNames.chats, RouteNames.chatThread('t1')]) {
+      for (final route in [RouteNames.chats, RouteNames.chatThread('t1'), RouteNames.call('c1')]) {
         expect(redirectFor(session: _signedIn(AccountStatus.active), location: route), isNull,
             reason: route);
         expect(redirectFor(session: _signedIn(AccountStatus.suspended), location: route),

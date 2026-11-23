@@ -6,6 +6,7 @@ import 'core/push/push_lifecycle.dart';
 import 'core/realtime/realtime_providers.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/presentation/widgets/session_expiry_listener.dart';
+import 'features/calls/presentation/providers/incoming_call_listener.dart';
 import 'features/settings/domain/supported_languages.dart';
 import 'features/settings/presentation/providers/locale_controller.dart';
 import 'l10n/app_localizations.dart';
@@ -21,6 +22,8 @@ class ValueXApp extends ConsumerWidget {
     ref.watch(realtimeConnectionProvider);
     // Registers this phone for push while the account is active and opens tapped notifications.
     ref.watch(pushLifecycleProvider);
+    // Opens the call screen when the server rings this phone.
+    ref.watch(incomingCallProvider);
 
     return MaterialApp.router(
       onGenerateTitle: (context) => AppLocalizations.of(context).appName,

@@ -81,6 +81,13 @@ class ApiConstants {
   static String chatDelivered(String threadId) => '/chats/$threadId/delivered';
   static String chatRead(String threadId) => '/chats/$threadId/read';
 
+  // Calls (US-014, US-015)
+  static const String callsVoice = '/calls/voice';
+  static const String callsVideo = '/calls/video';
+  static const String calls = '/calls';
+  static String call(String callId) => '/calls/$callId';
+  static String callAction(String callId, String action) => '/calls/$callId/$action';
+
   // Price negotiation (US-017)
   static String listingOffers(String listingId) => '/listings/$listingId/offers';
   static String negotiation(String negotiationId) => '/negotiations/$negotiationId';

@@ -104,10 +104,12 @@ void main() {
     expect(find.text('Conversation update'), findsOneWidget);
   });
 
-  testWidgets('keeps the neutral line for a call card and the listing card as before',
-      (tester) async {
-    await pump(tester, _card({'x': 1}, type: 'CALL_SUMMARY'));
-    expect(find.text('Conversation update'), findsOneWidget);
+  testWidgets('shows a call card with its own line and the listing card as before', (tester) async {
+    await pump(
+      tester,
+      _card({'type': 'VOICE', 'outcome': 'COMPLETED', 'durationSeconds': 61}, type: 'CALL_SUMMARY'),
+    );
+    expect(find.text('voice call · 1:01'), findsOneWidget);
 
     await pump(tester, _card({'title': 'Apple Watch', 'price': 14500}, type: 'LISTING_CONTEXT'));
     expect(find.text('Apple Watch'), findsOneWidget);

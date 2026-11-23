@@ -37,6 +37,7 @@ import '../../features/listing_view/presentation/listing_view_screen.dart';
 import '../../features/listing_view/presentation/seller_profile_screen.dart';
 import '../../features/profile/presentation/profile_details_screen.dart';
 import '../../features/communication_safety/presentation/blocked_users_screen.dart';
+import '../../features/calls/presentation/call_screen.dart';
 import '../../features/chat/presentation/chat_list_screen.dart';
 import '../../features/chat/presentation/chat_thread_screen.dart';
 import '../../features/negotiation/presentation/negotiation_screen.dart';
@@ -130,6 +131,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'negotiation',
         builder: (context, state) =>
             NegotiationScreen(negotiationId: state.pathParameters['negotiationId']!),
+      ),
+      GoRoute(
+        path: RouteNames.callPattern,
+        name: 'call',
+        builder: (context, state) => CallScreen(callId: state.pathParameters['callId']!),
       ),
       GoRoute(
         path: RouteNames.sellerProfilePattern,

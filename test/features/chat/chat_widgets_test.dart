@@ -209,14 +209,40 @@ void main() {
       expect(opened, 1);
     });
 
-    testWidgets('an offer or call card shows a neutral line until it has its own look',
-        (tester) async {
+    testWidgets('an offer card of an unknown kind shows a neutral line', (tester) async {
       await pumpWidgetApp(
         tester,
         SystemCard(message: ChatMessage.fromJson(messageJson(seq: 3, type: 'OFFER_EVENT'))),
       );
 
       expect(find.text('Conversation update'), findsOneWidget);
+    });
+
+    testWidgets('a call card says how the call went, from the side of the viewer', (tester) async {
+      Future<void> show(Map<String, dynamic> payload, {bool buyer = true}) => pumpWidgetApp(
+            tester,
+            SystemCard(
+              viewerIsBuyer: buyer,
+              message: ChatMessage.fromJson(
+                messageJson(seq: 4, type: 'CALL_SUMMARY', payload: payload),
+              ),
+            ),
+          );
+
+      await show({'type': 'VOICE', 'outcome': 'COMPLETED', 'durationSeconds': 125});
+      expect(find.text('voice call · 2:05'), findsOneWidget);
+      await show({'type': 'VIDEO', 'outcome': 'COMPLETED', 'durationSeconds': 3700});
+      expect(find.text('video call · 1:01:40'), findsOneWidget);
+      await show({'type': 'VOICE', 'outcome': 'MISSED'});
+      expect(find.text('voice call · No answer'), findsOneWidget);
+      await show({'type': 'VOICE', 'outcome': 'MISSED'}, buyer: false);
+      expect(find.text('Missed voice call'), findsOneWidget);
+      await show({'type': 'VIDEO', 'outcome': 'DECLINED'});
+      expect(find.text('video call · Declined'), findsOneWidget);
+      await show({'type': 'VOICE', 'outcome': 'FAILED'});
+      expect(find.text('voice call · Not connected'), findsOneWidget);
+      await show({'type': 'VOICE'});
+      expect(find.text('voice call · In progress'), findsOneWidget);
     });
   });
 

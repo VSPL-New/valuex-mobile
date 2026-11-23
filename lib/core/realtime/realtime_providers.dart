@@ -65,7 +65,7 @@ final negotiationEventsProvider = _eventsWithPrefix(const ['negotiation.', 'agre
 /// Badge counts changed (US-076): `badge.updated`.
 final badgeEventsProvider = _eventsWithPrefix(const ['badge.']);
 
-/// Events of calls (on hold): `call.*`.
+/// Events of calls (US-014, US-015): `call.incoming` and `call.updated`.
 final callEventsProvider = _eventsWithPrefix(const ['call.']);
 
 /// Keeps the connection open while the account is active and the app is signed in, and mirrors its

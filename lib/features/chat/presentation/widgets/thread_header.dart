@@ -5,6 +5,8 @@ import '../../../../core/theme/spacing.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../../../core/widgets/square_back_button.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../calls/domain/call.dart';
+import '../../../calls/presentation/call_starter.dart';
 import '../../../communication_safety/data/communication_safety_repository.dart';
 import '../../../communication_safety/domain/communication_safety.dart';
 import '../../../communication_safety/presentation/widgets/block_confirmation_dialog.dart';
@@ -15,20 +17,19 @@ import 'chat_avatar.dart';
 enum _ThreadAction { block, reportUser, reportThread }
 
 /// The top of a conversation (US-013): back, the other person's avatar and name, the listing title
-/// as a tappable subtitle, and Call and Video, which stay disabled until calls exist (decision D4).
+/// as a tappable subtitle, and Call and Video, which ring the seller when the viewer is the buyer
+/// (US-014, US-015) and stay disabled for the seller.
 /// The menu blocks or reports the person, or reports the conversation.
 class ThreadHeader extends ConsumerWidget {
   final ChatThread thread;
   final VoidCallback onBack;
   final VoidCallback onOpenListing;
-  final VoidCallback onCallsComingSoon;
 
   const ThreadHeader({
     super.key,
     required this.thread,
     required this.onBack,
     required this.onOpenListing,
-    required this.onCallsComingSoon,
   });
 
   Future<void> _block(BuildContext context, WidgetRef ref) async {
@@ -60,6 +61,8 @@ class ThreadHeader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    // A call goes from the buyer to the seller, and not into a conversation nobody can write in.
+    final canCall = thread.isBuyer && thread.canSend;
     return DecoratedBox(
       decoration: const BoxDecoration(
         color: AppColors.brandBackground,
@@ -115,12 +118,26 @@ class ThreadHeader extends ConsumerWidget {
               _RoundAction(
                 icon: Icons.call_outlined,
                 label: l10n.chatCallAction,
-                onPressed: onCallsComingSoon,
+                onPressed: canCall
+                    ? () => startCall(
+                          context,
+                          ref,
+                          listingId: thread.listing.listingId,
+                          type: CallType.voice,
+                        )
+                    : null,
               ),
               _RoundAction(
                 icon: Icons.videocam_outlined,
                 label: l10n.chatVideoAction,
-                onPressed: onCallsComingSoon,
+                onPressed: canCall
+                    ? () => startCall(
+                          context,
+                          ref,
+                          listingId: thread.listing.listingId,
+                          type: CallType.video,
+                        )
+                    : null,
               ),
               PopupMenuButton<_ThreadAction>(
                 tooltip: l10n.userSafetyMenu,
@@ -153,11 +170,11 @@ class ThreadHeader extends ConsumerWidget {
   }
 }
 
-/// A round control that looks disabled; it is announced as such but still tells the user why.
+/// A round control; without an action it looks disabled and is announced as such.
 class _RoundAction extends StatelessWidget {
   final IconData icon;
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const _RoundAction({required this.icon, required this.label, required this.onPressed});
 
@@ -165,11 +182,11 @@ class _RoundAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      enabled: false,
+      enabled: onPressed != null,
       label: label,
       excludeSemantics: true,
       child: Opacity(
-        opacity: 0.4,
+        opacity: onPressed == null ? 0.4 : 1,
         child: IconButton(
           constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
           style: IconButton.styleFrom(backgroundColor: AppColors.brandMuted),

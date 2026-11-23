@@ -8,8 +8,8 @@ import '../../../../l10n/app_localizations.dart';
 import '../../domain/public_listing.dart';
 
 /// Chat, Call, Video, Make an Offer, Add to Cart and Buy Now, exactly as the server allows them
-/// for this buyer (US-012, US-069). Chat opens the conversation; the others are not built yet, so
-/// an offered one only says so. One the server marks not applicable is left out.
+/// for this buyer (US-012, US-069, US-014, US-015). Chat opens the conversation; Call and Video ring
+/// the seller. One the server marks not applicable is left out.
 class ListingActions extends StatelessWidget {
   final Capabilities capabilities;
   final VoidCallback onUnbuilt;
@@ -46,11 +46,25 @@ class ListingActions extends StatelessWidget {
   /// A chat is being opened; a second tap is ignored until it answers.
   final bool chatBusy;
 
+  /// Rings the seller by voice (US-014); an older caller that does not pass it keeps the coming soon
+  /// message.
+  final VoidCallback? onCall;
+
+  /// Rings the seller with video (US-015); an older caller that does not pass it keeps the coming
+  /// soon message.
+  final VoidCallback? onVideo;
+
+  /// A call is being started; a second tap on Call or Video is ignored until it answers.
+  final bool callBusy;
+
   const ListingActions({
     super.key,
     required this.capabilities,
     required this.onUnbuilt,
     required this.onChat,
+    this.onCall,
+    this.onVideo,
+    this.callBusy = false,
     this.onOffer,
     this.onBuyNow,
     this.buyNowBusy = false,
@@ -72,8 +86,18 @@ class ListingActions extends StatelessWidget {
         Icons.chat_bubble_outline_rounded,
         chatBusy ? null : onChat,
       ),
-      (l10n.previewCall, capabilities.call, Icons.call_outlined, onUnbuilt),
-      (l10n.previewVideo, capabilities.video, Icons.videocam_outlined, onUnbuilt),
+      (
+        l10n.previewCall,
+        capabilities.call,
+        Icons.call_outlined,
+        callBusy ? null : (onCall ?? onUnbuilt),
+      ),
+      (
+        l10n.previewVideo,
+        capabilities.video,
+        Icons.videocam_outlined,
+        callBusy ? null : (onVideo ?? onUnbuilt),
+      ),
     ].where((entry) => !entry.$2.hidden).toList();
     final commerce = [
       (

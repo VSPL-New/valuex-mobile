@@ -34,6 +34,8 @@ abstract final class RealtimeTypes {
   static const String negotiationUpdated = 'negotiation.updated';
   static const String agreementUpdated = 'agreement.updated';
   static const String badgeUpdated = 'badge.updated';
+  static const String callIncoming = 'call.incoming';
+  static const String callUpdated = 'call.updated';
 
   /// Frames the app sends.
   static const String ping = 'ping';

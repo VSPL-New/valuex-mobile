@@ -57,6 +57,11 @@ class RouteNames {
   static const String negotiationBase = '/negotiations';
   static String negotiation(String negotiationId) => '$negotiationBase/$negotiationId';
   static const String negotiationPattern = '$negotiationBase/:negotiationId';
+
+  /// One voice or video call (US-014, US-015): the ringing, in-call and ended screens in one route.
+  static const String callBase = '/call';
+  static String call(String callId) => '$callBase/$callId';
+  static const String callPattern = '$callBase/:callId';
   static const String listingViewBase = '/listing';
   static String listingView(String listingId) => '$listingViewBase/$listingId';
   static const String listingViewPattern = '$listingViewBase/:listingId';

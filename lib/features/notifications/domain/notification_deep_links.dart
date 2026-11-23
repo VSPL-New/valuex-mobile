@@ -51,6 +51,10 @@ NotificationTarget? notificationTargetFor(String? deepLink) {
     // An offer, counter or answer (US-017): opens that negotiation.
     return NotificationTarget(path);
   }
+  if (path.startsWith('${RouteNames.callBase}/') && path.length > RouteNames.callBase.length + 1) {
+    // A ringing call (US-014, US-015): opens the incoming call screen.
+    return NotificationTarget(path);
+  }
   const publicListingBase = '/listings/';
   if (path.startsWith(publicListingBase) && path.length > publicListingBase.length) {
     // A Buy Now reservation ended by a price change (US-068): opens that listing for the new price.

@@ -234,7 +234,6 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
           thread: thread,
           onBack: () => context.canPop() ? context.pop() : context.go(RouteNames.chats),
           onOpenListing: () => context.push(RouteNames.listingView(thread.listing.listingId)),
-          onCallsComingSoon: () => _snack(l10n.chatCallsComingSoon),
         ),
         const SafetyBanner(),
         const RealtimeReconnectingBanner(),
