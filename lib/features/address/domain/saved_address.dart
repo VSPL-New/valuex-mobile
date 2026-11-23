@@ -13,6 +13,10 @@ class SavedAddress {
   final String pincode;
   final bool isDefault;
 
+  /// True only when a provider confirmed the address (the place check of US-113 is on); an address that
+  /// passed our own checks is saved unverified, and nothing is shown for it.
+  final bool verified;
+
   const SavedAddress({
     required this.id,
     this.label,
@@ -22,6 +26,7 @@ class SavedAddress {
     required this.state,
     required this.pincode,
     this.isDefault = false,
+    this.verified = false,
   });
 
   factory SavedAddress.fromJson(Object? json) {
@@ -35,6 +40,7 @@ class SavedAddress {
       state: map['state'] as String,
       pincode: map['pincode'] as String,
       isDefault: map['defaultAddress'] as bool? ?? false,
+      verified: map['verified'] as bool? ?? false,
     );
   }
 

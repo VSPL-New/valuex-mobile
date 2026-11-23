@@ -207,7 +207,7 @@ void main() {
       final request = adapter.requests.single;
       expect(request.uri.path, '/v1/places/abc');
       expect(request.queryParameters['sessionToken'], 'token-1');
-      expect(request.headers['X-Goog-FieldMask'], contains('addressComponents'));
+      expect(request.headers['X-Goog-FieldMask'], GooglePlacesService.detailsFieldMask);
       expect(place.line1, '12, MG Road, Indiranagar');
       expect(place.area, 'Indiranagar');
       expect(place.city, 'Bengaluru');
@@ -501,7 +501,7 @@ void main() {
 
     test('checks the address after a pause and reports it verified', () {
       fakeAsync((async) {
-        when(() => repository.verify(any())).thenAnswer((_) async {});
+        when(() => repository.verify(any())).thenAnswer((_) async => true);
 
         controller().schedule(_value);
         async.elapse(const Duration(milliseconds: 500));
@@ -514,9 +514,26 @@ void main() {
       });
     });
 
+    test('an address the backend accepted without a provider confirming it is not marked verified',
+        () {
+      fakeAsync((async) {
+        when(() => repository.verify(any())).thenAnswer((_) async => false);
+
+        controller().schedule(_value);
+        async.elapse(AddressVerificationController.debounce);
+        async.flushMicrotasks();
+        expect(state().status, AddressCheckStatus.accepted);
+
+        controller().schedule(_value);
+        async.elapse(AddressVerificationController.debounce);
+        async.flushMicrotasks();
+        verify(() => repository.verify(any())).called(1);
+      });
+    });
+
     test('does not check the same address twice', () {
       fakeAsync((async) {
-        when(() => repository.verify(any())).thenAnswer((_) async {});
+        when(() => repository.verify(any())).thenAnswer((_) async => true);
         controller().schedule(_value);
         async.elapse(AddressVerificationController.debounce);
         async.flushMicrotasks();
@@ -583,12 +600,12 @@ void main() {
 
     test('an answer for an address that was edited meanwhile is ignored', () {
       fakeAsync((async) {
-        final slow = Completer<void>();
+        final slow = Completer<bool>();
         when(() => repository.verify(_value)).thenAnswer((_) => slow.future);
         controller().schedule(_value);
         async.elapse(AddressVerificationController.debounce);
         controller().reset();
-        slow.complete();
+        slow.complete(true);
         async.flushMicrotasks();
 
         expect(state().status, AddressCheckStatus.idle);
@@ -725,7 +742,7 @@ void main() {
 
     testWidgets('the status line follows the check', (tester) async {
       await pump(tester);
-      when(() => repository.verify(any())).thenAnswer((_) async {});
+      when(() => repository.verify(any())).thenAnswer((_) async => true);
       final container = ProviderScope.containerOf(tester.element(find.byType(AddressSearchField)));
       container.listen(addressVerificationProvider, (_, __) {});
 
@@ -754,7 +771,7 @@ void main() {
     testWidgets('the status line says when the check cannot run, and while it runs',
         (tester) async {
       await pump(tester);
-      final pending = Completer<void>();
+      final pending = Completer<bool>();
       when(() => repository.verify(any())).thenAnswer((_) => pending.future);
       final container = ProviderScope.containerOf(tester.element(find.byType(AddressSearchField)));
       container.listen(addressVerificationProvider, (_, __) {});

@@ -19,7 +19,7 @@ class AddressVerificationStatus extends ConsumerWidget {
     final check = ref.watch(addressVerificationProvider);
 
     return switch (check.status) {
-      AddressCheckStatus.idle => const SizedBox.shrink(),
+      AddressCheckStatus.idle || AddressCheckStatus.accepted => const SizedBox.shrink(),
       AddressCheckStatus.rejected => FieldError(text: addressCheckMessage(l10n, check.code)),
       AddressCheckStatus.checking => _Line(
           icon: Icons.hourglass_top_rounded,

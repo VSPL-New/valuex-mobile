@@ -27,6 +27,8 @@ class ApiConstants {
   static const String revokeOtherSessions = '/users/me/sessions/revoke-others';
   static const String addressVerify = '/addresses/verify';
   static const String savedAddresses = '/users/me/addresses';
+  static String savedAddress(String id) => '/users/me/addresses/$id';
+  static String savedAddressDefault(String id) => '/users/me/addresses/$id/default';
   static const String homeFeatured = '/home/featured';
   static const String homePromos = '/home/promos';
   static const String notifications = '/notifications';

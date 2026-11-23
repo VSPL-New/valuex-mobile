@@ -4255,4 +4255,72 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cartAddressFirstIsDefault => 'Your first address is saved as your default';
+
+  @override
+  String get addressEditTitle => 'Edit address';
+
+  @override
+  String get myAddressesEmpty => 'You have no saved addresses';
+
+  @override
+  String get myAddressesEmptyHint => 'Add one to use it for delivery and pickup';
+
+  @override
+  String get myAddressesAdd => 'Add address';
+
+  @override
+  String get myAddressesLoadFailed => 'We couldn\'t load your addresses';
+
+  @override
+  String get addressUnnamed => 'Address';
+
+  @override
+  String get addressChipDefault => 'Default';
+
+  @override
+  String get addressChipVerified => 'Verified';
+
+  @override
+  String addressMenuLabel(String name) {
+    return 'Options for $name';
+  }
+
+  @override
+  String get addressMenuEdit => 'Edit';
+
+  @override
+  String get addressMenuSetDefault => 'Set as default';
+
+  @override
+  String get addressMenuDelete => 'Delete';
+
+  @override
+  String get addressDeleteTitle => 'Delete this address?';
+
+  @override
+  String addressDeleteMessage(String name) {
+    return '$name will be removed from your saved addresses.';
+  }
+
+  @override
+  String get addressDeleteConfirm => 'Delete';
+
+  @override
+  String get addressUpdated => 'Address updated';
+
+  @override
+  String get addressDefaultChanged => 'Default address changed';
+
+  @override
+  String get addressDeleted => 'Address deleted';
+
+  @override
+  String get addressErrorInUse =>
+      'This address is used by an item in your cart or a listing. Remove it there first';
+
+  @override
+  String get addressErrorLimit => 'You can save up to 10 addresses. Delete one to add another';
+
+  @override
+  String get addressActionFailed => 'Something went wrong. Please try again';
 }

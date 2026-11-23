@@ -12,6 +12,10 @@ import '../domain/indian_state_names.dart';
 class GooglePlacesService implements AddressSearchService {
   static const _host = 'https://places.googleapis.com/v1';
 
+  /// Address fields only (US-113): any other field, such as the place name, moves the call to a dearer
+  /// price band. `id` is the place id the form keeps; it is free.
+  static const detailsFieldMask = 'id,formattedAddress,addressComponents';
+
   final Dio _dio;
 
   GooglePlacesService({
@@ -63,7 +67,7 @@ class GooglePlacesService implements AddressSearchService {
         '/places/$placeId',
         queryParameters: {'sessionToken': sessionToken, 'languageCode': 'en'},
         options: Options(
-          headers: {'X-Goog-FieldMask': 'id,displayName,formattedAddress,addressComponents'},
+          headers: {'X-Goog-FieldMask': detailsFieldMask},
         ),
       ),
     );
