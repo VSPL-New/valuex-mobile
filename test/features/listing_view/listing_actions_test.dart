@@ -28,6 +28,9 @@ void main() {
     WidgetTester tester,
     Capabilities capabilities, {
     VoidCallback? onChat,
+    VoidCallback? onCall,
+    VoidCallback? onVideo,
+    bool callBusy = false,
     VoidCallback? onUnbuilt,
     VoidCallback? onBuyNow,
     bool buyNowBusy = false,
@@ -52,6 +55,9 @@ void main() {
             capabilities: capabilities,
             onUnbuilt: onUnbuilt ?? () {},
             onChat: onChat ?? () {},
+            onCall: onCall,
+            onVideo: onVideo,
+            callBusy: callBusy,
             onBuyNow: onBuyNow,
             buyNowBusy: buyNowBusy,
             hasChat: hasChat,
@@ -89,7 +95,51 @@ void main() {
     expect(find.text('Open chat'), findsNothing);
   });
 
-  testWidgets('a second tap while the chat is opening is ignored', (tester) async {
+  testWidgets('a second tap while a chat is opening is ignored', (tester) async {
+    var chats = 0;
+    await pump(tester, _caps(), onChat: () => chats++, chatBusy: true);
+
+    await tester.tap(find.text('Chat'));
+
+    expect(chats, 0);
+  });
+
+  testWidgets('Call and Video ring the seller when the server offers them', (tester) async {
+    var calls = 0;
+    var videos = 0;
+    var unbuilt = 0;
+    await pump(
+      tester,
+      _caps(call: _available, video: _available),
+      onCall: () => calls++,
+      onVideo: () => videos++,
+      onUnbuilt: () => unbuilt++,
+    );
+
+    await tester.tap(find.text('Call'));
+    await tester.tap(find.text('Video'));
+
+    expect([calls, videos, unbuilt], [1, 1, 0]);
+  });
+
+  testWidgets('a second tap while a call is being started is ignored', (tester) async {
+    var calls = 0;
+    var videos = 0;
+    await pump(
+      tester,
+      _caps(call: _available, video: _available),
+      onCall: () => calls++,
+      onVideo: () => videos++,
+      callBusy: true,
+    );
+
+    await tester.tap(find.text('Call'));
+    await tester.tap(find.text('Video'));
+
+    expect([calls, videos], [0, 0]);
+  });
+
+  testWidgets('a second tap while the chat is opening is ignored too', (tester) async {
     var chats = 0;
     await pump(tester, _caps(), onChat: () => chats++, chatBusy: true);
 

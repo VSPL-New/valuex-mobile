@@ -14,6 +14,9 @@ import '../../../core/widgets/square_back_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../buy_now/presentation/buy_now_error_messages.dart';
 import '../../buy_now/presentation/providers/buy_now_launcher.dart';
+import '../../calls/domain/call.dart';
+import '../../calls/presentation/call_starter.dart';
+import '../../calls/presentation/providers/call_launcher.dart';
 import '../../cart/presentation/cart_error_messages.dart';
 import '../../cart/presentation/providers/cart_providers.dart';
 import '../../chat/presentation/contact_error_messages.dart';
@@ -214,6 +217,13 @@ class ListingViewScreen extends ConsumerWidget {
                   hasChat: data.chatThreadId != null,
                   chatBusy: ref.watch(chatLauncherProvider),
                   onChat: () => _openChat(context, ref, data),
+                  callBusy: ref.watch(callLauncherProvider),
+                  onCall: () => unawaited(
+                    startCall(context, ref, listingId: data.listingId, type: CallType.voice),
+                  ),
+                  onVideo: () => unawaited(
+                    startCall(context, ref, listingId: data.listingId, type: CallType.video),
+                  ),
                   onOffer: () => _makeOffer(context, ref, data),
                   onBuyNow: () => _buyNow(context, ref, data),
                   buyNowBusy: ref.watch(buyNowLauncherProvider),

@@ -5205,11 +5205,353 @@ abstract class AppLocalizations {
   /// **'Say hello to start the conversation'**
   String get chatThreadEmpty;
 
-  /// No description provided for @chatCallsComingSoon.
+  /// No description provided for @callTitleVoice.
   ///
   /// In en, this message translates to:
-  /// **'Calls are coming soon'**
-  String get chatCallsComingSoon;
+  /// **'Voice call'**
+  String get callTitleVoice;
+
+  /// No description provided for @callTitleVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call'**
+  String get callTitleVideo;
+
+  /// No description provided for @callKindVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'voice call'**
+  String get callKindVoice;
+
+  /// No description provided for @callKindVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'video call'**
+  String get callKindVideo;
+
+  /// No description provided for @callCalling.
+  ///
+  /// In en, this message translates to:
+  /// **'Calling…'**
+  String get callCalling;
+
+  /// No description provided for @callIncomingVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming voice call'**
+  String get callIncomingVoice;
+
+  /// No description provided for @callIncomingVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming video call'**
+  String get callIncomingVideo;
+
+  /// No description provided for @callAboutListing.
+  ///
+  /// In en, this message translates to:
+  /// **'About {title}'**
+  String callAboutListing(String title);
+
+  /// No description provided for @callNotRecorded.
+  ///
+  /// In en, this message translates to:
+  /// **'This call is not recorded'**
+  String get callNotRecorded;
+
+  /// No description provided for @callAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get callAccept;
+
+  /// No description provided for @callDecline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get callDecline;
+
+  /// No description provided for @callCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get callCancel;
+
+  /// No description provided for @callEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End call'**
+  String get callEnd;
+
+  /// No description provided for @callMute.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute'**
+  String get callMute;
+
+  /// No description provided for @callUnmute.
+  ///
+  /// In en, this message translates to:
+  /// **'Unmute'**
+  String get callUnmute;
+
+  /// No description provided for @callSpeaker.
+  ///
+  /// In en, this message translates to:
+  /// **'Speaker'**
+  String get callSpeaker;
+
+  /// No description provided for @callEarpiece.
+  ///
+  /// In en, this message translates to:
+  /// **'Earpiece'**
+  String get callEarpiece;
+
+  /// No description provided for @callCameraOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn camera on'**
+  String get callCameraOn;
+
+  /// No description provided for @callCameraOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn camera off'**
+  String get callCameraOff;
+
+  /// No description provided for @callFlipCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Flip camera'**
+  String get callFlipCamera;
+
+  /// No description provided for @callReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get callReport;
+
+  /// No description provided for @callConnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting…'**
+  String get callConnecting;
+
+  /// No description provided for @callReconnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting…'**
+  String get callReconnecting;
+
+  /// No description provided for @callWaitingFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for {name} to join…'**
+  String callWaitingFor(String name);
+
+  /// No description provided for @callConnectionLost.
+  ///
+  /// In en, this message translates to:
+  /// **'The connection was lost. End the call and try again.'**
+  String get callConnectionLost;
+
+  /// No description provided for @callQualityExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent connection'**
+  String get callQualityExcellent;
+
+  /// No description provided for @callQualityGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good connection'**
+  String get callQualityGood;
+
+  /// No description provided for @callQualityPoor.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak connection'**
+  String get callQualityPoor;
+
+  /// No description provided for @callQualityLost.
+  ///
+  /// In en, this message translates to:
+  /// **'No connection'**
+  String get callQualityLost;
+
+  /// No description provided for @callLowBandwidth.
+  ///
+  /// In en, this message translates to:
+  /// **'Your connection is weak.'**
+  String get callLowBandwidth;
+
+  /// No description provided for @callTurnOffVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off video'**
+  String get callTurnOffVideo;
+
+  /// No description provided for @callTimeLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'This call ends in {time}'**
+  String callTimeLeft(String time);
+
+  /// No description provided for @callDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration {time}'**
+  String callDuration(String time);
+
+  /// No description provided for @callYourCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Your camera'**
+  String get callYourCamera;
+
+  /// No description provided for @callEndedCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Call ended'**
+  String get callEndedCompleted;
+
+  /// No description provided for @callEndedNoAnswerOut.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} did not answer'**
+  String callEndedNoAnswerOut(String name);
+
+  /// No description provided for @callEndedMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed call from {name}'**
+  String callEndedMissed(String name);
+
+  /// No description provided for @callEndedDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} declined the call'**
+  String callEndedDeclined(String name);
+
+  /// No description provided for @callEndedCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Call cancelled'**
+  String get callEndedCancelled;
+
+  /// No description provided for @callEndedDropped.
+  ///
+  /// In en, this message translates to:
+  /// **'The call ended because the connection was lost'**
+  String get callEndedDropped;
+
+  /// No description provided for @callEndedMaxDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'The call reached its time limit'**
+  String get callEndedMaxDuration;
+
+  /// No description provided for @callEndedBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'This call could not continue'**
+  String get callEndedBlocked;
+
+  /// No description provided for @callEndedFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The call could not be connected'**
+  String get callEndedFailed;
+
+  /// No description provided for @callClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get callClose;
+
+  /// No description provided for @callErrorMicrophone.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone access is required for calls'**
+  String get callErrorMicrophone;
+
+  /// No description provided for @callErrorCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera and microphone access are required for video calls'**
+  String get callErrorCamera;
+
+  /// No description provided for @callOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get callOpenSettings;
+
+  /// No description provided for @callErrorLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'We could not open this call. Please try again.'**
+  String get callErrorLoad;
+
+  /// No description provided for @callErrorJoin.
+  ///
+  /// In en, this message translates to:
+  /// **'We could not connect the call. Please try again.'**
+  String get callErrorJoin;
+
+  /// No description provided for @callErrorUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Calls are not available right now. Please try again later.'**
+  String get callErrorUnavailable;
+
+  /// No description provided for @callErrorInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'You are already on a call'**
+  String get callErrorInProgress;
+
+  /// No description provided for @callErrorBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'The seller is on another call. Please try again in a moment.'**
+  String get callErrorBusy;
+
+  /// No description provided for @callSummaryCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{kind} · {time}'**
+  String callSummaryCompleted(String kind, String time);
+
+  /// No description provided for @callSummaryMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed {kind}'**
+  String callSummaryMissed(String kind);
+
+  /// No description provided for @callSummaryNoAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'{kind} · No answer'**
+  String callSummaryNoAnswer(String kind);
+
+  /// No description provided for @callSummaryDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'{kind} · Declined'**
+  String callSummaryDeclined(String kind);
+
+  /// No description provided for @callSummaryFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'{kind} · Not connected'**
+  String callSummaryFailed(String kind);
+
+  /// No description provided for @callSummaryInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{kind} · In progress'**
+  String callSummaryInProgress(String kind);
 
   /// No description provided for @chatCallAction.
   ///

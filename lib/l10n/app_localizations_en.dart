@@ -2958,7 +2958,204 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatThreadEmpty => 'Say hello to start the conversation';
 
   @override
-  String get chatCallsComingSoon => 'Calls are coming soon';
+  String get callTitleVoice => 'Voice call';
+
+  @override
+  String get callTitleVideo => 'Video call';
+
+  @override
+  String get callKindVoice => 'voice call';
+
+  @override
+  String get callKindVideo => 'video call';
+
+  @override
+  String get callCalling => 'Calling…';
+
+  @override
+  String get callIncomingVoice => 'Incoming voice call';
+
+  @override
+  String get callIncomingVideo => 'Incoming video call';
+
+  @override
+  String callAboutListing(String title) {
+    return 'About $title';
+  }
+
+  @override
+  String get callNotRecorded => 'This call is not recorded';
+
+  @override
+  String get callAccept => 'Accept';
+
+  @override
+  String get callDecline => 'Decline';
+
+  @override
+  String get callCancel => 'Cancel';
+
+  @override
+  String get callEnd => 'End call';
+
+  @override
+  String get callMute => 'Mute';
+
+  @override
+  String get callUnmute => 'Unmute';
+
+  @override
+  String get callSpeaker => 'Speaker';
+
+  @override
+  String get callEarpiece => 'Earpiece';
+
+  @override
+  String get callCameraOn => 'Turn camera on';
+
+  @override
+  String get callCameraOff => 'Turn camera off';
+
+  @override
+  String get callFlipCamera => 'Flip camera';
+
+  @override
+  String get callReport => 'Report';
+
+  @override
+  String get callConnecting => 'Connecting…';
+
+  @override
+  String get callReconnecting => 'Reconnecting…';
+
+  @override
+  String callWaitingFor(String name) {
+    return 'Waiting for $name to join…';
+  }
+
+  @override
+  String get callConnectionLost => 'The connection was lost. End the call and try again.';
+
+  @override
+  String get callQualityExcellent => 'Excellent connection';
+
+  @override
+  String get callQualityGood => 'Good connection';
+
+  @override
+  String get callQualityPoor => 'Weak connection';
+
+  @override
+  String get callQualityLost => 'No connection';
+
+  @override
+  String get callLowBandwidth => 'Your connection is weak.';
+
+  @override
+  String get callTurnOffVideo => 'Turn off video';
+
+  @override
+  String callTimeLeft(String time) {
+    return 'This call ends in $time';
+  }
+
+  @override
+  String callDuration(String time) {
+    return 'Duration $time';
+  }
+
+  @override
+  String get callYourCamera => 'Your camera';
+
+  @override
+  String get callEndedCompleted => 'Call ended';
+
+  @override
+  String callEndedNoAnswerOut(String name) {
+    return '$name did not answer';
+  }
+
+  @override
+  String callEndedMissed(String name) {
+    return 'Missed call from $name';
+  }
+
+  @override
+  String callEndedDeclined(String name) {
+    return '$name declined the call';
+  }
+
+  @override
+  String get callEndedCancelled => 'Call cancelled';
+
+  @override
+  String get callEndedDropped => 'The call ended because the connection was lost';
+
+  @override
+  String get callEndedMaxDuration => 'The call reached its time limit';
+
+  @override
+  String get callEndedBlocked => 'This call could not continue';
+
+  @override
+  String get callEndedFailed => 'The call could not be connected';
+
+  @override
+  String get callClose => 'Close';
+
+  @override
+  String get callErrorMicrophone => 'Microphone access is required for calls';
+
+  @override
+  String get callErrorCamera => 'Camera and microphone access are required for video calls';
+
+  @override
+  String get callOpenSettings => 'Open settings';
+
+  @override
+  String get callErrorLoad => 'We could not open this call. Please try again.';
+
+  @override
+  String get callErrorJoin => 'We could not connect the call. Please try again.';
+
+  @override
+  String get callErrorUnavailable => 'Calls are not available right now. Please try again later.';
+
+  @override
+  String get callErrorInProgress => 'You are already on a call';
+
+  @override
+  String get callErrorBusy => 'The seller is on another call. Please try again in a moment.';
+
+  @override
+  String callSummaryCompleted(String kind, String time) {
+    return '$kind · $time';
+  }
+
+  @override
+  String callSummaryMissed(String kind) {
+    return 'Missed $kind';
+  }
+
+  @override
+  String callSummaryNoAnswer(String kind) {
+    return '$kind · No answer';
+  }
+
+  @override
+  String callSummaryDeclined(String kind) {
+    return '$kind · Declined';
+  }
+
+  @override
+  String callSummaryFailed(String kind) {
+    return '$kind · Not connected';
+  }
+
+  @override
+  String callSummaryInProgress(String kind) {
+    return '$kind · In progress';
+  }
 
   @override
   String get chatCallAction => 'Call, coming soon';

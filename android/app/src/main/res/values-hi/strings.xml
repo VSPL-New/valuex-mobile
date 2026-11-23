@@ -4,4 +4,7 @@
     <string name="push_channel_offers">ऑफ़र</string>
     <string name="push_channel_calls">कॉल</string>
     <string name="push_channel_general">सामान्य</string>
+    <string name="call_ongoing_channel">जारी कॉल</string>
+    <string name="call_ongoing_title">JustQlic कॉल जारी है</string>
+    <string name="call_ongoing_text">अपनी कॉल पर लौटने के लिए टैप करें</string>
 </resources>

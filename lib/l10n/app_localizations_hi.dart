@@ -2951,7 +2951,204 @@ class AppLocalizationsHi extends AppLocalizations {
   String get chatThreadEmpty => 'बातचीत शुरू करने के लिए नमस्ते कहें';
 
   @override
-  String get chatCallsComingSoon => 'कॉल जल्द आ रहे हैं';
+  String get callTitleVoice => 'वॉइस कॉल';
+
+  @override
+  String get callTitleVideo => 'वीडियो कॉल';
+
+  @override
+  String get callKindVoice => 'वॉइस कॉल';
+
+  @override
+  String get callKindVideo => 'वीडियो कॉल';
+
+  @override
+  String get callCalling => 'कॉल हो रही है…';
+
+  @override
+  String get callIncomingVoice => 'आने वाली वॉइस कॉल';
+
+  @override
+  String get callIncomingVideo => 'आने वाली वीडियो कॉल';
+
+  @override
+  String callAboutListing(String title) {
+    return '$title के बारे में';
+  }
+
+  @override
+  String get callNotRecorded => 'यह कॉल रिकॉर्ड नहीं की जाती';
+
+  @override
+  String get callAccept => 'स्वीकार करें';
+
+  @override
+  String get callDecline => 'अस्वीकार करें';
+
+  @override
+  String get callCancel => 'रद्द करें';
+
+  @override
+  String get callEnd => 'कॉल समाप्त करें';
+
+  @override
+  String get callMute => 'म्यूट करें';
+
+  @override
+  String get callUnmute => 'अनम्यूट करें';
+
+  @override
+  String get callSpeaker => 'स्पीकर';
+
+  @override
+  String get callEarpiece => 'ईयरपीस';
+
+  @override
+  String get callCameraOn => 'कैमरा चालू करें';
+
+  @override
+  String get callCameraOff => 'कैमरा बंद करें';
+
+  @override
+  String get callFlipCamera => 'कैमरा बदलें';
+
+  @override
+  String get callReport => 'रिपोर्ट करें';
+
+  @override
+  String get callConnecting => 'जुड़ रहे हैं…';
+
+  @override
+  String get callReconnecting => 'फिर से जुड़ रहे हैं…';
+
+  @override
+  String callWaitingFor(String name) {
+    return '$name के जुड़ने की प्रतीक्षा…';
+  }
+
+  @override
+  String get callConnectionLost => 'कनेक्शन टूट गया। कॉल समाप्त करें और फिर कोशिश करें।';
+
+  @override
+  String get callQualityExcellent => 'बहुत अच्छा कनेक्शन';
+
+  @override
+  String get callQualityGood => 'अच्छा कनेक्शन';
+
+  @override
+  String get callQualityPoor => 'कमज़ोर कनेक्शन';
+
+  @override
+  String get callQualityLost => 'कनेक्शन नहीं है';
+
+  @override
+  String get callLowBandwidth => 'आपका कनेक्शन कमज़ोर है।';
+
+  @override
+  String get callTurnOffVideo => 'वीडियो बंद करें';
+
+  @override
+  String callTimeLeft(String time) {
+    return 'यह कॉल $time में समाप्त होगी';
+  }
+
+  @override
+  String callDuration(String time) {
+    return 'अवधि $time';
+  }
+
+  @override
+  String get callYourCamera => 'आपका कैमरा';
+
+  @override
+  String get callEndedCompleted => 'कॉल समाप्त हुई';
+
+  @override
+  String callEndedNoAnswerOut(String name) {
+    return '$name ने जवाब नहीं दिया';
+  }
+
+  @override
+  String callEndedMissed(String name) {
+    return '$name की मिस्ड कॉल';
+  }
+
+  @override
+  String callEndedDeclined(String name) {
+    return '$name ने कॉल अस्वीकार की';
+  }
+
+  @override
+  String get callEndedCancelled => 'कॉल रद्द की गई';
+
+  @override
+  String get callEndedDropped => 'कनेक्शन टूटने से कॉल समाप्त हो गई';
+
+  @override
+  String get callEndedMaxDuration => 'कॉल की समय सीमा पूरी हो गई';
+
+  @override
+  String get callEndedBlocked => 'यह कॉल जारी नहीं रह सकी';
+
+  @override
+  String get callEndedFailed => 'कॉल जुड़ नहीं सकी';
+
+  @override
+  String get callClose => 'बंद करें';
+
+  @override
+  String get callErrorMicrophone => 'कॉल के लिए माइक्रोफ़ोन की अनुमति ज़रूरी है';
+
+  @override
+  String get callErrorCamera => 'वीडियो कॉल के लिए कैमरा और माइक्रोफ़ोन की अनुमति ज़रूरी है';
+
+  @override
+  String get callOpenSettings => 'सेटिंग्स खोलें';
+
+  @override
+  String get callErrorLoad => 'हम यह कॉल नहीं खोल सके। कृपया फिर कोशिश करें।';
+
+  @override
+  String get callErrorJoin => 'हम कॉल नहीं जोड़ सके। कृपया फिर कोशिश करें।';
+
+  @override
+  String get callErrorUnavailable => 'कॉल अभी उपलब्ध नहीं हैं। कृपया बाद में कोशिश करें।';
+
+  @override
+  String get callErrorInProgress => 'आप पहले से एक कॉल पर हैं';
+
+  @override
+  String get callErrorBusy => 'विक्रेता दूसरी कॉल पर हैं। कृपया थोड़ी देर में कोशिश करें।';
+
+  @override
+  String callSummaryCompleted(String kind, String time) {
+    return '$kind · $time';
+  }
+
+  @override
+  String callSummaryMissed(String kind) {
+    return 'मिस्ड $kind';
+  }
+
+  @override
+  String callSummaryNoAnswer(String kind) {
+    return '$kind · जवाब नहीं मिला';
+  }
+
+  @override
+  String callSummaryDeclined(String kind) {
+    return '$kind · अस्वीकार की गई';
+  }
+
+  @override
+  String callSummaryFailed(String kind) {
+    return '$kind · जुड़ नहीं सकी';
+  }
+
+  @override
+  String callSummaryInProgress(String kind) {
+    return '$kind · जारी है';
+  }
 
   @override
   String get chatCallAction => 'कॉल, जल्द आ रहा है';
