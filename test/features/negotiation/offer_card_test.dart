@@ -25,15 +25,28 @@ void main() {
     ChatMessage message, {
     bool viewerIsBuyer = true,
     ValueChanged<String>? onOpen,
+    VoidCallback? onAddToCart,
     Locale locale = const Locale('en'),
+    Size size = const Size(390, 844),
+    double textScale = 1,
   }) async {
+    tester.view.physicalSize = size * 2;
+    tester.view.devicePixelRatio = 2;
+    addTearDown(tester.view.reset);
+    tester.platformDispatcher.textScaleFactorTestValue = textScale;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
     await tester.pumpWidget(MaterialApp(
       theme: AppTheme.lightTheme,
       locale: locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
-        body: SystemCard(message: message, viewerIsBuyer: viewerIsBuyer, onOpenNegotiation: onOpen),
+        body: SystemCard(
+          message: message,
+          viewerIsBuyer: viewerIsBuyer,
+          onOpenNegotiation: onOpen,
+          onAddToCart: onAddToCart,
+        ),
       ),
     ));
   }
@@ -115,6 +128,70 @@ void main() {
     expect(find.text('Apple Watch'), findsOneWidget);
   });
 
+  group('an item added to the cart (US-019)', () {
+    final added = {
+      ...base,
+      'kind': 'ADDED_TO_CART',
+      'by': 'BUYER',
+      'heldUntil': '2026-11-18T10:00:00Z',
+    };
+
+    testWidgets('tells the buyer "You added" and the seller "The buyer added"', (tester) async {
+      await pump(tester, _card(added));
+      expect(find.text('You added this to the cart at ₹12,000'), findsOneWidget);
+      expect(find.textContaining('Price held until'), findsOneWidget);
+
+      await pump(tester, _card(added), viewerIsBuyer: false);
+      expect(find.text('The buyer added this to the cart at ₹12,000'), findsOneWidget);
+    });
+
+    testWidgets('leaves the held line out when the time is missing or unreadable', (tester) async {
+      await pump(tester, _card({...added, 'heldUntil': null}));
+      expect(find.textContaining('Price held until'), findsNothing);
+
+      await pump(tester, _card({...added, 'heldUntil': 'soon'}));
+      expect(find.textContaining('Price held until'), findsNothing);
+    });
+
+    testWidgets('is spoken in Hindi', (tester) async {
+      await pump(tester, _card(added), locale: const Locale('hi'));
+
+      expect(find.text('आपने इसे ₹12,000 पर कार्ट में जोड़ा'), findsOneWidget);
+    });
+  });
+
+  group('Add to cart on an accepted offer (US-019)', () {
+    final accepted = _card({...base, 'kind': 'OFFER_ACCEPTED', 'by': 'SELLER'});
+
+    testWidgets('shows the button only when given a handler and runs it once per tap',
+        (tester) async {
+      var adds = 0;
+      await pump(tester, accepted);
+      expect(find.text('Add to cart'), findsNothing);
+
+      await pump(tester, accepted, onAddToCart: () => adds++);
+      await tester.tap(find.text('Add to cart'));
+
+      expect(adds, 1);
+    });
+
+    testWidgets('has its own accessible button and does not overflow at 320 px and 200 percent',
+        (tester) async {
+      final handle = tester.ensureSemantics();
+      await pump(tester, accepted, onAddToCart: () {}, size: const Size(320, 640), textScale: 2);
+
+      expect(tester.takeException(), isNull);
+      expect(find.bySemanticsLabel('Add to cart'), findsOneWidget);
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      handle.dispose();
+    });
+
+    testWidgets('is spoken in Hindi', (tester) async {
+      await pump(tester, accepted, onAddToCart: () {}, locale: const Locale('hi'));
+
+      expect(find.text('कार्ट में जोड़ें'), findsOneWidget);
+    });
+  });
   testWidgets('is spoken in Hindi', (tester) async {
     await pump(tester, _card({...base, 'kind': 'OFFER_RECEIVED', 'by': 'BUYER'}),
         locale: const Locale('hi'));

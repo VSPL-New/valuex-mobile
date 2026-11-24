@@ -11,6 +11,7 @@ import 'package:valuex_mobile/core/realtime/realtime_providers.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/user_profile.dart';
 import 'package:valuex_mobile/features/calls/data/call_permissions.dart';
+import 'package:valuex_mobile/features/cart/data/cart_repository.dart';
 import 'package:valuex_mobile/features/calls/data/call_repository.dart';
 import 'package:valuex_mobile/features/calls/domain/call.dart';
 import 'package:valuex_mobile/features/profile/data/profile_repository.dart';
@@ -25,6 +26,7 @@ import '../../helpers/accessibility.dart';
 import '../../helpers/fonts.dart';
 import '../../core/realtime/realtime_fakes.dart';
 import '../calls/call_fixtures.dart';
+import '../cart/cart_fixtures.dart';
 import '../communication_safety/communication_safety_fixtures.dart';
 import 'chat_fixtures.dart';
 import 'chat_test_app.dart';
@@ -188,6 +190,56 @@ void main() {
     handle.dispose();
   });
 
+  group('Add to cart on an accepted offer (US-019)', () {
+    ChatMessage acceptedCard(int seq) => ChatMessage.fromJson(messageJson(
+          seq: seq,
+          type: 'OFFER_EVENT',
+          payload: {
+            'negotiationId': 'n1',
+            'kind': 'OFFER_ACCEPTED',
+            'by': 'SELLER',
+            'amount': 12000,
+          },
+        ));
+
+    ChatMessage addedCard(int seq) => ChatMessage.fromJson(messageJson(
+          seq: seq,
+          type: 'OFFER_EVENT',
+          payload: {'negotiationId': 'n1', 'kind': 'ADDED_TO_CART', 'by': 'BUYER', 'amount': 12000},
+        ));
+
+    testWidgets('the buyer gets the button on the newest accepted card only, and it adds the item',
+        (tester) async {
+      final cart = MockCartRepository();
+      when(() => cart.add('l1')).thenAnswer((_) async => addedLine());
+      stub(messages: [listingCard(), acceptedCard(2), message(seq: 3), acceptedCard(4)]);
+      await pump(tester, extra: [cartRepositoryProvider.overrideWithValue(cart)]);
+
+      expect(find.text('Add to cart'), findsOneWidget);
+      await tester.tap(find.text('Add to cart'));
+      await tester.pumpAndSettle();
+
+      verify(() => cart.add('l1')).called(1);
+      expect(find.text('Added to your cart'), findsOneWidget);
+    });
+
+    testWidgets('the seller never gets the button and reads what the buyer did', (tester) async {
+      stub(
+        thread0: thread(role: 'SELLER', lastSeq: 4, myReadSeq: 4),
+        messages: [listingCard(), acceptedCard(2), addedCard(3)],
+      );
+      await pump(tester);
+
+      expect(find.text('Add to cart'), findsNothing);
+      expect(find.text('The buyer added this to the cart at ₹12,000'), findsOneWidget);
+    });
+
+    testWidgets('a thread without an accepted offer has no button', (tester) async {
+      await pump(tester);
+
+      expect(find.text('Add to cart'), findsNothing);
+    });
+  });
   testWidgets('the safety banner shows once and stays dismissed', (tester) async {
     await pump(tester, prefs: const {});
 

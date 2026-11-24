@@ -3,9 +3,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
 import 'package:valuex_mobile/core/realtime/realtime_event.dart';
+import 'package:valuex_mobile/features/cart/data/cart_repository.dart';
+import 'package:valuex_mobile/features/negotiation/domain/negotiation.dart';
 import 'package:valuex_mobile/features/negotiation/presentation/negotiation_screen.dart';
 
 import '../../helpers/fonts.dart';
+import '../cart/cart_fixtures.dart';
 import 'negotiation_fixtures.dart';
 
 ApiError _refusal(String code) =>
@@ -25,6 +28,7 @@ void main() {
     Locale locale = const Locale('en'),
     double textScale = 1,
     Size size = const Size(390, 844),
+    MockCartRepository? cart,
   }) async {
     await pumpNegotiationApp(
       tester,
@@ -33,6 +37,7 @@ void main() {
       locale: locale,
       textScale: textScale,
       size: size,
+      overrides: [if (cart != null) cartRepositoryProvider.overrideWithValue(cart)],
     );
     await tester.pumpAndSettle();
   }
@@ -209,6 +214,59 @@ void main() {
     expect(find.text('The buyer has been told and can now go to checkout.'), findsNothing);
   });
 
+  group('Add to cart from the accepted price (US-019)', () {
+    Negotiation accepted({String role = 'BUYER', bool realEstate = false}) => negotiation(
+          role: role,
+          realEstate: realEstate,
+          state: 'OFFER_ACCEPTED',
+          awaiting: 'NONE',
+          agreedPrice: 12000,
+          priceLockExpiresAt: '2026-11-18T10:00:00Z',
+          expiresAt: null,
+          actions: {},
+        );
+
+    testWidgets('the buyer adds the item to the cart and is told so', (tester) async {
+      final cart = MockCartRepository();
+      when(() => repo.get('n1')).thenAnswer((_) async => accepted());
+      when(() => cart.add('l1')).thenAnswer((_) async => addedLine());
+      await pump(tester, cart: cart);
+
+      await tester.tap(find.text('Add to cart'));
+      await tester.pumpAndSettle();
+
+      verify(() => cart.add('l1')).called(1);
+      expect(find.text('Added to your cart'), findsOneWidget);
+    });
+
+    testWidgets('a refusal is shown and nothing else changes', (tester) async {
+      final cart = MockCartRepository();
+      when(() => repo.get('n1')).thenAnswer((_) async => accepted());
+      when(() => cart.add('l1')).thenThrow(_refusal('ERROR_MAX_CART_ITEMS'));
+      await pump(tester, cart: cart);
+
+      await tester.tap(find.text('Add to cart'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Cart limit reached. Remove an item to add another'), findsOneWidget);
+      expect(find.text('Add to cart'), findsOneWidget);
+    });
+
+    testWidgets('the seller, a property and an open negotiation have no such button',
+        (tester) async {
+      when(() => repo.get('n1')).thenAnswer((_) async => accepted(role: 'SELLER'));
+      await pump(tester);
+      expect(find.text('Add to cart'), findsNothing);
+
+      when(() => repo.get('n1')).thenAnswer((_) async => accepted(realEstate: true));
+      await pump(tester);
+      expect(find.text('Add to cart'), findsNothing);
+
+      when(() => repo.get('n1')).thenAnswer((_) async => negotiation());
+      await pump(tester);
+      expect(find.text('Add to cart'), findsNothing);
+    });
+  });
   testWidgets('says only Accept and Decline remain at the last round', (tester) async {
     when(() => repo.get('n1')).thenAnswer((_) async => negotiation(
           role: 'SELLER',

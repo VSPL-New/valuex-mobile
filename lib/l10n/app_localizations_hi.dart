@@ -2143,9 +2143,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get listingViewOwnListing => 'आपकी लिस्टिंग';
 
   @override
-  String get listingViewAddToCart => 'कार्ट में जोड़ें';
-
-  @override
   String listingViewActionLabel(String action, String status) {
     return '$action, $status';
   }
@@ -3658,6 +3655,22 @@ class AppLocalizationsHi extends AppLocalizations {
   String get offerCardView => 'ऑफ़र देखें';
 
   @override
+  String offerCardAddedToCart(String who, String amount) {
+    return '$who इसे $amount पर कार्ट में जोड़ा';
+  }
+
+  @override
+  String offerCardHeldUntil(String time) {
+    return 'कीमत $time तक सुरक्षित है';
+  }
+
+  @override
+  String get offerCardAddToCart => 'कार्ट में जोड़ें';
+
+  @override
+  String get savedItemViewDetails => 'विवरण देखें';
+
+  @override
   String get offerCardWhoYou => 'आपने';
 
   @override
@@ -4044,9 +4057,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get cartErrorUnavailableYet => 'कार्ट अभी उपलब्ध नहीं है। कृपया बाद में पुनः प्रयास करें';
-
-  @override
-  String get listingViewNegotiationRequired => 'पहले ऑफ़र करें या अभी खरीदें';
 
   @override
   String get pushPromptTitle => 'संदेश और ऑफ़र की जानकारी पाएँ';

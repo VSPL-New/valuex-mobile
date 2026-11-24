@@ -16,8 +16,6 @@ import '../../../core/widgets/square_back_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../home/domain/entities/listing.dart';
 import '../../home/presentation/home_labels.dart';
-import '../../cart/presentation/cart_error_messages.dart';
-import '../../cart/presentation/providers/cart_providers.dart';
 import '../domain/saved_listing.dart';
 import 'providers/saved_items_controller.dart';
 
@@ -75,32 +73,6 @@ class _SavedItemsScreenState extends ConsumerState<SavedItemsScreen> {
     }
   }
 
-  /// Add to Cart (US-019): works when the buyer already holds an accepted price on the item; any
-  /// other case shows the reason, for example to make an offer first.
-  Future<void> _addToCart(SavedListing item) async {
-    final l10n = AppLocalizations.of(context);
-    final messenger = ScaffoldMessenger.of(context);
-    final router = GoRouter.of(context);
-    final result = await ref.read(cartAdderProvider.notifier).add(item.id);
-    if (!mounted) return;
-    final error = result.error;
-    if (error == null && result.added == null) return;
-    messenger.hideCurrentSnackBar();
-    if (error != null) {
-      messenger.showSnackBar(SnackBar(content: Text(cartErrorMessage(l10n, error))));
-      return;
-    }
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(l10n.cartAdded),
-        action: SnackBarAction(
-          label: l10n.cartViewCart,
-          onPressed: () => unawaited(router.push(RouteNames.cart)),
-        ),
-      ),
-    );
-  }
-
   Future<void> _refresh() async {
     ref.invalidate(savedItemsControllerProvider);
     try {
@@ -142,7 +114,7 @@ class _SavedItemsScreenState extends ConsumerState<SavedItemsScreen> {
               item: item,
               onOpen: () => context.push(RouteNames.listingView(item.id)),
               onRemove: () => _remove(item),
-              onAddToCart: () => unawaited(_addToCart(item)),
+              onViewDetails: () => context.push(RouteNames.listingView(item.id)),
             );
           },
         ),
@@ -222,13 +194,13 @@ class _SavedItemCard extends StatelessWidget {
   final SavedListing item;
   final VoidCallback onOpen;
   final VoidCallback onRemove;
-  final VoidCallback onAddToCart;
+  final VoidCallback onViewDetails;
 
   const _SavedItemCard({
     required this.item,
     required this.onOpen,
     required this.onRemove,
-    required this.onAddToCart,
+    required this.onViewDetails,
   });
 
   @override
@@ -313,8 +285,8 @@ class _SavedItemCard extends StatelessWidget {
             children: [
               if (item.available)
                 OutlinedButton(
-                  onPressed: onAddToCart,
-                  child: Text(l10n.listingViewAddToCart),
+                  onPressed: onViewDetails,
+                  child: Text(l10n.savedItemViewDetails),
                 ),
               TextButton.icon(
                 onPressed: onRemove,
