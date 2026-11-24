@@ -38,7 +38,8 @@ class GooglePlacesService implements AddressSearchService {
     if (Platform.isAndroid) {
       return {
         'X-Android-Package': AppConstants.androidPackage,
-        if (androidCert.isNotEmpty) 'X-Android-Cert': androidCert,
+        // Google wants plain hex; keytool prints the SHA-1 with colons.
+        if (androidCert.isNotEmpty) 'X-Android-Cert': androidCert.replaceAll(':', ''),
       };
     }
     return const {};
