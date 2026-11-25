@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
+import 'package:valuex_mobile/core/routing/app_router.dart';
 import 'package:valuex_mobile/core/routing/route_names.dart';
 import 'package:valuex_mobile/core/widgets/square_back_button.dart';
 import 'package:valuex_mobile/features/auth/data/models/auth_models.dart';
@@ -123,8 +124,9 @@ void main() {
       expect(find.text('No longer available'), findsOneWidget);
       expect(find.text('Under review'), findsOneWidget);
       expect(find.text('Remove from saved'), findsNWidgets(3));
-      // Add to Cart is offered only for an available item, and it is live now (US-019).
-      expect(find.text('Add to Cart'), findsOneWidget);
+      // View details is offered only for an available item (US-019).
+      expect(find.text('View details'), findsOneWidget);
+      expect(find.text('Add to Cart'), findsNothing);
       expect(tester.widget<OutlinedButton>(find.byType(OutlinedButton)).onPressed, isNotNull);
       handle.dispose();
       await harness.dispose();
@@ -138,38 +140,18 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('Add to Cart adds the item and View cart opens the cart (US-019)', (tester) async {
-      when(() => cart.add('l1')).thenAnswer((_) async => addedLine());
+    testWidgets('View details opens the listing page and nothing is added to the cart',
+        (tester) async {
       await openAt(tester, RouteNames.savedItems);
 
-      await tester.tap(find.text('Add to Cart'));
+      await tester.tap(find.text('View details'));
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 400));
 
-      verify(() => cart.add('l1')).called(1);
-      expect(find.text('Added to your cart'), findsOneWidget);
-      await tester.tap(find.text('View cart'));
-      await harness.settle();
-      expect(find.text('Your cart is empty'), findsOneWidget);
+      final shown = harness.container.read(appRouterProvider).routerDelegate.currentConfiguration;
+      expect(shown.last.matchedLocation, RouteNames.listingView('l1'));
+      verifyNever(() => cart.add(any()));
       await harness.dispose();
     });
-
-    testWidgets('Add to Cart without an accepted price says what to do first', (tester) async {
-      when(() => cart.add('l1')).thenThrow(const ApiError(
-        type: ApiErrorType.business,
-        message: 'server words',
-        code: 'ERROR_PRICE_NOT_ACCEPTED',
-        statusCode: 409,
-      ));
-      await openAt(tester, RouteNames.savedItems);
-
-      await tester.tap(find.text('Add to Cart'));
-      await tester.pumpAndSettle();
-
-      expect(find.textContaining("hasn't been accepted yet"), findsOneWidget);
-      await harness.dispose();
-    });
-
     testWidgets('an empty list explains how to save an item', (tester) async {
       saved.onList = (page) async => savedPage(const []);
       await openAt(tester, RouteNames.savedItems);

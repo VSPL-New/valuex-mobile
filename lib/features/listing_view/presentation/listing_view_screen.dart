@@ -127,43 +127,6 @@ class ListingViewScreen extends ConsumerWidget {
     await context.push(RouteNames.cart);
   }
 
-  /// Add to Cart (US-019): the line rests on the price the buyer already agreed, which the server
-  /// reads itself. A refusal shows its message, and the page is read again when what the buyer saw is
-  /// no longer true.
-  Future<void> _addToCart(BuildContext context, WidgetRef ref, PublicListing listing) async {
-    final l10n = AppLocalizations.of(context);
-    final messenger = ScaffoldMessenger.of(context);
-    final router = GoRouter.of(context);
-    final result = await ref.read(cartAdderProvider.notifier).add(listing.listingId);
-    if (!context.mounted) return;
-    final error = result.error;
-    messenger.hideCurrentSnackBar();
-    if (error != null) {
-      messenger.showSnackBar(SnackBar(content: Text(cartErrorMessage(l10n, error))));
-      if (cartErrorStalesPage(error)) ref.invalidate(publicListingProvider(listingId));
-      return;
-    }
-    if (result.added == null) return;
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(l10n.cartAdded),
-        action: SnackBarAction(
-          label: l10n.cartViewCart,
-          onPressed: () => unawaited(router.push(RouteNames.cart)),
-        ),
-      ),
-    );
-  }
-
-  /// The buyer taps Add to Cart before the seller accepted a price: say what to do first.
-  void _explainNegotiationRequired(BuildContext context) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).listingViewNegotiationRequired)),
-      );
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
@@ -227,9 +190,6 @@ class ListingViewScreen extends ConsumerWidget {
                   onOffer: () => _makeOffer(context, ref, data),
                   onBuyNow: () => _buyNow(context, ref, data),
                   buyNowBusy: ref.watch(buyNowLauncherProvider),
-                  onAddToCart: () => unawaited(_addToCart(context, ref, data)),
-                  addToCartBusy: ref.watch(cartAdderProvider),
-                  onNegotiationRequired: () => _explainNegotiationRequired(context),
                   hasOffer: data.negotiationId != null,
                 );
                 if (large) {

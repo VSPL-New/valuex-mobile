@@ -11,6 +11,7 @@ import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/realtime_reconnecting_banner.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../cart/presentation/add_accepted_to_cart.dart';
 import '../../listing/data/photo_source.dart';
 import '../../notifications/presentation/push_permission_sheet.dart';
 import '../domain/chat.dart';
@@ -310,6 +311,10 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
     final l10n = AppLocalizations.of(context);
     final thread = data.thread;
     final rows = <Widget>[];
+    // Only the newest accepted-offer card offers Add to cart, and only to the buyer (US-019).
+    final newestAccepted = data.messages
+        .where((m) => m.type == ChatMessageType.offerEvent && m.payload['kind'] == 'OFFER_ACCEPTED')
+        .fold(0, (newest, m) => m.seq > newest ? m.seq : newest);
     DateTime? previousDay;
     for (final message in data.messages) {
       if (previousDay == null || !sameDay(previousDay, message.createdAt)) {
@@ -327,6 +332,9 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
                 onOpenListing: () => context.push(RouteNames.listingView(thread.listing.listingId)),
                 viewerIsBuyer: thread.isBuyer,
                 onOpenNegotiation: (id) => context.push(RouteNames.negotiation(id)),
+                onAddToCart: thread.isBuyer && message.seq == newestAccepted
+                    ? () => unawaited(addAcceptedToCart(context, ref, thread.listing.listingId))
+                    : null,
               )
             : MessageBubble(
                 key: ValueKey('${message.seq}-${message.clientMessageId}'),

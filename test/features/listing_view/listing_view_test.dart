@@ -462,9 +462,10 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('a general listing offers Add to Cart and Buy Now, also disabled', (tester) async {
+    testWidgets('a general listing offers Buy Now, also disabled, and no Add to Cart',
+        (tester) async {
       await open(tester);
-      expect(find.text('Add to Cart'), findsOneWidget);
+      expect(find.text('Add to Cart'), findsNothing);
       expect(find.text('Buy Now'), findsOneWidget);
       await tester.tap(find.text('Buy Now'));
       await tester.pump();
@@ -480,7 +481,7 @@ void main() {
         },
       ));
       await open(tester);
-      expect(find.text('Your listing'), findsNWidgets(5));
+      expect(find.text('Your listing'), findsNWidgets(4));
       expect(find.text('Coming soon'), findsNothing);
     });
 

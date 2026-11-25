@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -11,6 +12,7 @@ import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/single_tone_button.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../cart/presentation/add_accepted_to_cart.dart';
 import '../domain/negotiation.dart';
 import 'counter_sheet.dart';
 import 'negotiation_error_messages.dart';
@@ -23,7 +25,7 @@ import 'widgets/price_lock_banner.dart';
 /// One price negotiation, for the buyer and for the seller (US-017): the listing, where it stands
 /// in one line, the countdown, every price put forward, and the actions the server allows right now.
 /// The Proceed to checkout control belongs to the checkout stories (US-018, Sprint 5) and is not
-/// shown here, because neither Add to Cart nor Buy Now is switched on yet (decision D10).
+/// shown here. Once the price is accepted the buyer can add the item to the cart from here (US-019).
 class NegotiationScreen extends ConsumerStatefulWidget {
   final String negotiationId;
 
@@ -208,6 +210,16 @@ class _NegotiationScreenState extends ConsumerState<NegotiationScreen> {
                     lockEndsAt: negotiation.priceLockExpiresAt,
                     serverTime: negotiation.serverTime,
                   ),
+                  if (negotiation.role == NegotiationRole.buyer && !negotiation.listing.realEstate)
+                    Padding(
+                      padding: const EdgeInsets.only(top: AppSpacing.sm),
+                      child: SingleToneButton(
+                        label: l10n.offerCardAddToCart,
+                        onPressed: () => unawaited(
+                          addAcceptedToCart(context, ref, negotiation.listing.listingId),
+                        ),
+                      ),
+                    ),
                   if (negotiation.role == NegotiationRole.seller && !negotiation.listing.realEstate)
                     Padding(
                       padding: const EdgeInsets.only(top: AppSpacing.sm),

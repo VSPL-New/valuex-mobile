@@ -3801,12 +3801,6 @@ abstract class AppLocalizations {
   /// **'Your listing'**
   String get listingViewOwnListing;
 
-  /// No description provided for @listingViewAddToCart.
-  ///
-  /// In en, this message translates to:
-  /// **'Add to Cart'**
-  String get listingViewAddToCart;
-
   /// No description provided for @listingViewActionLabel.
   ///
   /// In en, this message translates to:
@@ -6423,6 +6417,30 @@ abstract class AppLocalizations {
   /// **'View offer'**
   String get offerCardView;
 
+  /// No description provided for @offerCardAddedToCart.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} added this to the cart at {amount}'**
+  String offerCardAddedToCart(String who, String amount);
+
+  /// No description provided for @offerCardHeldUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Price held until {time}'**
+  String offerCardHeldUntil(String time);
+
+  /// No description provided for @offerCardAddToCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to cart'**
+  String get offerCardAddToCart;
+
+  /// No description provided for @savedItemViewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View details'**
+  String get savedItemViewDetails;
+
   /// No description provided for @offerCardWhoYou.
   ///
   /// In en, this message translates to:
@@ -7040,12 +7058,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The cart is not available yet. Please try again later'**
   String get cartErrorUnavailableYet;
-
-  /// No description provided for @listingViewNegotiationRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Make an offer or Buy Now first'**
-  String get listingViewNegotiationRequired;
 
   /// No description provided for @pushPromptTitle.
   ///

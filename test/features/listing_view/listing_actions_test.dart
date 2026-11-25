@@ -161,7 +161,6 @@ void main() {
 
     expect(find.bySemanticsLabel('Chat, Unavailable'), findsOneWidget);
     expect(find.bySemanticsLabel('Make an Offer, Not negotiable'), findsOneWidget);
-    expect(find.bySemanticsLabel('Add to Cart, Identity verification needed'), findsOneWidget);
     handle.dispose();
   });
 
@@ -170,7 +169,7 @@ void main() {
     await pump(
         tester, _caps(chat: mine, call: mine, video: mine, offer: mine, cart: mine, buyNow: mine));
 
-    expect(find.text('Your listing'), findsNWidgets(6));
+    expect(find.text('Your listing'), findsNWidgets(5));
   });
 
   testWidgets('real estate shows Make an Offer alone in its row, without cart or buy now',
@@ -267,96 +266,21 @@ void main() {
     });
   });
 
-  group('Add to Cart (US-019)', () {
+  testWidgets(
+      'Add to Cart is not offered here whatever the server says; it lives on the accepted offer',
+      (tester) async {
     const enabled = Capability(available: true, reason: CapabilityReason.other);
     const needsOffer = Capability(available: false, reason: CapabilityReason.negotiationRequired);
 
-    Future<void> pumpCart(
-      WidgetTester tester,
-      Capability cart, {
-      VoidCallback? onAddToCart,
-      VoidCallback? onNegotiationRequired,
-      VoidCallback? onUnbuilt,
-      bool busy = false,
-    }) async {
-      await tester.pumpWidget(MaterialApp(
-        theme: AppTheme.lightTheme,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Scaffold(
-          body: Align(
-            alignment: Alignment.bottomCenter,
-            child: ListingActions(
-              capabilities: _caps(cart: cart),
-              onUnbuilt: onUnbuilt ?? () {},
-              onChat: () {},
-              onAddToCart: onAddToCart,
-              addToCartBusy: busy,
-              onNegotiationRequired: onNegotiationRequired,
-            ),
-          ),
-        ),
-      ));
-      await tester.pumpAndSettle();
+    for (final cart in [enabled, needsOffer, _soon]) {
+      await pump(tester, _caps(cart: cart, buyNow: enabled));
+
+      expect(find.text('Add to Cart'), findsNothing);
+      expect(find.text('Buy Now'), findsOneWidget);
     }
+  });
 
-    testWidgets('an available Add to Cart adds the listing and does not say coming soon',
-        (tester) async {
-      var adds = 0;
-      var unbuilt = 0;
-      await pumpCart(tester, enabled, onAddToCart: () => adds++, onUnbuilt: () => unbuilt++);
-
-      await tester.tap(find.text('Add to Cart'));
-
-      expect(adds, 1);
-      expect(unbuilt, 0);
-    });
-
-    testWidgets('a second tap while an add is running is ignored', (tester) async {
-      var adds = 0;
-      await pumpCart(tester, enabled, onAddToCart: () => adds++, busy: true);
-
-      await tester.tap(find.text('Add to Cart'));
-
-      expect(adds, 0);
-    });
-
-    testWidgets('a caller without an add handler keeps the coming soon message', (tester) async {
-      var unbuilt = 0;
-      await pumpCart(tester, enabled, onUnbuilt: () => unbuilt++);
-
-      await tester.tap(find.text('Add to Cart'));
-
-      expect(unbuilt, 1);
-    });
-
-    testWidgets('without an accepted price the button stays tappable and only explains',
-        (tester) async {
-      final handle = tester.ensureSemantics();
-      var adds = 0;
-      var hints = 0;
-      await pumpCart(tester, needsOffer,
-          onAddToCart: () => adds++, onNegotiationRequired: () => hints++);
-
-      await tester.tap(find.text('Add to Cart'));
-
-      expect(adds, 0);
-      expect(hints, 1);
-      expect(find.bySemanticsLabel('Add to Cart, Make an offer or Buy Now first'), findsOneWidget);
-      handle.dispose();
-    });
-
-    testWidgets('a caller without a hint leaves that button off', (tester) async {
-      var adds = 0;
-      await pumpCart(tester, needsOffer, onAddToCart: () => adds++);
-
-      await tester.tap(find.text('Add to Cart'));
-
-      expect(adds, 0);
-    });
-
-    test('reads the new reason from the server', () {
-      expect(CapabilityReason.from('NEGOTIATION_REQUIRED'), CapabilityReason.negotiationRequired);
-    });
+  test('still reads the negotiation reason from the server', () {
+    expect(CapabilityReason.from('NEGOTIATION_REQUIRED'), CapabilityReason.negotiationRequired);
   });
 }

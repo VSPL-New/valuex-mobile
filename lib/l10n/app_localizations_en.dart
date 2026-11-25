@@ -2151,9 +2151,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get listingViewOwnListing => 'Your listing';
 
   @override
-  String get listingViewAddToCart => 'Add to Cart';
-
-  @override
   String listingViewActionLabel(String action, String status) {
     return '$action, $status';
   }
@@ -3669,6 +3666,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get offerCardView => 'View offer';
 
   @override
+  String offerCardAddedToCart(String who, String amount) {
+    return '$who added this to the cart at $amount';
+  }
+
+  @override
+  String offerCardHeldUntil(String time) {
+    return 'Price held until $time';
+  }
+
+  @override
+  String get offerCardAddToCart => 'Add to cart';
+
+  @override
+  String get savedItemViewDetails => 'View details';
+
+  @override
   String get offerCardWhoYou => 'You';
 
   @override
@@ -4051,9 +4064,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cartErrorUnavailableYet => 'The cart is not available yet. Please try again later';
-
-  @override
-  String get listingViewNegotiationRequired => 'Make an offer or Buy Now first';
 
   @override
   String get pushPromptTitle => 'Hear about messages and offers';
