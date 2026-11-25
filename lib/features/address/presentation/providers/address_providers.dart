@@ -114,7 +114,8 @@ final addressSearchControllerProvider =
   retry: noAutoRetry,
 );
 
-enum AddressCheckStatus { idle, checking, verified, rejected, unavailable }
+/// [accepted]: the backend accepted the address but no provider confirmed it (US-113); nothing is shown.
+enum AddressCheckStatus { idle, checking, verified, accepted, rejected, unavailable }
 
 class AddressVerificationState {
   final AddressCheckStatus status;
@@ -161,8 +162,9 @@ class AddressVerificationController extends Notifier<AddressVerificationState> {
   void schedule(AddressValue value) {
     _timer?.cancel();
     _pending = value;
-    final settled =
-        state.status == AddressCheckStatus.verified || state.status == AddressCheckStatus.rejected;
+    final settled = state.status == AddressCheckStatus.verified ||
+        state.status == AddressCheckStatus.accepted ||
+        state.status == AddressCheckStatus.rejected;
     if (settled && state.checked == value) return;
     state = const AddressVerificationState();
     _timer = Timer(debounce, () => _check(value));
@@ -188,9 +190,12 @@ class AddressVerificationController extends Notifier<AddressVerificationState> {
   Future<void> _check(AddressValue value) async {
     state = AddressVerificationState(status: AddressCheckStatus.checking, checked: value);
     try {
-      await ref.read(addressRepositoryProvider).verify(value);
+      final confirmed = await ref.read(addressRepositoryProvider).verify(value);
       if (!ref.mounted || _pending != value) return;
-      state = AddressVerificationState(status: AddressCheckStatus.verified, checked: value);
+      state = AddressVerificationState(
+        status: confirmed ? AddressCheckStatus.verified : AddressCheckStatus.accepted,
+        checked: value,
+      );
     } on Object catch (error) {
       if (!ref.mounted || _pending != value) return;
       state = isAddressRejection(error)

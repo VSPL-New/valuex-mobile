@@ -19,9 +19,10 @@ import 'address_verification_status.dart';
 
 /// Opens the new address form (US-020) and returns the address that was saved, or null when the
 /// buyer closed it. [hasSavedAddresses] says whether a "make this my default" switch makes sense: the
-/// first address a user saves is the default without asking.
+/// first address a user saves is the default without asking. With [existing] the form edits that
+/// address (US-113) instead of adding one, and returns the changed address.
 Future<SavedAddress?> showAddressFormSheet(BuildContext context,
-    {required bool hasSavedAddresses}) {
+    {required bool hasSavedAddresses, SavedAddress? existing}) {
   return showModalBottomSheet<SavedAddress>(
     context: context,
     isScrollControlled: true,
@@ -30,7 +31,8 @@ Future<SavedAddress?> showAddressFormSheet(BuildContext context,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
     ),
-    builder: (context) => AddressFormSheet(hasSavedAddresses: hasSavedAddresses),
+    builder: (context) =>
+        AddressFormSheet(hasSavedAddresses: hasSavedAddresses, existing: existing),
   );
 }
 
@@ -41,7 +43,10 @@ enum _NameChoice { none, home, office, other }
 class AddressFormSheet extends ConsumerStatefulWidget {
   final bool hasSavedAddresses;
 
-  const AddressFormSheet({super.key, required this.hasSavedAddresses});
+  /// The address being edited; null when adding one.
+  final SavedAddress? existing;
+
+  const AddressFormSheet({super.key, required this.hasSavedAddresses, this.existing});
 
   @override
   ConsumerState<AddressFormSheet> createState() => _AddressFormSheetState();
@@ -60,7 +65,41 @@ class _AddressFormSheetState extends ConsumerState<AddressFormSheet> {
   _NameChoice _name = _NameChoice.none;
   bool _makeDefault = false;
   bool _busy = false;
+  bool _nameRead = false;
   String? _saveError;
+
+  /// What the form held when it opened, for an edit: unchanged means nothing needs checking.
+  AddressValue? _original;
+
+  @override
+  void initState() {
+    super.initState();
+    final existing = widget.existing;
+    if (existing == null) return;
+    _line.text = existing.address;
+    _landmark.text = existing.landmark ?? '';
+    _city.text = existing.city;
+    _pincodeField.text = existing.pincode;
+    _state = existing.state;
+    _original = _value;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final label = widget.existing?.label;
+    if (_nameRead || label == null) return;
+    _nameRead = true;
+    final l10n = AppLocalizations.of(context);
+    if (label == l10n.cartAddressNameHome) {
+      _name = _NameChoice.home;
+    } else if (label == l10n.cartAddressNameOffice) {
+      _name = _NameChoice.office;
+    } else {
+      _name = _NameChoice.other;
+      _custom.text = label;
+    }
+  }
 
   @override
   void dispose() {
@@ -94,7 +133,7 @@ class _AddressFormSheetState extends ConsumerState<AddressFormSheet> {
     setState(() => _saveError = null);
     final value = _value;
     final check = ref.read(addressVerificationProvider.notifier);
-    value == null ? check.reset() : check.schedule(value);
+    value == null || value == _original ? check.reset() : check.schedule(value);
   }
 
   void _fill(AddressDetails details) {
@@ -122,11 +161,15 @@ class _AddressFormSheetState extends ConsumerState<AddressFormSheet> {
       _saveError = null;
     });
     try {
-      final saved = await ref.read(addressRepositoryProvider).create(
-            value,
-            label: _label(l10n),
-            makeDefault: widget.hasSavedAddresses && _makeDefault,
-          );
+      final repository = ref.read(addressRepositoryProvider);
+      final existing = widget.existing;
+      final saved = existing == null
+          ? await repository.create(
+              value,
+              label: _label(l10n),
+              makeDefault: widget.hasSavedAddresses && _makeDefault,
+            )
+          : await repository.update(existing.id, value, label: _label(l10n));
       if (mounted) Navigator.of(context).pop(saved);
     } on Object catch (error) {
       if (!mounted) return;
@@ -188,7 +231,10 @@ class _AddressFormSheetState extends ConsumerState<AddressFormSheet> {
           children: [
             Semantics(
               header: true,
-              child: Text(l10n.cartAddressTitle, style: AppTextStyles.heading2),
+              child: Text(
+                widget.existing == null ? l10n.cartAddressTitle : l10n.addressEditTitle,
+                style: AppTextStyles.heading2,
+              ),
             ),
             const SizedBox(height: AppSpacing.md),
             AddressSearchField(onSelected: _fill),
@@ -244,7 +290,9 @@ class _AddressFormSheetState extends ConsumerState<AddressFormSheet> {
               _field(l10n.cartAddressNameCustom, _custom, maxLength: 50),
             ],
             const SizedBox(height: AppSpacing.md),
-            if (widget.hasSavedAddresses)
+            if (widget.existing != null)
+              const SizedBox.shrink() // an edit keeps its place; Set as default is on the list
+            else if (widget.hasSavedAddresses)
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
                 value: _makeDefault,

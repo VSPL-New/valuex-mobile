@@ -77,7 +77,7 @@ void main() {
           expectedShippingCost: any(named: 'expectedShippingCost'),
           termsAccepted: any(named: 'termsAccepted'),
         )).thenAnswer((_) async => CartLine.fromJson(line));
-    when(() => addressRepository.verify(any())).thenAnswer((_) async {});
+    when(() => addressRepository.verify(any())).thenAnswer((_) async => true);
   });
 
   Future<void> open(

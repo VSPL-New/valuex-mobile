@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../config/app_config.dart';
 import '../../features/splash/presentation/splash_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
+import '../../features/address/presentation/my_addresses_screen.dart';
 import '../../features/auth/presentation/providers/session_controller.dart';
 import '../../features/auth/presentation/screens/aadhaar_dev_otp_screen.dart';
 import '../../features/auth/presentation/screens/aadhaar_screen.dart';
@@ -292,6 +293,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: RouteNames.blockedUsers,
         name: 'blockedUsers',
         builder: (context, state) => const BlockedUsersScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.myAddresses,
+        name: 'myAddresses',
+        builder: (context, state) => const MyAddressesScreen(),
       ),
       GoRoute(
         path: RouteNames.notifications,

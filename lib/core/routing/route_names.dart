@@ -46,6 +46,7 @@ class RouteNames {
   static String cartDelivery(String itemId) => '$cartItemsBase/$itemId/delivery';
   static const String cartDeliveryPattern = '$cartItemsBase/:itemId/delivery';
   static const String blockedUsers = '/profile/blocked-users';
+  static const String myAddresses = '/profile/addresses';
 
   /// The Chats tab and one conversation (US-013).
   static const String chats = '/chats';

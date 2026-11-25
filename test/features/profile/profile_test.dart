@@ -14,6 +14,7 @@ import 'package:valuex_mobile/core/routing/route_names.dart';
 import 'package:valuex_mobile/core/storage/preferences_service.dart';
 import 'package:valuex_mobile/core/widgets/loading_indicator.dart';
 import 'package:valuex_mobile/core/widgets/square_back_button.dart';
+import 'package:valuex_mobile/features/address/presentation/my_addresses_screen.dart';
 import 'package:valuex_mobile/features/auth/data/models/auth_models.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/logout_outcome.dart';
@@ -458,13 +459,17 @@ void main() {
       await harness.dispose();
     });
 
-    testWidgets('My Addresses is listed under Account and answers with the coming soon message',
-        (tester) async {
+    testWidgets('My Addresses is listed under Account and opens its own page', (tester) async {
       await showProfile(tester);
       await tester.scrollUntilVisible(find.text('My Addresses'), 200);
       await tester.tap(find.text('My Addresses'));
-      await tester.pump();
-      expect(find.text('This is coming soon'), findsOneWidget);
+      await harness.settle();
+
+      expect(find.byType(MyAddressesScreen), findsOneWidget);
+      expect(find.text('This is coming soon'), findsNothing);
+      await tester.tap(find.byType(SquareBackButton));
+      await harness.settle();
+      expect(find.byType(ProfileScreen), findsOneWidget);
       await harness.dispose();
     });
 

@@ -17,18 +17,14 @@ class AddressRepository {
     );
   }
 
-  /// Completes when the backend confirms the address; an [ApiError] says why it did not.
-  Future<void> verify(AddressValue value) {
-    return _client.post<void>(
+  /// Completes when the backend accepts the address; an [ApiError] says why it did not. The answer
+  /// is true when a provider confirmed the address and false when it only passed the backend's own
+  /// checks (US-113); the caller shows a "verified" mark only for true.
+  Future<bool> verify(AddressValue value) {
+    return _client.post<bool>(
       ApiConstants.addressVerify,
-      data: {
-        'address': value.address,
-        if (value.landmark != null && value.landmark!.isNotEmpty) 'landmark': value.landmark,
-        'city': value.city,
-        'state': value.state,
-        'pincode': value.pincode,
-        if (value.placeId != null) 'placeId': value.placeId,
-      },
+      data: _fields(value),
+      parse: (json) => (json as Map<String, dynamic>)['verified'] == true,
     );
   }
 
@@ -38,18 +34,46 @@ class AddressRepository {
     return _client.post<SavedAddress>(
       ApiConstants.savedAddresses,
       data: {
-        'address': value.address,
-        if (value.landmark != null && value.landmark!.isNotEmpty) 'landmark': value.landmark,
-        'city': value.city,
-        'state': value.state,
-        'pincode': value.pincode,
-        if (value.placeId != null) 'placeId': value.placeId,
+        ..._fields(value),
         if (label != null && label.trim().isNotEmpty) 'label': label.trim(),
         'makeDefault': makeDefault,
       },
       parse: SavedAddress.fromJson,
     );
   }
+
+  /// Changes a saved address (US-113). The backend checks the address again only when a field
+  /// other than the name changed; a missing [label] removes the name.
+  Future<SavedAddress> update(String id, AddressValue value, {String? label}) {
+    return _client.put<SavedAddress>(
+      ApiConstants.savedAddress(id),
+      data: {
+        ..._fields(value),
+        if (label != null && label.trim().isNotEmpty) 'label': label.trim(),
+      },
+      parse: SavedAddress.fromJson,
+    );
+  }
+
+  /// Makes the address the default one (US-113).
+  Future<SavedAddress> setDefault(String id) {
+    return _client.put<SavedAddress>(ApiConstants.savedAddressDefault(id),
+        parse: SavedAddress.fromJson);
+  }
+
+  /// Deletes the address (US-113); `ERROR_ADDRESS_IN_USE` says a cart line or listing uses it.
+  Future<void> delete(String id) {
+    return _client.delete<void>(ApiConstants.savedAddress(id));
+  }
+
+  Map<String, dynamic> _fields(AddressValue value) => {
+        'address': value.address,
+        if (value.landmark != null && value.landmark!.isNotEmpty) 'landmark': value.landmark,
+        'city': value.city,
+        'state': value.state,
+        'pincode': value.pincode,
+        if (value.placeId != null) 'placeId': value.placeId,
+      };
 }
 
 final addressRepositoryProvider = Provider<AddressRepository>(

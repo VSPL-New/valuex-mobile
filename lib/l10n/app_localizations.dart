@@ -7418,6 +7418,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your first address is saved as your default'**
   String get cartAddressFirstIsDefault;
+
+  /// No description provided for @addressEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit address'**
+  String get addressEditTitle;
+
+  /// No description provided for @myAddressesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no saved addresses'**
+  String get myAddressesEmpty;
+
+  /// No description provided for @myAddressesEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add one to use it for delivery and pickup'**
+  String get myAddressesEmptyHint;
+
+  /// No description provided for @myAddressesAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add address'**
+  String get myAddressesAdd;
+
+  /// No description provided for @myAddressesLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t load your addresses'**
+  String get myAddressesLoadFailed;
+
+  /// No description provided for @addressUnnamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get addressUnnamed;
+
+  /// No description provided for @addressChipDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get addressChipDefault;
+
+  /// No description provided for @addressChipVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get addressChipVerified;
+
+  /// No description provided for @addressMenuLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Options for {name}'**
+  String addressMenuLabel(String name);
+
+  /// No description provided for @addressMenuEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get addressMenuEdit;
+
+  /// No description provided for @addressMenuSetDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Set as default'**
+  String get addressMenuSetDefault;
+
+  /// No description provided for @addressMenuDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get addressMenuDelete;
+
+  /// No description provided for @addressDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this address?'**
+  String get addressDeleteTitle;
+
+  /// No description provided for @addressDeleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will be removed from your saved addresses.'**
+  String addressDeleteMessage(String name);
+
+  /// No description provided for @addressDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get addressDeleteConfirm;
+
+  /// No description provided for @addressUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Address updated'**
+  String get addressUpdated;
+
+  /// No description provided for @addressDefaultChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Default address changed'**
+  String get addressDefaultChanged;
+
+  /// No description provided for @addressDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Address deleted'**
+  String get addressDeleted;
+
+  /// No description provided for @addressErrorInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'This address is used by an item in your cart or a listing. Remove it there first'**
+  String get addressErrorInUse;
+
+  /// No description provided for @addressErrorLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'You can save up to 10 addresses. Delete one to add another'**
+  String get addressErrorLimit;
+
+  /// No description provided for @addressActionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again'**
+  String get addressActionFailed;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

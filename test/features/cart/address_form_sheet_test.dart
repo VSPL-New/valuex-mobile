@@ -52,7 +52,7 @@ void main() {
     repository = MockAddressRepository();
     result = null;
     closed = false;
-    when(() => repository.verify(any())).thenAnswer((_) async {});
+    when(() => repository.verify(any())).thenAnswer((_) async => true);
     when(() => repository.create(
           any(),
           label: any(named: 'label'),

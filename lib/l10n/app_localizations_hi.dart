@@ -4249,4 +4249,72 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get cartAddressFirstIsDefault =>
       'आपका पहला पता आपके डिफ़ॉल्ट पते के रूप में सहेजा जाता है';
+
+  @override
+  String get addressEditTitle => 'पता बदलें';
+
+  @override
+  String get myAddressesEmpty => 'आपका कोई सहेजा हुआ पता नहीं है';
+
+  @override
+  String get myAddressesEmptyHint => 'डिलीवरी और पिकअप के लिए एक पता जोड़ें';
+
+  @override
+  String get myAddressesAdd => 'पता जोड़ें';
+
+  @override
+  String get myAddressesLoadFailed => 'हम आपके पते लोड नहीं कर सके';
+
+  @override
+  String get addressUnnamed => 'पता';
+
+  @override
+  String get addressChipDefault => 'डिफ़ॉल्ट';
+
+  @override
+  String get addressChipVerified => 'सत्यापित';
+
+  @override
+  String addressMenuLabel(String name) {
+    return '$name के विकल्प';
+  }
+
+  @override
+  String get addressMenuEdit => 'बदलें';
+
+  @override
+  String get addressMenuSetDefault => 'डिफ़ॉल्ट बनाएँ';
+
+  @override
+  String get addressMenuDelete => 'हटाएँ';
+
+  @override
+  String get addressDeleteTitle => 'यह पता हटाएँ?';
+
+  @override
+  String addressDeleteMessage(String name) {
+    return '$name आपके सहेजे हुए पतों से हटा दिया जाएगा।';
+  }
+
+  @override
+  String get addressDeleteConfirm => 'हटाएँ';
+
+  @override
+  String get addressUpdated => 'पता अपडेट किया गया';
+
+  @override
+  String get addressDefaultChanged => 'डिफ़ॉल्ट पता बदल गया';
+
+  @override
+  String get addressDeleted => 'पता हटाया गया';
+
+  @override
+  String get addressErrorInUse =>
+      'यह पता आपके कार्ट की किसी वस्तु या किसी लिस्टिंग में इस्तेमाल हो रहा है। पहले उसे वहाँ से हटाएँ';
+
+  @override
+  String get addressErrorLimit => 'आप अधिकतम 10 पते सहेज सकते हैं। नया जोड़ने के लिए एक हटाएँ';
+
+  @override
+  String get addressActionFailed => 'कुछ गलत हो गया। कृपया फिर कोशिश करें';
 }
