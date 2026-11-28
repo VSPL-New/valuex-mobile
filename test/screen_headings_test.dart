@@ -4,6 +4,8 @@ import 'package:valuex_mobile/core/routing/route_names.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
 import 'package:valuex_mobile/features/listing/domain/category.dart';
 import 'package:valuex_mobile/features/listing/presentation/providers/category_providers.dart';
+import 'package:valuex_mobile/features/order/data/mock_seller_order_repository.dart';
+import 'package:valuex_mobile/features/order/presentation/providers/seller_order_providers.dart';
 
 import 'helpers/app_harness.dart';
 
@@ -21,6 +23,7 @@ void main() {
     RouteNames.signupAadhaar: ('Verify Aadhaar', AccountStatus.identityVerificationPending),
     RouteNames.signupEmail: ('Verify Email', AccountStatus.emailVerificationPending),
     RouteNames.signupMobile: ('Create Account', null),
+    RouteNames.sellerOrders: ('Incoming Orders', AccountStatus.active),
   };
 
   for (final entry in titles.entries) {
@@ -29,6 +32,7 @@ void main() {
       final harness = AppHarness(tester, extraOverrides: [
         categoryChildrenProvider((parentCode: null, scope: CategoryScope.popular))
             .overrideWith((_) async => const <CategoryNode>[]),
+        sellerOrderRepositoryProvider.overrideWithValue(MockSellerOrderRepository()),
       ]);
       try {
         if (entry.value.$2 != null) harness.signedInAs(entry.value.$2!);

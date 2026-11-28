@@ -36,6 +36,12 @@ class ApiConstants {
 
   static String notificationRead(String id) => '/notifications/$id/read';
 
+  // Seller Incoming Orders (US-112)
+  static const String sellerOrders = '/seller/orders';
+  static const String sellerOrdersSummary = '/seller/orders/summary';
+  static String sellerOrderStartPacking(String orderId) => '/seller/orders/$orderId/start-packing';
+  static String sellerOrderHandedOver(String orderId) => '/seller/orders/$orderId/mark-handed-over';
+
   static const String listings = '/listings';
   static const String myListings = '/listings/mine';
   static const String sellerPlans = '/plans/seller';

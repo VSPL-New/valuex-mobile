@@ -138,6 +138,12 @@ void main() {
       expect(notificationTargetFor('/chats'), isNull);
     });
 
+    test('a new order opens Incoming Orders on top (US-112)', () {
+      final target = notificationTargetFor('/seller/orders')!;
+      expect(target.route, RouteNames.sellerOrders);
+      expect(target.isTab, isFalse);
+    });
+
     test('screens that are not built yet and missing links have no target', () {
       expect(notificationTargetFor('/support'), isNull);
       expect(notificationTargetFor(null), isNull);

@@ -2,6 +2,7 @@
 <resources>
     <string name="push_channel_chat">संदेश</string>
     <string name="push_channel_offers">ऑफ़र</string>
+    <string name="push_channel_orders">ऑर्डर</string>
     <string name="push_channel_calls">कॉल</string>
     <string name="push_channel_general">सामान्य</string>
     <string name="call_ongoing_channel">जारी कॉल</string>
