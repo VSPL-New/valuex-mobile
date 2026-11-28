@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/config/app_config.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/network/api_error.dart';
+import '../../../listing/data/listing_repository.dart';
 import '../../data/mock_seller_order_repository.dart';
 import '../../data/seller_order_repository_impl.dart';
 import '../../domain/entities/incoming_order.dart';
@@ -10,7 +11,8 @@ import '../../domain/repositories/seller_order_repository.dart';
 /// The backend, or the Make sample orders when the app runs with `SELLER_ORDERS=mock`.
 final sellerOrderRepositoryProvider = Provider<SellerOrderRepository>((ref) {
   if (ref.watch(appConfigProvider).useMockSellerOrders) return MockSellerOrderRepository();
-  return SellerOrderRepositoryImpl(ref.watch(apiClientProvider));
+  return SellerOrderRepositoryImpl(
+      ref.watch(apiClientProvider), ref.watch(listingRepositoryProvider));
 });
 
 class SellerOrdersState {

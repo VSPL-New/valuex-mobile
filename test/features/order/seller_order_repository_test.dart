@@ -1,13 +1,17 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:valuex_mobile/core/config/app_config.dart';
 import 'package:valuex_mobile/core/network/api_client.dart';
 import 'package:valuex_mobile/core/network/api_error.dart';
+import 'package:valuex_mobile/features/listing/data/listing_repository.dart';
 import 'package:valuex_mobile/features/order/data/mock_seller_order_repository.dart';
 import 'package:valuex_mobile/features/order/data/seller_order_repository_impl.dart';
 import 'package:valuex_mobile/features/order/domain/entities/incoming_order.dart';
 
 import '../../helpers/fake_http_adapter.dart';
 import '../../helpers/fake_secure_storage.dart';
+
+class _MockListingRepository extends Mock implements ListingRepository {}
 
 const _card = {
   'orderId': 'order-1',
@@ -56,7 +60,7 @@ void main() {
         adapter: adapter,
       );
       addTearDown(client.dispose);
-      repository = SellerOrderRepositoryImpl(client);
+      repository = SellerOrderRepositoryImpl(client, _MockListingRepository());
     });
 
     test('reads a page of cards, asking for the page and size', () async {

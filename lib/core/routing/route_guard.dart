@@ -84,8 +84,11 @@ const Set<String> _aadhaarRoutes = {RouteNames.signupAadhaar, RouteNames.devAadh
 
 /// Routes with an id in the path are guarded as their base route.
 String _gatedBase(String location) {
-  // Incoming Orders sits under the seller profile base but is its own page (US-112).
-  if (location == RouteNames.sellerOrders) return location;
+  // Incoming Orders sits under the seller profile base but is its own page (US-112), and so is
+  // packing one of its orders (US-026).
+  if (location == RouteNames.sellerOrders || location.startsWith('${RouteNames.sellerOrders}/')) {
+    return RouteNames.sellerOrders;
+  }
   for (final base in [
     RouteNames.myListings,
     RouteNames.listingViewBase,

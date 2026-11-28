@@ -45,6 +45,7 @@ import '../../features/negotiation/presentation/negotiation_screen.dart';
 import '../../features/negotiation/presentation/offers_screen.dart';
 import '../../features/cart/presentation/cart_screen.dart';
 import '../../features/cart/presentation/delivery_screen.dart';
+import '../../features/order/presentation/packing/pack_and_upload_proof_screen.dart';
 import '../../features/order/presentation/seller_incoming_orders_screen.dart';
 import '../../features/saved_listings/presentation/saved_items_screen.dart';
 import '../../features/saved_searches/presentation/saved_search_results_screen.dart';
@@ -145,6 +146,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: RouteNames.sellerOrders,
         name: 'sellerOrders',
         builder: (context, state) => const SellerIncomingOrdersScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.sellerOrderPackingPattern,
+        name: 'sellerOrderPacking',
+        builder: (context, state) =>
+            PackAndUploadProofScreen(orderId: state.pathParameters['orderId']!),
       ),
       GoRoute(
         path: RouteNames.sellerProfilePattern,

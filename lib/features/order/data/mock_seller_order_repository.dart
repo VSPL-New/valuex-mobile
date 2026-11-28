@@ -1,14 +1,90 @@
+import 'dart:typed_data';
+
+import '../../../core/network/api_error.dart';
 import '../domain/entities/incoming_order.dart';
+import '../domain/entities/packing.dart';
 import '../domain/repositories/seller_order_repository.dart';
 
 /// The four sample orders of the Figma Make `SellerIncomingOrdersScreen`, one per group, for demos
 /// and QA before checkout creates real orders (US-112, `SELLER_ORDERS=mock`). Photos are left out
-/// (the card shows its placeholder); Start Packing moves the sample order to Packing in memory.
+/// (the card shows its placeholder); Start Packing moves the sample order to Packing in memory,
+/// and packing photos (US-026) are kept in memory with the server's rules, without uploading.
 class MockSellerOrderRepository implements SellerOrderRepository {
+  static const PackingRules _rules = PackingRules();
+
   final DateTime Function() _now;
   late final List<IncomingOrder> _orders = _samples(_now());
+  final Map<String, List<OrderProof>> _proofs = {};
+  int _nextId = 0;
 
   MockSellerOrderRepository({DateTime Function()? now}) : _now = now ?? DateTime.now;
+
+  @override
+  Future<PackingView> packing(String orderId) async => PackingView(
+        order: _orders.firstWhere((o) => o.id == orderId),
+        proofs: List.unmodifiable(_proofs[orderId] ?? const <OrderProof>[]),
+        rules: _rules,
+      );
+
+  @override
+  Future<String> uploadProofPhoto({
+    required String ownerId,
+    required String fileName,
+    required String contentType,
+    required Uint8List bytes,
+    required int width,
+    required int height,
+  }) async {
+    if (width < _rules.minPixels || height < _rules.minPixels) {
+      throw const ApiError(
+          type: ApiErrorType.validation, message: 'Image quality low', code: _lowQuality);
+    }
+    return 'mock-media-${_nextId++}';
+  }
+
+  @override
+  Future<OrderProof> attachProof(String orderId, String mediaId, ProofKind kind) async {
+    final proofs = _proofs.putIfAbsent(orderId, () => []);
+    if (proofs.where((p) => p.kind == kind).length >= _rules.max(kind)) {
+      throw const ApiError(
+          type: ApiErrorType.validation, message: 'Section full', code: 'ERROR_PROOF_LIMIT');
+    }
+    final proof = OrderProof(id: 'proof-$mediaId', kind: kind, uploadedAt: _now());
+    proofs.add(proof);
+    return proof;
+  }
+
+  @override
+  Future<void> removeProof(String orderId, String proofId) async =>
+      _proofs[orderId]?.removeWhere((p) => p.id == proofId);
+
+  @override
+  Future<IncomingOrder> completePacking(String orderId, PackageSize size) async {
+    final proofs = _proofs[orderId] ?? const <OrderProof>[];
+    for (final kind in ProofKind.values) {
+      if (proofs.where((p) => p.kind == kind).length < _rules.min(kind)) {
+        throw const ApiError(
+            type: ApiErrorType.validation, message: 'Photos missing', code: 'ERROR_IMAGE_REQUIRED');
+      }
+    }
+    final index = _orders.indexWhere((o) => o.id == orderId);
+    final order = _orders[index];
+    final ready = IncomingOrder(
+      id: order.id,
+      orderNumber: order.orderNumber,
+      bucket: FulfilmentBucket.packing,
+      orderState: 'SELLER_PROOF_UPLOADED',
+      placedAt: order.placedAt,
+      amount: order.amount,
+      title: order.title,
+      buyerName: order.buyerName,
+      actions: const [SellerOrderAction.schedulePickup],
+    );
+    _orders[index] = ready;
+    return ready;
+  }
+
+  static const String _lowQuality = 'WARNING_IMAGE_QUALITY_LOW';
 
   @override
   Future<IncomingOrdersPage> orders(

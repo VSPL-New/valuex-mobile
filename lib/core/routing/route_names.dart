@@ -41,6 +41,10 @@ class RouteNames {
   /// The seller's Incoming Orders (US-112): opened from Profile and from a new-order push.
   static const String sellerOrders = '/seller/orders';
 
+  /// Pack & Upload Proof for one order (US-026), opened from Incoming Orders.
+  static String sellerOrderPacking(String orderId) => '$sellerOrders/$orderId/packing';
+  static const String sellerOrderPackingPattern = '$sellerOrders/:orderId/packing';
+
   /// The buyer's cart (US-019).
   static const String cart = '/cart';
 

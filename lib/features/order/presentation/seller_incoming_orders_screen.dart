@@ -73,21 +73,30 @@ class _SellerIncomingOrdersScreenState extends ConsumerState<SellerIncomingOrder
       case SellerOrderAction.startPacking:
         final error = await _controller.startPacking(order.id);
         _afterAction(error);
-        // Pack & Upload Proof is US-026; until it ships the next step answers "coming soon".
-        if (error == null && mounted) showComingSoon(context);
+        if (error == null && mounted) await _openPacking(order);
+      case SellerOrderAction.continuePacking:
+        await _openPacking(order);
       case SellerOrderAction.markHandedOver:
         if (!await _confirmHandOver() || !mounted) return;
         _afterAction(await _controller.markHandedOver(order.id));
       case SellerOrderAction.viewPickupDetails:
         await _showPickupDetails(order);
       case SellerOrderAction.reject:
-      case SellerOrderAction.continuePacking:
       case SellerOrderAction.schedulePickup:
       case SellerOrderAction.viewSchedule:
       case SellerOrderAction.reschedulePickup:
-        // Reject is US-059 (Sprint 7); packing and pickup scheduling are US-026 and US-027.
+        // Reject is US-059 (Sprint 7); pickup scheduling is US-027.
         showComingSoon(context);
     }
+  }
+
+  /// Pack & Upload Proof (US-026). The list reloads on return; finishing packing says so, and the
+  /// card then offers Schedule Pickup (US-027, plan G6).
+  Future<void> _openPacking(IncomingOrder order) async {
+    final done = await context.push<bool>(RouteNames.sellerOrderPacking(order.id));
+    if (!mounted) return;
+    unawaited(_controller.load());
+    if (done ?? false) _say(AppLocalizations.of(context).packingDone);
   }
 
   /// The list has already reloaded; tells the seller why the action did not happen, and keeps the

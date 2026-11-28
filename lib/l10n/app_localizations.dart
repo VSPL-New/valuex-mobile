@@ -7802,6 +7802,264 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No pickup service in your area. Contact support'**
   String get sellerOrdersNoLogistics;
+
+  /// No description provided for @packingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pack & Upload Proof'**
+  String get packingTitle;
+
+  /// No description provided for @packingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Required before pickup is scheduled'**
+  String get packingSubtitle;
+
+  /// No description provided for @packingOrderRef.
+  ///
+  /// In en, this message translates to:
+  /// **'Order #{number}'**
+  String packingOrderRef(String number);
+
+  /// No description provided for @packingStepsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'STEPS TO FOLLOW:'**
+  String get packingStepsTitle;
+
+  /// No description provided for @packingStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'Photograph the item clearly from all angles'**
+  String get packingStep1;
+
+  /// No description provided for @packingStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrap item securely with bubble wrap/foam'**
+  String get packingStep2;
+
+  /// No description provided for @packingStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'Place in a sturdy box or cover'**
+  String get packingStep3;
+
+  /// No description provided for @packingStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'Photograph the packed item showing all sides'**
+  String get packingStep4;
+
+  /// No description provided for @packingItemPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Item Photos'**
+  String get packingItemPhotos;
+
+  /// No description provided for @packingItemPhotosHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Min {min}, max {max} photos required'**
+  String packingItemPhotosHint(int min, int max);
+
+  /// No description provided for @packingPackagePhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Packaging Photos'**
+  String get packingPackagePhotos;
+
+  /// No description provided for @packingPackagePhotosHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Show packed item clearly'**
+  String get packingPackagePhotosHint;
+
+  /// No description provided for @packingCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}/{max}'**
+  String packingCount(int count, int max);
+
+  /// No description provided for @packingCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of {max} photos added'**
+  String packingCountLabel(int count, int max);
+
+  /// No description provided for @packingAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get packingAdd;
+
+  /// No description provided for @packingAddItemPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add item photo'**
+  String get packingAddItemPhoto;
+
+  /// No description provided for @packingAddPackagePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add packaging photo'**
+  String get packingAddPackagePhoto;
+
+  /// No description provided for @packingItemPhotoLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Item photo {index} of {count}'**
+  String packingItemPhotoLabel(int index, int count);
+
+  /// No description provided for @packingPackagePhotoLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Packaging photo {index} of {count}'**
+  String packingPackagePhotoLabel(int index, int count);
+
+  /// No description provided for @packingRemovePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove photo'**
+  String get packingRemovePhoto;
+
+  /// No description provided for @packingUploading.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading photo'**
+  String get packingUploading;
+
+  /// No description provided for @packingRetryUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload failed. Tap to try again'**
+  String get packingRetryUpload;
+
+  /// No description provided for @packingTakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get packingTakePhoto;
+
+  /// No description provided for @packingChooseGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get packingChooseGallery;
+
+  /// No description provided for @packingSizeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Packed size and weight'**
+  String get packingSizeTitle;
+
+  /// No description provided for @packingSizeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Used to book a courier. Measure the item as it will be packed'**
+  String get packingSizeHint;
+
+  /// No description provided for @packingWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight (kg)'**
+  String get packingWeight;
+
+  /// No description provided for @packingLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Length (cm)'**
+  String get packingLength;
+
+  /// No description provided for @packingBreadth.
+  ///
+  /// In en, this message translates to:
+  /// **'Breadth (cm)'**
+  String get packingBreadth;
+
+  /// No description provided for @packingHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Height (cm)'**
+  String get packingHeight;
+
+  /// No description provided for @packingWeightInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a packed weight between 0.05 and 30 kg'**
+  String get packingWeightInvalid;
+
+  /// No description provided for @packingSideInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter each side between 1 and 150 cm'**
+  String get packingSideInvalid;
+
+  /// No description provided for @packingEscrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment of {amount} is held in escrow and will be released once buyer confirms delivery.'**
+  String packingEscrow(String amount);
+
+  /// No description provided for @packingSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Proof & Schedule Pickup'**
+  String get packingSubmit;
+
+  /// No description provided for @packingMissingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least {items, plural, =1{1 item photo} other{{items} item photos}} + {packages, plural, =1{1 packaging photo} other{{packages} packaging photos}}'**
+  String packingMissingHint(int items, int packages);
+
+  /// No description provided for @packingErrorImageRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please upload package images before scheduling pickup'**
+  String get packingErrorImageRequired;
+
+  /// No description provided for @packingErrorUploadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to upload images. Try again'**
+  String get packingErrorUploadFailed;
+
+  /// No description provided for @packingErrorQualityLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Image quality low. Upload clearer photo'**
+  String get packingErrorQualityLow;
+
+  /// No description provided for @packingErrorLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t add more photos here'**
+  String get packingErrorLimit;
+
+  /// No description provided for @packingErrorPhotoInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'This photo can\'t be used. Choose another'**
+  String get packingErrorPhotoInvalid;
+
+  /// No description provided for @packingPhotoDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow access to your camera or photos in Settings to add a photo'**
+  String get packingPhotoDenied;
+
+  /// No description provided for @packingLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load this order. Tap Retry'**
+  String get packingLoadFailed;
+
+  /// No description provided for @packingDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Proof uploaded. Schedule the pickup next'**
+  String get packingDone;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

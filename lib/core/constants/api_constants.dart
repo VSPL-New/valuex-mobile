@@ -42,6 +42,15 @@ class ApiConstants {
   static String sellerOrderStartPacking(String orderId) => '/seller/orders/$orderId/start-packing';
   static String sellerOrderHandedOver(String orderId) => '/seller/orders/$orderId/mark-handed-over';
 
+  // Seller packing (US-026)
+  static String sellerOrderPacking(String orderId) => '/seller/orders/$orderId/packing';
+  static String sellerOrderPackingProofs(String orderId) =>
+      '/seller/orders/$orderId/packing/proofs';
+  static String sellerOrderPackingProof(String orderId, String proofId) =>
+      '/seller/orders/$orderId/packing/proofs/$proofId';
+  static String sellerOrderPackingComplete(String orderId) =>
+      '/seller/orders/$orderId/packing/complete';
+
   static const String listings = '/listings';
   static const String myListings = '/listings/mine';
   static const String sellerPlans = '/plans/seller';

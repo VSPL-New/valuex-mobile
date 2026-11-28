@@ -83,6 +83,16 @@ void main() {
           path: RouteNames.sellerOrders,
           builder: (context, state) => const SellerIncomingOrdersScreen(),
         ),
+        GoRoute(
+          path: RouteNames.sellerOrderPackingPattern,
+          builder: (context, state) => Scaffold(
+            body: Column(children: [
+              Text('packing ${state.pathParameters['orderId']}'),
+              TextButton(onPressed: () => context.pop(true), child: const Text('finish')),
+              TextButton(onPressed: () => context.pop(false), child: const Text('leave')),
+            ]),
+          ),
+        ),
       ],
     );
     await tester.pumpWidget(ProviderScope(
@@ -169,7 +179,8 @@ void main() {
     expect(find.text('Retry'), findsOneWidget);
   });
 
-  testWidgets('Start Packing calls the server, reloads and says packing is coming', (tester) async {
+  testWidgets('Start Packing calls the server, reloads and opens Pack & Upload Proof',
+      (tester) async {
     serve([
       _order('a', actions: const [SellerOrderAction.startPacking, SellerOrderAction.reject])
     ]);
@@ -181,7 +192,43 @@ void main() {
 
     verify(() => repository.startPacking('a')).called(1);
     verify(() => repository.summary()).called(2);
-    expect(find.text('This is coming soon'), findsOneWidget);
+    expect(find.text('packing a'), findsOneWidget);
+    expect(find.text('This is coming soon'), findsNothing);
+  });
+
+  testWidgets('Continue Packing opens packing; finishing reloads and says pickup is next',
+      (tester) async {
+    serve([
+      _order('a',
+          bucket: FulfilmentBucket.packing, actions: const [SellerOrderAction.continuePacking]),
+    ]);
+    await pump(tester);
+
+    await tester.tap(find.text('Continue Packing'));
+    await tester.pumpAndSettle();
+    expect(find.text('packing a'), findsOneWidget);
+    await tester.tap(find.text('finish'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Incoming Orders'), findsOneWidget);
+    expect(find.text('Proof uploaded. Schedule the pickup next'), findsOneWidget);
+    verify(() => repository.summary()).called(2);
+  });
+
+  testWidgets('leaving packing without finishing only reloads the list', (tester) async {
+    serve([
+      _order('a',
+          bucket: FulfilmentBucket.packing, actions: const [SellerOrderAction.continuePacking]),
+    ]);
+    await pump(tester);
+
+    await tester.tap(find.text('Continue Packing'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('leave'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Proof uploaded. Schedule the pickup next'), findsNothing);
+    verify(() => repository.summary()).called(2);
   });
 
   testWidgets('a refused action says the order moved on and reloads', (tester) async {
@@ -267,11 +314,11 @@ void main() {
       (tester) async {
     serve([
       _order('a',
-          bucket: FulfilmentBucket.packing, actions: const [SellerOrderAction.continuePacking]),
+          bucket: FulfilmentBucket.packing, actions: const [SellerOrderAction.schedulePickup]),
     ]);
     await pump(tester);
 
-    await tester.tap(find.text('Continue Packing'));
+    await tester.tap(find.text('Schedule Pickup'));
     await tester.pumpAndSettle();
     expect(find.text('This is coming soon'), findsOneWidget);
 
