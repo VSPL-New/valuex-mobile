@@ -19,6 +19,11 @@ enum OtpMode { backend, msg91 }
 /// charges nothing. `mock` is allowed in the dev configs only.
 enum PaymentMode { none, mock }
 
+/// `backend` shows the seller's real Incoming Orders; `mock` shows the four sample orders of the
+/// Figma Make screen, for demos and QA before checkout creates real orders (US-112). `mock` is
+/// allowed in the dev configs only.
+enum SellerOrdersMode { backend, mock }
+
 class AppConfigException implements Exception {
   final String message;
 
@@ -57,6 +62,8 @@ class AppConfig {
 
   final PaymentMode paymentMode;
 
+  final SellerOrdersMode sellerOrdersMode;
+
   const AppConfig._({
     required this.env,
     required this.apiBaseUrl,
@@ -71,6 +78,7 @@ class AppConfig {
     required this.msg91WidgetId,
     required this.msg91AuthToken,
     required this.paymentMode,
+    required this.sellerOrdersMode,
   });
 
   factory AppConfig.fromEnvironment() {
@@ -88,6 +96,7 @@ class AppConfig {
       msg91WidgetId: const String.fromEnvironment('MSG91_WIDGET_ID'),
       msg91AuthToken: const String.fromEnvironment('MSG91_AUTH_TOKEN'),
       paymentProvider: const String.fromEnvironment('PAYMENT_PROVIDER', defaultValue: 'none'),
+      sellerOrders: const String.fromEnvironment('SELLER_ORDERS', defaultValue: 'backend'),
     );
   }
 
@@ -105,6 +114,7 @@ class AppConfig {
     String msg91WidgetId = '',
     String msg91AuthToken = '',
     String paymentProvider = 'none',
+    String sellerOrders = 'backend',
   }) {
     final parsedEnv = switch (env) {
       'dev' => AppEnv.dev,
@@ -154,6 +164,14 @@ class AppConfig {
         ),
     };
 
+    final parsedSellerOrders = switch (sellerOrders) {
+      'backend' => SellerOrdersMode.backend,
+      'mock' => SellerOrdersMode.mock,
+      _ => throw AppConfigException(
+          'SELLER_ORDERS must be backend or mock (got "$sellerOrders")',
+        ),
+    };
+
     final uri = Uri.tryParse(apiBaseUrl);
     if (uri == null || !uri.hasAuthority || uri.host.isEmpty) {
       throw const AppConfigException('API_BASE_URL is missing or invalid');
@@ -166,6 +184,9 @@ class AppConfig {
     }
     if (parsedPayment == PaymentMode.mock && parsedEnv != AppEnv.dev) {
       throw const AppConfigException('The mock payment checkout is allowed in dev only');
+    }
+    if (parsedSellerOrders == SellerOrdersMode.mock && parsedEnv != AppEnv.dev) {
+      throw const AppConfigException('The sample seller orders are allowed in dev only');
     }
     if (parsedEnv == AppEnv.prod && parsedGoogle == GoogleSignInMode.mock) {
       throw const AppConfigException('The mock Google sign-in is not allowed in prod');
@@ -201,6 +222,7 @@ class AppConfig {
       msg91WidgetId: msg91WidgetId,
       msg91AuthToken: msg91AuthToken,
       paymentMode: parsedPayment,
+      sellerOrdersMode: parsedSellerOrders,
     );
   }
 
@@ -215,6 +237,8 @@ class AppConfig {
   bool get useMsg91Otp => otpMode == OtpMode.msg91;
 
   bool get useMockPayment => paymentMode == PaymentMode.mock;
+
+  bool get useMockSellerOrders => sellerOrdersMode == SellerOrdersMode.mock;
 }
 
 final appConfigProvider = Provider<AppConfig>(

@@ -38,6 +38,9 @@ class RouteNames {
   /// Offers received and sent (US-076).
   static const String offers = '/offers';
 
+  /// The seller's Incoming Orders (US-112): opened from Profile and from a new-order push.
+  static const String sellerOrders = '/seller/orders';
+
   /// The buyer's cart (US-019).
   static const String cart = '/cart';
 

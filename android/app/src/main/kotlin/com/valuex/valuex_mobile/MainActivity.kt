@@ -160,6 +160,10 @@ class MainActivity : FlutterActivity() {
             listOf(
                 NotificationChannel("chat", getString(R.string.push_channel_chat), importance),
                 NotificationChannel("offers", getString(R.string.push_channel_offers), importance),
+                // A new order on the seller's item (US-112): sent at high priority
+                NotificationChannel(
+                    "orders", getString(R.string.push_channel_orders), NotificationManager.IMPORTANCE_HIGH,
+                ),
                 NotificationChannel("general", getString(R.string.push_channel_general), importance),
                 calls,
             ),

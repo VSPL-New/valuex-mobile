@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:valuex_mobile/core/routing/route_names.dart';
 import 'package:valuex_mobile/features/auth/domain/entities/account_status.dart';
+import 'package:valuex_mobile/features/order/data/mock_seller_order_repository.dart';
+import 'package:valuex_mobile/features/order/presentation/providers/seller_order_providers.dart';
 
 import 'helpers/app_harness.dart';
 import 'helpers/fonts.dart';
@@ -26,6 +28,7 @@ void main() {
     RouteNames.search: AccountStatus.active,
     RouteNames.searchCategories: AccountStatus.active,
     RouteNames.language: AccountStatus.active,
+    RouteNames.sellerOrders: AccountStatus.active,
   };
 
   final guidelines = <String, AccessibilityGuideline>{
@@ -39,7 +42,10 @@ void main() {
     for (final guideline in guidelines.entries) {
       testWidgets('${entry.key} passes ${guideline.key}', (tester) async {
         final handle = tester.ensureSemantics();
-        final harness = AppHarness(tester);
+        final harness = AppHarness(tester, extraOverrides: [
+          // Incoming Orders shows the Make sample orders, so its cards are checked too.
+          sellerOrderRepositoryProvider.overrideWithValue(MockSellerOrderRepository()),
+        ]);
         if (entry.value != null) harness.signedInAs(entry.value!);
         await harness.launch(location: entry.key == 'onboarding' ? null : entry.key);
 

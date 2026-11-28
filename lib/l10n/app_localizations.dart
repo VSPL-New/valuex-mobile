@@ -7556,6 +7556,252 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong. Please try again'**
   String get addressActionFailed;
+
+  /// No description provided for @sellerOrdersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming Orders'**
+  String get sellerOrdersTitle;
+
+  /// No description provided for @sellerOrdersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{total, plural, =1{1 order} other{{total} orders}} · {newCount} new'**
+  String sellerOrdersSubtitle(int total, int newCount);
+
+  /// No description provided for @sellerOrdersNewBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} New'**
+  String sellerOrdersNewBadge(String count);
+
+  /// No description provided for @sellerOrdersTileNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get sellerOrdersTileNew;
+
+  /// No description provided for @sellerOrdersTilePacking.
+  ///
+  /// In en, this message translates to:
+  /// **'Packing'**
+  String get sellerOrdersTilePacking;
+
+  /// No description provided for @sellerOrdersTileScheduled.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled'**
+  String get sellerOrdersTileScheduled;
+
+  /// No description provided for @sellerOrdersTileShipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipped'**
+  String get sellerOrdersTileShipped;
+
+  /// No description provided for @sellerOrdersChipNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New Order'**
+  String get sellerOrdersChipNew;
+
+  /// No description provided for @sellerOrdersChipPacking.
+  ///
+  /// In en, this message translates to:
+  /// **'Packing Required'**
+  String get sellerOrdersChipPacking;
+
+  /// No description provided for @sellerOrdersChipArranging.
+  ///
+  /// In en, this message translates to:
+  /// **'Arranging pickup'**
+  String get sellerOrdersChipArranging;
+
+  /// No description provided for @sellerOrdersChipScheduled.
+  ///
+  /// In en, this message translates to:
+  /// **'Pickup Scheduled'**
+  String get sellerOrdersChipScheduled;
+
+  /// No description provided for @sellerOrdersChipShipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipped'**
+  String get sellerOrdersChipShipped;
+
+  /// No description provided for @sellerOrdersChipReturning.
+  ///
+  /// In en, this message translates to:
+  /// **'Returning to you'**
+  String get sellerOrdersChipReturning;
+
+  /// No description provided for @sellerOrdersChipHandedOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Handed over'**
+  String get sellerOrdersChipHandedOver;
+
+  /// No description provided for @sellerOrdersTagUrgent.
+  ///
+  /// In en, this message translates to:
+  /// **'URGENT'**
+  String get sellerOrdersTagUrgent;
+
+  /// No description provided for @sellerOrdersTagSelfPickup.
+  ///
+  /// In en, this message translates to:
+  /// **'Self Pickup by Buyer'**
+  String get sellerOrdersTagSelfPickup;
+
+  /// No description provided for @sellerOrdersTagPickupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Pickup failed'**
+  String get sellerOrdersTagPickupFailed;
+
+  /// No description provided for @sellerOrdersBuyer.
+  ///
+  /// In en, this message translates to:
+  /// **'Buyer: {name}'**
+  String sellerOrdersBuyer(String name);
+
+  /// No description provided for @sellerOrdersBuyerUnnamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Buyer'**
+  String get sellerOrdersBuyerUnnamed;
+
+  /// No description provided for @sellerOrdersStartPacking.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Packing'**
+  String get sellerOrdersStartPacking;
+
+  /// No description provided for @sellerOrdersReject.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get sellerOrdersReject;
+
+  /// No description provided for @sellerOrdersContinuePacking.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue Packing'**
+  String get sellerOrdersContinuePacking;
+
+  /// No description provided for @sellerOrdersSchedulePickup.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule Pickup'**
+  String get sellerOrdersSchedulePickup;
+
+  /// No description provided for @sellerOrdersViewSchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'View Schedule'**
+  String get sellerOrdersViewSchedule;
+
+  /// No description provided for @sellerOrdersReschedulePickup.
+  ///
+  /// In en, this message translates to:
+  /// **'Reschedule Pickup'**
+  String get sellerOrdersReschedulePickup;
+
+  /// No description provided for @sellerOrdersViewPickupDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View Pickup Details'**
+  String get sellerOrdersViewPickupDetails;
+
+  /// No description provided for @sellerOrdersMarkHandedOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as handed over'**
+  String get sellerOrdersMarkHandedOver;
+
+  /// No description provided for @sellerOrdersShippedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Shipped'**
+  String get sellerOrdersShippedStatus;
+
+  /// No description provided for @sellerOrdersDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Order details'**
+  String get sellerOrdersDetails;
+
+  /// No description provided for @sellerOrdersItemPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Item photo'**
+  String get sellerOrdersItemPhoto;
+
+  /// No description provided for @sellerOrdersHandOverQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Has the buyer collected the item?'**
+  String get sellerOrdersHandOverQuestion;
+
+  /// No description provided for @sellerOrdersHandOverConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, handed over'**
+  String get sellerOrdersHandOverConfirm;
+
+  /// No description provided for @sellerOrdersPickupDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pickup details'**
+  String get sellerOrdersPickupDetailsTitle;
+
+  /// No description provided for @sellerOrdersPickupDetailsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The buyer collects the item from this address'**
+  String get sellerOrdersPickupDetailsHint;
+
+  /// No description provided for @sellerOrdersEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No incoming orders yet. Orders for your listings will appear here'**
+  String get sellerOrdersEmpty;
+
+  /// No description provided for @sellerOrdersShowingAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing all {count} incoming orders'**
+  String sellerOrdersShowingAll(int count);
+
+  /// No description provided for @sellerOrdersLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load your incoming orders. Pull down or tap Retry'**
+  String get sellerOrdersLoadFailed;
+
+  /// No description provided for @sellerOrdersActionNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'This order has already moved to the next step. Refreshing'**
+  String get sellerOrdersActionNotAllowed;
+
+  /// No description provided for @sellerOrdersNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This order is no longer available'**
+  String get sellerOrdersNotFound;
+
+  /// No description provided for @sellerOrdersBookingFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'We could not arrange the shipment. Please try again'**
+  String get sellerOrdersBookingFailed;
+
+  /// No description provided for @sellerOrdersNoLogistics.
+  ///
+  /// In en, this message translates to:
+  /// **'No pickup service in your area. Contact support'**
+  String get sellerOrdersNoLogistics;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -72,6 +72,13 @@ class ProfileScreen extends ConsumerWidget {
     }
   }
 
+  /// Opens Incoming Orders (US-112); the badge is reloaded on return, since the seller may have
+  /// started packing there.
+  Future<void> _openIncomingOrders(BuildContext context, WidgetRef ref) async {
+    await context.push<void>(RouteNames.sellerOrders);
+    ref.invalidate(profileMenuBadgesProvider);
+  }
+
   Future<void> _refresh(WidgetRef ref) async {
     ref
       ..invalidate(userProfileProvider)
@@ -176,8 +183,11 @@ class ProfileScreen extends ConsumerWidget {
                             badge: offersAwaiting,
                             onTap: () => context.push(RouteNames.offers),
                           ),
-                          item(Icons.assignment_outlined, l10n.profileIncomingOrders,
-                              ProfileMenuKeys.incomingOrders),
+                          item(
+                              Icons.assignment_outlined,
+                              l10n.profileIncomingOrders,
+                              ProfileMenuKeys.incomingOrders,
+                              () => _openIncomingOrders(context, ref)),
                           item(
                               Icons.sell_outlined,
                               l10n.profileMyListings,

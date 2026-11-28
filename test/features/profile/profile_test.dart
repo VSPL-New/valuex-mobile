@@ -30,6 +30,9 @@ import 'package:valuex_mobile/features/profile/data/mock_profile_summary.dart';
 import 'package:valuex_mobile/features/profile/data/profile_repository.dart';
 import 'package:valuex_mobile/features/profile/domain/profile_menu_badges.dart';
 import 'package:valuex_mobile/features/profile/domain/profile_summary.dart';
+import 'package:valuex_mobile/features/order/data/mock_seller_order_repository.dart';
+import 'package:valuex_mobile/features/order/presentation/providers/seller_order_providers.dart';
+import 'package:valuex_mobile/features/order/presentation/seller_incoming_orders_screen.dart';
 import 'package:valuex_mobile/features/profile/presentation/profile_details_screen.dart';
 import 'package:valuex_mobile/features/profile/presentation/profile_screen.dart';
 import 'package:valuex_mobile/features/profile/presentation/widgets/profile_menu_section.dart';
@@ -429,6 +432,27 @@ void main() {
         expect(await prefs.getString(StorageKeys.homeLocation), isNull);
         await harness.dispose();
       });
+    });
+
+    testWidgets('Incoming Orders opens its own page and refreshes the badge on return (US-112)',
+        (tester) async {
+      await launch(tester, more: [
+        sellerOrderRepositoryProvider.overrideWithValue(MockSellerOrderRepository()),
+      ]);
+      await tester.tap(find.text('Profile'));
+      await harness.settle();
+      verify(() => repository.menuBadges()).called(1);
+
+      await tester.tap(find.text('Incoming Orders'));
+      await harness.settle();
+      expect(find.byType(SellerIncomingOrdersScreen), findsOneWidget);
+      expect(find.text('This is coming soon'), findsNothing);
+      await tester.tap(find.byType(SquareBackButton));
+      await harness.settle();
+
+      expect(find.byType(ProfileScreen), findsOneWidget);
+      verify(() => repository.menuBadges()).called(1);
+      await harness.dispose();
     });
 
     testWidgets('Account Security opens its own page instead of the coming soon message',

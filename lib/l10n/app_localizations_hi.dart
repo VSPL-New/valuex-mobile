@@ -4327,4 +4327,144 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get addressActionFailed => 'कुछ गलत हो गया। कृपया फिर कोशिश करें';
+
+  @override
+  String get sellerOrdersTitle => 'आने वाले ऑर्डर';
+
+  @override
+  String sellerOrdersSubtitle(int total, int newCount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      total,
+      locale: localeName,
+      other: '$total ऑर्डर',
+      one: '1 ऑर्डर',
+    );
+    return '$_temp0 · $newCount नए';
+  }
+
+  @override
+  String sellerOrdersNewBadge(String count) {
+    return '$count नए';
+  }
+
+  @override
+  String get sellerOrdersTileNew => 'नए';
+
+  @override
+  String get sellerOrdersTilePacking => 'पैकिंग';
+
+  @override
+  String get sellerOrdersTileScheduled => 'तय';
+
+  @override
+  String get sellerOrdersTileShipped => 'भेजे गए';
+
+  @override
+  String get sellerOrdersChipNew => 'नया ऑर्डर';
+
+  @override
+  String get sellerOrdersChipPacking => 'पैकिंग बाकी';
+
+  @override
+  String get sellerOrdersChipArranging => 'पिकअप की व्यवस्था हो रही है';
+
+  @override
+  String get sellerOrdersChipScheduled => 'पिकअप तय';
+
+  @override
+  String get sellerOrdersChipShipped => 'भेजा गया';
+
+  @override
+  String get sellerOrdersChipReturning => 'आपके पास लौट रहा है';
+
+  @override
+  String get sellerOrdersChipHandedOver => 'सौंप दिया गया';
+
+  @override
+  String get sellerOrdersTagUrgent => 'अत्यावश्यक';
+
+  @override
+  String get sellerOrdersTagSelfPickup => 'खरीदार खुद ले जाएगा';
+
+  @override
+  String get sellerOrdersTagPickupFailed => 'पिकअप नहीं हुआ';
+
+  @override
+  String sellerOrdersBuyer(String name) {
+    return 'खरीदार: $name';
+  }
+
+  @override
+  String get sellerOrdersBuyerUnnamed => 'खरीदार';
+
+  @override
+  String get sellerOrdersStartPacking => 'पैकिंग शुरू करें';
+
+  @override
+  String get sellerOrdersReject => 'अस्वीकार करें';
+
+  @override
+  String get sellerOrdersContinuePacking => 'पैकिंग जारी रखें';
+
+  @override
+  String get sellerOrdersSchedulePickup => 'पिकअप तय करें';
+
+  @override
+  String get sellerOrdersViewSchedule => 'शेड्यूल देखें';
+
+  @override
+  String get sellerOrdersReschedulePickup => 'पिकअप दोबारा तय करें';
+
+  @override
+  String get sellerOrdersViewPickupDetails => 'पिकअप विवरण देखें';
+
+  @override
+  String get sellerOrdersMarkHandedOver => 'सौंप दिया, दर्ज करें';
+
+  @override
+  String get sellerOrdersShippedStatus => 'ऑर्डर भेज दिया गया';
+
+  @override
+  String get sellerOrdersDetails => 'ऑर्डर विवरण';
+
+  @override
+  String get sellerOrdersItemPhoto => 'सामान की फ़ोटो';
+
+  @override
+  String get sellerOrdersHandOverQuestion => 'क्या खरीदार ने सामान ले लिया है?';
+
+  @override
+  String get sellerOrdersHandOverConfirm => 'हाँ, सौंप दिया';
+
+  @override
+  String get sellerOrdersPickupDetailsTitle => 'पिकअप विवरण';
+
+  @override
+  String get sellerOrdersPickupDetailsHint => 'खरीदार इसी पते से सामान लेगा';
+
+  @override
+  String get sellerOrdersEmpty => 'अभी कोई ऑर्डर नहीं आया है। आपकी लिस्टिंग के ऑर्डर यहाँ दिखेंगे';
+
+  @override
+  String sellerOrdersShowingAll(int count) {
+    return 'सभी $count ऑर्डर दिखाए गए';
+  }
+
+  @override
+  String get sellerOrdersLoadFailed =>
+      'आपके ऑर्डर लोड नहीं हो सके। नीचे खींचें या फिर से कोशिश करें पर टैप करें';
+
+  @override
+  String get sellerOrdersActionNotAllowed => 'यह ऑर्डर अगले चरण में जा चुका है। रीफ़्रेश हो रहा है';
+
+  @override
+  String get sellerOrdersNotFound => 'यह ऑर्डर अब उपलब्ध नहीं है';
+
+  @override
+  String get sellerOrdersBookingFailed =>
+      'शिपमेंट की व्यवस्था नहीं हो सकी। कृपया फिर से कोशिश करें';
+
+  @override
+  String get sellerOrdersNoLogistics =>
+      'आपके क्षेत्र में पिकअप सेवा नहीं है। सहायता से संपर्क करें';
 }

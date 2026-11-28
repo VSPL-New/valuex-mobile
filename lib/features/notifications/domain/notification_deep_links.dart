@@ -20,6 +20,8 @@ const Map<String, NotificationTarget> _targets = {
   '/profile': NotificationTarget(RouteNames.profile, isTab: true),
   '/profile/account-security': NotificationTarget(RouteNames.accountSecurity),
   '/saved-items': NotificationTarget(RouteNames.savedItems),
+  // A buyer paid for one of the seller's items (NEW_ORDER, US-112).
+  '/seller/orders': NotificationTarget(RouteNames.sellerOrders),
 };
 
 /// Deep link paths that open a listing page, with the route they open.

@@ -213,6 +213,41 @@ void main() {
       );
     });
 
+    test('shows the real seller orders unless the samples are asked for in dev (US-112)', () {
+      final backend =
+          AppConfig.parse(env: 'dev', apiBaseUrl: 'http://10.0.2.2:8080', aadhaarFlow: 'sandbox');
+      final samples = AppConfig.parse(
+        env: 'dev',
+        apiBaseUrl: 'http://10.0.2.2:8080',
+        aadhaarFlow: 'sandbox',
+        sellerOrders: 'mock',
+      );
+
+      expect(backend.useMockSellerOrders, isFalse);
+      expect(samples.useMockSellerOrders, isTrue);
+    });
+
+    test('rejects the sample seller orders outside dev and an unknown mode', () {
+      expect(
+        () => AppConfig.parse(
+          env: 'staging',
+          apiBaseUrl: 'https://api.example.com/api/v1',
+          aadhaarFlow: 'thirdparty',
+          sellerOrders: 'mock',
+        ),
+        throwsA(isA<AppConfigException>()),
+      );
+      expect(
+        () => AppConfig.parse(
+          env: 'dev',
+          apiBaseUrl: 'http://10.0.2.2:8080',
+          aadhaarFlow: 'sandbox',
+          sellerOrders: 'fake',
+        ),
+        throwsA(isA<AppConfigException>()),
+      );
+    });
+
     test('rejects the Aadhaar sandbox flow in prod', () {
       expect(
         () => AppConfig.parse(

@@ -4333,4 +4333,144 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addressActionFailed => 'Something went wrong. Please try again';
+
+  @override
+  String get sellerOrdersTitle => 'Incoming Orders';
+
+  @override
+  String sellerOrdersSubtitle(int total, int newCount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      total,
+      locale: localeName,
+      other: '$total orders',
+      one: '1 order',
+    );
+    return '$_temp0 · $newCount new';
+  }
+
+  @override
+  String sellerOrdersNewBadge(String count) {
+    return '$count New';
+  }
+
+  @override
+  String get sellerOrdersTileNew => 'New';
+
+  @override
+  String get sellerOrdersTilePacking => 'Packing';
+
+  @override
+  String get sellerOrdersTileScheduled => 'Scheduled';
+
+  @override
+  String get sellerOrdersTileShipped => 'Shipped';
+
+  @override
+  String get sellerOrdersChipNew => 'New Order';
+
+  @override
+  String get sellerOrdersChipPacking => 'Packing Required';
+
+  @override
+  String get sellerOrdersChipArranging => 'Arranging pickup';
+
+  @override
+  String get sellerOrdersChipScheduled => 'Pickup Scheduled';
+
+  @override
+  String get sellerOrdersChipShipped => 'Shipped';
+
+  @override
+  String get sellerOrdersChipReturning => 'Returning to you';
+
+  @override
+  String get sellerOrdersChipHandedOver => 'Handed over';
+
+  @override
+  String get sellerOrdersTagUrgent => 'URGENT';
+
+  @override
+  String get sellerOrdersTagSelfPickup => 'Self Pickup by Buyer';
+
+  @override
+  String get sellerOrdersTagPickupFailed => 'Pickup failed';
+
+  @override
+  String sellerOrdersBuyer(String name) {
+    return 'Buyer: $name';
+  }
+
+  @override
+  String get sellerOrdersBuyerUnnamed => 'Buyer';
+
+  @override
+  String get sellerOrdersStartPacking => 'Start Packing';
+
+  @override
+  String get sellerOrdersReject => 'Reject';
+
+  @override
+  String get sellerOrdersContinuePacking => 'Continue Packing';
+
+  @override
+  String get sellerOrdersSchedulePickup => 'Schedule Pickup';
+
+  @override
+  String get sellerOrdersViewSchedule => 'View Schedule';
+
+  @override
+  String get sellerOrdersReschedulePickup => 'Reschedule Pickup';
+
+  @override
+  String get sellerOrdersViewPickupDetails => 'View Pickup Details';
+
+  @override
+  String get sellerOrdersMarkHandedOver => 'Mark as handed over';
+
+  @override
+  String get sellerOrdersShippedStatus => 'Order Shipped';
+
+  @override
+  String get sellerOrdersDetails => 'Order details';
+
+  @override
+  String get sellerOrdersItemPhoto => 'Item photo';
+
+  @override
+  String get sellerOrdersHandOverQuestion => 'Has the buyer collected the item?';
+
+  @override
+  String get sellerOrdersHandOverConfirm => 'Yes, handed over';
+
+  @override
+  String get sellerOrdersPickupDetailsTitle => 'Pickup details';
+
+  @override
+  String get sellerOrdersPickupDetailsHint => 'The buyer collects the item from this address';
+
+  @override
+  String get sellerOrdersEmpty =>
+      'No incoming orders yet. Orders for your listings will appear here';
+
+  @override
+  String sellerOrdersShowingAll(int count) {
+    return 'Showing all $count incoming orders';
+  }
+
+  @override
+  String get sellerOrdersLoadFailed =>
+      'Unable to load your incoming orders. Pull down or tap Retry';
+
+  @override
+  String get sellerOrdersActionNotAllowed =>
+      'This order has already moved to the next step. Refreshing';
+
+  @override
+  String get sellerOrdersNotFound => 'This order is no longer available';
+
+  @override
+  String get sellerOrdersBookingFailed => 'We could not arrange the shipment. Please try again';
+
+  @override
+  String get sellerOrdersNoLogistics => 'No pickup service in your area. Contact support';
 }

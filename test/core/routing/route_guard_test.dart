@@ -46,6 +46,19 @@ void main() {
       }
     });
 
+    test('Incoming Orders needs an active account (US-112)', () {
+      expect(
+          redirectFor(session: _signedOut(), location: RouteNames.sellerOrders), RouteNames.signIn);
+      expect(
+        redirectFor(session: _signedIn(AccountStatus.active), location: RouteNames.sellerOrders),
+        isNull,
+      );
+      expect(
+        redirectFor(session: _signedIn(AccountStatus.suspended), location: RouteNames.sellerOrders),
+        RouteNames.accountBlocked,
+      );
+    });
+
     test('cannot open the Chats tab or a conversation', () {
       for (final route in [RouteNames.chats, RouteNames.chatThread('t1'), RouteNames.call('c1')]) {
         expect(
