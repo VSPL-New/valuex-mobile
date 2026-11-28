@@ -4467,4 +4467,161 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get sellerOrdersNoLogistics =>
       'आपके क्षेत्र में पिकअप सेवा नहीं है। सहायता से संपर्क करें';
+
+  @override
+  String get packingTitle => 'पैक करें और प्रमाण अपलोड करें';
+
+  @override
+  String get packingSubtitle => 'पिकअप शेड्यूल करने से पहले ज़रूरी';
+
+  @override
+  String packingOrderRef(String number) {
+    return 'ऑर्डर #$number';
+  }
+
+  @override
+  String get packingStepsTitle => 'ये कदम अपनाएँ:';
+
+  @override
+  String get packingStep1 => 'सामान की हर तरफ़ से साफ़ फ़ोटो लें';
+
+  @override
+  String get packingStep2 => 'सामान को बबल रैप/फ़ोम से अच्छी तरह लपेटें';
+
+  @override
+  String get packingStep3 => 'मज़बूत डिब्बे या कवर में रखें';
+
+  @override
+  String get packingStep4 => 'पैक किए गए सामान की हर तरफ़ से फ़ोटो लें';
+
+  @override
+  String get packingItemPhotos => 'सामान की फ़ोटो';
+
+  @override
+  String packingItemPhotosHint(int min, int max) {
+    return 'कम से कम $min, ज़्यादा से ज़्यादा $max फ़ोटो ज़रूरी';
+  }
+
+  @override
+  String get packingPackagePhotos => 'पैकिंग की फ़ोटो';
+
+  @override
+  String get packingPackagePhotosHint => 'पैक किया गया सामान साफ़ दिखाएँ';
+
+  @override
+  String packingCount(int count, int max) {
+    return '$count/$max';
+  }
+
+  @override
+  String packingCountLabel(int count, int max) {
+    return '$max में से $count फ़ोटो जोड़ी गईं';
+  }
+
+  @override
+  String get packingAdd => 'जोड़ें';
+
+  @override
+  String get packingAddItemPhoto => 'सामान की फ़ोटो जोड़ें';
+
+  @override
+  String get packingAddPackagePhoto => 'पैकिंग की फ़ोटो जोड़ें';
+
+  @override
+  String packingItemPhotoLabel(int index, int count) {
+    return 'सामान की फ़ोटो $count में से $index';
+  }
+
+  @override
+  String packingPackagePhotoLabel(int index, int count) {
+    return 'पैकिंग की फ़ोटो $count में से $index';
+  }
+
+  @override
+  String get packingRemovePhoto => 'फ़ोटो हटाएँ';
+
+  @override
+  String get packingUploading => 'फ़ोटो अपलोड हो रही है';
+
+  @override
+  String get packingRetryUpload => 'अपलोड नहीं हुई। फिर से कोशिश करने के लिए टैप करें';
+
+  @override
+  String get packingTakePhoto => 'फ़ोटो लें';
+
+  @override
+  String get packingChooseGallery => 'गैलरी से चुनें';
+
+  @override
+  String get packingSizeTitle => 'पैक किया गया आकार और वज़न';
+
+  @override
+  String get packingSizeHint => 'कूरियर बुक करने के लिए। सामान को पैक होने के बाद नापें';
+
+  @override
+  String get packingWeight => 'वज़न (कि.ग्रा.)';
+
+  @override
+  String get packingLength => 'लंबाई (से.मी.)';
+
+  @override
+  String get packingBreadth => 'चौड़ाई (से.मी.)';
+
+  @override
+  String get packingHeight => 'ऊँचाई (से.मी.)';
+
+  @override
+  String get packingWeightInvalid => 'पैक किया गया वज़न 0.05 से 30 कि.ग्रा. के बीच डालें';
+
+  @override
+  String get packingSideInvalid => 'हर तरफ़ की माप 1 से 150 से.मी. के बीच डालें';
+
+  @override
+  String packingEscrow(String amount) {
+    return '$amount का भुगतान एस्क्रो में रखा है और खरीदार के डिलीवरी की पुष्टि करने पर जारी होगा।';
+  }
+
+  @override
+  String get packingSubmit => 'प्रमाण भेजें और पिकअप शेड्यूल करें';
+
+  @override
+  String packingMissingHint(int items, int packages) {
+    String _temp0 = intl.Intl.pluralLogic(
+      items,
+      locale: localeName,
+      other: 'सामान की $items फ़ोटो',
+      one: 'सामान की 1 फ़ोटो',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      packages,
+      locale: localeName,
+      other: 'पैकिंग की $packages फ़ोटो',
+      one: 'पैकिंग की 1 फ़ोटो',
+    );
+    return 'कम से कम $_temp0 + $_temp1 जोड़ें';
+  }
+
+  @override
+  String get packingErrorImageRequired => 'पिकअप शेड्यूल करने से पहले पैकेज की फ़ोटो अपलोड करें';
+
+  @override
+  String get packingErrorUploadFailed => 'फ़ोटो अपलोड नहीं हुईं। फिर से कोशिश करें';
+
+  @override
+  String get packingErrorQualityLow => 'फ़ोटो साफ़ नहीं है। ज़्यादा साफ़ फ़ोटो अपलोड करें';
+
+  @override
+  String get packingErrorLimit => 'यहाँ और फ़ोटो नहीं जोड़ी जा सकतीं';
+
+  @override
+  String get packingErrorPhotoInvalid => 'यह फ़ोटो इस्तेमाल नहीं हो सकती। दूसरी चुनें';
+
+  @override
+  String get packingPhotoDenied => 'फ़ोटो जोड़ने के लिए सेटिंग्स में कैमरा या फ़ोटो की अनुमति दें';
+
+  @override
+  String get packingLoadFailed => 'यह ऑर्डर लोड नहीं हो सका। फिर से कोशिश करें पर टैप करें';
+
+  @override
+  String get packingDone => 'प्रमाण अपलोड हो गया। अब पिकअप शेड्यूल करें';
 }

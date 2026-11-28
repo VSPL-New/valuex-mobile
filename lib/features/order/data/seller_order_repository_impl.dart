@@ -1,13 +1,19 @@
+import 'dart:typed_data';
+
 import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
+import '../../listing/data/listing_repository.dart';
 import '../domain/entities/incoming_order.dart';
+import '../domain/entities/packing.dart';
 import '../domain/repositories/seller_order_repository.dart';
 
-/// Calls the four seller order endpoints of the backend (US-112, LLD A.4).
+/// Calls the seller order endpoints of the backend: Incoming Orders (US-112, LLD A.4) and Pack &
+/// Upload Proof (US-026, LLD D.3).
 class SellerOrderRepositoryImpl implements SellerOrderRepository {
   final ApiClient _client;
+  final ListingRepository _uploads;
 
-  SellerOrderRepositoryImpl(this._client);
+  SellerOrderRepositoryImpl(this._client, this._uploads);
 
   @override
   Future<IncomingOrdersPage> orders(
@@ -37,6 +43,124 @@ class SellerOrderRepositoryImpl implements SellerOrderRepository {
         ApiConstants.sellerOrderHandedOver(orderId),
         parse: (data) => parseIncomingOrder(data as Map<String, dynamic>),
       );
+
+  @override
+  Future<PackingView> packing(String orderId) => _client.get(
+        ApiConstants.sellerOrderPacking(orderId),
+        parse: (data) => parsePackingView(data as Map<String, dynamic>),
+      );
+
+  @override
+  Future<String> uploadProofPhoto({
+    required String ownerId,
+    required String fileName,
+    required String contentType,
+    required Uint8List bytes,
+    required int width,
+    required int height,
+  }) async {
+    final ticket = await _client.post<UploadTicket>(
+      ApiConstants.mediaUploads,
+      data: {
+        'purpose': 'SELLER_PRE_SHIPMENT_EVIDENCE',
+        'ownerType': 'USER',
+        'ownerId': ownerId,
+        'fileName': fileName,
+        'contentType': contentType,
+        'sizeBytes': bytes.length,
+      },
+      parse: (json) {
+        final map = json as Map<String, dynamic>;
+        return UploadTicket(
+            mediaId: map['mediaId'] as String, uploadUrl: map['uploadUrl'] as String);
+      },
+    );
+    await _uploads.uploadBytes(ticket.uploadUrl, bytes, contentType);
+    await _uploads.completeUpload(
+      mediaId: ticket.mediaId,
+      contentType: contentType,
+      sizeBytes: bytes.length,
+      width: width,
+      height: height,
+    );
+    return ticket.mediaId;
+  }
+
+  @override
+  Future<OrderProof> attachProof(String orderId, String mediaId, ProofKind kind) => _client.post(
+        ApiConstants.sellerOrderPackingProofs(orderId),
+        data: {'mediaId': mediaId, 'kind': kind.wire},
+        parse: (data) => parseOrderProof(data as Map<String, dynamic>)!,
+      );
+
+  @override
+  Future<void> removeProof(String orderId, String proofId) =>
+      _client.delete<void>(ApiConstants.sellerOrderPackingProof(orderId, proofId));
+
+  @override
+  Future<IncomingOrder> completePacking(String orderId, PackageSize size) => _client.post(
+        ApiConstants.sellerOrderPackingComplete(orderId),
+        data: {
+          'package': {
+            'weightKg': size.weightKg,
+            'lengthCm': size.lengthCm,
+            'breadthCm': size.breadthCm,
+            'heightCm': size.heightCm,
+          },
+        },
+        parse: (data) => parseIncomingOrder(data as Map<String, dynamic>),
+      );
+}
+
+/// Reads `GET /seller/orders/{id}/packing`. A photo of a kind this app does not know is left out.
+PackingView parsePackingView(Map<String, dynamic> json) {
+  final rules =
+      json['rules'] is Map<String, dynamic> ? json['rules'] as Map<String, dynamic> : null;
+  final size = json['packageSize'] is Map<String, dynamic>
+      ? json['packageSize'] as Map<String, dynamic>
+      : null;
+  const defaults = PackingRules();
+  int rule(String key, int fallback) => (rules?[key] as num?)?.toInt() ?? fallback;
+  return PackingView(
+    order: parseIncomingOrder(json['order'] as Map<String, dynamic>),
+    proofs: [
+      for (final value
+          in json['proofs'] is List<dynamic> ? json['proofs'] as List<dynamic> : const [])
+        if (value is Map<String, dynamic>)
+          if (parseOrderProof(value) case final proof?) proof,
+    ],
+    packageSize: size == null ? null : _packageSize(size),
+    rules: PackingRules(
+      itemMin: rule('itemMin', defaults.itemMin),
+      itemMax: rule('itemMax', defaults.itemMax),
+      packageMin: rule('packageMin', defaults.packageMin),
+      packageMax: rule('packageMax', defaults.packageMax),
+      minPixels: rule('minPixels', defaults.minPixels),
+    ),
+  );
+}
+
+/// One packing photo; null for a kind this app does not know.
+OrderProof? parseOrderProof(Map<String, dynamic> json) {
+  final kind = ProofKind.values.where((k) => k.wire == json['kind']).firstOrNull;
+  if (kind == null) return null;
+  return OrderProof(
+    id: json['proofId'] as String,
+    kind: kind,
+    url: json['url'] as String?,
+    uploadedAt: DateTime.tryParse(json['uploadedAt'] as String? ?? '')?.toLocal() ?? DateTime.now(),
+    submitted: json['submitted'] as bool? ?? false,
+  );
+}
+
+PackageSize? _packageSize(Map<String, dynamic> json) {
+  double? read(String key) => num.tryParse('${json[key] ?? ''}')?.toDouble();
+  final weight = read('weightKg');
+  final length = read('lengthCm');
+  final breadth = read('breadthCm');
+  final height = read('heightCm');
+  if (weight == null || length == null || breadth == null || height == null) return null;
+  return PackageSize(weightKg: weight, lengthCm: length, breadthCm: breadth, heightCm: height);
 }
 
 /// Reads one card of `GET /seller/orders`. Unknown actions and tags (from a newer backend) are

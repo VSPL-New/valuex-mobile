@@ -29,6 +29,7 @@ void main() {
     RouteNames.searchCategories: AccountStatus.active,
     RouteNames.language: AccountStatus.active,
     RouteNames.sellerOrders: AccountStatus.active,
+    RouteNames.sellerOrderPacking('mock-1000'): AccountStatus.active,
   };
 
   final guidelines = <String, AccessibilityGuideline>{

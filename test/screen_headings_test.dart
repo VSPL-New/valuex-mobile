@@ -24,6 +24,7 @@ void main() {
     RouteNames.signupEmail: ('Verify Email', AccountStatus.emailVerificationPending),
     RouteNames.signupMobile: ('Create Account', null),
     RouteNames.sellerOrders: ('Incoming Orders', AccountStatus.active),
+    RouteNames.sellerOrderPacking('mock-1000'): ('Pack & Upload Proof', AccountStatus.active),
   };
 
   for (final entry in titles.entries) {

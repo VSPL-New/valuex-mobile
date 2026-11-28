@@ -59,6 +59,16 @@ void main() {
       );
     });
 
+    test('Pack & Upload Proof is guarded like Incoming Orders (US-026)', () {
+      final packing = RouteNames.sellerOrderPacking('o1');
+      expect(redirectFor(session: _signedOut(), location: packing), RouteNames.signIn);
+      expect(redirectFor(session: _signedIn(AccountStatus.active), location: packing), isNull);
+      expect(
+        redirectFor(session: _signedIn(AccountStatus.suspended), location: packing),
+        RouteNames.accountBlocked,
+      );
+    });
+
     test('cannot open the Chats tab or a conversation', () {
       for (final route in [RouteNames.chats, RouteNames.chatThread('t1'), RouteNames.call('c1')]) {
         expect(

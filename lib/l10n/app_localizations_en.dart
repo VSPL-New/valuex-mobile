@@ -4473,4 +4473,162 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sellerOrdersNoLogistics => 'No pickup service in your area. Contact support';
+
+  @override
+  String get packingTitle => 'Pack & Upload Proof';
+
+  @override
+  String get packingSubtitle => 'Required before pickup is scheduled';
+
+  @override
+  String packingOrderRef(String number) {
+    return 'Order #$number';
+  }
+
+  @override
+  String get packingStepsTitle => 'STEPS TO FOLLOW:';
+
+  @override
+  String get packingStep1 => 'Photograph the item clearly from all angles';
+
+  @override
+  String get packingStep2 => 'Wrap item securely with bubble wrap/foam';
+
+  @override
+  String get packingStep3 => 'Place in a sturdy box or cover';
+
+  @override
+  String get packingStep4 => 'Photograph the packed item showing all sides';
+
+  @override
+  String get packingItemPhotos => 'Item Photos';
+
+  @override
+  String packingItemPhotosHint(int min, int max) {
+    return 'Min $min, max $max photos required';
+  }
+
+  @override
+  String get packingPackagePhotos => 'Packaging Photos';
+
+  @override
+  String get packingPackagePhotosHint => 'Show packed item clearly';
+
+  @override
+  String packingCount(int count, int max) {
+    return '$count/$max';
+  }
+
+  @override
+  String packingCountLabel(int count, int max) {
+    return '$count of $max photos added';
+  }
+
+  @override
+  String get packingAdd => 'Add';
+
+  @override
+  String get packingAddItemPhoto => 'Add item photo';
+
+  @override
+  String get packingAddPackagePhoto => 'Add packaging photo';
+
+  @override
+  String packingItemPhotoLabel(int index, int count) {
+    return 'Item photo $index of $count';
+  }
+
+  @override
+  String packingPackagePhotoLabel(int index, int count) {
+    return 'Packaging photo $index of $count';
+  }
+
+  @override
+  String get packingRemovePhoto => 'Remove photo';
+
+  @override
+  String get packingUploading => 'Uploading photo';
+
+  @override
+  String get packingRetryUpload => 'Upload failed. Tap to try again';
+
+  @override
+  String get packingTakePhoto => 'Take a photo';
+
+  @override
+  String get packingChooseGallery => 'Choose from gallery';
+
+  @override
+  String get packingSizeTitle => 'Packed size and weight';
+
+  @override
+  String get packingSizeHint => 'Used to book a courier. Measure the item as it will be packed';
+
+  @override
+  String get packingWeight => 'Weight (kg)';
+
+  @override
+  String get packingLength => 'Length (cm)';
+
+  @override
+  String get packingBreadth => 'Breadth (cm)';
+
+  @override
+  String get packingHeight => 'Height (cm)';
+
+  @override
+  String get packingWeightInvalid => 'Enter a packed weight between 0.05 and 30 kg';
+
+  @override
+  String get packingSideInvalid => 'Enter each side between 1 and 150 cm';
+
+  @override
+  String packingEscrow(String amount) {
+    return 'Payment of $amount is held in escrow and will be released once buyer confirms delivery.';
+  }
+
+  @override
+  String get packingSubmit => 'Submit Proof & Schedule Pickup';
+
+  @override
+  String packingMissingHint(int items, int packages) {
+    String _temp0 = intl.Intl.pluralLogic(
+      items,
+      locale: localeName,
+      other: '$items item photos',
+      one: '1 item photo',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      packages,
+      locale: localeName,
+      other: '$packages packaging photos',
+      one: '1 packaging photo',
+    );
+    return 'Add at least $_temp0 + $_temp1';
+  }
+
+  @override
+  String get packingErrorImageRequired => 'Please upload package images before scheduling pickup';
+
+  @override
+  String get packingErrorUploadFailed => 'Failed to upload images. Try again';
+
+  @override
+  String get packingErrorQualityLow => 'Image quality low. Upload clearer photo';
+
+  @override
+  String get packingErrorLimit => 'You can\'t add more photos here';
+
+  @override
+  String get packingErrorPhotoInvalid => 'This photo can\'t be used. Choose another';
+
+  @override
+  String get packingPhotoDenied =>
+      'Allow access to your camera or photos in Settings to add a photo';
+
+  @override
+  String get packingLoadFailed => 'Unable to load this order. Tap Retry';
+
+  @override
+  String get packingDone => 'Proof uploaded. Schedule the pickup next';
 }
